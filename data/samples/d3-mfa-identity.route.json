@@ -1,0 +1,51 @@
+{
+  "metadata": {
+    "id": "route-d3-mfa-identity",
+    "input": "D3-MFA",
+    "name": "Multi-factor authentication reverse route",
+    "curation_status": "curated_mvp",
+    "notes": "D3FEND-first route for identity defense navigation."
+  },
+  "nodes": [
+    {"id":"D3-MFA","type":"d3fend","name":"Multi-factor Authentication","url":"https://d3fend.mitre.org/technique/d3f:MultiFactorAuthentication/"},
+    {"id":"T1078","type":"attack","name":"Valid Accounts","url":"https://attack.mitre.org/techniques/T1078/"},
+    {"id":"T1110","type":"attack","name":"Brute Force","url":"https://attack.mitre.org/techniques/T1110/"},
+    {"id":"ART-USER-ACCOUNT","type":"artifact","name":"User account"},
+    {"id":"ART-CREDENTIAL","type":"artifact","name":"Credential"},
+    {"id":"ART-REMOTE-SESSION","type":"artifact","name":"Remote session"},
+    {"id":"CTRL-MFA-ENFORCEMENT","type":"control","name":"MFA enforcement policy"},
+    {"id":"CTRL-CONDITIONAL-ACCESS","type":"control","name":"Conditional access policy"},
+    {"id":"DET-IMPOSSIBLE-TRAVEL","type":"detection","name":"Impossible travel / anomalous login"},
+    {"id":"DET-MFA-BYPASS-SIGNAL","type":"detection","name":"Login without expected MFA assurance"},
+    {"id":"EV-IAM-LOGS","type":"evidence","name":"IAM authentication logs"}
+  ],
+  "edges": [
+    {"source":"T1078","target":"ART-USER-ACCOUNT","relationship":"abuses_artifact","confidence":"curated"},
+    {"source":"T1078","target":"ART-CREDENTIAL","relationship":"abuses_artifact","confidence":"curated"},
+    {"source":"T1078","target":"ART-REMOTE-SESSION","relationship":"abuses_artifact","confidence":"curated"},
+    {"source":"T1110","target":"ART-CREDENTIAL","relationship":"targets_artifact","confidence":"curated"},
+    {"source":"D3-MFA","target":"ART-USER-ACCOUNT","relationship":"protects_artifact","confidence":"curated"},
+    {"source":"D3-MFA","target":"ART-CREDENTIAL","relationship":"protects_artifact","confidence":"curated"},
+    {"source":"D3-MFA","target":"CTRL-MFA-ENFORCEMENT","relationship":"implemented_by","confidence":"internal_control_mapping"},
+    {"source":"D3-MFA","target":"CTRL-CONDITIONAL-ACCESS","relationship":"implemented_by","confidence":"internal_control_mapping"},
+    {"source":"CTRL-CONDITIONAL-ACCESS","target":"DET-IMPOSSIBLE-TRAVEL","relationship":"enables_detection","confidence":"internal_detection_mapping"},
+    {"source":"CTRL-MFA-ENFORCEMENT","target":"DET-MFA-BYPASS-SIGNAL","relationship":"enables_detection","confidence":"internal_detection_mapping"},
+    {"source":"DET-IMPOSSIBLE-TRAVEL","target":"EV-IAM-LOGS","relationship":"requires_evidence","confidence":"internal_evidence_mapping"},
+    {"source":"DET-MFA-BYPASS-SIGNAL","target":"EV-IAM-LOGS","relationship":"requires_evidence","confidence":"internal_evidence_mapping"}
+  ],
+  "coverage": {
+    "D3-MFA": {
+      "status":"partial",
+      "controls":["CTRL-MFA-ENFORCEMENT","CTRL-CONDITIONAL-ACCESS"],
+      "detections":["DET-IMPOSSIBLE-TRAVEL"],
+      "evidence":["EV-IAM-LOGS"],
+      "owners":["IAM","SOC"],
+      "gaps":["Confirm break-glass and service-account exceptions"]
+    },
+    "T1078": {
+      "status":"partial",
+      "detections":["DET-IMPOSSIBLE-TRAVEL","DET-MFA-BYPASS-SIGNAL"],
+      "owners":["SOC","IAM"]
+    }
+  }
+}
