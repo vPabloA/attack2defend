@@ -15,7 +15,11 @@ pytest -q
 
 echo "[4/4] Building Navigator UI"
 cd app/navigator-ui
-npm install
+if [ -f package-lock.json ]; then
+  npm ci
+else
+  npm install
+fi
 npm run build
 
 echo "Attack2Defend pre-production validation completed successfully."
