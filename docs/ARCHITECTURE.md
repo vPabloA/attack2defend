@@ -161,8 +161,9 @@ data/
 ├── edges.json
 ├── indexes.json
 ├── metadata.json
-├── coverage.yaml
-└── detections.yaml
+├── coverage.json
+├── routes.json
+└── knowledge-bundle.json
 ```
 
 Upgrade later only if needed:

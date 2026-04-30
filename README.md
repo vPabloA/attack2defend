@@ -150,6 +150,9 @@ attack2defend/
 │   └── UX_MODEL.md
 ├── scripts/knowledge_builder/
 │   └── README.md
+├── app/navigator-ui/
+│   ├── README.md
+│   └── public/data/knowledge-bundle.json
 ├── tests/
 │   └── test_resolver.py
 └── AGENTS.md
@@ -215,3 +218,6 @@ Recommended capability names:
 python scripts/knowledge_builder/build_knowledge_base.py
 pytest -q
 ```
+
+
+> Note: in this repository snapshot, `app/navigator-ui/` contains runtime data and docs; the full Vite UI source may live in a separate branch/repository state.
