@@ -1,0 +1,83 @@
+[
+  {
+    "source": "CVE-2021-44228",
+    "target": "CWE-917",
+    "relationship": "has_weakness",
+    "source_framework": "",
+    "target_framework": "",
+    "confidence": "curated",
+    "source_ref": ""
+  },
+  {
+    "source": "CWE-917",
+    "target": "CAPEC-136",
+    "relationship": "may_enable_attack_pattern",
+    "source_framework": "",
+    "target_framework": "",
+    "confidence": "curated",
+    "source_ref": ""
+  },
+  {
+    "source": "CAPEC-136",
+    "target": "T1190",
+    "relationship": "may_map_to_attack_technique",
+    "source_framework": "",
+    "target_framework": "",
+    "confidence": "curated",
+    "source_ref": ""
+  },
+  {
+    "source": "T1190",
+    "target": "D3-NTA",
+    "relationship": "may_be_detected_by",
+    "source_framework": "",
+    "target_framework": "",
+    "confidence": "curated",
+    "source_ref": ""
+  },
+  {
+    "source": "T1567",
+    "target": "D3-DNSDL",
+    "relationship": "may_be_detected_by",
+    "source_framework": "",
+    "target_framework": "",
+    "confidence": "curated",
+    "source_ref": ""
+  },
+  {
+    "source": "CVE-2024-37079",
+    "target": "CWE-79",
+    "relationship": "has_weakness",
+    "source_framework": "",
+    "target_framework": "",
+    "confidence": "curated",
+    "source_ref": ""
+  },
+  {
+    "source": "CWE-79",
+    "target": "CAPEC-63",
+    "relationship": "may_enable_attack_pattern",
+    "source_framework": "",
+    "target_framework": "",
+    "confidence": "curated",
+    "source_ref": ""
+  },
+  {
+    "source": "CAPEC-63",
+    "target": "T1059",
+    "relationship": "may_map_to_attack_technique",
+    "source_framework": "",
+    "target_framework": "",
+    "confidence": "curated",
+    "source_ref": ""
+  },
+  {
+    "source": "T1059",
+    "target": "D3-MFA",
+    "relationship": "may_be_detected_by",
+    "source_framework": "",
+    "target_framework": "",
+    "confidence": "curated",
+    "source_ref": ""
+  }
+]

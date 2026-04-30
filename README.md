@@ -207,3 +207,11 @@ Recommended capability names:
 5. Preserve internal coverage data across public data updates.
 6. Separate confirmed evidence, inference and hypothesis.
 7. Every route must end in action, evidence or a declared gap.
+
+
+## Quickstart (current MVP)
+
+```bash
+python scripts/knowledge_builder/build_knowledge_base.py
+pytest -q
+```
