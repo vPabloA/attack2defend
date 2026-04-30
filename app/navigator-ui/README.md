@@ -2,11 +2,19 @@
 
 First MVP frontend for the route-first UX.
 
-It consumes:
+It consumes a UI-local copy of the curated sample route:
+
+```text
+src/data/log4shell.route.json
+```
+
+The canonical curated sample remains in:
 
 ```text
 ../../data/samples/log4shell.route.json
 ```
+
+This keeps the Vite app low-risk and avoids cross-root JSON import issues during the MVP.
 
 ## Tabs
 
