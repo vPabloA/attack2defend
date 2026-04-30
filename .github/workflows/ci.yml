@@ -33,6 +33,34 @@ jobs:
       - name: Run Python tests
         run: pytest -q
 
+  public-collectors-smoke:
+    name: Public collectors smoke validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Build public-source knowledge bundle without D3FEND fanout
+        run: |
+          python scripts/knowledge_builder/build_knowledge_base.py \
+            --with-public-sources \
+            --public-no-d3fend \
+            --max-kev-cves 25 \
+            --no-snapshot
+
+      - name: Validate public-source knowledge bundle
+        run: |
+          python scripts/knowledge_builder/validate_bundle.py \
+            data/knowledge-bundle.json \
+            --require-public-sources \
+            --min-nodes 100 \
+            --min-edges 10
+
   navigator-ui:
     name: Navigator UI build
     runs-on: ubuntu-latest
