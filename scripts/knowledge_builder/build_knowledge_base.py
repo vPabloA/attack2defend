@@ -78,6 +78,8 @@ class BuildState:
     source_files: list[str] = field(default_factory=list)
     route_inputs: list[str] = field(default_factory=list)
     public_sources: list[str] = field(default_factory=list)
+    public_successful_collectors: set[str] = field(default_factory=set)
+    public_failed_collectors: list[str] = field(default_factory=list)
     issues: list[BuildIssue] = field(default_factory=list)
 
     def warn(self, message: str, source: str = "") -> None:
@@ -273,6 +275,8 @@ def ingest_public_result(state: BuildState, result: Any) -> None:
         if normalized_input:
             state.route_inputs.append(normalized_input)
     state.public_sources.extend(getattr(result, "sources", []))
+    state.public_successful_collectors.update(getattr(result, "successful_collectors", set()))
+    state.public_failed_collectors.extend(getattr(result, "failed_collectors", []))
     for warning in getattr(result, "warnings", []):
         state.warn(str(warning), "public_collectors")
 
@@ -439,6 +443,8 @@ def build_bundle(
         "seed_inputs": {"required": sorted(REQUIRED_SEED_INPUTS), "available": sorted(set(state.route_inputs))},
         "public_collection": {
             "enabled": with_public_sources,
+            "successful_collectors": sorted(state.public_successful_collectors),
+            "failed_collectors": sorted(set(state.public_failed_collectors)),
             "nvd_enabled": with_nvd or bool(nvd_cves) or nvd_recent_days > 0,
             "nvd_recent_days": nvd_recent_days,
             "nvd_cves": sorted({normalize_id(item) for item in nvd_cves}),
