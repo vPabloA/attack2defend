@@ -1,0 +1,38 @@
+{
+  "builder_version": "0.2.0",
+  "contract_version": "attack2defend.knowledge_bundle.v1",
+  "counts": {
+    "coverage_records": 6,
+    "edges": 69,
+    "nodes": 67,
+    "route_inputs": 5,
+    "routes": 5,
+    "warnings": 0
+  },
+  "generated_at": "2026-04-30T13:33:48Z",
+  "mode": "curated_mvp_bundle",
+  "seed_inputs": {
+    "available": [
+      "CVE-2021-44228",
+      "CVE-2024-37079",
+      "CWE-79",
+      "D3-MFA",
+      "T1567"
+    ],
+    "required": [
+      "CVE-2021-44228",
+      "CVE-2024-37079",
+      "CWE-79",
+      "D3-MFA",
+      "T1567"
+    ]
+  },
+  "source_files": [
+    "/workspace/attack2defend/data/samples/cve-2024-37079-vcenter.route.json",
+    "/workspace/attack2defend/data/samples/cwe-79-xss.route.json",
+    "/workspace/attack2defend/data/samples/d3-mfa-identity.route.json",
+    "/workspace/attack2defend/data/samples/log4shell.route.json",
+    "/workspace/attack2defend/data/samples/t1567-exfiltration-web-service.route.json"
+  ],
+  "warnings": []
+}

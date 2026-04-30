@@ -1,0 +1,373 @@
+[
+  {
+    "id": "ART-CREDENTIAL",
+    "name": "Credential",
+    "type": "artifact"
+  },
+  {
+    "id": "ART-DNS-LOOKUP",
+    "name": "DNS lookup",
+    "type": "artifact"
+  },
+  {
+    "id": "ART-DOMAIN",
+    "name": "Domain",
+    "type": "artifact"
+  },
+  {
+    "id": "ART-NETWORK-TRAFFIC",
+    "name": "Outbound network traffic",
+    "type": "artifact"
+  },
+  {
+    "id": "ART-REMOTE-SESSION",
+    "name": "Remote session",
+    "type": "artifact"
+  },
+  {
+    "id": "ART-RPC-NETWORK-TRAFFIC",
+    "name": "RPC network traffic",
+    "type": "artifact"
+  },
+  {
+    "id": "ART-SENSITIVE-FILE",
+    "name": "Sensitive file or payload",
+    "type": "artifact"
+  },
+  {
+    "id": "ART-URL",
+    "name": "URL",
+    "type": "artifact"
+  },
+  {
+    "id": "ART-USER-ACCOUNT",
+    "name": "User account",
+    "type": "artifact"
+  },
+  {
+    "id": "ART-VCENTER-SERVICE",
+    "name": "vCenter service endpoint",
+    "type": "artifact"
+  },
+  {
+    "id": "ART-WEB-INPUT",
+    "name": "Web input field or parameter",
+    "type": "artifact"
+  },
+  {
+    "id": "ART-WEB-SCRIPT",
+    "name": "Web script content",
+    "type": "artifact"
+  },
+  {
+    "id": "T1059",
+    "name": "Command and Scripting Interpreter",
+    "type": "attack",
+    "url": "https://attack.mitre.org/techniques/T1059/"
+  },
+  {
+    "id": "T1059.007",
+    "name": "Command and Scripting Interpreter: JavaScript",
+    "type": "attack",
+    "url": "https://attack.mitre.org/techniques/T1059/007/"
+  },
+  {
+    "id": "T1071",
+    "name": "Application Layer Protocol",
+    "type": "attack",
+    "url": "https://attack.mitre.org/techniques/T1071/"
+  },
+  {
+    "id": "T1078",
+    "name": "Valid Accounts",
+    "type": "attack",
+    "url": "https://attack.mitre.org/techniques/T1078/"
+  },
+  {
+    "id": "T1105",
+    "name": "Ingress Tool Transfer",
+    "type": "attack",
+    "url": "https://attack.mitre.org/techniques/T1105/"
+  },
+  {
+    "id": "T1110",
+    "name": "Brute Force",
+    "type": "attack",
+    "url": "https://attack.mitre.org/techniques/T1110/"
+  },
+  {
+    "id": "T1189",
+    "name": "Drive-by Compromise",
+    "type": "attack",
+    "url": "https://attack.mitre.org/techniques/T1189/"
+  },
+  {
+    "id": "T1190",
+    "name": "Exploit Public-Facing Application",
+    "type": "attack",
+    "url": "https://attack.mitre.org/techniques/T1190/"
+  },
+  {
+    "id": "T1567",
+    "name": "Exfiltration Over Web Service",
+    "type": "attack",
+    "url": "https://attack.mitre.org/techniques/T1567/"
+  },
+  {
+    "id": "CAPEC-100",
+    "name": "Overflow Buffers",
+    "type": "capec",
+    "url": "https://capec.mitre.org/data/definitions/100.html"
+  },
+  {
+    "id": "CAPEC-136",
+    "name": "LDAP Injection",
+    "type": "capec",
+    "url": "https://capec.mitre.org/data/definitions/136.html"
+  },
+  {
+    "id": "CAPEC-248",
+    "name": "Command Injection",
+    "type": "capec",
+    "url": "https://capec.mitre.org/data/definitions/248.html"
+  },
+  {
+    "id": "CAPEC-63",
+    "name": "Cross-Site Scripting (XSS)",
+    "type": "capec",
+    "url": "https://capec.mitre.org/data/definitions/63.html"
+  },
+  {
+    "id": "CTRL-CONDITIONAL-ACCESS",
+    "name": "Conditional access policy",
+    "type": "control"
+  },
+  {
+    "id": "CTRL-CSP",
+    "name": "Content Security Policy",
+    "type": "control"
+  },
+  {
+    "id": "CTRL-DLP-CASB",
+    "name": "DLP / CASB policy",
+    "type": "control"
+  },
+  {
+    "id": "CTRL-DNS-FILTERING",
+    "name": "DNS filtering",
+    "type": "control"
+  },
+  {
+    "id": "CTRL-EGRESS-FIREWALL",
+    "name": "Egress firewall allow/deny policy",
+    "type": "control"
+  },
+  {
+    "id": "CTRL-INPUT-OUTPUT-ENCODING",
+    "name": "Input validation and output encoding",
+    "type": "control"
+  },
+  {
+    "id": "CTRL-MFA-ENFORCEMENT",
+    "name": "MFA enforcement policy",
+    "type": "control"
+  },
+  {
+    "id": "CTRL-PATCH-MANAGEMENT",
+    "name": "Patch management evidence",
+    "type": "control"
+  },
+  {
+    "id": "CTRL-SWG-PROXY",
+    "name": "SWG / proxy logging",
+    "type": "control"
+  },
+  {
+    "id": "CTRL-VIRTUAL-PATCH",
+    "name": "Virtual patch / perimeter restriction",
+    "type": "control"
+  },
+  {
+    "id": "CVE-2021-44228",
+    "name": "Apache Log4j2 JNDI RCE / Log4Shell",
+    "type": "cve",
+    "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-44228"
+  },
+  {
+    "id": "CVE-2024-37079",
+    "metadata": {
+      "product_family": "VMware vCenter Server"
+    },
+    "name": "VMware vCenter Server DCERPC heap-overflow RCE",
+    "type": "cve",
+    "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-37079"
+  },
+  {
+    "id": "CWE-20",
+    "name": "Improper Input Validation",
+    "type": "cwe",
+    "url": "https://cwe.mitre.org/data/definitions/20.html"
+  },
+  {
+    "id": "CWE-502",
+    "name": "Deserialization of Untrusted Data",
+    "type": "cwe",
+    "url": "https://cwe.mitre.org/data/definitions/502.html"
+  },
+  {
+    "id": "CWE-787",
+    "name": "Out-of-bounds Write",
+    "type": "cwe",
+    "url": "https://cwe.mitre.org/data/definitions/787.html"
+  },
+  {
+    "id": "CWE-79",
+    "name": "Improper Neutralization of Input During Web Page Generation / Cross-site Scripting",
+    "type": "cwe",
+    "url": "https://cwe.mitre.org/data/definitions/79.html"
+  },
+  {
+    "id": "CWE-917",
+    "name": "Expression Language Injection",
+    "type": "cwe",
+    "url": "https://cwe.mitre.org/data/definitions/917.html"
+  },
+  {
+    "id": "D3-ACH",
+    "name": "Application Configuration Hardening",
+    "type": "d3fend",
+    "url": "https://d3fend.mitre.org/technique/d3f:ApplicationConfigurationHardening/"
+  },
+  {
+    "id": "D3-AI",
+    "name": "Asset Inventory",
+    "type": "d3fend",
+    "url": "https://d3fend.mitre.org/technique/d3f:AssetInventory/"
+  },
+  {
+    "id": "D3-AVE",
+    "name": "Asset Vulnerability Enumeration",
+    "type": "d3fend",
+    "url": "https://d3fend.mitre.org/technique/d3f:AssetVulnerabilityEnumeration/"
+  },
+  {
+    "id": "D3-DNSAL",
+    "name": "DNS Allowlisting",
+    "type": "d3fend",
+    "url": "https://d3fend.mitre.org/technique/d3f:DNSAllowlisting/"
+  },
+  {
+    "id": "D3-DNSDL",
+    "name": "DNS Denylisting",
+    "type": "d3fend",
+    "url": "https://d3fend.mitre.org/technique/d3f:DNSDenylisting/"
+  },
+  {
+    "id": "D3-FA",
+    "name": "File Analysis",
+    "type": "d3fend",
+    "url": "https://d3fend.mitre.org/technique/d3f:FileAnalysis/"
+  },
+  {
+    "id": "D3-MFA",
+    "name": "Multi-factor Authentication",
+    "type": "d3fend",
+    "url": "https://d3fend.mitre.org/technique/d3f:MultiFactorAuthentication/"
+  },
+  {
+    "id": "D3-NTA",
+    "name": "Network Traffic Analysis",
+    "type": "d3fend",
+    "url": "https://d3fend.mitre.org/technique/d3f:NetworkTrafficAnalysis/"
+  },
+  {
+    "id": "D3-OTF",
+    "name": "Outbound Traffic Filtering",
+    "type": "d3fend",
+    "url": "https://d3fend.mitre.org/technique/d3f:OutboundTrafficFiltering/"
+  },
+  {
+    "id": "D3-PA",
+    "name": "Process Analysis",
+    "type": "d3fend",
+    "url": "https://d3fend.mitre.org/technique/d3f:ProcessAnalysis/"
+  },
+  {
+    "id": "D3-PSA",
+    "name": "Process Spawn Analysis",
+    "type": "d3fend",
+    "url": "https://d3fend.mitre.org/technique/d3f:ProcessSpawnAnalysis/"
+  },
+  {
+    "id": "D3-SU",
+    "name": "Software Update",
+    "type": "d3fend",
+    "url": "https://d3fend.mitre.org/technique/d3f:SoftwareUpdate/"
+  },
+  {
+    "id": "D3-UA",
+    "name": "URL Analysis",
+    "type": "d3fend",
+    "url": "https://d3fend.mitre.org/technique/d3f:URLAnalysis/"
+  },
+  {
+    "id": "DET-CLOUD-UPLOAD-ANOMALY",
+    "name": "Anomalous upload to external cloud service",
+    "type": "detection"
+  },
+  {
+    "id": "DET-IMPOSSIBLE-TRAVEL",
+    "name": "Impossible travel / anomalous login",
+    "type": "detection"
+  },
+  {
+    "id": "DET-MFA-BYPASS-SIGNAL",
+    "name": "Login without expected MFA assurance",
+    "type": "detection"
+  },
+  {
+    "id": "DET-NON-BROWSER-UPLOAD",
+    "name": "Non-browser process uploading to external web service",
+    "type": "detection"
+  },
+  {
+    "id": "DET-RPC-EXPLOIT-ATTEMPT",
+    "name": "Suspicious RPC exploit attempt against vCenter",
+    "type": "detection"
+  },
+  {
+    "id": "DET-XSS-PAYLOAD",
+    "name": "Suspicious XSS payload in web logs",
+    "type": "detection"
+  },
+  {
+    "id": "EV-DNS-LOGS",
+    "name": "DNS logs",
+    "type": "evidence"
+  },
+  {
+    "id": "EV-EDR-NETWORK",
+    "name": "EDR network telemetry",
+    "type": "evidence"
+  },
+  {
+    "id": "EV-FIREWALL-LOGS",
+    "name": "Firewall or load balancer logs",
+    "type": "evidence"
+  },
+  {
+    "id": "EV-IAM-LOGS",
+    "name": "IAM authentication logs",
+    "type": "evidence"
+  },
+  {
+    "id": "EV-PROXY-LOGS",
+    "name": "Proxy logs",
+    "type": "evidence"
+  },
+  {
+    "id": "EV-WEB-APP-LOGS",
+    "name": "Web application logs",
+    "type": "evidence"
+  }
+]
