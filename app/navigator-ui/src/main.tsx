@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import routeData from '../../../data/samples/log4shell.route.json';
+import routeData from './data/log4shell.route.json';
 import './styles.css';
 
 type NodeType = 'cve' | 'cwe' | 'capec' | 'attack' | 'd3fend' | 'artifact' | 'control' | 'detection' | 'evidence' | 'gap';
