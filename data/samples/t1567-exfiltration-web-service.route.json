@@ -1,0 +1,65 @@
+{
+  "metadata": {
+    "id": "route-t1567-exfiltration-web-service",
+    "input": "T1567",
+    "name": "Exfiltration Over Web Service defense route",
+    "curation_status": "curated_mvp",
+    "notes": "ATT&CK-to-D3FEND operational route for exfiltration over web services."
+  },
+  "nodes": [
+    {"id":"T1567","type":"attack","name":"Exfiltration Over Web Service","url":"https://attack.mitre.org/techniques/T1567/"},
+    {"id":"ART-NETWORK-TRAFFIC","type":"artifact","name":"Outbound network traffic"},
+    {"id":"ART-URL","type":"artifact","name":"URL"},
+    {"id":"ART-DOMAIN","type":"artifact","name":"Domain"},
+    {"id":"ART-DNS-LOOKUP","type":"artifact","name":"DNS lookup"},
+    {"id":"ART-SENSITIVE-FILE","type":"artifact","name":"Sensitive file or payload"},
+    {"id":"D3-NTA","type":"d3fend","name":"Network Traffic Analysis","url":"https://d3fend.mitre.org/technique/d3f:NetworkTrafficAnalysis/"},
+    {"id":"D3-OTF","type":"d3fend","name":"Outbound Traffic Filtering","url":"https://d3fend.mitre.org/technique/d3f:OutboundTrafficFiltering/"},
+    {"id":"D3-DNSAL","type":"d3fend","name":"DNS Allowlisting","url":"https://d3fend.mitre.org/technique/d3f:DNSAllowlisting/"},
+    {"id":"D3-DNSDL","type":"d3fend","name":"DNS Denylisting","url":"https://d3fend.mitre.org/technique/d3f:DNSDenylisting/"},
+    {"id":"D3-UA","type":"d3fend","name":"URL Analysis","url":"https://d3fend.mitre.org/technique/d3f:URLAnalysis/"},
+    {"id":"D3-FA","type":"d3fend","name":"File Analysis","url":"https://d3fend.mitre.org/technique/d3f:FileAnalysis/"},
+    {"id":"CTRL-SWG-PROXY","type":"control","name":"SWG / proxy logging"},
+    {"id":"CTRL-DNS-FILTERING","type":"control","name":"DNS filtering"},
+    {"id":"CTRL-EGRESS-FIREWALL","type":"control","name":"Egress firewall allow/deny policy"},
+    {"id":"CTRL-DLP-CASB","type":"control","name":"DLP / CASB policy"},
+    {"id":"DET-CLOUD-UPLOAD-ANOMALY","type":"detection","name":"Anomalous upload to external cloud service"},
+    {"id":"DET-NON-BROWSER-UPLOAD","type":"detection","name":"Non-browser process uploading to external web service"},
+    {"id":"EV-PROXY-LOGS","type":"evidence","name":"Proxy logs"},
+    {"id":"EV-DNS-LOGS","type":"evidence","name":"DNS logs"},
+    {"id":"EV-EDR-NETWORK","type":"evidence","name":"EDR network telemetry"}
+  ],
+  "edges": [
+    {"source":"T1567","target":"ART-NETWORK-TRAFFIC","relationship":"affects_artifact","confidence":"curated"},
+    {"source":"T1567","target":"ART-URL","relationship":"affects_artifact","confidence":"curated"},
+    {"source":"T1567","target":"ART-DOMAIN","relationship":"affects_artifact","confidence":"curated"},
+    {"source":"T1567","target":"ART-DNS-LOOKUP","relationship":"affects_artifact","confidence":"curated"},
+    {"source":"T1567","target":"ART-SENSITIVE-FILE","relationship":"affects_artifact","confidence":"curated"},
+    {"source":"ART-NETWORK-TRAFFIC","target":"D3-NTA","relationship":"may_be_detected_by","confidence":"curated"},
+    {"source":"ART-NETWORK-TRAFFIC","target":"D3-OTF","relationship":"may_be_defended_by","confidence":"curated"},
+    {"source":"ART-DNS-LOOKUP","target":"D3-DNSAL","relationship":"may_be_defended_by","confidence":"curated"},
+    {"source":"ART-DNS-LOOKUP","target":"D3-DNSDL","relationship":"may_be_defended_by","confidence":"curated"},
+    {"source":"ART-URL","target":"D3-UA","relationship":"may_be_detected_by","confidence":"curated"},
+    {"source":"ART-SENSITIVE-FILE","target":"D3-FA","relationship":"may_be_detected_by","confidence":"curated"},
+    {"source":"D3-NTA","target":"CTRL-SWG-PROXY","relationship":"implemented_by","confidence":"internal_control_mapping"},
+    {"source":"D3-DNSAL","target":"CTRL-DNS-FILTERING","relationship":"implemented_by","confidence":"internal_control_mapping"},
+    {"source":"D3-DNSDL","target":"CTRL-DNS-FILTERING","relationship":"implemented_by","confidence":"internal_control_mapping"},
+    {"source":"D3-OTF","target":"CTRL-EGRESS-FIREWALL","relationship":"implemented_by","confidence":"internal_control_mapping"},
+    {"source":"D3-FA","target":"CTRL-DLP-CASB","relationship":"implemented_by","confidence":"internal_control_mapping"},
+    {"source":"CTRL-SWG-PROXY","target":"DET-CLOUD-UPLOAD-ANOMALY","relationship":"enables_detection","confidence":"internal_detection_mapping"},
+    {"source":"CTRL-SWG-PROXY","target":"DET-NON-BROWSER-UPLOAD","relationship":"enables_detection","confidence":"internal_detection_mapping"},
+    {"source":"DET-CLOUD-UPLOAD-ANOMALY","target":"EV-PROXY-LOGS","relationship":"requires_evidence","confidence":"internal_evidence_mapping"},
+    {"source":"DET-CLOUD-UPLOAD-ANOMALY","target":"EV-DNS-LOGS","relationship":"requires_evidence","confidence":"internal_evidence_mapping"},
+    {"source":"DET-NON-BROWSER-UPLOAD","target":"EV-EDR-NETWORK","relationship":"requires_evidence","confidence":"internal_evidence_mapping"}
+  ],
+  "coverage": {
+    "T1567": {
+      "status":"partial",
+      "controls":["CTRL-SWG-PROXY","CTRL-DNS-FILTERING"],
+      "detections":["DET-CLOUD-UPLOAD-ANOMALY"],
+      "evidence":["EV-PROXY-LOGS","EV-DNS-LOGS"],
+      "owners":["SOC","Network Security"],
+      "gaps":["Endpoint file access visibility may be missing"]
+    }
+  }
+}
