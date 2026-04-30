@@ -1,14 +1,144 @@
 # Attack2Defend Navigator
 
-**Attack2Defend** is a lightweight operational navigator that connects public threat knowledge to defensive action.
+**Attack2Defend** is a static-first operational navigator that turns public security framework knowledge into SOC/CTEM action.
 
-It is designed to map:
+It maps and navigates:
 
 ```text
 CVE → CWE → CAPEC → MITRE ATT&CK → Digital Artifact → MITRE D3FEND → Control → Detection → Evidence → Gap
 ```
 
-The goal is not to clone ATT&CK Navigator, D3FEND CAD, NSFW, or CVE2CAPEC. The goal is to build a simple, SOC-ready layer that turns framework relationships into **CTI actions, Threat Hunting hypotheses, Detection-as-Code metadata, CTEM decisions, and evidence of coverage**.
+The runtime UI does **not** call public APIs. Public knowledge is fetched by the scheduled builder, validated, snapshotted and served locally as `knowledge-bundle.json`.
+
+---
+
+## Current status
+
+| Capability | Status |
+|---|---|
+| React/Vite Navigator UI | Ready |
+| Deterministic curated seeds | Ready |
+| Public ATT&CK collector | Ready |
+| Public CWE collector | Ready |
+| Public CAPEC collector | Ready |
+| Public CISA KEV collector | Ready |
+| Best-effort D3FEND enrichment | Ready |
+| Optional NVD CVE enrichment | Ready |
+| Bundle validator | Ready |
+| Debian/Nginx/cron pre-prod runbook | Ready |
+| Agentic AI / AI Route Analyst runtime | Pending |
+
+---
+
+## Quick start: curated mode
+
+Curated mode is fast and offline after clone. It uses `data/samples/*.route.json`.
+
+```bash
+python scripts/knowledge_builder/build_knowledge_base.py
+python scripts/knowledge_builder/validate_bundle.py data/knowledge-bundle.json
+pytest -q
+```
+
+---
+
+## Quick start: public-source mode
+
+Public-source mode hydrates the bundle from ATT&CK, CWE, CAPEC, CISA KEV and best-effort D3FEND. It also preserves curated seeds and internal coverage.
+
+```bash
+python scripts/knowledge_builder/build_knowledge_base.py \
+  --with-public-sources \
+  --refresh-public-sources
+
+python scripts/knowledge_builder/validate_bundle.py \
+  data/knowledge-bundle.json \
+  --require-public-sources \
+  --min-nodes 100 \
+  --min-edges 50
+```
+
+Optional NVD enrichment for specific CVEs:
+
+```bash
+python scripts/knowledge_builder/build_knowledge_base.py \
+  --with-public-sources \
+  --with-nvd \
+  --nvd-cve CVE-2021-44228 \
+  --nvd-cve CVE-2024-37079
+```
+
+Optional recent NVD enrichment:
+
+```bash
+export NVD_API_KEY="<optional-api-key>"
+python scripts/knowledge_builder/build_knowledge_base.py \
+  --with-public-sources \
+  --with-nvd \
+  --nvd-recent-days 7
+```
+
+Generated outputs:
+
+```text
+data/nodes.json
+data/edges.json
+data/indexes.json
+data/coverage.json
+data/routes.json
+data/metadata.json
+data/knowledge-bundle.json
+data/raw/                         # public-source cache when enabled
+data/snapshots/<timestamp>/
+app/navigator-ui/public/data/knowledge-bundle.json
+```
+
+---
+
+## Run the UI
+
+```bash
+cd app/navigator-ui
+npm install
+npm run dev
+```
+
+Build static UI:
+
+```bash
+cd app/navigator-ui
+npm run build
+```
+
+The UI loads:
+
+```text
+/data/knowledge-bundle.json
+```
+
+If that file is missing, it falls back to the local Log4Shell sample for development resilience.
+
+---
+
+## Debian pre-production deployment
+
+Use the runbook:
+
+```text
+docs/PREPROD_DEPLOYMENT_DEBIAN.md
+```
+
+Pre-production cron should run public-source mode:
+
+```cron
+30 2 * * * cd /opt/attack2defend && . .venv/bin/activate && python scripts/knowledge_builder/build_knowledge_base.py --with-public-sources && python scripts/knowledge_builder/validate_bundle.py data/knowledge-bundle.json --require-public-sources --min-nodes 100 --min-edges 50 >> /var/log/attack2defend/knowledge_builder.log 2>&1
+```
+
+Recommended when you want recent NVD enrichment and have `NVD_API_KEY` available:
+
+```cron
+30 2 * * * cd /opt/attack2defend && . .venv/bin/activate && python scripts/knowledge_builder/build_knowledge_base.py --with-public-sources --with-nvd --nvd-recent-days 7 && python scripts/knowledge_builder/validate_bundle.py data/knowledge-bundle.json --require-public-sources --min-nodes 100 --min-edges 50 >> /var/log/attack2defend/knowledge_builder.log 2>&1
+```
 
 ---
 
@@ -33,185 +163,35 @@ ATT&CK technique
 → recommended action
 ```
 
-In one sentence:
-
 > **ATT&CK explains how the adversary acts. D3FEND explains how we defend the artifacts the adversary touches. Attack2Defend makes that route operational.**
 
 ---
 
-## Current MVP Pro state
+## What is intentionally not included yet
 
-The project is no longer a single Log4Shell demo. The MVP now has:
-
-| Capability | Status |
+| Not included | Reason |
 |---|---|
-| Curated multi-route knowledge seeds | Ready |
-| Local knowledge builder | Ready |
-| Generated bundle contract | Ready |
-| Search across CVE/CWE/CAPEC/ATT&CK/D3FEND/artifacts/controls/detections/evidence | Ready in UI |
-| Bidirectional route traversal | Ready in UI |
-| Coverage records | Ready |
-| Controls/detections/evidence/gaps model | Ready |
-| ATT&CK Navigator layer export starter | Ready |
-| Google SecOps-inspired UI styling | Ready |
-| AI agent / AI Route Analyst runtime | Pending |
-
-Seed routes currently include:
-
-| Input | Route purpose |
-|---|---|
-| `CVE-2021-44228` | Log4Shell route from CVE to weaknesses, attack path, D3FEND, controls, detections and evidence. |
-| `T1567` | Exfiltration over web service route from ATT&CK to artifacts, D3FEND, controls and detections. |
-| `CVE-2024-37079` | VMware vCenter exposure route to avoid CVE-only dead ends. |
-| `CWE-79` | XSS route for AppSec/CWE-driven navigation. |
-| `D3-MFA` | D3FEND-first reverse route for identity defense navigation. |
-
----
-
-## Quick start
-
-### Build the local knowledge bundle
-
-The scheduled-job entrypoint is:
-
-```bash
-python scripts/knowledge_builder/build_knowledge_base.py
-```
-
-MVP output:
-
-```text
-data/nodes.json
-data/edges.json
-data/indexes.json
-data/coverage.json
-data/routes.json
-data/metadata.json
-data/knowledge-bundle.json
-data/snapshots/<timestamp>/
-app/navigator-ui/public/data/knowledge-bundle.json
-```
-
-Cron example:
-
-```cron
-# Daily Attack2Defend knowledge sync at 02:30
-30 2 * * * cd /opt/attack2defend && .venv/bin/python scripts/knowledge_builder/build_knowledge_base.py >> logs/knowledge_builder.log 2>&1
-```
-
-### Run the MVP UI
-
-```bash
-cd app/navigator-ui
-npm install
-npm run dev
-```
-
-Build UI:
-
-```bash
-cd app/navigator-ui
-npm run build
-```
-
-Recommended local validation flow:
-
-```bash
-python scripts/knowledge_builder/build_knowledge_base.py
-cd app/navigator-ui
-npm install
-npm run build
-npm run dev
-```
-
----
-
-## MVP scope
-
-### In scope
-
-| Capability | Description |
-|---|---|
-| Framework route resolver | Resolve known relationships across CVE, CWE, CAPEC, ATT&CK, artifacts, D3FEND, controls, detections and evidence. |
-| Static knowledge bundle | Load normalized `knowledge-bundle.json` generated from curated snapshots and future public sources. |
-| Route analysis contract | Produce structured outputs for route, interpretation, hypotheses, actions and evidence gaps. |
-| CTI / TH action cards | Convert a route into CTI and Threat Hunting actions. |
-| Coverage metadata | Track internal controls, detections, owners, evidence and gaps without overwriting them from public data. |
-| Export-first design | Support Markdown/JSON and ATT&CK Navigator layer outputs. |
-
-### Out of scope for MVP
-
-| Not now | Reason |
-|---|---|
-| Full graph database | JSON is enough for the first working navigator. |
-| Runtime dependency on public APIs | SOC runtime should use internal snapshots. |
+| Agentic AI / AI Route Analyst runtime | Next major capability; must consume resolved routes, not invent mappings. |
+| Backend API | Static-first is enough for current pre-prod. |
+| Graph database | JSON bundle is enough until route queries become complex. |
+| Browser runtime public API calls | Public APIs belong in scheduled builder only. |
 | Autonomous remediation | Human approval and ownership come first. |
-| Heavy agent loop | Deterministic route first, AI interpretation second. |
-| Rebuilding ATT&CK Navigator or D3FEND CAD | Use deep links/export instead of cloning native MITRE tools. |
-| AI agent execution | The only intentionally pending major capability. |
 
 ---
 
-## UX model
+## Validation seeds
 
-Default UX must stay simple:
+Guaranteed curated seeds:
 
-```text
-[Search CVE / CWE / CAPEC / ATT&CK / D3FEND]
-
-Route:
-CVE → CWE → CAPEC → ATT&CK → Artifact → D3FEND → Control → Detection → Evidence
-
-Actions:
-CTI | Threat Hunting | SOC | AppSec | Infra | Cloud
-
-Depth tabs:
-Graph | MITRE Views | Coverage | Export
-```
-
-Recommended tabs:
-
-| Tab | Purpose |
+| Input | Purpose |
 |---|---|
-| Route | Simple linear path inspired by NSFW/CVE2CAPEC. |
-| Actions | CTI, TH, SOC and engineering actions. |
-| Graph | Auto-generated graph of the current route. |
-| MITRE Views | Deep links and ATT&CK Navigator layer export. |
-| Coverage | Controls, detections, owners, evidence and gaps. |
-| Export | Markdown, JSON and Navigator layer export. |
+| `CVE-2021-44228` | Log4Shell route from CVE to weakness, attack path, defense, controls, detections and evidence. |
+| `T1567` | ATT&CK-first exfiltration route. |
+| `CVE-2024-37079` | Modern CVE route. |
+| `CWE-79` | AppSec/CWE-first route. |
+| `D3-MFA` | D3FEND-first identity route. |
 
----
-
-## Architecture
-
-```text
-Public sources / curated seeds
-NVD / CVE / CWE / CAPEC / ATT&CK STIX / D3FEND / CISA KEV / internal mappings
-        ↓
-Threat Knowledge Builder
-fetch/curate → normalize → link → validate → snapshot → publish
-        ↓
-Internal Knowledge Bundle
-knowledge-bundle.json + nodes + edges + indexes + coverage + routes + metadata
-        ↓
-Navigator UI
-search → route traversal → graph → coverage → export
-        ↓
-Future AI Route Analyst
-interpretation + hypotheses + actions + validation plan
-```
-
----
-
-## Core rule
-
-```text
-The route is deterministic.
-The analysis is assisted by AI.
-The decision remains human-governed.
-```
-
-The AI must not invent mappings. It receives a resolved route and converts it into explanation, hypotheses, actions and evidence requirements.
+Public-source mode should also expose generic public nodes such as `T1190`, `CAPEC-63`, and broad CWE/CAPEC/ATT&CK catalog entries depending on source availability.
 
 ---
 
@@ -219,70 +199,28 @@ The AI must not invent mappings. It receives a resolved route and converts it in
 
 ```text
 attack2defend/
-├── app/navigator-ui/
-│   └── src/
-├── src/attack2defend/
-│   ├── contracts.py
-│   ├── resolver.py
-│   └── analyst_prompt.py
+├── app/navigator-ui/                 # React/Vite/TypeScript UI
 ├── data/
-│   ├── samples/
-│   │   ├── log4shell.route.json
-│   │   ├── t1567-exfiltration-web-service.route.json
-│   │   ├── cve-2024-37079-vcenter.route.json
-│   │   ├── cwe-79-xss.route.json
-│   │   └── d3-mfa-identity.route.json
-│   ├── nodes.json              # generated by builder
-│   ├── edges.json              # generated by builder
-│   ├── indexes.json            # generated by builder
-│   ├── coverage.json           # generated by builder
-│   ├── routes.json             # generated by builder
-│   ├── metadata.json           # generated by builder
-│   ├── knowledge-bundle.json   # generated by builder
-│   └── snapshots/              # generated by builder
-├── contracts/
-│   └── route-analysis.schema.json
-├── docs/
-│   ├── ARCHITECTURE.md
-│   ├── CTEM_OPERATING_MODEL.md
-│   └── UX_MODEL.md
+│   ├── samples/                      # curated route seeds
+│   ├── raw/                          # public-source cache when enabled
+│   ├── knowledge-bundle.json         # generated bundle
+│   └── snapshots/                    # generated snapshots
 ├── scripts/knowledge_builder/
-│   ├── build_knowledge_base.py # cron/job entrypoint
-│   └── README.md
-├── tests/
-│   └── test_resolver.py
-└── AGENTS.md
+│   ├── build_knowledge_base.py       # cron/job entrypoint
+│   ├── public_collectors.py          # dependency-free public collectors
+│   └── validate_bundle.py            # dependency-free bundle validator
+├── docs/
+│   └── PREPROD_DEPLOYMENT_DEBIAN.md
+└── tests/
 ```
-
----
-
-## Future integration with mcp-security
-
-Attack2Defend should later become a module/capability in `mcp-security`:
-
-```text
-attack2defend_core
-├── native_adapter
-└── mcp_adapter
-```
-
-Recommended capability names:
-
-| Capability | Responsibility |
-|---|---|
-| `attack2defend.resolve_route` | Deterministically resolve the framework route. |
-| `attack2defend.enrich_context` | Add asset, KEV, coverage, detections and evidence context. |
-| `attack2defend.analyze_route` | Use AI to generate interpretation, hypotheses and actions. |
-| `attack2defend.export_card` | Export Markdown/YAML/JSON. |
 
 ---
 
 ## Development principles
 
-1. Keep the route deterministic.
-2. Keep the UI simple first, graph second.
-3. Use public sources to build internal snapshots.
-4. Never depend on public APIs at SOC runtime.
-5. Preserve internal coverage data across public data updates.
-6. Separate confirmed evidence, inference and hypothesis.
-7. Every route must end in action, evidence or a declared gap.
+1. Keep route resolution deterministic.
+2. Use public sources only in the scheduled builder.
+3. Never depend on public APIs at SOC runtime.
+4. Preserve curated/internal coverage across public updates.
+5. UI renders the bundle; it does not fetch external knowledge directly.
+6. Every route should end in action, evidence or a declared gap.

@@ -26,6 +26,30 @@ REQUIRED_SEED_INPUTS = MODULE.REQUIRED_SEED_INPUTS
 validate_seed_inputs = MODULE.validate_seed_inputs
 
 
+def build_bundle_for_test(**overrides):
+    defaults = {
+        "strict": False,
+        "with_public_sources": False,
+        "cache_dir": Path("unused-cache"),
+        "refresh_public_sources": False,
+        "public_timeout": 10,
+        "public_fail_on_error": False,
+        "public_no_attack": False,
+        "public_no_cwe": False,
+        "public_no_capec": False,
+        "public_no_kev": False,
+        "public_no_d3fend": False,
+        "with_nvd": False,
+        "nvd_cves": [],
+        "nvd_recent_days": 0,
+        "nvd_api_key": None,
+        "max_kev_cves": None,
+        "max_d3fend_attack_ids": 5,
+    }
+    defaults.update(overrides)
+    return MODULE.build_bundle(**defaults)
+
+
 def test_validate_seed_inputs_passes_when_all_required_are_present():
     state = BuildState(route_inputs=sorted(REQUIRED_SEED_INPUTS))
     validate_seed_inputs(state)
@@ -47,12 +71,12 @@ def test_build_bundle_generates_expected_files_and_valid_bundle(tmp_path):
     ui_public_dir = tmp_path / "ui-public" / "data"
     shutil.copytree(REPO_ROOT / "data" / "samples", source_dir)
 
-    exit_code = MODULE.build_bundle(
+    exit_code = build_bundle_for_test(
         source_dir=source_dir,
         output_dir=output_dir,
         snapshot_dir=snapshot_dir,
         ui_public_dir=ui_public_dir,
-        strict=False,
+        cache_dir=tmp_path / "raw",
     )
 
     assert exit_code == 0
@@ -75,6 +99,7 @@ def test_build_bundle_generates_expected_files_and_valid_bundle(tmp_path):
     metadata = bundle["metadata"]
     assert set(metadata["seed_inputs"]["required"]) == REQUIRED_SEED_INPUTS
     assert REQUIRED_SEED_INPUTS.issubset(set(metadata["seed_inputs"]["available"]))
+    assert metadata["public_collection"]["enabled"] is False
     assert bundle["nodes"]
     assert bundle["edges"]
     assert bundle["coverage"]
@@ -94,3 +119,23 @@ def test_bundle_validator_detects_broken_edge():
 
     errors = VALIDATOR.validate_bundle(bundle)
     assert any("broken edge target" in error for error in errors)
+
+
+def test_public_source_validator_requires_public_metadata():
+    bundle = {
+        "metadata": {
+            "mode": "curated_mvp_bundle",
+            "seed_inputs": {"available": sorted(REQUIRED_SEED_INPUTS)},
+            "public_collection": {"enabled": False},
+            "public_sources": [],
+        },
+        "nodes": [{"id": "T1190", "type": "attack", "name": "Exploit Public-Facing Application"}],
+        "edges": [],
+        "indexes": {"route_inputs": sorted(REQUIRED_SEED_INPUTS), "search": [{"id": "T1190"}]},
+        "coverage": {},
+        "routes": [],
+    }
+
+    errors = VALIDATOR.validate_bundle(bundle, require_public_sources=True, min_nodes=1)
+    assert any("public_sources_bundle" in error for error in errors)
+    assert any("metadata.public_collection.enabled" in error for error in errors)

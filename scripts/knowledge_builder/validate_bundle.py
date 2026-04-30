@@ -26,7 +26,7 @@ def load_json(path: Path) -> dict[str, Any]:
     return payload
 
 
-def validate_bundle(bundle: dict[str, Any]) -> list[str]:
+def validate_bundle(bundle: dict[str, Any], *, require_public_sources: bool = False, min_nodes: int | None = None, min_edges: int | None = None) -> list[str]:
     errors: list[str] = []
 
     missing_keys = REQUIRED_TOP_LEVEL_KEYS - set(bundle)
@@ -51,7 +51,14 @@ def validate_bundle(bundle: dict[str, Any]) -> list[str]:
         errors.append("metadata must be an object")
         metadata = {}
 
+    if min_nodes is not None and len(nodes) < min_nodes:
+        errors.append(f"node count {len(nodes)} is below required minimum {min_nodes}")
+    if min_edges is not None and len(edges) < min_edges:
+        errors.append(f"edge count {len(edges)} is below required minimum {min_edges}")
+
     node_ids: set[str] = set()
+    node_types: set[str] = set()
+    public_node_count = 0
     for index, node in enumerate(nodes):
         if not isinstance(node, dict):
             errors.append(f"nodes[{index}] is not an object")
@@ -59,18 +66,23 @@ def validate_bundle(bundle: dict[str, Any]) -> list[str]:
         node_id = str(node.get("id", "")).strip().upper()
         node_type = str(node.get("type", "")).strip().lower()
         node_name = str(node.get("name", "")).strip()
+        metadata_obj = node.get("metadata", {}) if isinstance(node.get("metadata", {}), dict) else {}
         if not node_id:
             errors.append(f"nodes[{index}] missing id")
             continue
         if node_id in node_ids:
             errors.append(f"duplicate node id: {node_id}")
         node_ids.add(node_id)
+        node_types.add(node_type)
+        if str(metadata_obj.get("source", "")).startswith(("mitre_", "cwe_", "capec_", "cisa_", "nvd_", "d3fend_")):
+            public_node_count += 1
         if node_type not in VALID_NODE_TYPES:
             errors.append(f"node {node_id} invalid type: {node_type!r}")
         if not node_name:
             errors.append(f"node {node_id} missing name")
 
     edge_keys: set[tuple[str, str, str]] = set()
+    public_edge_count = 0
     for index, edge in enumerate(edges):
         if not isinstance(edge, dict):
             errors.append(f"edges[{index}] is not an object")
@@ -89,6 +101,8 @@ def validate_bundle(bundle: dict[str, Any]) -> list[str]:
         if key in edge_keys:
             errors.append(f"duplicate edge: {source} {relationship} {target}")
         edge_keys.add(key)
+        if edge.get("confidence") == "public_source" or str(edge.get("source_ref", "")).startswith(("mitre_", "capec_", "nvd_", "d3fend_")):
+            public_edge_count += 1
 
     route_inputs = set(indexes.get("route_inputs", [])) if isinstance(indexes.get("route_inputs", []), list) else set()
     metadata_seed_inputs = metadata.get("seed_inputs", {})
@@ -102,12 +116,38 @@ def validate_bundle(bundle: dict[str, Any]) -> list[str]:
     if isinstance(search_index, list) and len(search_index) < len(nodes):
         errors.append("search index has fewer entries than nodes")
 
+    if require_public_sources:
+        public_collection = metadata.get("public_collection", {}) if isinstance(metadata.get("public_collection", {}), dict) else {}
+        public_sources = metadata.get("public_sources", [])
+        successful_collectors = set(public_collection.get("successful_collectors", [])) if isinstance(public_collection.get("successful_collectors", []), list) else set()
+        if metadata.get("mode") != "public_sources_bundle":
+            errors.append("bundle mode is not public_sources_bundle")
+        if public_collection.get("enabled") is not True:
+            errors.append("metadata.public_collection.enabled is not true")
+        if not isinstance(public_sources, list) or not public_sources:
+            errors.append("metadata.public_sources is empty")
+        if not successful_collectors:
+            errors.append("metadata.public_collection.successful_collectors is empty")
+        has_attack = "attack" in node_types
+        has_cwe = "cwe" in node_types
+        has_capec = "capec" in node_types
+        has_kev_or_cve = "kev" in successful_collectors or "cve" in node_types
+        if not ((has_attack and has_cwe and has_capec) or (has_attack and has_kev_or_cve)):
+            errors.append("public bundle must include ATT&CK + CWE + CAPEC, or ATT&CK + KEV/CVE")
+        if public_node_count == 0:
+            errors.append("public bundle has no public-source nodes")
+        if public_edge_count == 0:
+            errors.append("public bundle has no public-source edges")
+
     return errors
 
 
 def parse_args(argv: list[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Validate an Attack2Defend knowledge bundle.")
     parser.add_argument("bundle", type=Path, nargs="?", default=Path("data/knowledge-bundle.json"))
+    parser.add_argument("--require-public-sources", action="store_true", help="Require metadata and graph evidence that public collectors were used.")
+    parser.add_argument("--min-nodes", type=int, default=None)
+    parser.add_argument("--min-edges", type=int, default=None)
     return parser.parse_args(argv)
 
 
@@ -119,7 +159,12 @@ def main(argv: list[str] | None = None) -> int:
         print(f"ERROR: failed to load bundle: {exc}", file=sys.stderr)
         return 1
 
-    errors = validate_bundle(bundle)
+    errors = validate_bundle(
+        bundle,
+        require_public_sources=args.require_public_sources,
+        min_nodes=args.min_nodes,
+        min_edges=args.min_edges,
+    )
     if errors:
         for error in errors:
             print(f"ERROR: {error}", file=sys.stderr)

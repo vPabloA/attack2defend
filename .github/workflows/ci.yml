@@ -33,6 +33,52 @@ jobs:
       - name: Run Python tests
         run: pytest -q
 
+  public-collectors-smoke:
+    name: Public collectors smoke validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Python package
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e '.[dev]'
+
+      - name: Build public-source knowledge bundle without D3FEND fanout
+        run: |
+          python scripts/knowledge_builder/build_knowledge_base.py \
+            --with-public-sources \
+            --public-no-d3fend \
+            --max-kev-cves 25 \
+            --no-snapshot
+
+      - name: Validate public-source knowledge bundle
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          bundle = json.loads(Path("data/knowledge-bundle.json").read_text(encoding="utf-8"))
+          metadata = bundle.get("metadata", {})
+          public_sources = metadata.get("public_sources", [])
+          if not public_sources:
+              raise SystemExit("Public smoke failed: metadata.public_sources is empty")
+          print(f"Public smoke sources: {len(public_sources)}")
+          PY
+
+      - name: Enforce public-source bundle contracts
+        run: |
+          python scripts/knowledge_builder/validate_bundle.py \
+            data/knowledge-bundle.json \
+            --require-public-sources \
+            --min-nodes 100 \
+            --min-edges 10
+
   navigator-ui:
     name: Navigator UI build
     runs-on: ubuntu-latest
