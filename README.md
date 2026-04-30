@@ -220,4 +220,3 @@ pytest -q
 ```
 
 
-> Note: in this repository snapshot, `app/navigator-ui/` contains runtime data and docs; the full Vite UI source may live in a separate branch/repository state.

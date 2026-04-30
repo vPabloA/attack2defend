@@ -128,6 +128,12 @@ def main() -> None:
 
     (public_data_dir / "knowledge-bundle.json").write_text(json.dumps(bundle, indent=2), encoding="utf-8")
 
+    snapshot_dir = data_dir / "snapshots"
+    snapshot_dir.mkdir(parents=True, exist_ok=True)
+    timestamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    snapshot_path = snapshot_dir / f"knowledge-bundle-{timestamp}.json"
+    snapshot_path.write_text(json.dumps(bundle, indent=2), encoding="utf-8")
+
 
 if __name__ == "__main__":
     main()

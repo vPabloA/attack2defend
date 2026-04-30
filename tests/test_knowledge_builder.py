@@ -34,3 +34,6 @@ def test_build_knowledge_base_outputs_and_edges():
     for seed in ["CVE-2021-44228", "T1567", "CVE-2024-37079", "CWE-79", "D3-MFA"]:
         assert seed in routes
         assert routes[seed]["found"] is True
+
+    snapshots = sorted((REPO_ROOT / "data/snapshots").glob("knowledge-bundle-*.json"))
+    assert snapshots, "missing snapshot knowledge bundle"

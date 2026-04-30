@@ -1,0 +1,4 @@
+:root{font-family:Inter,Arial,sans-serif;background:#0b1220;color:#e6edf7}
+body{margin:0}.app{max-width:980px;margin:auto;padding:20px}input{width:100%;padding:10px;border-radius:8px;border:1px solid #2b3b57;background:#0f1b31;color:#fff}
+.tabs,.chips{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}button{background:#13233f;color:#cde1ff;border:1px solid #29466b;border-radius:8px;padding:8px 12px;cursor:pointer}.active{background:#1d4ed8}
+pre{background:#0f1b31;padding:10px;border-radius:8px;overflow:auto}ol,ul{line-height:1.8}

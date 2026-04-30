@@ -1,0 +1,25 @@
+{
+  "metadata": {
+    "bundle_version": "fallback-local",
+    "curation_status": "seed_curated"
+  },
+  "nodes": [
+    { "id": "CVE-2021-44228", "type": "cve", "name": "Apache Log4j2 JNDI RCE" },
+    { "id": "T1567", "type": "attack", "name": "Exfiltration Over Web Service" },
+    { "id": "CVE-2024-37079", "type": "cve", "name": "Curated seed CVE-2024-37079" },
+    { "id": "CWE-79", "type": "cwe", "name": "Cross-site Scripting" },
+    { "id": "D3-MFA", "type": "d3fend", "name": "Multi-factor Authentication" }
+  ],
+  "routes": {
+    "CVE-2021-44228": { "found": true, "ordered_path": ["CVE-2021-44228", "CWE-917", "CAPEC-136", "T1190", "D3-NTA"], "warnings": [] },
+    "T1567": { "found": true, "ordered_path": ["T1567", "D3-DNSDL"], "warnings": [] },
+    "CVE-2024-37079": { "found": true, "ordered_path": ["CVE-2024-37079", "CWE-79", "CAPEC-63", "T1059", "D3-MFA"], "warnings": [] },
+    "CWE-79": { "found": true, "ordered_path": ["CWE-79", "CAPEC-63", "T1059", "D3-MFA"], "warnings": [] },
+    "D3-MFA": { "found": true, "ordered_path": ["D3-MFA"], "warnings": [] }
+  },
+  "coverage": {
+    "records": [
+      { "target_id": "D3-MFA", "status": "unknown", "gaps": ["Owner and evidence not assigned yet"] }
+    ]
+  }
+}
