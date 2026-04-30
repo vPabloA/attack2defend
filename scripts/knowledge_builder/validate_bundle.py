@@ -119,15 +119,21 @@ def validate_bundle(bundle: dict[str, Any], *, require_public_sources: bool = Fa
     if require_public_sources:
         public_collection = metadata.get("public_collection", {}) if isinstance(metadata.get("public_collection", {}), dict) else {}
         public_sources = metadata.get("public_sources", [])
+        successful_collectors = set(public_collection.get("successful_collectors", [])) if isinstance(public_collection.get("successful_collectors", []), list) else set()
         if metadata.get("mode") != "public_sources_bundle":
             errors.append("bundle mode is not public_sources_bundle")
         if public_collection.get("enabled") is not True:
             errors.append("metadata.public_collection.enabled is not true")
         if not isinstance(public_sources, list) or not public_sources:
             errors.append("metadata.public_sources is empty")
-        for required_type in ("attack", "cwe", "capec"):
-            if required_type not in node_types:
-                errors.append(f"public bundle missing node type: {required_type}")
+        if not successful_collectors:
+            errors.append("metadata.public_collection.successful_collectors is empty")
+        has_attack = "attack" in node_types
+        has_cwe = "cwe" in node_types
+        has_capec = "capec" in node_types
+        has_kev_or_cve = "kev" in successful_collectors or "cve" in node_types
+        if not ((has_attack and has_cwe and has_capec) or (has_attack and has_kev_or_cve)):
+            errors.append("public bundle must include ATT&CK + CWE + CAPEC, or ATT&CK + KEV/CVE")
         if public_node_count == 0:
             errors.append("public bundle has no public-source nodes")
         if public_edge_count == 0:

@@ -47,6 +47,8 @@ class CollectorResult:
     route_inputs: set[str] = field(default_factory=set)
     sources: list[str] = field(default_factory=list)
     warnings: list[str] = field(default_factory=list)
+    successful_collectors: set[str] = field(default_factory=set)
+    failed_collectors: list[str] = field(default_factory=list)
 
     def add_node(self, node: dict[str, Any]) -> None:
         node_id = normalize_id(node.get("id"))
@@ -77,6 +79,8 @@ class CollectorResult:
         self.route_inputs.update(other.route_inputs)
         self.sources.extend(other.sources)
         self.warnings.extend(other.warnings)
+        self.successful_collectors.update(other.successful_collectors)
+        self.failed_collectors.extend(other.failed_collectors)
 
 
 def normalize_id(value: Any) -> str:
@@ -122,12 +126,18 @@ def merge_node(existing: dict[str, Any], incoming: dict[str, Any]) -> dict[str, 
     return merged
 
 
+DEFAULT_HEADERS = {
+    "User-Agent": "attack2defend-knowledge-builder/0.3 (+https://github.com/vPabloA/attack2defend)",
+    "Accept": "application/json, application/xml, text/xml, application/zip, */*",
+}
+
+
 def fetch_bytes(url: str, cache_path: Path, *, timeout: int = 45, refresh: bool = False, headers: dict[str, str] | None = None) -> bytes:
     cache_path.parent.mkdir(parents=True, exist_ok=True)
     if cache_path.exists() and not refresh:
         return cache_path.read_bytes()
 
-    request = urllib.request.Request(url, headers={"User-Agent": "attack2defend-knowledge-builder/0.1", **(headers or {})})
+    request = urllib.request.Request(url, headers={**DEFAULT_HEADERS, **(headers or {})})
     with urllib.request.urlopen(request, timeout=timeout) as response:
         data = response.read()
     cache_path.write_bytes(data)
@@ -168,8 +178,9 @@ def first_text(element: ET.Element, child_name: str) -> str:
 
 
 def collect_attack(cache_dir: Path, *, refresh: bool = False, timeout: int = 45) -> CollectorResult:
-    result = CollectorResult(sources=[ATTACK_ENTERPRISE_STIX_URL])
+    result = CollectorResult()
     payload = fetch_json(ATTACK_ENTERPRISE_STIX_URL, cache_dir / "attack" / "enterprise-attack.json", refresh=refresh, timeout=timeout)
+    result.sources.append(ATTACK_ENTERPRISE_STIX_URL)
     objects = payload.get("objects", [])
     stix_to_attack: dict[str, str] = {}
 
@@ -212,8 +223,9 @@ def collect_attack(cache_dir: Path, *, refresh: bool = False, timeout: int = 45)
 
 
 def collect_cwe(cache_dir: Path, *, refresh: bool = False, timeout: int = 45) -> CollectorResult:
-    result = CollectorResult(sources=[CWE_LATEST_XML_ZIP_URL])
+    result = CollectorResult()
     root = read_first_xml_from_zip(fetch_bytes(CWE_LATEST_XML_ZIP_URL, cache_dir / "cwe" / "cwec_latest.xml.zip", refresh=refresh, timeout=timeout))
+    result.sources.append(CWE_LATEST_XML_ZIP_URL)
 
     for weakness in root.iter():
         if strip_namespace(weakness.tag) != "Weakness":
@@ -234,8 +246,9 @@ def collect_cwe(cache_dir: Path, *, refresh: bool = False, timeout: int = 45) ->
 
 
 def collect_capec(cache_dir: Path, *, refresh: bool = False, timeout: int = 45) -> CollectorResult:
-    result = CollectorResult(sources=[CAPEC_LATEST_XML_ZIP_URL])
+    result = CollectorResult()
     root = read_first_xml_from_zip(fetch_bytes(CAPEC_LATEST_XML_ZIP_URL, cache_dir / "capec" / "capec_latest.xml.zip", refresh=refresh, timeout=timeout))
+    result.sources.append(CAPEC_LATEST_XML_ZIP_URL)
 
     for attack_pattern in root.iter():
         if strip_namespace(attack_pattern.tag) != "Attack_Pattern":
@@ -273,8 +286,9 @@ def collect_capec(cache_dir: Path, *, refresh: bool = False, timeout: int = 45) 
 
 
 def collect_kev(cache_dir: Path, *, refresh: bool = False, timeout: int = 45, max_cves: int | None = None) -> CollectorResult:
-    result = CollectorResult(sources=[CISA_KEV_URL])
+    result = CollectorResult()
     payload = fetch_json(CISA_KEV_URL, cache_dir / "kev" / "known_exploited_vulnerabilities.json", refresh=refresh, timeout=timeout)
+    result.sources.append(CISA_KEV_URL)
     vulnerabilities = payload.get("vulnerabilities", [])
     if not isinstance(vulnerabilities, list):
         return result
@@ -316,7 +330,7 @@ def collect_nvd(
     timeout: int = 45,
     max_results: int = 2000,
 ) -> CollectorResult:
-    result = CollectorResult(sources=[NVD_CVE_API_URL])
+    result = CollectorResult()
     headers = {"apiKey": api_key} if api_key else None
     requested_urls: list[tuple[str, Path]] = []
 
@@ -342,6 +356,7 @@ def collect_nvd(
         if index and api_key is None and refresh:
             time.sleep(6)
         payload = fetch_json(url, cache_path, refresh=refresh, timeout=timeout, headers=headers)
+        result.sources.append(url)
         ingest_nvd_payload(payload, result)
 
     return result
@@ -456,12 +471,15 @@ def collect_public_sources(
 
     def run(name: str, func: Any) -> None:
         try:
-            aggregate.extend(func())
+            collector_result = func()
+            aggregate.extend(collector_result)
+            aggregate.successful_collectors.add(name)
         except Exception as exc:  # noqa: BLE001 - collectors should isolate source failures
             message = f"Public collector {name} failed: {exc}"
             if fail_on_error:
                 raise RuntimeError(message) from exc
             aggregate.warnings.append(message)
+            aggregate.failed_collectors.append(name)
 
     if include_attack:
         run("attack", lambda: collect_attack(cache_dir, refresh=refresh, timeout=timeout))
