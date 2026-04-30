@@ -211,7 +211,7 @@ Recommended pre-production cron with public-source mode:
 
 ```cron
 # Attack2Defend public knowledge sync at 02:30
-30 2 * * * cd /opt/attack2defend && . .venv/bin/activate && python scripts/knowledge_builder/build_knowledge_base.py --with-public-sources && python scripts/knowledge_builder/validate_bundle.py data/knowledge-bundle.json --require-public-sources --min-nodes 100 --min-edges 50 >> /var/log/attack2defend/knowledge_builder.log 2>&1
+30 2 * * * cd /opt/attack2defend && . .venv/bin/activate && python scripts/knowledge_builder/build_knowledge_base.py --with-public-sources --with-nvd --nvd-recent-days 7 && python scripts/knowledge_builder/validate_bundle.py data/knowledge-bundle.json --require-public-sources --min-nodes 100 --min-edges 50 >> /var/log/attack2defend/knowledge_builder.log 2>&1
 ```
 
 Curated-only fallback cron:
