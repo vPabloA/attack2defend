@@ -1,0 +1,95 @@
+{
+  "CVE-2024-37079": {
+    "gaps": [
+      "Confirm affected vCenter exposure and version"
+    ],
+    "owners": [
+      "Infra",
+      "SOC",
+      "Virtualization"
+    ],
+    "status": "unknown"
+  },
+  "CWE-79": {
+    "controls": [
+      "CTRL-CSP",
+      "CTRL-INPUT-OUTPUT-ENCODING"
+    ],
+    "detections": [
+      "DET-XSS-PAYLOAD"
+    ],
+    "gaps": [
+      "Confirm CSP/report-only vs enforced status"
+    ],
+    "owners": [
+      "AppSec",
+      "SOC"
+    ],
+    "status": "partial"
+  },
+  "D3-MFA": {
+    "controls": [
+      "CTRL-CONDITIONAL-ACCESS",
+      "CTRL-MFA-ENFORCEMENT"
+    ],
+    "detections": [
+      "DET-IMPOSSIBLE-TRAVEL"
+    ],
+    "evidence": [
+      "EV-IAM-LOGS"
+    ],
+    "gaps": [
+      "Confirm break-glass and service-account exceptions"
+    ],
+    "owners": [
+      "IAM",
+      "SOC"
+    ],
+    "status": "partial"
+  },
+  "T1078": {
+    "detections": [
+      "DET-IMPOSSIBLE-TRAVEL",
+      "DET-MFA-BYPASS-SIGNAL"
+    ],
+    "owners": [
+      "IAM",
+      "SOC"
+    ],
+    "status": "partial"
+  },
+  "T1190": {
+    "controls": [
+      "CTRL-VIRTUAL-PATCH"
+    ],
+    "evidence": [
+      "EV-FIREWALL-LOGS"
+    ],
+    "owners": [
+      "Infra",
+      "SOC"
+    ],
+    "status": "partial"
+  },
+  "T1567": {
+    "controls": [
+      "CTRL-DNS-FILTERING",
+      "CTRL-SWG-PROXY"
+    ],
+    "detections": [
+      "DET-CLOUD-UPLOAD-ANOMALY"
+    ],
+    "evidence": [
+      "EV-DNS-LOGS",
+      "EV-PROXY-LOGS"
+    ],
+    "gaps": [
+      "Endpoint file access visibility may be missing"
+    ],
+    "owners": [
+      "Network Security",
+      "SOC"
+    ],
+    "status": "partial"
+  }
+}

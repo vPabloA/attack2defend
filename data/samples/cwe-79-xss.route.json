@@ -1,0 +1,45 @@
+{
+  "metadata": {
+    "id": "route-cwe-79-xss",
+    "input": "CWE-79",
+    "name": "Cross-site scripting route",
+    "curation_status": "curated_mvp",
+    "notes": "Application security route for CWE-driven navigation."
+  },
+  "nodes": [
+    {"id":"CWE-79","type":"cwe","name":"Improper Neutralization of Input During Web Page Generation / Cross-site Scripting","url":"https://cwe.mitre.org/data/definitions/79.html"},
+    {"id":"CAPEC-63","type":"capec","name":"Cross-Site Scripting (XSS)","url":"https://capec.mitre.org/data/definitions/63.html"},
+    {"id":"T1189","type":"attack","name":"Drive-by Compromise","url":"https://attack.mitre.org/techniques/T1189/"},
+    {"id":"T1059.007","type":"attack","name":"Command and Scripting Interpreter: JavaScript","url":"https://attack.mitre.org/techniques/T1059/007/"},
+    {"id":"ART-WEB-INPUT","type":"artifact","name":"Web input field or parameter"},
+    {"id":"ART-WEB-SCRIPT","type":"artifact","name":"Web script content"},
+    {"id":"D3-ACH","type":"d3fend","name":"Application Configuration Hardening","url":"https://d3fend.mitre.org/technique/d3f:ApplicationConfigurationHardening/"},
+    {"id":"D3-UA","type":"d3fend","name":"URL Analysis","url":"https://d3fend.mitre.org/technique/d3f:URLAnalysis/"},
+    {"id":"CTRL-CSP","type":"control","name":"Content Security Policy"},
+    {"id":"CTRL-INPUT-OUTPUT-ENCODING","type":"control","name":"Input validation and output encoding"},
+    {"id":"DET-XSS-PAYLOAD","type":"detection","name":"Suspicious XSS payload in web logs"},
+    {"id":"EV-WEB-APP-LOGS","type":"evidence","name":"Web application logs"}
+  ],
+  "edges": [
+    {"source":"CWE-79","target":"CAPEC-63","relationship":"may_enable_attack_pattern","confidence":"curated"},
+    {"source":"CAPEC-63","target":"T1189","relationship":"may_map_to_attack_technique","confidence":"curated"},
+    {"source":"CAPEC-63","target":"T1059.007","relationship":"may_map_to_attack_technique","confidence":"curated"},
+    {"source":"CWE-79","target":"ART-WEB-INPUT","relationship":"affects_artifact","confidence":"curated"},
+    {"source":"CAPEC-63","target":"ART-WEB-SCRIPT","relationship":"affects_artifact","confidence":"curated"},
+    {"source":"ART-WEB-INPUT","target":"D3-ACH","relationship":"may_be_defended_by","confidence":"curated"},
+    {"source":"ART-WEB-SCRIPT","target":"D3-UA","relationship":"may_be_detected_by","confidence":"curated"},
+    {"source":"D3-ACH","target":"CTRL-CSP","relationship":"implemented_by","confidence":"internal_control_mapping"},
+    {"source":"D3-ACH","target":"CTRL-INPUT-OUTPUT-ENCODING","relationship":"implemented_by","confidence":"internal_control_mapping"},
+    {"source":"D3-UA","target":"DET-XSS-PAYLOAD","relationship":"enables_detection","confidence":"internal_detection_mapping"},
+    {"source":"DET-XSS-PAYLOAD","target":"EV-WEB-APP-LOGS","relationship":"requires_evidence","confidence":"internal_evidence_mapping"}
+  ],
+  "coverage": {
+    "CWE-79": {
+      "status":"partial",
+      "controls":["CTRL-CSP","CTRL-INPUT-OUTPUT-ENCODING"],
+      "detections":["DET-XSS-PAYLOAD"],
+      "owners":["AppSec","SOC"],
+      "gaps":["Confirm CSP/report-only vs enforced status"]
+    }
+  }
+}

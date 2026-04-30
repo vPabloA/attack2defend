@@ -39,18 +39,105 @@ In one sentence:
 
 ---
 
+## Current MVP Pro state
+
+The project is no longer a single Log4Shell demo. The MVP now has:
+
+| Capability | Status |
+|---|---|
+| Curated multi-route knowledge seeds | Ready |
+| Local knowledge builder | Ready |
+| Generated bundle contract | Ready |
+| Search across CVE/CWE/CAPEC/ATT&CK/D3FEND/artifacts/controls/detections/evidence | Ready in UI |
+| Bidirectional route traversal | Ready in UI |
+| Coverage records | Ready |
+| Controls/detections/evidence/gaps model | Ready |
+| ATT&CK Navigator layer export starter | Ready |
+| Google SecOps-inspired UI styling | Ready |
+| AI agent / AI Route Analyst runtime | Pending |
+
+Seed routes currently include:
+
+| Input | Route purpose |
+|---|---|
+| `CVE-2021-44228` | Log4Shell route from CVE to weaknesses, attack path, D3FEND, controls, detections and evidence. |
+| `T1567` | Exfiltration over web service route from ATT&CK to artifacts, D3FEND, controls and detections. |
+| `CVE-2024-37079` | VMware vCenter exposure route to avoid CVE-only dead ends. |
+| `CWE-79` | XSS route for AppSec/CWE-driven navigation. |
+| `D3-MFA` | D3FEND-first reverse route for identity defense navigation. |
+
+---
+
+## Quick start
+
+### Build the local knowledge bundle
+
+The scheduled-job entrypoint is:
+
+```bash
+python scripts/knowledge_builder/build_knowledge_base.py
+```
+
+MVP output:
+
+```text
+data/nodes.json
+data/edges.json
+data/indexes.json
+data/coverage.json
+data/routes.json
+data/metadata.json
+data/knowledge-bundle.json
+data/snapshots/<timestamp>/
+app/navigator-ui/public/data/knowledge-bundle.json
+```
+
+Cron example:
+
+```cron
+# Daily Attack2Defend knowledge sync at 02:30
+30 2 * * * cd /opt/attack2defend && .venv/bin/python scripts/knowledge_builder/build_knowledge_base.py >> logs/knowledge_builder.log 2>&1
+```
+
+### Run the MVP UI
+
+```bash
+cd app/navigator-ui
+npm install
+npm run dev
+```
+
+Build UI:
+
+```bash
+cd app/navigator-ui
+npm run build
+```
+
+Recommended local validation flow:
+
+```bash
+python scripts/knowledge_builder/build_knowledge_base.py
+cd app/navigator-ui
+npm install
+npm run build
+npm run dev
+```
+
+---
+
 ## MVP scope
 
 ### In scope
 
 | Capability | Description |
 |---|---|
-| Framework route resolver | Resolve known relationships across CVE, CWE, CAPEC, ATT&CK and D3FEND. |
-| Static knowledge bundle | Load normalized `nodes.json` and `edges.json` generated from public sources or curated snapshots. |
+| Framework route resolver | Resolve known relationships across CVE, CWE, CAPEC, ATT&CK, artifacts, D3FEND, controls, detections and evidence. |
+| Static knowledge bundle | Load normalized `knowledge-bundle.json` generated from curated snapshots and future public sources. |
 | Route analysis contract | Produce structured outputs for route, interpretation, hypotheses, actions and evidence gaps. |
 | CTI / TH action cards | Convert a route into CTI and Threat Hunting actions. |
 | Coverage metadata | Track internal controls, detections, owners, evidence and gaps without overwriting them from public data. |
-| Export-first design | Support Markdown/YAML/JSON outputs for reports, Detection-as-Code metadata and future integrations. |
+| Export-first design | Support Markdown/JSON and ATT&CK Navigator layer outputs. |
 
 ### Out of scope for MVP
 
@@ -61,6 +148,7 @@ In one sentence:
 | Autonomous remediation | Human approval and ownership come first. |
 | Heavy agent loop | Deterministic route first, AI interpretation second. |
 | Rebuilding ATT&CK Navigator or D3FEND CAD | Use deep links/export instead of cloning native MITRE tools. |
+| AI agent execution | The only intentionally pending major capability. |
 
 ---
 
@@ -72,7 +160,7 @@ Default UX must stay simple:
 [Search CVE / CWE / CAPEC / ATT&CK / D3FEND]
 
 Route:
-CVE → CWE → CAPEC → ATT&CK → D3FEND
+CVE → CWE → CAPEC → ATT&CK → Artifact → D3FEND → Control → Detection → Evidence
 
 Actions:
 CTI | Threat Hunting | SOC | AppSec | Infra | Cloud
@@ -88,34 +176,29 @@ Recommended tabs:
 | Route | Simple linear path inspired by NSFW/CVE2CAPEC. |
 | Actions | CTI, TH, SOC and engineering actions. |
 | Graph | Auto-generated graph of the current route. |
-| MITRE Views | Deep links and future exports to ATT&CK Navigator / D3FEND CAD-compatible views. |
+| MITRE Views | Deep links and ATT&CK Navigator layer export. |
 | Coverage | Controls, detections, owners, evidence and gaps. |
-| Export | Markdown, YAML, JSON and future ATT&CK Navigator layer. |
+| Export | Markdown, JSON and Navigator layer export. |
 
 ---
 
 ## Architecture
 
 ```text
-Public sources
-NVD / CVE / CWE / CAPEC / ATT&CK STIX / D3FEND / CISA KEV
+Public sources / curated seeds
+NVD / CVE / CWE / CAPEC / ATT&CK STIX / D3FEND / CISA KEV / internal mappings
         ↓
 Threat Knowledge Builder
-fetch → normalize → link → validate → snapshot
+fetch/curate → normalize → link → validate → snapshot → publish
         ↓
 Internal Knowledge Bundle
-nodes.json + edges.json + indexes.json + metadata.json
+knowledge-bundle.json + nodes + edges + indexes + coverage + routes + metadata
         ↓
-Route Resolver
-input ID → related nodes → ordered route
+Navigator UI
+search → route traversal → graph → coverage → export
         ↓
-Coverage Enricher
-controls + detections + evidence + owners + gaps
-        ↓
-AI Route Analyst
+Future AI Route Analyst
 interpretation + hypotheses + actions + validation plan
-        ↓
-Navigator UI / API / Markdown / YAML / JSON
 ```
 
 ---
@@ -136,12 +219,27 @@ The AI must not invent mappings. It receives a resolved route and converts it in
 
 ```text
 attack2defend/
+├── app/navigator-ui/
+│   └── src/
 ├── src/attack2defend/
 │   ├── contracts.py
 │   ├── resolver.py
 │   └── analyst_prompt.py
-├── data/samples/
-│   └── log4shell.route.json
+├── data/
+│   ├── samples/
+│   │   ├── log4shell.route.json
+│   │   ├── t1567-exfiltration-web-service.route.json
+│   │   ├── cve-2024-37079-vcenter.route.json
+│   │   ├── cwe-79-xss.route.json
+│   │   └── d3-mfa-identity.route.json
+│   ├── nodes.json              # generated by builder
+│   ├── edges.json              # generated by builder
+│   ├── indexes.json            # generated by builder
+│   ├── coverage.json           # generated by builder
+│   ├── routes.json             # generated by builder
+│   ├── metadata.json           # generated by builder
+│   ├── knowledge-bundle.json   # generated by builder
+│   └── snapshots/              # generated by builder
 ├── contracts/
 │   └── route-analysis.schema.json
 ├── docs/
@@ -149,30 +247,11 @@ attack2defend/
 │   ├── CTEM_OPERATING_MODEL.md
 │   └── UX_MODEL.md
 ├── scripts/knowledge_builder/
+│   ├── build_knowledge_base.py # cron/job entrypoint
 │   └── README.md
 ├── tests/
 │   └── test_resolver.py
 └── AGENTS.md
-```
-
----
-
-## First sample
-
-The repository starts with a curated sample route for:
-
-```text
-CVE-2021-44228 / Log4Shell
-```
-
-Target route:
-
-```text
-CVE-2021-44228
-→ CWE-917 / CWE-20 / CWE-502
-→ CAPEC-136 / CAPEC-248
-→ T1190 / T1059 / T1105 / T1071
-→ D3FEND inventory, vulnerability enumeration, software update, network/process analysis
 ```
 
 ---
