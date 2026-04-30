@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://attack2defend.local/contracts/route-analysis.schema.json",
+  "title": "Attack2Defend Route Analysis",
+  "type": "object",
+  "required": ["input", "route", "analysis"],
+  "properties": {
+    "input": {
+      "type": "object",
+      "required": ["id", "type"],
+      "properties": {
+        "id": {"type": "string"},
+        "type": {"type": "string"}
+      },
+      "additionalProperties": true
+    },
+    "route": {
+      "type": "object",
+      "required": ["nodes", "edges"],
+      "properties": {
+        "nodes": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/node"}
+        },
+        "edges": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/edge"}
+        },
+        "ordered_path": {
+          "type": "array",
+          "items": {"type": "string"}
+        }
+      },
+      "additionalProperties": true
+    },
+    "coverage": {
+      "type": "object",
+      "additionalProperties": {"$ref": "#/$defs/coverage_record"}
+    },
+    "analysis": {
+      "type": "object",
+      "required": ["executive_summary", "interpretation", "recommended_decision"],
+      "properties": {
+        "executive_summary": {"type": "string"},
+        "interpretation": {"type": "string"},
+        "cti_actions": {"type": "array", "items": {"type": "string"}},
+        "threat_hunting_hypotheses": {"type": "array", "items": {"type": "string"}},
+        "soc_actions": {"type": "array", "items": {"type": "string"}},
+        "appsec_actions": {"type": "array", "items": {"type": "string"}},
+        "infra_actions": {"type": "array", "items": {"type": "string"}},
+        "missing_evidence": {"type": "array", "items": {"type": "string"}},
+        "escalation_criteria": {"type": "array", "items": {"type": "string"}},
+        "recommended_decision": {
+          "type": "string",
+          "enum": ["no_action", "monitor", "hunt", "detect", "validate", "mitigate", "escalate", "accept_risk", "validate_and_mitigate"]
+        },
+        "confidence": {
+          "type": "string",
+          "enum": ["low", "medium", "high"]
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "$defs": {
+    "node": {
+      "type": "object",
+      "required": ["id", "type", "name"],
+      "properties": {
+        "id": {"type": "string"},
+        "type": {"type": "string"},
+        "name": {"type": "string"},
+        "description": {"type": "string"},
+        "url": {"type": "string"},
+        "metadata": {"type": "object"}
+      },
+      "additionalProperties": true
+    },
+    "edge": {
+      "type": "object",
+      "required": ["source", "target", "relationship"],
+      "properties": {
+        "source": {"type": "string"},
+        "target": {"type": "string"},
+        "relationship": {"type": "string"},
+        "confidence": {"type": "string"},
+        "source_ref": {"type": "string"}
+      },
+      "additionalProperties": true
+    },
+    "coverage_record": {
+      "type": "object",
+      "properties": {
+        "status": {"type": "string"},
+        "controls": {"type": "array", "items": {"type": "string"}},
+        "detections": {"type": "array", "items": {"type": "string"}},
+        "evidence": {"type": "array", "items": {"type": "string"}},
+        "gaps": {"type": "array", "items": {"type": "string"}},
+        "owners": {"type": "array", "items": {"type": "string"}}
+      },
+      "additionalProperties": true
+    }
+  }
+}
