@@ -3,23 +3,23 @@
 
 Scheduled-job entrypoint for the local Attack2Defend knowledge base.
 
-Current MVP behavior:
-- reads all curated route files from data/samples/*.route.json;
-- normalizes nodes, edges, coverage and route metadata;
-- validates node IDs, duplicate conflicts and broken edges;
-- generates a local knowledge bundle consumed by the Navigator UI;
-- mirrors the bundle to app/navigator-ui/public/data/knowledge-bundle.json;
-- optionally creates timestamped snapshots under data/snapshots/.
+The builder can run in two modes:
 
-Future collector stages will hydrate the same contract from NVD/CVE, CWE, CAPEC,
-ATT&CK STIX, D3FEND and CISA KEV. SOC runtime should consume only the generated
-local bundle, not live public APIs.
+1. Curated mode (default): reads data/samples/*.route.json and generates a
+   deterministic local bundle.
+2. Public-source mode (--with-public-sources): extends the curated bundle with
+   public ATT&CK, CWE, CAPEC, CISA KEV, optional NVD and best-effort D3FEND data.
+
+SOC runtime rule:
+The Navigator UI never calls public APIs directly. Public sources are fetched by
+this scheduled builder and published as a local snapshot.
 """
 
 from __future__ import annotations
 
 import argparse
 import json
+import os
 import shutil
 import sys
 from dataclasses import asdict, dataclass, field
@@ -27,7 +27,16 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-BUILDER_VERSION = "0.2.0"
+SCRIPT_DIR = Path(__file__).resolve().parent
+if str(SCRIPT_DIR) not in sys.path:
+    sys.path.insert(0, str(SCRIPT_DIR))
+
+try:
+    from public_collectors import collect_public_sources
+except Exception:  # pragma: no cover - import failure is reported at runtime when requested
+    collect_public_sources = None  # type: ignore[assignment]
+
+BUILDER_VERSION = "0.3.0"
 CONTRACT_VERSION = "attack2defend.knowledge_bundle.v1"
 
 VALID_NODE_TYPES = {
@@ -68,6 +77,7 @@ class BuildState:
     routes: list[dict[str, Any]] = field(default_factory=list)
     source_files: list[str] = field(default_factory=list)
     route_inputs: list[str] = field(default_factory=list)
+    public_sources: list[str] = field(default_factory=list)
     issues: list[BuildIssue] = field(default_factory=list)
 
     def warn(self, message: str, source: str = "") -> None:
@@ -100,7 +110,7 @@ def normalize_id(value: Any) -> str:
     return str(value or "").strip().upper()
 
 
-def normalize_node(raw: dict[str, Any], source: Path, state: BuildState) -> dict[str, Any] | None:
+def normalize_node(raw: dict[str, Any], source: Path | str, state: BuildState) -> dict[str, Any] | None:
     node_id = normalize_id(raw.get("id"))
     node_type = str(raw.get("type") or "").strip().lower()
     name = str(raw.get("name") or "").strip()
@@ -127,6 +137,8 @@ def normalize_node(raw: dict[str, Any], source: Path, state: BuildState) -> dict
 def merge_node(existing: dict[str, Any], incoming: dict[str, Any]) -> dict[str, Any]:
     merged = dict(existing)
     for key, value in incoming.items():
+        if value in ("", None, [], {}):
+            continue
         if key == "metadata" and isinstance(value, dict):
             metadata = dict(merged.get("metadata", {}))
             metadata.update(value)
@@ -136,7 +148,7 @@ def merge_node(existing: dict[str, Any], incoming: dict[str, Any]) -> dict[str, 
     return merged
 
 
-def normalize_edge(raw: dict[str, Any], source: Path, state: BuildState) -> dict[str, Any] | None:
+def normalize_edge(raw: dict[str, Any], source: Path | str, state: BuildState) -> dict[str, Any] | None:
     source_id = normalize_id(raw.get("source"))
     target_id = normalize_id(raw.get("target"))
     relationship = str(raw.get("relationship") or "").strip().lower()
@@ -184,6 +196,25 @@ def merge_coverage(existing: dict[str, Any], incoming: dict[str, Any]) -> dict[s
     return merged
 
 
+def upsert_node(state: BuildState, node: dict[str, Any], source: Path | str) -> None:
+    normalized = normalize_node(node, source, state)
+    if normalized is None:
+        return
+    existing = state.nodes.get(normalized["id"])
+    if existing and existing != normalized:
+        state.nodes[normalized["id"]] = merge_node(existing, normalized)
+    else:
+        state.nodes[normalized["id"]] = normalized
+
+
+def upsert_edge(state: BuildState, edge: dict[str, Any], source: Path | str) -> None:
+    normalized = normalize_edge(edge, source, state)
+    if normalized is None:
+        return
+    key = (normalized["source"], normalized["target"], normalized["relationship"])
+    state.edges[key] = normalized
+
+
 def ingest_route_file(path: Path, state: BuildState) -> None:
     payload = load_json(path)
     state.source_files.append(str(path))
@@ -204,28 +235,16 @@ def ingest_route_file(path: Path, state: BuildState) -> None:
         return
 
     for raw_node in raw_nodes:
-        if not isinstance(raw_node, dict):
-            state.error(f"Invalid node object: {raw_node!r}", str(path))
-            continue
-        node = normalize_node(raw_node, path, state)
-        if node is None:
-            continue
-        existing = state.nodes.get(node["id"])
-        if existing and existing != node:
-            state.warn(f"Duplicate node {node['id']} differed; merged non-empty metadata", str(path))
-            state.nodes[node["id"]] = merge_node(existing, node)
+        if isinstance(raw_node, dict):
+            upsert_node(state, raw_node, path)
         else:
-            state.nodes[node["id"]] = node
+            state.error(f"Invalid node object: {raw_node!r}", str(path))
 
     for raw_edge in raw_edges:
-        if not isinstance(raw_edge, dict):
+        if isinstance(raw_edge, dict):
+            upsert_edge(state, raw_edge, path)
+        else:
             state.error(f"Invalid edge object: {raw_edge!r}", str(path))
-            continue
-        edge = normalize_edge(raw_edge, path, state)
-        if edge is None:
-            continue
-        key = (edge["source"], edge["target"], edge["relationship"])
-        state.edges[key] = edge
 
     raw_coverage = payload.get("coverage")
     if isinstance(raw_coverage, dict):
@@ -236,6 +255,26 @@ def ingest_route_file(path: Path, state: BuildState) -> None:
                 continue
             record = normalize_coverage(record_raw)
             state.coverage[target_id] = merge_coverage(state.coverage.get(target_id, {}), record)
+
+
+def ingest_public_result(state: BuildState, result: Any) -> None:
+    for node in getattr(result, "nodes", {}).values():
+        upsert_node(state, node, "public_collectors")
+    for edge in getattr(result, "edges", {}).values():
+        upsert_edge(state, edge, "public_collectors")
+    for route in getattr(result, "routes", []):
+        if isinstance(route, dict):
+            route_input = normalize_id(route.get("input"))
+            if route_input:
+                state.route_inputs.append(route_input)
+            state.routes.append(route)
+    for route_input in getattr(result, "route_inputs", set()):
+        normalized_input = normalize_id(route_input)
+        if normalized_input:
+            state.route_inputs.append(normalized_input)
+    state.public_sources.extend(getattr(result, "sources", []))
+    for warning in getattr(result, "warnings", []):
+        state.warn(str(warning), "public_collectors")
 
 
 def validate_edges(state: BuildState) -> None:
@@ -270,12 +309,7 @@ def build_indexes(nodes: list[dict[str, Any]], edges: list[dict[str, Any]], rout
 
     for node in nodes:
         by_type.setdefault(node["type"], []).append(node["id"])
-        search.append({
-            "id": node["id"],
-            "type": node["type"],
-            "name": node["name"],
-            "text": f"{node['id']} {node['name']}".lower(),
-        })
+        search.append({"id": node["id"], "type": node["type"], "name": node["name"], "text": f"{node['id']} {node['name']}".lower()})
 
     for edge in edges:
         outgoing.setdefault(edge["source"], []).append({"target": edge["target"], "relationship": edge["relationship"]})
@@ -300,26 +334,14 @@ def write_json(path: Path, payload: Any) -> None:
 
 
 def write_bundle_files(output_dir: Path, bundle: dict[str, Any]) -> None:
-    write_json(output_dir / "nodes.json", bundle["nodes"])
-    write_json(output_dir / "edges.json", bundle["edges"])
-    write_json(output_dir / "indexes.json", bundle["indexes"])
-    write_json(output_dir / "coverage.json", bundle["coverage"])
-    write_json(output_dir / "routes.json", bundle["routes"])
-    write_json(output_dir / "metadata.json", bundle["metadata"])
+    for file_name in ("nodes", "edges", "indexes", "coverage", "routes", "metadata"):
+        write_json(output_dir / f"{file_name}.json", bundle[file_name])
     write_json(output_dir / "knowledge-bundle.json", bundle)
 
 
 def copy_bundle_files(source_dir: Path, target_dir: Path) -> None:
     target_dir.mkdir(parents=True, exist_ok=True)
-    for file_name in (
-        "nodes.json",
-        "edges.json",
-        "indexes.json",
-        "coverage.json",
-        "routes.json",
-        "metadata.json",
-        "knowledge-bundle.json",
-    ):
+    for file_name in ("nodes.json", "edges.json", "indexes.json", "coverage.json", "routes.json", "metadata.json", "knowledge-bundle.json"):
         shutil.copy2(source_dir / file_name, target_dir / file_name)
 
 
@@ -330,6 +352,22 @@ def build_bundle(
     ui_public_dir: Path | None,
     *,
     strict: bool,
+    with_public_sources: bool,
+    cache_dir: Path,
+    refresh_public_sources: bool,
+    public_timeout: int,
+    public_fail_on_error: bool,
+    public_no_attack: bool,
+    public_no_cwe: bool,
+    public_no_capec: bool,
+    public_no_kev: bool,
+    public_no_d3fend: bool,
+    with_nvd: bool,
+    nvd_cves: list[str],
+    nvd_recent_days: int,
+    nvd_api_key: str | None,
+    max_kev_cves: int | None,
+    max_d3fend_attack_ids: int,
 ) -> int:
     state = BuildState()
     route_files = sorted(source_dir.glob("*.route.json"))
@@ -338,6 +376,35 @@ def build_bundle(
 
     for route_file in route_files:
         ingest_route_file(route_file, state)
+
+    if with_public_sources:
+        if collect_public_sources is None:
+            state.error("public_collectors.py could not be imported")
+        else:
+            try:
+                public_result = collect_public_sources(
+                    cache_dir,
+                    refresh=refresh_public_sources,
+                    timeout=public_timeout,
+                    include_attack=not public_no_attack,
+                    include_cwe=not public_no_cwe,
+                    include_capec=not public_no_capec,
+                    include_kev=not public_no_kev,
+                    include_d3fend=not public_no_d3fend,
+                    include_nvd=with_nvd,
+                    nvd_cves=nvd_cves,
+                    nvd_recent_days=nvd_recent_days,
+                    nvd_api_key=nvd_api_key,
+                    max_kev_cves=max_kev_cves,
+                    max_d3fend_attack_ids=max_d3fend_attack_ids,
+                    fail_on_error=public_fail_on_error,
+                )
+                ingest_public_result(state, public_result)
+            except Exception as exc:  # noqa: BLE001 - top-level builder must report cleanly
+                if public_fail_on_error:
+                    state.error(f"Public source collection failed: {exc}")
+                else:
+                    state.warn(f"Public source collection failed: {exc}", "public_collectors")
 
     validate_edges(state)
     validate_coverage(state)
@@ -359,7 +426,8 @@ def build_bundle(
         "builder_version": BUILDER_VERSION,
         "generated_at": generated_at,
         "source_files": state.source_files,
-        "mode": "curated_mvp_bundle",
+        "public_sources": sorted(set(state.public_sources)),
+        "mode": "public_sources_bundle" if with_public_sources else "curated_mvp_bundle",
         "counts": {
             "nodes": len(nodes),
             "edges": len(edges),
@@ -368,20 +436,17 @@ def build_bundle(
             "route_inputs": len(set(state.route_inputs)),
             "warnings": len([issue for issue in state.issues if issue.severity == "warning"]),
         },
-        "seed_inputs": {
-            "required": sorted(REQUIRED_SEED_INPUTS),
-            "available": sorted(set(state.route_inputs)),
+        "seed_inputs": {"required": sorted(REQUIRED_SEED_INPUTS), "available": sorted(set(state.route_inputs))},
+        "public_collection": {
+            "enabled": with_public_sources,
+            "nvd_enabled": with_nvd or bool(nvd_cves) or nvd_recent_days > 0,
+            "nvd_recent_days": nvd_recent_days,
+            "nvd_cves": sorted({normalize_id(item) for item in nvd_cves}),
+            "cache_dir": str(cache_dir),
         },
         "warnings": [asdict(issue) for issue in state.issues if issue.severity == "warning"],
     }
-    bundle = {
-        "metadata": metadata,
-        "nodes": nodes,
-        "edges": edges,
-        "indexes": indexes,
-        "coverage": dict(sorted(state.coverage.items())),
-        "routes": state.routes,
-    }
+    bundle = {"metadata": metadata, "nodes": nodes, "edges": edges, "indexes": indexes, "coverage": dict(sorted(state.coverage.items())), "routes": state.routes}
 
     output_dir.mkdir(parents=True, exist_ok=True)
     write_bundle_files(output_dir, bundle)
@@ -394,10 +459,9 @@ def build_bundle(
         target = snapshot_dir / stamp
         copy_bundle_files(output_dir, target)
 
-    print(
-        "Attack2Defend knowledge bundle generated: "
-        f"nodes={len(nodes)} edges={len(edges)} routes={len(state.routes)} output={output_dir}"
-    )
+    print("Attack2Defend knowledge bundle generated: " f"nodes={len(nodes)} edges={len(edges)} routes={len(state.routes)} output={output_dir}")
+    if with_public_sources:
+        print(f"Public source mode enabled: sources={len(set(state.public_sources))} cache={cache_dir}")
     if ui_public_dir is not None:
         print(f"UI public bundle mirrored: {ui_public_dir}")
     if state.issues:
@@ -418,9 +482,25 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser.add_argument("--output-dir", type=Path, default=repo_root / "data")
     parser.add_argument("--snapshot-dir", type=Path, default=repo_root / "data" / "snapshots")
     parser.add_argument("--ui-public-dir", type=Path, default=repo_root / "app" / "navigator-ui" / "public" / "data")
+    parser.add_argument("--cache-dir", type=Path, default=repo_root / "data" / "raw")
     parser.add_argument("--no-snapshot", action="store_true", help="Skip timestamped snapshot creation.")
     parser.add_argument("--no-ui-mirror", action="store_true", help="Do not mirror bundle to the Navigator UI public directory.")
     parser.add_argument("--strict", action="store_true", help="Treat warnings as build blockers.")
+    parser.add_argument("--with-public-sources", action="store_true", help="Hydrate the bundle with public ATT&CK/CWE/CAPEC/KEV/D3FEND sources.")
+    parser.add_argument("--refresh-public-sources", action="store_true", help="Ignore cached public files and refetch public sources.")
+    parser.add_argument("--public-timeout", type=int, default=45)
+    parser.add_argument("--public-fail-on-error", action="store_true", help="Fail the build if any public source collector fails.")
+    parser.add_argument("--public-no-attack", action="store_true")
+    parser.add_argument("--public-no-cwe", action="store_true")
+    parser.add_argument("--public-no-capec", action="store_true")
+    parser.add_argument("--public-no-kev", action="store_true")
+    parser.add_argument("--public-no-d3fend", action="store_true")
+    parser.add_argument("--with-nvd", action="store_true", help="Enable NVD CVE collection. Use with --nvd-cve or --nvd-recent-days.")
+    parser.add_argument("--nvd-cve", action="append", default=[], help="Fetch a specific CVE from NVD. May be repeated.")
+    parser.add_argument("--nvd-recent-days", type=int, default=0, help="Fetch CVEs modified in the last N days from NVD.")
+    parser.add_argument("--nvd-api-key", default=os.environ.get("NVD_API_KEY"))
+    parser.add_argument("--max-kev-cves", type=int, default=None)
+    parser.add_argument("--max-d3fend-attack-ids", type=int, default=250)
     return parser.parse_args(argv)
 
 
@@ -434,6 +514,22 @@ def main(argv: list[str] | None = None) -> int:
         snapshot_dir=snapshot_dir,
         ui_public_dir=ui_public_dir,
         strict=args.strict,
+        with_public_sources=args.with_public_sources,
+        cache_dir=args.cache_dir,
+        refresh_public_sources=args.refresh_public_sources,
+        public_timeout=args.public_timeout,
+        public_fail_on_error=args.public_fail_on_error,
+        public_no_attack=args.public_no_attack,
+        public_no_cwe=args.public_no_cwe,
+        public_no_capec=args.public_no_capec,
+        public_no_kev=args.public_no_kev,
+        public_no_d3fend=args.public_no_d3fend,
+        with_nvd=args.with_nvd,
+        nvd_cves=args.nvd_cve,
+        nvd_recent_days=args.nvd_recent_days,
+        nvd_api_key=args.nvd_api_key,
+        max_kev_cves=args.max_kev_cves,
+        max_d3fend_attack_ids=args.max_d3fend_attack_ids,
     )
 
 
