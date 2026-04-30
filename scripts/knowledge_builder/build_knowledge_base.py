@@ -44,6 +44,13 @@ VALID_NODE_TYPES = {
 }
 
 LIST_COVERAGE_FIELDS = ("controls", "detections", "evidence", "gaps", "owners")
+REQUIRED_SEED_INPUTS = {
+    "CVE-2021-44228",
+    "T1567",
+    "CVE-2024-37079",
+    "CWE-79",
+    "D3-MFA",
+}
 
 
 @dataclass(slots=True)
@@ -247,6 +254,13 @@ def validate_coverage(state: BuildState) -> None:
             state.warn(f"Coverage target is not a known node: {target_id}")
 
 
+def validate_seed_inputs(state: BuildState) -> None:
+    available = set(state.route_inputs)
+    missing = sorted(REQUIRED_SEED_INPUTS - available)
+    if missing:
+        state.error(f"Missing required seed inputs: {', '.join(missing)}")
+
+
 def build_indexes(nodes: list[dict[str, Any]], edges: list[dict[str, Any]], route_inputs: list[str]) -> dict[str, Any]:
     by_type: dict[str, list[str]] = {}
     outgoing: dict[str, list[dict[str, str]]] = {}
@@ -327,6 +341,7 @@ def build_bundle(
 
     validate_edges(state)
     validate_coverage(state)
+    validate_seed_inputs(state)
 
     if strict and any(issue.severity == "warning" for issue in state.issues):
         state.error("Strict mode treats warnings as build blockers")
@@ -352,6 +367,10 @@ def build_bundle(
             "routes": len(state.routes),
             "route_inputs": len(set(state.route_inputs)),
             "warnings": len([issue for issue in state.issues if issue.severity == "warning"]),
+        },
+        "seed_inputs": {
+            "required": sorted(REQUIRED_SEED_INPUTS),
+            "available": sorted(set(state.route_inputs)),
         },
         "warnings": [asdict(issue) for issue in state.issues if issue.severity == "warning"],
     }
