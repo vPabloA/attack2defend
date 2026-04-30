@@ -1,0 +1,124 @@
+{
+  "metadata": {
+    "id": "sample-log4shell-route",
+    "input": "CVE-2021-44228",
+    "name": "Log4Shell Attack2Defend sample route",
+    "curation_status": "sample_curated",
+    "notes": "Initial curated sample for MVP contracts. Not a full authoritative mapping."
+  },
+  "nodes": [
+    {
+      "id": "CVE-2021-44228",
+      "type": "cve",
+      "name": "Apache Log4j2 JNDI RCE / Log4Shell",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-44228"
+    },
+    {
+      "id": "CWE-917",
+      "type": "cwe",
+      "name": "Expression Language Injection",
+      "url": "https://cwe.mitre.org/data/definitions/917.html"
+    },
+    {
+      "id": "CWE-20",
+      "type": "cwe",
+      "name": "Improper Input Validation",
+      "url": "https://cwe.mitre.org/data/definitions/20.html"
+    },
+    {
+      "id": "CWE-502",
+      "type": "cwe",
+      "name": "Deserialization of Untrusted Data",
+      "url": "https://cwe.mitre.org/data/definitions/502.html"
+    },
+    {
+      "id": "CAPEC-136",
+      "type": "capec",
+      "name": "LDAP Injection",
+      "url": "https://capec.mitre.org/data/definitions/136.html"
+    },
+    {
+      "id": "CAPEC-248",
+      "type": "capec",
+      "name": "Command Injection",
+      "url": "https://capec.mitre.org/data/definitions/248.html"
+    },
+    {
+      "id": "T1190",
+      "type": "attack",
+      "name": "Exploit Public-Facing Application",
+      "url": "https://attack.mitre.org/techniques/T1190/"
+    },
+    {
+      "id": "T1059",
+      "type": "attack",
+      "name": "Command and Scripting Interpreter",
+      "url": "https://attack.mitre.org/techniques/T1059/"
+    },
+    {
+      "id": "T1105",
+      "type": "attack",
+      "name": "Ingress Tool Transfer",
+      "url": "https://attack.mitre.org/techniques/T1105/"
+    },
+    {
+      "id": "T1071",
+      "type": "attack",
+      "name": "Application Layer Protocol",
+      "url": "https://attack.mitre.org/techniques/T1071/"
+    },
+    {
+      "id": "D3-AI",
+      "type": "d3fend",
+      "name": "Asset Inventory",
+      "url": "https://d3fend.mitre.org/technique/d3f:AssetInventory/"
+    },
+    {
+      "id": "D3-AVE",
+      "type": "d3fend",
+      "name": "Asset Vulnerability Enumeration",
+      "url": "https://d3fend.mitre.org/technique/d3f:AssetVulnerabilityEnumeration/"
+    },
+    {
+      "id": "D3-SU",
+      "type": "d3fend",
+      "name": "Software Update",
+      "url": "https://d3fend.mitre.org/technique/d3f:SoftwareUpdate/"
+    },
+    {
+      "id": "D3-NTA",
+      "type": "d3fend",
+      "name": "Network Traffic Analysis",
+      "url": "https://d3fend.mitre.org/technique/d3f:NetworkTrafficAnalysis/"
+    },
+    {
+      "id": "D3-PA",
+      "type": "d3fend",
+      "name": "Process Analysis",
+      "url": "https://d3fend.mitre.org/technique/d3f:ProcessAnalysis/"
+    },
+    {
+      "id": "D3-PSA",
+      "type": "d3fend",
+      "name": "Process Spawn Analysis",
+      "url": "https://d3fend.mitre.org/technique/d3f:ProcessSpawnAnalysis/"
+    }
+  ],
+  "edges": [
+    {"source": "CVE-2021-44228", "target": "CWE-917", "relationship": "has_weakness"},
+    {"source": "CVE-2021-44228", "target": "CWE-20", "relationship": "has_related_weakness"},
+    {"source": "CVE-2021-44228", "target": "CWE-502", "relationship": "has_related_weakness"},
+    {"source": "CWE-917", "target": "CAPEC-136", "relationship": "may_enable_attack_pattern"},
+    {"source": "CAPEC-136", "target": "CAPEC-248", "relationship": "child_of"},
+    {"source": "CAPEC-248", "target": "T1190", "relationship": "may_map_to_attack_technique"},
+    {"source": "T1190", "target": "T1059", "relationship": "may_lead_to_post_exploitation"},
+    {"source": "T1059", "target": "T1105", "relationship": "may_lead_to_post_exploitation"},
+    {"source": "T1105", "target": "T1071", "relationship": "may_lead_to_post_exploitation"},
+    {"source": "T1190", "target": "D3-AI", "relationship": "may_be_defended_by"},
+    {"source": "T1190", "target": "D3-AVE", "relationship": "may_be_defended_by"},
+    {"source": "T1190", "target": "D3-SU", "relationship": "may_be_defended_by"},
+    {"source": "T1190", "target": "D3-NTA", "relationship": "may_be_detected_by"},
+    {"source": "T1059", "target": "D3-PA", "relationship": "may_be_detected_by"},
+    {"source": "T1059", "target": "D3-PSA", "relationship": "may_be_detected_by"}
+  ]
+}
