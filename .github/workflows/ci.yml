@@ -1,0 +1,73 @@
+name: Attack2Defend CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  python-builder:
+    name: Python builder and tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Python package with dev dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e '.[dev]'
+
+      - name: Build deterministic knowledge bundle
+        run: python scripts/knowledge_builder/build_knowledge_base.py --no-snapshot
+
+      - name: Validate generated knowledge bundle
+        run: python scripts/knowledge_builder/validate_bundle.py data/knowledge-bundle.json
+
+      - name: Run Python tests
+        run: pytest -q
+
+  navigator-ui:
+    name: Navigator UI build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app/navigator-ui
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Build deterministic knowledge bundle
+        run: python scripts/knowledge_builder/build_knowledge_base.py --no-snapshot
+        working-directory: ${{ github.workspace }}
+
+      - name: Validate generated knowledge bundle
+        run: python scripts/knowledge_builder/validate_bundle.py data/knowledge-bundle.json
+        working-directory: ${{ github.workspace }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install UI dependencies
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install
+          fi
+
+      - name: Build UI
+        run: npm run build
