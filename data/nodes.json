@@ -1,0 +1,98 @@
+[
+  {
+    "id": "CVE-2021-44228",
+    "type": "cve",
+    "name": "Apache Log4j2 JNDI RCE",
+    "description": "",
+    "url": "",
+    "metadata": {}
+  },
+  {
+    "id": "CWE-917",
+    "type": "cwe",
+    "name": "Expression Language Injection",
+    "description": "",
+    "url": "",
+    "metadata": {}
+  },
+  {
+    "id": "CAPEC-136",
+    "type": "capec",
+    "name": "LDAP Injection",
+    "description": "",
+    "url": "",
+    "metadata": {}
+  },
+  {
+    "id": "T1190",
+    "type": "attack",
+    "name": "Exploit Public-Facing Application",
+    "description": "",
+    "url": "",
+    "metadata": {}
+  },
+  {
+    "id": "D3-NTA",
+    "type": "d3fend",
+    "name": "Network Traffic Analysis",
+    "description": "",
+    "url": "",
+    "metadata": {}
+  },
+  {
+    "id": "T1567",
+    "type": "attack",
+    "name": "Exfiltration Over Web Service",
+    "description": "",
+    "url": "",
+    "metadata": {}
+  },
+  {
+    "id": "D3-DNSDL",
+    "type": "d3fend",
+    "name": "DNS Denylisting",
+    "description": "",
+    "url": "",
+    "metadata": {}
+  },
+  {
+    "id": "CVE-2024-37079",
+    "type": "cve",
+    "name": "Curated seed CVE-2024-37079",
+    "description": "",
+    "url": "",
+    "metadata": {}
+  },
+  {
+    "id": "CWE-79",
+    "type": "cwe",
+    "name": "Cross-site Scripting",
+    "description": "",
+    "url": "",
+    "metadata": {}
+  },
+  {
+    "id": "CAPEC-63",
+    "type": "capec",
+    "name": "XSS",
+    "description": "",
+    "url": "",
+    "metadata": {}
+  },
+  {
+    "id": "T1059",
+    "type": "attack",
+    "name": "Command and Scripting Interpreter",
+    "description": "",
+    "url": "",
+    "metadata": {}
+  },
+  {
+    "id": "D3-MFA",
+    "type": "d3fend",
+    "name": "Multi-factor Authentication",
+    "description": "",
+    "url": "",
+    "metadata": {}
+  }
+]

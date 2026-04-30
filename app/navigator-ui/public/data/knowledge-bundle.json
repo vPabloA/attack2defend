@@ -1,0 +1,309 @@
+{
+  "metadata": {
+    "bundle_version": "0.1.0-mvp",
+    "generated_at": "2026-04-30T12:28:36.981306+00:00",
+    "curation_status": "seed_curated",
+    "seed_inputs": [
+      "CVE-2021-44228",
+      "T1567",
+      "CVE-2024-37079",
+      "CWE-79",
+      "D3-MFA"
+    ],
+    "counts": {
+      "nodes": 12,
+      "edges": 9
+    }
+  },
+  "nodes": [
+    {
+      "id": "CVE-2021-44228",
+      "type": "cve",
+      "name": "Apache Log4j2 JNDI RCE",
+      "description": "",
+      "url": "",
+      "metadata": {}
+    },
+    {
+      "id": "CWE-917",
+      "type": "cwe",
+      "name": "Expression Language Injection",
+      "description": "",
+      "url": "",
+      "metadata": {}
+    },
+    {
+      "id": "CAPEC-136",
+      "type": "capec",
+      "name": "LDAP Injection",
+      "description": "",
+      "url": "",
+      "metadata": {}
+    },
+    {
+      "id": "T1190",
+      "type": "attack",
+      "name": "Exploit Public-Facing Application",
+      "description": "",
+      "url": "",
+      "metadata": {}
+    },
+    {
+      "id": "D3-NTA",
+      "type": "d3fend",
+      "name": "Network Traffic Analysis",
+      "description": "",
+      "url": "",
+      "metadata": {}
+    },
+    {
+      "id": "T1567",
+      "type": "attack",
+      "name": "Exfiltration Over Web Service",
+      "description": "",
+      "url": "",
+      "metadata": {}
+    },
+    {
+      "id": "D3-DNSDL",
+      "type": "d3fend",
+      "name": "DNS Denylisting",
+      "description": "",
+      "url": "",
+      "metadata": {}
+    },
+    {
+      "id": "CVE-2024-37079",
+      "type": "cve",
+      "name": "Curated seed CVE-2024-37079",
+      "description": "",
+      "url": "",
+      "metadata": {}
+    },
+    {
+      "id": "CWE-79",
+      "type": "cwe",
+      "name": "Cross-site Scripting",
+      "description": "",
+      "url": "",
+      "metadata": {}
+    },
+    {
+      "id": "CAPEC-63",
+      "type": "capec",
+      "name": "XSS",
+      "description": "",
+      "url": "",
+      "metadata": {}
+    },
+    {
+      "id": "T1059",
+      "type": "attack",
+      "name": "Command and Scripting Interpreter",
+      "description": "",
+      "url": "",
+      "metadata": {}
+    },
+    {
+      "id": "D3-MFA",
+      "type": "d3fend",
+      "name": "Multi-factor Authentication",
+      "description": "",
+      "url": "",
+      "metadata": {}
+    }
+  ],
+  "edges": [
+    {
+      "source": "CVE-2021-44228",
+      "target": "CWE-917",
+      "relationship": "has_weakness",
+      "source_framework": "",
+      "target_framework": "",
+      "confidence": "curated",
+      "source_ref": ""
+    },
+    {
+      "source": "CWE-917",
+      "target": "CAPEC-136",
+      "relationship": "may_enable_attack_pattern",
+      "source_framework": "",
+      "target_framework": "",
+      "confidence": "curated",
+      "source_ref": ""
+    },
+    {
+      "source": "CAPEC-136",
+      "target": "T1190",
+      "relationship": "may_map_to_attack_technique",
+      "source_framework": "",
+      "target_framework": "",
+      "confidence": "curated",
+      "source_ref": ""
+    },
+    {
+      "source": "T1190",
+      "target": "D3-NTA",
+      "relationship": "may_be_detected_by",
+      "source_framework": "",
+      "target_framework": "",
+      "confidence": "curated",
+      "source_ref": ""
+    },
+    {
+      "source": "T1567",
+      "target": "D3-DNSDL",
+      "relationship": "may_be_detected_by",
+      "source_framework": "",
+      "target_framework": "",
+      "confidence": "curated",
+      "source_ref": ""
+    },
+    {
+      "source": "CVE-2024-37079",
+      "target": "CWE-79",
+      "relationship": "has_weakness",
+      "source_framework": "",
+      "target_framework": "",
+      "confidence": "curated",
+      "source_ref": ""
+    },
+    {
+      "source": "CWE-79",
+      "target": "CAPEC-63",
+      "relationship": "may_enable_attack_pattern",
+      "source_framework": "",
+      "target_framework": "",
+      "confidence": "curated",
+      "source_ref": ""
+    },
+    {
+      "source": "CAPEC-63",
+      "target": "T1059",
+      "relationship": "may_map_to_attack_technique",
+      "source_framework": "",
+      "target_framework": "",
+      "confidence": "curated",
+      "source_ref": ""
+    },
+    {
+      "source": "T1059",
+      "target": "D3-MFA",
+      "relationship": "may_be_detected_by",
+      "source_framework": "",
+      "target_framework": "",
+      "confidence": "curated",
+      "source_ref": ""
+    }
+  ],
+  "indexes": {
+    "node_ids": [
+      "CAPEC-136",
+      "CAPEC-63",
+      "CVE-2021-44228",
+      "CVE-2024-37079",
+      "CWE-79",
+      "CWE-917",
+      "D3-DNSDL",
+      "D3-MFA",
+      "D3-NTA",
+      "T1059",
+      "T1190",
+      "T1567"
+    ],
+    "by_type": {
+      "cve": [
+        "CVE-2021-44228",
+        "CVE-2024-37079"
+      ],
+      "cwe": [
+        "CWE-79",
+        "CWE-917"
+      ],
+      "capec": [
+        "CAPEC-136",
+        "CAPEC-63"
+      ],
+      "attack": [
+        "T1059",
+        "T1190",
+        "T1567"
+      ],
+      "d3fend": [
+        "D3-DNSDL",
+        "D3-MFA",
+        "D3-NTA"
+      ],
+      "artifact": [],
+      "control": [],
+      "detection": [],
+      "evidence": [],
+      "gap": []
+    }
+  },
+  "coverage": {
+    "version": 1,
+    "records": [
+      {
+        "target_id": "D3-MFA",
+        "status": "unknown",
+        "controls": [],
+        "detections": [],
+        "evidence": [],
+        "gaps": [
+          "Owner and evidence not assigned yet"
+        ],
+        "owners": []
+      }
+    ]
+  },
+  "routes": {
+    "CVE-2021-44228": {
+      "found": true,
+      "ordered_path": [
+        "CVE-2021-44228",
+        "CWE-917",
+        "CAPEC-136",
+        "T1190",
+        "D3-NTA"
+      ],
+      "warnings": []
+    },
+    "T1567": {
+      "found": true,
+      "ordered_path": [
+        "T1567",
+        "D3-DNSDL"
+      ],
+      "warnings": []
+    },
+    "CVE-2024-37079": {
+      "found": true,
+      "ordered_path": [
+        "CVE-2024-37079",
+        "CWE-79",
+        "CAPEC-63",
+        "T1059",
+        "D3-MFA"
+      ],
+      "warnings": []
+    },
+    "CWE-79": {
+      "found": true,
+      "ordered_path": [
+        "CWE-79",
+        "CAPEC-63",
+        "T1059",
+        "D3-MFA"
+      ],
+      "warnings": []
+    },
+    "D3-MFA": {
+      "found": true,
+      "ordered_path": [
+        "D3-MFA"
+      ],
+      "warnings": []
+    }
+  }
+}

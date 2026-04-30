@@ -1,0 +1,49 @@
+{
+  "CVE-2021-44228": {
+    "found": true,
+    "ordered_path": [
+      "CVE-2021-44228",
+      "CWE-917",
+      "CAPEC-136",
+      "T1190",
+      "D3-NTA"
+    ],
+    "warnings": []
+  },
+  "T1567": {
+    "found": true,
+    "ordered_path": [
+      "T1567",
+      "D3-DNSDL"
+    ],
+    "warnings": []
+  },
+  "CVE-2024-37079": {
+    "found": true,
+    "ordered_path": [
+      "CVE-2024-37079",
+      "CWE-79",
+      "CAPEC-63",
+      "T1059",
+      "D3-MFA"
+    ],
+    "warnings": []
+  },
+  "CWE-79": {
+    "found": true,
+    "ordered_path": [
+      "CWE-79",
+      "CAPEC-63",
+      "T1059",
+      "D3-MFA"
+    ],
+    "warnings": []
+  },
+  "D3-MFA": {
+    "found": true,
+    "ordered_path": [
+      "D3-MFA"
+    ],
+    "warnings": []
+  }
+}

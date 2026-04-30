@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "records": [
+    {
+      "target_id": "D3-MFA",
+      "status": "unknown",
+      "controls": [],
+      "detections": [],
+      "evidence": [],
+      "gaps": [
+        "Owner and evidence not assigned yet"
+      ],
+      "owners": []
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "node_ids": [
+    "CAPEC-136",
+    "CAPEC-63",
+    "CVE-2021-44228",
+    "CVE-2024-37079",
+    "CWE-79",
+    "CWE-917",
+    "D3-DNSDL",
+    "D3-MFA",
+    "D3-NTA",
+    "T1059",
+    "T1190",
+    "T1567"
+  ],
+  "by_type": {
+    "cve": [
+      "CVE-2021-44228",
+      "CVE-2024-37079"
+    ],
+    "cwe": [
+      "CWE-79",
+      "CWE-917"
+    ],
+    "capec": [
+      "CAPEC-136",
+      "CAPEC-63"
+    ],
+    "attack": [
+      "T1059",
+      "T1190",
+      "T1567"
+    ],
+    "d3fend": [
+      "D3-DNSDL",
+      "D3-MFA",
+      "D3-NTA"
+    ],
+    "artifact": [],
+    "control": [],
+    "detection": [],
+    "evidence": [],
+    "gap": []
+  }
+}

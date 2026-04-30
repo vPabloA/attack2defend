@@ -1,0 +1,16 @@
+{
+  "bundle_version": "0.1.0-mvp",
+  "generated_at": "2026-04-30T12:28:36.981306+00:00",
+  "curation_status": "seed_curated",
+  "seed_inputs": [
+    "CVE-2021-44228",
+    "T1567",
+    "CVE-2024-37079",
+    "CWE-79",
+    "D3-MFA"
+  ],
+  "counts": {
+    "nodes": 12,
+    "edges": 9
+  }
+}

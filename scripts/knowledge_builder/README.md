@@ -59,3 +59,24 @@ A build should fail if:
 - duplicate nodes conflict;
 - massive relationship deletion happens without explicit override;
 - internal coverage files would be overwritten.
+
+## Current MVP builder
+
+Run:
+
+```bash
+python scripts/knowledge_builder/build_knowledge_base.py
+```
+
+This generates deterministic seed artifacts for local runtime:
+
+- `data/nodes.json`
+- `data/edges.json`
+- `data/indexes.json`
+- `data/coverage.json`
+- `data/routes.json`
+- `data/metadata.json`
+- `data/knowledge-bundle.json`
+- `app/navigator-ui/public/data/knowledge-bundle.json`
+
+The script fails if it detects broken edges (source/target not present in nodes).
