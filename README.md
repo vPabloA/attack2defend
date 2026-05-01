@@ -1,14 +1,24 @@
 # Attack2Defend Navigator
 
-**Attack2Defend** is a static-first operational navigator that turns public security framework knowledge into SOC/CTEM action.
+**Attack2Defend** is a simple static-first navigator that turns public security framework knowledge into SOC/CTEM action.
 
-It maps and navigates:
+It connects and navigates:
 
 ```text
-CVE → CWE → CAPEC → MITRE ATT&CK → Digital Artifact → MITRE D3FEND → Control → Detection → Evidence → Gap
+CVE → CWE → CAPEC → MITRE ATT&CK → Artifact → MITRE D3FEND → Control → Detection → Evidence → Gap
 ```
 
-The runtime UI does **not** call public APIs. Public knowledge is fetched by the scheduled builder, validated, snapshotted and served locally as `knowledge-bundle.json`.
+The browser UI does **not** call public APIs. Public sources are fetched by the scheduled builder, written into a local `knowledge-bundle.json`, validated, and served to the React UI.
+
+---
+
+## What it is
+
+```text
+Search → Route Flow → ATT&CK Layer → D3FEND CAD Graph → Coverage → Export
+```
+
+It is not a graph database, backend API, or AI agent runtime. The only intentionally pending major capability is **Agentic AI / AI Route Analyst**.
 
 ---
 
@@ -16,7 +26,7 @@ The runtime UI does **not** call public APIs. Public knowledge is fetched by the
 
 | Capability | Status |
 |---|---|
-| React/Vite Navigator UI | Ready |
+| React/Vite search-first UI | Ready |
 | Deterministic curated seeds | Ready |
 | Public ATT&CK collector | Ready |
 | Public CWE collector | Ready |
@@ -32,7 +42,7 @@ The runtime UI does **not** call public APIs. Public knowledge is fetched by the
 
 ## Quick start: curated mode
 
-Curated mode is fast and offline after clone. It uses `data/samples/*.route.json`.
+Curated mode is fast and works offline after clone. It uses `data/samples/*.route.json`.
 
 ```bash
 python scripts/knowledge_builder/build_knowledge_base.py
@@ -42,9 +52,24 @@ pytest -q
 
 ---
 
-## Quick start: public-source mode
+## Quick start: pre-production bootstrap
 
-Public-source mode hydrates the bundle from ATT&CK, CWE, CAPEC, CISA KEV and best-effort D3FEND. It also preserves curated seeds and internal coverage.
+Use this when you want the first local knowledge base to hydrate from public sources.
+
+```bash
+bash scripts/bootstrap_preprod.sh
+```
+
+The script runs public-source mode, validates the bundle, mirrors the UI runtime data, and stores a `last-good` copy after successful validation.
+
+Optional NVD recent enrichment is enabled automatically when `NVD_API_KEY` exists:
+
+```bash
+export NVD_API_KEY="<optional-api-key>"
+bash scripts/bootstrap_preprod.sh
+```
+
+Manual equivalent:
 
 ```bash
 python scripts/knowledge_builder/build_knowledge_base.py \
@@ -58,26 +83,6 @@ python scripts/knowledge_builder/validate_bundle.py \
   --min-edges 50
 ```
 
-Optional NVD enrichment for specific CVEs:
-
-```bash
-python scripts/knowledge_builder/build_knowledge_base.py \
-  --with-public-sources \
-  --with-nvd \
-  --nvd-cve CVE-2021-44228 \
-  --nvd-cve CVE-2024-37079
-```
-
-Optional recent NVD enrichment:
-
-```bash
-export NVD_API_KEY="<optional-api-key>"
-python scripts/knowledge_builder/build_knowledge_base.py \
-  --with-public-sources \
-  --with-nvd \
-  --nvd-recent-days 7
-```
-
 Generated outputs:
 
 ```text
@@ -88,9 +93,11 @@ data/coverage.json
 data/routes.json
 data/metadata.json
 data/knowledge-bundle.json
+data/knowledge-bundle.last-good.json
 data/raw/                         # public-source cache when enabled
 data/snapshots/<timestamp>/
 app/navigator-ui/public/data/knowledge-bundle.json
+app/navigator-ui/public/data/knowledge-bundle.last-good.json
 ```
 
 ---
@@ -110,13 +117,25 @@ cd app/navigator-ui
 npm run build
 ```
 
-The UI loads:
+The UI is **search-first**:
 
-```text
-/data/knowledge-bundle.json
-```
+- Nothing is selected by default.
+- No demo route is shown until the user searches.
+- The UI loads `/data/knowledge-bundle.json` first.
+- If the generated bundle is missing, it shows a visible fallback warning and uses the local Log4Shell sample only for development resilience.
+- The **Clear** button resets query, active route, selected node and exports.
 
-If that file is missing, it falls back to the local Log4Shell sample for development resilience.
+---
+
+## Main tabs
+
+| Tab | Purpose |
+|---|---|
+| Route Flow | Concatenated route across CVE/CWE/CAPEC/ATT&CK/Artifact/D3FEND/Control/Detection/Evidence/Gap. |
+| ATT&CK Navigator | ATT&CK layer JSON preview/download for the active route. |
+| D3FEND CAD | CAD-style D3FEND graph JSON preview/download for the active route. |
+| Coverage | Coverage, detections, owners, evidence and gaps. |
+| Export | Markdown, route JSON, ATT&CK layer JSON and D3FEND CAD graph JSON. |
 
 ---
 
@@ -128,54 +147,11 @@ Use the runbook:
 docs/PREPROD_DEPLOYMENT_DEBIAN.md
 ```
 
-Pre-production cron should run public-source mode:
+Recommended cron:
 
 ```cron
-30 2 * * * cd /opt/attack2defend && . .venv/bin/activate && python scripts/knowledge_builder/build_knowledge_base.py --with-public-sources && python scripts/knowledge_builder/validate_bundle.py data/knowledge-bundle.json --require-public-sources --min-nodes 100 --min-edges 50 >> /var/log/attack2defend/knowledge_builder.log 2>&1
+30 2 * * * cd /opt/attack2defend && . .venv/bin/activate && bash scripts/bootstrap_preprod.sh >> /var/log/attack2defend/knowledge_builder.log 2>&1
 ```
-
-Recommended when you want recent NVD enrichment and have `NVD_API_KEY` available:
-
-```cron
-30 2 * * * cd /opt/attack2defend && . .venv/bin/activate && python scripts/knowledge_builder/build_knowledge_base.py --with-public-sources --with-nvd --nvd-recent-days 7 && python scripts/knowledge_builder/validate_bundle.py data/knowledge-bundle.json --require-public-sources --min-nodes 100 --min-edges 50 >> /var/log/attack2defend/knowledge_builder.log 2>&1
-```
-
----
-
-## Product thesis
-
-Most tools stop at mapping:
-
-```text
-CVE/CWE/CAPEC/ATT&CK → D3FEND
-```
-
-Attack2Defend continues the route:
-
-```text
-ATT&CK technique
-→ affected digital artifact
-→ D3FEND defensive technique
-→ internal control
-→ detection logic
-→ required evidence
-→ operational gap
-→ recommended action
-```
-
-> **ATT&CK explains how the adversary acts. D3FEND explains how we defend the artifacts the adversary touches. Attack2Defend makes that route operational.**
-
----
-
-## What is intentionally not included yet
-
-| Not included | Reason |
-|---|---|
-| Agentic AI / AI Route Analyst runtime | Next major capability; must consume resolved routes, not invent mappings. |
-| Backend API | Static-first is enough for current pre-prod. |
-| Graph database | JSON bundle is enough until route queries become complex. |
-| Browser runtime public API calls | Public APIs belong in scheduled builder only. |
-| Autonomous remediation | Human approval and ownership come first. |
 
 ---
 
@@ -191,7 +167,19 @@ Guaranteed curated seeds:
 | `CWE-79` | AppSec/CWE-first route. |
 | `D3-MFA` | D3FEND-first identity route. |
 
-Public-source mode should also expose generic public nodes such as `T1190`, `CAPEC-63`, and broad CWE/CAPEC/ATT&CK catalog entries depending on source availability.
+Public-source mode should also expose public nodes such as `T1190`, `CAPEC-63`, and broader CWE/CAPEC/ATT&CK catalog entries depending on source availability.
+
+---
+
+## What is intentionally not included yet
+
+| Not included | Reason |
+|---|---|
+| Agentic AI / AI Route Analyst runtime | Next major capability; must consume resolved routes, not invent mappings. |
+| Backend API | Static-first is enough for current pre-prod. |
+| Graph database | JSON bundle is enough until route queries become complex. |
+| Browser runtime public API calls | Public APIs belong in scheduled builder only. |
+| Autonomous remediation | Human approval and ownership come first. |
 
 ---
 
@@ -205,10 +193,12 @@ attack2defend/
 │   ├── raw/                          # public-source cache when enabled
 │   ├── knowledge-bundle.json         # generated bundle
 │   └── snapshots/                    # generated snapshots
-├── scripts/knowledge_builder/
-│   ├── build_knowledge_base.py       # cron/job entrypoint
-│   ├── public_collectors.py          # dependency-free public collectors
-│   └── validate_bundle.py            # dependency-free bundle validator
+├── scripts/
+│   ├── bootstrap_preprod.sh          # simple first-run/public refresh command
+│   └── knowledge_builder/
+│       ├── build_knowledge_base.py   # builder/cron entrypoint
+│       ├── public_collectors.py      # dependency-free public collectors
+│       └── validate_bundle.py        # dependency-free bundle validator
 ├── docs/
 │   └── PREPROD_DEPLOYMENT_DEBIAN.md
 └── tests/
@@ -223,4 +213,4 @@ attack2defend/
 3. Never depend on public APIs at SOC runtime.
 4. Preserve curated/internal coverage across public updates.
 5. UI renders the bundle; it does not fetch external knowledge directly.
-6. Every route should end in action, evidence or a declared gap.
+6. Keep the UX search-first and avoid demo-first behavior.
