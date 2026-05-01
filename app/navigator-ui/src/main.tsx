@@ -5,7 +5,8 @@ import './styles.css';
 
 type NodeType = 'cve' | 'cwe' | 'capec' | 'attack' | 'd3fend' | 'artifact' | 'control' | 'detection' | 'evidence' | 'gap';
 type CoverageStatus = 'covered' | 'partial' | 'missing' | 'unknown' | 'not_applicable';
-type TabId = 'route' | 'actions' | 'graph' | 'mitre' | 'coverage' | 'export';
+type TabId = 'route' | 'attack' | 'd3fend' | 'coverage' | 'export';
+type BundleSource = 'generated' | 'fallback';
 
 type RouteNode = {
   id: string;
@@ -50,6 +51,9 @@ type KnowledgeBundle = {
     mode?: string;
     counts?: Record<string, number>;
     warnings?: unknown[];
+    public_sources?: unknown[];
+    public_source_failures?: unknown[];
+    seed_inputs?: { required?: string[]; available?: string[] };
   };
   nodes: RouteNode[];
   edges: RouteEdge[];
@@ -71,6 +75,11 @@ type LegacyRouteData = {
   coverage?: Record<string, CoverageRecord>;
 };
 
+type ResolvedRoute = { root: string; nodes: string[]; edges: RouteEdge[] };
+type CoverageRow = { id: string; status: CoverageStatus; controls: string[]; detections: string[]; evidence: string[]; gaps: string[]; owners: string[] };
+type AttackLayer = ReturnType<typeof buildAttackNavigatorLayer>;
+type D3fendCadGraph = ReturnType<typeof buildD3fendCadGraph>;
+
 const legacyRoute = fallbackRoute as LegacyRouteData;
 
 const fallbackBundle: KnowledgeBundle = {
@@ -91,7 +100,6 @@ const fallbackBundle: KnowledgeBundle = {
 };
 
 const typeOrder: NodeType[] = ['cve', 'cwe', 'capec', 'attack', 'artifact', 'd3fend', 'control', 'detection', 'evidence', 'gap'];
-const primaryColumns: NodeType[] = ['cve', 'cwe', 'capec', 'attack', 'd3fend'];
 
 const typeLabels: Record<NodeType, string> = {
   cve: 'CVE',
@@ -125,10 +133,11 @@ const relationshipLabels: Record<string, string> = {
 
 function App() {
   const [bundle, setBundle] = useState<KnowledgeBundle>(fallbackBundle);
-  const [bundleSource, setBundleSource] = useState<'generated' | 'fallback'>('fallback');
-  const [query, setQuery] = useState<string>('CVE-2021-44228');
-  const [selectedId, setSelectedId] = useState<string>('CVE-2021-44228');
+  const [bundleSource, setBundleSource] = useState<BundleSource>('fallback');
+  const [query, setQuery] = useState<string>('');
+  const [selectedId, setSelectedId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<TabId>('route');
+  const [searchError, setSearchError] = useState<string>('');
 
   useEffect(() => {
     fetch('/data/knowledge-bundle.json')
@@ -140,78 +149,118 @@ function App() {
         if (Array.isArray(nextBundle.nodes) && Array.isArray(nextBundle.edges)) {
           setBundle(nextBundle);
           setBundleSource('generated');
-          const preferred = nextBundle.indexes?.route_inputs?.[0] ?? nextBundle.nodes[0]?.id ?? 'CVE-2021-44228';
-          setQuery(preferred);
-          setSelectedId(preferred);
+          setQuery('');
+          setSelectedId(null);
         }
       })
       .catch(() => {
         setBundle(fallbackBundle);
         setBundleSource('fallback');
+        setQuery('');
+        setSelectedId(null);
       });
   }, []);
 
   const nodeMap = useMemo(() => new Map(bundle.nodes.map((node) => [node.id, node])), [bundle.nodes]);
-  const selectedNode = nodeMap.get(selectedId) ?? bundle.nodes[0];
-  const activeRoute = useMemo(() => resolveRoute(bundle, selectedNode?.id ?? ''), [bundle, selectedNode?.id]);
-  const activeNodes = useMemo(() => activeRoute.nodes.map((id) => nodeMap.get(id)).filter(Boolean) as RouteNode[], [activeRoute.nodes, nodeMap]);
+  const selectedNode = selectedId ? nodeMap.get(selectedId) ?? null : null;
+  const activeRoute = useMemo(() => (selectedNode ? resolveRoute(bundle, selectedNode.id) : null), [bundle, selectedNode]);
+  const activeNodes = useMemo(() => {
+    if (!activeRoute) return [];
+    return activeRoute.nodes.map((id) => nodeMap.get(id)).filter(Boolean) as RouteNode[];
+  }, [activeRoute, nodeMap]);
   const routeNodesByType = useMemo(() => groupNodesByType(activeNodes), [activeNodes]);
-  const relatedEdges = useMemo(() => bundle.edges.filter((edge) => edge.source === selectedNode?.id || edge.target === selectedNode?.id), [bundle.edges, selectedNode?.id]);
+  const relatedEdges = useMemo(() => {
+    if (!selectedNode) return [];
+    return bundle.edges.filter((edge) => edge.source === selectedNode.id || edge.target === selectedNode.id);
+  }, [bundle.edges, selectedNode]);
   const suggestions = useMemo(() => buildSuggestions(bundle, query), [bundle, query]);
-  const markdownExport = useMemo(() => buildMarkdownExport(bundle, activeRoute, selectedNode), [bundle, activeRoute, selectedNode]);
-  const navigatorLayer = useMemo(() => buildAttackNavigatorLayer(bundle, activeRoute), [bundle, activeRoute]);
-  const coverageRows = useMemo(() => buildCoverageRows(bundle, activeRoute), [bundle, activeRoute]);
+  const coverageRows = useMemo(() => (activeRoute ? buildCoverageRows(bundle, activeRoute) : []), [bundle, activeRoute]);
+  const navigatorLayer = useMemo(() => (activeRoute ? buildAttackNavigatorLayer(bundle, activeRoute) : buildAttackNavigatorLayer(bundle, { root: 'EMPTY', nodes: [], edges: [] })), [bundle, activeRoute]);
+  const d3fendCadGraph = useMemo(() => (activeRoute ? buildD3fendCadGraph(bundle, activeRoute) : buildD3fendCadGraph(bundle, { root: 'EMPTY', nodes: [], edges: [] })), [bundle, activeRoute]);
+  const markdownExport = useMemo(() => {
+    if (!activeRoute || !selectedNode) return '';
+    return buildMarkdownExport(bundle, activeRoute, selectedNode);
+  }, [bundle, activeRoute, selectedNode]);
 
   function submitSearch() {
-    const candidate = query.trim().toUpperCase();
+    const term = query.trim();
+    const candidate = term.toUpperCase();
+    setSearchError('');
     if (!candidate) return;
+
     const exact = nodeMap.get(candidate);
     if (exact) {
       setSelectedId(exact.id);
+      setQuery(exact.id);
+      setActiveTab('route');
       return;
     }
-    const fuzzy = bundle.nodes.find((node) => `${node.id} ${node.name}`.toLowerCase().includes(query.trim().toLowerCase()));
-    if (fuzzy) setSelectedId(fuzzy.id);
+
+    const fuzzy = bundle.nodes.find((node) => `${node.id} ${node.name}`.toLowerCase().includes(term.toLowerCase()));
+    if (fuzzy) {
+      setSelectedId(fuzzy.id);
+      setQuery(fuzzy.id);
+      setActiveTab('route');
+      return;
+    }
+
+    setSelectedId(null);
+    setSearchError(`No node found for "${term}" in the loaded bundle.`);
   }
 
-  if (!selectedNode) return <main className="app-shell"><section className="panel">No knowledge bundle loaded.</section></main>;
+  function clearSearch() {
+    setQuery('');
+    setSelectedId(null);
+    setSearchError('');
+    setActiveTab('route');
+  }
+
+  function selectNode(id: string) {
+    setSelectedId(id);
+    setQuery(id);
+    setSearchError('');
+  }
 
   return (
     <main className="app-shell">
       <header className="hero">
         <div>
-          <p className="eyebrow">Attack2Defend Navigator · MVP Pro</p>
+          <p className="eyebrow">Attack2Defend Navigator · Search-first</p>
           <h1>Threat-defense route navigator</h1>
-          <p className="hero-copy">Navigate CVE, CWE, CAPEC, ATT&CK, artifacts, D3FEND, controls, detections, evidence and gaps from one local knowledge bundle.</p>
+          <p className="hero-copy">Search a CVE, CWE, CAPEC, ATT&CK technique, D3FEND technique, artifact, control, detection or evidence node. The UI renders local bundle data only.</p>
+          <BundleBanner bundle={bundle} bundleSource={bundleSource} />
           <div className="metric-row">
             <Metric label="Nodes" value={String(bundle.nodes.length)} />
             <Metric label="Edges" value={String(bundle.edges.length)} />
-            <Metric label="Routes" value={String(bundle.routes?.length ?? bundle.indexes?.route_inputs?.length ?? 1)} />
+            <Metric label="Routes" value={String(bundle.routes?.length ?? bundle.indexes?.route_inputs?.length ?? 0)} />
             <Metric label="Source" value={bundleSource === 'generated' ? 'Generated bundle' : 'Fallback sample'} />
           </div>
         </div>
         <div className="search-card">
           <label htmlFor="route-search">Search any ID or name</label>
-          <div className="search-inline">
-            <input id="route-search" value={query} onChange={(event) => setQuery(event.target.value)} onKeyDown={(event) => event.key === 'Enter' && submitSearch()} placeholder="CVE-2021-44228, T1567, CWE-79, D3-MFA..." />
-            <button onClick={submitSearch}>Resolve</button>
+          <div className="search-inline search-inline-with-clear">
+            <input id="route-search" value={query} onChange={(event) => setQuery(event.target.value)} onKeyDown={(event) => event.key === 'Enter' && submitSearch()} placeholder="CVE-2021-44228, T1190, CAPEC-63, CWE-79, D3-MFA..." />
+            <button onClick={submitSearch}>Search</button>
+            <button className="secondary-button" onClick={clearSearch}>Clear</button>
           </div>
-          <div className="suggestions">
-            {suggestions.map((node) => (
-              <button key={node.id} onClick={() => { setSelectedId(node.id); setQuery(node.id); }}>
-                <strong>{node.id}</strong><span>{node.name}</span>
-              </button>
-            ))}
-          </div>
+          {searchError && <p className="search-error">{searchError}</p>}
+          {query.trim() && suggestions.length > 0 && (
+            <div className="suggestions">
+              {suggestions.map((node) => (
+                <button key={node.id} onClick={() => selectNode(node.id)}>
+                  <strong>{node.id}</strong><span>{node.name}</span>
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       </header>
 
       <nav className="tabs" aria-label="Navigator tabs">
         {[
-          ['route', 'Route'],
-          ['actions', 'Actions'],
-          ['graph', 'Graph'],
-          ['mitre', 'MITRE Views'],
+          ['route', 'Route Flow'],
+          ['attack', 'ATT&CK Navigator'],
+          ['d3fend', 'D3FEND CAD'],
           ['coverage', 'Coverage'],
           ['export', 'Export'],
         ].map(([id, label]) => (
@@ -219,22 +268,28 @@ function App() {
         ))}
       </nav>
 
-      {activeTab === 'route' && (
-        <section className="grid route-layout">
-          <div className="panel wide">
-            <PanelTitle title="Framework Route" subtitle="Route-first navigation across public frameworks and internal operational objects." />
-            <RouteColumns nodesByType={routeNodesByType} selectedId={selectedNode.id} onSelect={setSelectedId} />
-          </div>
-          <NodeDetail node={selectedNode} relatedEdges={relatedEdges} onSelect={setSelectedId} nodeMap={nodeMap} />
-          <RouteAnalystPreview node={selectedNode} activeRoute={activeRoute} coverageRows={coverageRows} />
-        </section>
-      )}
+      {!selectedNode || !activeRoute ? (
+        <EmptyState bundleSource={bundleSource} />
+      ) : (
+        <>
+          {activeTab === 'route' && (
+            <section className="grid route-layout">
+              <div className="panel wide">
+                <PanelTitle title="Route Flow" subtitle="CVE → CWE → CAPEC → ATT&CK → Artifact → D3FEND → Control → Detection → Evidence → Gap." />
+                <RouteColumns nodesByType={routeNodesByType} selectedId={selectedNode.id} onSelect={selectNode} />
+                <RelationshipStrip edges={activeRoute.edges} />
+              </div>
+              <NodeDetail node={selectedNode} relatedEdges={relatedEdges} onSelect={selectNode} nodeMap={nodeMap} />
+              <ActionSummary node={selectedNode} activeRoute={activeRoute} coverageRows={coverageRows} />
+            </section>
+          )}
 
-      {activeTab === 'actions' && <ActionsTab node={selectedNode} activeRoute={activeRoute} coverageRows={coverageRows} />}
-      {activeTab === 'graph' && <GraphTab bundle={bundle} activeRoute={activeRoute} selectedId={selectedNode.id} setSelectedId={setSelectedId} />}
-      {activeTab === 'mitre' && <MitreViewsTab bundle={bundle} activeRoute={activeRoute} navigatorLayer={navigatorLayer} />}
-      {activeTab === 'coverage' && <CoverageTab rows={coverageRows} bundle={bundle} activeRoute={activeRoute} />}
-      {activeTab === 'export' && <ExportTab markdown={markdownExport} json={JSON.stringify({ route: activeRoute, selected: selectedNode, coverage: coverageRows }, null, 2)} navigatorLayer={JSON.stringify(navigatorLayer, null, 2)} />}
+          {activeTab === 'attack' && <AttackNavigatorTab bundle={bundle} activeRoute={activeRoute} navigatorLayer={navigatorLayer} />}
+          {activeTab === 'd3fend' && <D3fendCadTab bundle={bundle} activeRoute={activeRoute} cadGraph={d3fendCadGraph} />}
+          {activeTab === 'coverage' && <CoverageTab rows={coverageRows} bundle={bundle} />}
+          {activeTab === 'export' && <ExportTab markdown={markdownExport} routeJson={JSON.stringify({ route: activeRoute, selected: selectedNode, coverage: coverageRows }, null, 2)} navigatorLayer={JSON.stringify(navigatorLayer, null, 2)} cadGraph={JSON.stringify(d3fendCadGraph, null, 2)} />}
+        </>
+      )}
     </main>
   );
 }
@@ -247,10 +302,46 @@ function PanelTitle({ title, subtitle }: { title: string; subtitle: string }) {
   return <div className="panel-title"><h2>{title}</h2><p>{subtitle}</p></div>;
 }
 
+function BundleBanner({ bundle, bundleSource }: { bundle: KnowledgeBundle; bundleSource: BundleSource }) {
+  const generatedAt = bundle.metadata.generated_at ?? 'not available';
+  const mode = bundle.metadata.mode ?? 'unknown';
+  const warnings = bundle.metadata.warnings?.length ?? 0;
+  const publicSources = bundle.metadata.public_sources?.length ?? 0;
+  const publicFailures = bundle.metadata.public_source_failures?.length ?? 0;
+
+  return (
+    <div className={`bundle-banner ${bundleSource}`}>
+      <strong>{bundleSource === 'generated' ? 'Generated bundle loaded' : 'Fallback sample loaded'}</strong>
+      <span>mode: {mode}</span>
+      <span>generated: {generatedAt}</span>
+      <span>public sources: {publicSources}</span>
+      <span>warnings: {warnings + publicFailures}</span>
+      {bundleSource === 'fallback' && <em>No generated bundle was found. Run the builder before treating this as pre-production data.</em>}
+    </div>
+  );
+}
+
+function EmptyState({ bundleSource }: { bundleSource: BundleSource }) {
+  return (
+    <section className="panel empty-state">
+      <h2>Search to begin</h2>
+      <p>Enter a CVE, CWE, CAPEC, ATT&CK technique, D3FEND technique, artifact, control, detection or evidence node. Nothing is pre-selected.</p>
+      <div className="empty-examples">
+        <code>CVE-2021-44228</code>
+        <code>T1190</code>
+        <code>CAPEC-63</code>
+        <code>CWE-79</code>
+        <code>D3-MFA</code>
+      </div>
+      {bundleSource === 'fallback' && <p className="fallback-warning">Fallback sample is available only for development resilience. Generate <code>/data/knowledge-bundle.json</code> for real validation.</p>}
+    </section>
+  );
+}
+
 function RouteColumns({ nodesByType, selectedId, onSelect }: { nodesByType: Map<NodeType, RouteNode[]>; selectedId: string; onSelect: (id: string) => void }) {
   return (
-    <div className="columns pro-columns">
-      {primaryColumns.map((type) => (
+    <div className="columns pro-columns route-flow-columns">
+      {typeOrder.map((type) => (
         <div key={type} className="framework-column">
           <h3>{typeLabels[type]}</h3>
           {(nodesByType.get(type) ?? []).map((node) => (
@@ -265,10 +356,24 @@ function RouteColumns({ nodesByType, selectedId, onSelect }: { nodesByType: Map<
   );
 }
 
+function RelationshipStrip({ edges }: { edges: RouteEdge[] }) {
+  return (
+    <div className="relationship-strip">
+      {edges.slice(0, 40).map((edge) => (
+        <span key={`${edge.source}-${edge.relationship}-${edge.target}`}>
+          <code>{edge.source}</code> {relationshipLabels[edge.relationship] ?? edge.relationship} <code>{edge.target}</code>
+          {edge.confidence && <em>{edge.confidence}</em>}
+        </span>
+      ))}
+      {edges.length > 40 && <span>Showing first 40 relationships of {edges.length}.</span>}
+    </div>
+  );
+}
+
 function NodeDetail({ node, relatedEdges, onSelect, nodeMap }: { node: RouteNode; relatedEdges: RouteEdge[]; onSelect: (id: string) => void; nodeMap: Map<string, RouteNode> }) {
   return (
     <aside className="panel">
-      <PanelTitle title="Selected Node" subtitle="Official meaning, direct relationships and source confidence." />
+      <PanelTitle title="Selected Node" subtitle="Direct relationships and source context." />
       <div className={`detail-badge ${node.type}`}>{typeLabels[node.type]}</div>
       <h3>{node.id}</h3>
       <p className="node-name">{node.name}</p>
@@ -293,75 +398,69 @@ function NodeDetail({ node, relatedEdges, onSelect, nodeMap }: { node: RouteNode
   );
 }
 
-function RouteAnalystPreview({ node, activeRoute, coverageRows }: { node: RouteNode; activeRoute: ResolvedRoute; coverageRows: CoverageRow[] }) {
-  const missing = coverageRows.filter((row) => row.status !== 'covered').slice(0, 3);
+function ActionSummary({ node, activeRoute, coverageRows }: { node: RouteNode; activeRoute: ResolvedRoute; coverageRows: CoverageRow[] }) {
   return (
     <aside className="panel analyst-card">
-      <PanelTitle title="AI Route Analyst Pending" subtitle="Everything here is deterministic. Agentic analysis is the only pending capability." />
-      <p><strong>{node.id}</strong> is connected to {activeRoute.nodes.length} nodes and {activeRoute.edges.length} relationships.</p>
-      <p>The current MVP already resolves route, artifacts, D3FEND, controls, detections, evidence and coverage from the local knowledge bundle.</p>
-      <div className="decision-card"><span>Recommended deterministic posture</span><strong>{missing.length ? 'VALIDATE + CLOSE GAPS' : 'MONITOR + VERIFY'}</strong></div>
+      <PanelTitle title="Deterministic Actions" subtitle="No AI. Actions are generated from the resolved route." />
+      <ul className="action-list">
+        {buildCtiActions(node, activeRoute).map((item) => <li key={item}>{item}</li>)}
+        {buildHuntingActions(node, activeRoute).map((item) => <li key={item}>{item}</li>)}
+        {buildSocActions(activeRoute, coverageRows).map((item) => <li key={item}>{item}</li>)}
+      </ul>
     </aside>
   );
 }
 
-function ActionsTab({ node, activeRoute, coverageRows }: { node: RouteNode; activeRoute: ResolvedRoute; coverageRows: CoverageRow[] }) {
-  return (
-    <section className="grid two-col">
-      <ActionPanel title="CTI Actions" items={buildCtiActions(node, activeRoute)} />
-      <ActionPanel title="Threat Hunting Hypotheses" items={buildHuntingActions(node, activeRoute)} />
-      <ActionPanel title="SOC / Detection Actions" items={buildSocActions(activeRoute, coverageRows)} />
-      <ActionPanel title="Engineering / Owner Actions" items={buildOwnerActions(coverageRows)} />
-    </section>
-  );
-}
-
-function ActionPanel({ title, items }: { title: string; items: string[] }) {
-  return <section className="panel"><PanelTitle title={title} subtitle="Deterministic action card from the current route." /><ul className="action-list">{items.map((item) => <li key={item}>{item}</li>)}</ul></section>;
-}
-
-function GraphTab({ bundle, activeRoute, selectedId, setSelectedId }: { bundle: KnowledgeBundle; activeRoute: ResolvedRoute; selectedId: string; setSelectedId: (id: string) => void }) {
-  const nodeMap = new Map(bundle.nodes.map((node) => [node.id, node]));
-  const graphNodes = activeRoute.nodes.map((id) => nodeMap.get(id)).filter(Boolean) as RouteNode[];
-  return (
-    <section className="panel">
-      <PanelTitle title="Route Graph" subtitle="Generated from the active route. Still simple: no graph database required." />
-      <div className="graph-grid-pro">
-        {graphNodes.map((node) => (
-          <button key={node.id} className={`graph-node ${node.type} ${selectedId === node.id ? 'selected' : ''}`} onClick={() => setSelectedId(node.id)}>
-            <strong>{node.id}</strong><span>{node.name}</span><small>{typeLabels[node.type]}</small>
-          </button>
-        ))}
-      </div>
-      <div className="relationship-strip">
-        {activeRoute.edges.slice(0, 24).map((edge) => <span key={`${edge.source}-${edge.relationship}-${edge.target}`}><code>{edge.source}</code> {relationshipLabels[edge.relationship] ?? edge.relationship} <code>{edge.target}</code></span>)}
-      </div>
-    </section>
-  );
-}
-
-function MitreViewsTab({ bundle, activeRoute, navigatorLayer }: { bundle: KnowledgeBundle; activeRoute: ResolvedRoute; navigatorLayer: unknown }) {
+function AttackNavigatorTab({ bundle, activeRoute, navigatorLayer }: { bundle: KnowledgeBundle; activeRoute: ResolvedRoute; navigatorLayer: AttackLayer }) {
   const nodeMap = new Map(bundle.nodes.map((node) => [node.id, node]));
   const attackNodes = activeRoute.nodes.map((id) => nodeMap.get(id)).filter((node): node is RouteNode => node?.type === 'attack');
+  return (
+    <section className="grid two-col">
+      <section className="panel">
+        <PanelTitle title="ATT&CK Navigator Layer" subtitle="Simple export compatible with ATT&CK Navigator. This project does not reimplement Navigator." />
+        <LinkList nodes={attackNodes} />
+        <DownloadLinks filename={`attack2defend-${activeRoute.root}-attack-layer.json`} payload={navigatorLayer} />
+      </section>
+      <section className="panel">
+        <PanelTitle title="Layer JSON Preview" subtitle="Open or import this JSON in ATT&CK Navigator." />
+        <textarea value={JSON.stringify(navigatorLayer, null, 2)} readOnly />
+      </section>
+    </section>
+  );
+}
+
+function D3fendCadTab({ bundle, activeRoute, cadGraph }: { bundle: KnowledgeBundle; activeRoute: ResolvedRoute; cadGraph: D3fendCadGraph }) {
+  const nodeMap = new Map(bundle.nodes.map((node) => [node.id, node]));
   const d3fendNodes = activeRoute.nodes.map((id) => nodeMap.get(id)).filter((node): node is RouteNode => node?.type === 'd3fend');
   return (
     <section className="grid two-col">
-      <section className="panel"><PanelTitle title="ATT&CK Native Links" subtitle="Deep links now; Navigator layer export included below." /><LinkList nodes={attackNodes} /></section>
-      <section className="panel"><PanelTitle title="D3FEND Native Links" subtitle="Deep links now; CAD-compatible export remains a future adapter." /><LinkList nodes={d3fendNodes} /></section>
-      <section className="panel wide"><PanelTitle title="ATT&CK Navigator Layer Preview" subtitle="Generated from selected ATT&CK techniques." /><textarea value={JSON.stringify(navigatorLayer, null, 2)} readOnly /></section>
+      <section className="panel">
+        <PanelTitle title="D3FEND CAD Graph" subtitle="CAD-style graph export for Attack / Countermeasure / Artifact route context." />
+        <LinkList nodes={d3fendNodes} />
+        <DownloadLinks filename={`attack2defend-${activeRoute.root}-d3fend-cad.json`} payload={cadGraph} />
+      </section>
+      <section className="panel">
+        <PanelTitle title="CAD JSON Preview" subtitle="Prepared for future D3FEND CAD import/embed workflow." />
+        <textarea value={JSON.stringify(cadGraph, null, 2)} readOnly />
+      </section>
     </section>
   );
 }
 
-function LinkList({ nodes }: { nodes: RouteNode[] }) {
-  return <ul className="link-list">{nodes.length === 0 && <li>No nodes in active route.</li>}{nodes.map((node) => <li key={node.id}>{node.url ? <a href={node.url} target="_blank" rel="noreferrer">{node.id} · {node.name}</a> : `${node.id} · ${node.name}`}</li>)}</ul>;
+function DownloadLinks({ filename, payload }: { filename: string; payload: unknown }) {
+  const href = `data:application/json;charset=utf-8,${encodeURIComponent(JSON.stringify(payload, null, 2))}`;
+  return <div className="download-row"><a href={href} download={filename}>Download JSON</a></div>;
 }
 
-function CoverageTab({ rows, bundle, activeRoute }: { rows: CoverageRow[]; bundle: KnowledgeBundle; activeRoute: ResolvedRoute }) {
+function LinkList({ nodes }: { nodes: RouteNode[] }) {
+  return <ul className="link-list">{nodes.length === 0 && <li>No matching nodes in active route.</li>}{nodes.map((node) => <li key={node.id}>{node.url ? <a href={node.url} target="_blank" rel="noreferrer">{node.id} · {node.name}</a> : `${node.id} · ${node.name}`}</li>)}</ul>;
+}
+
+function CoverageTab({ rows, bundle }: { rows: CoverageRow[]; bundle: KnowledgeBundle }) {
   const nodeMap = new Map(bundle.nodes.map((node) => [node.id, node]));
   return (
     <section className="panel">
-      <PanelTitle title="Coverage" subtitle="Curated internal coverage. Generated from route coverage, controls, detections and evidence relationships." />
+      <PanelTitle title="Coverage" subtitle="Curated/internal coverage merged with the active route." />
       <div className="coverage-table">
         {rows.map((row) => <CoverageRowCard key={row.id} row={row} node={nodeMap.get(row.id)} />)}
         {rows.length === 0 && <p>No coverage records for this active route yet.</p>}
@@ -374,18 +473,16 @@ function CoverageRowCard({ row, node }: { row: CoverageRow; node?: RouteNode }) 
   return <div className="coverage-row"><span className={`status ${row.status}`}>{row.status}</span><strong>{row.id}{node ? ` · ${node.name}` : ''}</strong><span>{row.owners.join(', ') || 'Unassigned'}</span><p>{[...row.controls, ...row.detections, ...row.evidence, ...row.gaps].slice(0, 5).join(' · ') || 'No mapped evidence yet.'}</p></div>;
 }
 
-function ExportTab({ markdown, json, navigatorLayer }: { markdown: string; json: string; navigatorLayer: string }) {
+function ExportTab({ markdown, routeJson, navigatorLayer, cadGraph }: { markdown: string; routeJson: string; navigatorLayer: string; cadGraph: string }) {
   return (
     <section className="grid two-col">
       <section className="panel"><PanelTitle title="Markdown Export" subtitle="Ready for CTI/TH/SOC notes." /><textarea value={markdown} readOnly /></section>
-      <section className="panel"><PanelTitle title="Route JSON Export" subtitle="Active route and coverage." /><textarea value={json} readOnly /></section>
-      <section className="panel wide"><PanelTitle title="ATT&CK Navigator Layer Export" subtitle="Use as a starter layer in ATT&CK Navigator." /><textarea value={navigatorLayer} readOnly /></section>
+      <section className="panel"><PanelTitle title="Route JSON Export" subtitle="Active route and coverage." /><textarea value={routeJson} readOnly /></section>
+      <section className="panel"><PanelTitle title="ATT&CK Layer Export" subtitle="Navigator-compatible starter layer." /><textarea value={navigatorLayer} readOnly /></section>
+      <section className="panel"><PanelTitle title="D3FEND CAD Graph Export" subtitle="CAD-style graph payload." /><textarea value={cadGraph} readOnly /></section>
     </section>
   );
 }
-
-type ResolvedRoute = { root: string; nodes: string[]; edges: RouteEdge[] };
-type CoverageRow = { id: string; status: CoverageStatus; controls: string[]; detections: string[]; evidence: string[]; gaps: string[]; owners: string[] };
 
 function resolveRoute(bundle: KnowledgeBundle, root: string): ResolvedRoute {
   const start = root.toUpperCase();
@@ -427,8 +524,8 @@ function groupNodesByType(nodes: RouteNode[]) {
 
 function buildSuggestions(bundle: KnowledgeBundle, query: string) {
   const term = query.trim().toLowerCase();
-  const candidates = term ? bundle.nodes.filter((node) => `${node.id} ${node.name}`.toLowerCase().includes(term)) : bundle.nodes;
-  return candidates.slice(0, 8);
+  if (!term) return [];
+  return bundle.nodes.filter((node) => `${node.id} ${node.name}`.toLowerCase().includes(term)).slice(0, 8);
 }
 
 function buildCoverageRows(bundle: KnowledgeBundle, route: ResolvedRoute): CoverageRow[] {
@@ -468,27 +565,48 @@ function buildSocActions(route: ResolvedRoute, coverageRows: CoverageRow[]) {
   ];
 }
 
-function buildOwnerActions(coverageRows: CoverageRow[]) {
-  const owners = sortedUnique(coverageRows.flatMap((row) => row.owners));
-  const gaps = coverageRows.flatMap((row) => row.gaps);
-  return [
-    `Assign owners: ${owners.length ? owners.join(', ') : 'owner missing'}.`,
-    `Close gaps: ${gaps.length ? gaps.join('; ') : 'no curated gaps in active route'}.`,
-    'Validate closure with evidence, not ticket status alone.',
-  ];
-}
-
 function buildAttackNavigatorLayer(bundle: KnowledgeBundle, route: ResolvedRoute) {
   const nodeMap = new Map(bundle.nodes.map((node) => [node.id, node]));
   return {
     name: `Attack2Defend layer - ${route.root}`,
-    versions: { attack: 'unknown', navigator: '4.9.1', layer: '4.5' },
+    versions: { attack: 'unknown', navigator: '5.x-compatible', layer: '4.5' },
     domain: 'enterprise-attack',
     description: 'Generated starter layer from Attack2Defend active route.',
     techniques: route.nodes
       .map((id) => nodeMap.get(id))
       .filter((node): node is RouteNode => Boolean(node && node.type === 'attack'))
       .map((node) => ({ techniqueID: node.id, score: 1, comment: node.name })),
+  };
+}
+
+function buildD3fendCadGraph(bundle: KnowledgeBundle, route: ResolvedRoute) {
+  const nodeMap = new Map(bundle.nodes.map((node) => [node.id, node]));
+  const nodes = route.nodes
+    .map((id) => nodeMap.get(id))
+    .filter((node): node is RouteNode => Boolean(node && ['attack', 'artifact', 'd3fend'].includes(node.type)))
+    .map((node) => ({
+      id: node.id,
+      label: node.name,
+      type: node.type,
+      d3f_class: node.type === 'attack' ? 'Attack' : node.type === 'd3fend' ? 'Countermeasure' : 'DigitalArtifact',
+      url: node.url ?? null,
+    }));
+  const nodeIds = new Set(nodes.map((node) => node.id));
+  const edges = route.edges
+    .filter((edge) => nodeIds.has(edge.source) && nodeIds.has(edge.target))
+    .map((edge) => ({
+      source: edge.source,
+      target: edge.target,
+      relationship: edge.relationship,
+      d3f_property: edge.relationship,
+      confidence: edge.confidence ?? 'unknown',
+    }));
+  return {
+    name: `Attack2Defend D3FEND CAD graph - ${route.root}`,
+    format: 'attack2defend-d3fend-cad-like.v1',
+    root: route.root,
+    nodes,
+    edges,
   };
 }
 
@@ -515,10 +633,6 @@ ${buildCtiActions(selectedNode, route).concat(buildHuntingActions(selectedNode, 
 ## Coverage / Gaps
 ${coverageRows.map((row) => `- ${row.id}: ${row.status}${row.gaps.length ? ` | gaps: ${row.gaps.join('; ')}` : ''}`).join('\n') || '- No coverage records mapped yet.'}
 `;
-}
-
-function sortedUnique(values: string[]) {
-  return Array.from(new Set(values.filter(Boolean))).sort();
 }
 
 createRoot(document.getElementById('root')!).render(<App />);
