@@ -60,6 +60,43 @@ h1 {
   line-height: 1.55;
 }
 
+.bundle-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 18px;
+  padding: 12px;
+  border: 1px solid var(--secops-border);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, .75);
+}
+
+.bundle-banner strong {
+  color: #202124;
+  margin-right: 6px;
+}
+
+.bundle-banner span,
+.bundle-banner em {
+  color: var(--google-grey);
+  font-size: 12px;
+}
+
+.bundle-banner.generated {
+  border-left: 5px solid var(--google-green);
+}
+
+.bundle-banner.fallback {
+  border-left: 5px solid var(--google-yellow);
+}
+
+.bundle-banner em {
+  flex-basis: 100%;
+  font-style: normal;
+  color: #b06000;
+}
+
 .metric-row {
   display: flex;
   flex-wrap: wrap;
@@ -121,6 +158,10 @@ h1 {
   gap: 10px;
 }
 
+.search-inline-with-clear {
+  grid-template-columns: minmax(0, 1fr) auto auto;
+}
+
 .search-card input {
   border: 1px solid #c7d2e5;
   border-radius: 16px;
@@ -147,6 +188,21 @@ h1 {
   color: #fff;
   font-weight: 800;
   box-shadow: 0 8px 20px rgba(26, 115, 232, .24);
+}
+
+.search-card .search-inline button.secondary-button {
+  color: #3c4043;
+  background: #fff;
+  border: 1px solid #dfe5f2;
+  box-shadow: none;
+}
+
+.search-error,
+.fallback-warning {
+  margin: 0;
+  color: #a50e0e;
+  font-size: 13px;
+  line-height: 1.4;
 }
 
 .suggestions {
@@ -223,6 +279,32 @@ h1 {
 
 .panel.wide { grid-column: 1 / -1; }
 
+.empty-state {
+  text-align: center;
+  padding: 42px 24px;
+}
+
+.empty-state h2 {
+  margin: 0 0 8px;
+  font-size: 30px;
+  letter-spacing: -0.04em;
+}
+
+.empty-state p {
+  max-width: 760px;
+  margin: 0 auto 18px;
+  color: var(--google-grey);
+  line-height: 1.55;
+}
+
+.empty-examples {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin: 18px 0;
+}
+
 .panel-title h2 {
   margin: 0;
   font-size: 22px;
@@ -242,8 +324,9 @@ h1 {
   gap: 12px;
 }
 
-.pro-columns {
-  grid-template-columns: repeat(5, minmax(160px, 1fr));
+.pro-columns,
+.route-flow-columns {
+  grid-template-columns: repeat(10, minmax(160px, 1fr));
   overflow-x: auto;
   padding-bottom: 6px;
 }
@@ -379,50 +462,6 @@ code {
   line-height: 1.55;
 }
 
-.decision-card {
-  margin-top: 18px;
-  border-radius: 20px;
-  padding: 16px;
-  background: linear-gradient(135deg, #174ea6, #1a73e8 62%, #34a853);
-  color: #fff;
-}
-
-.decision-card span {
-  display: block;
-  opacity: .78;
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: .08em;
-  margin-bottom: 6px;
-}
-
-.graph-grid-pro {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-  gap: 12px;
-}
-
-.graph-node {
-  min-height: 104px;
-  padding: 14px;
-  border-radius: 18px;
-  background: #fff;
-  border: 1px solid #e3e9f4;
-  text-align: left;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.graph-node small {
-  margin-top: auto;
-  color: #8a9099;
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: .08em;
-  font-weight: 800;
-}
-
 .relationship-strip {
   margin-top: 20px;
   padding-top: 16px;
@@ -431,6 +470,26 @@ code {
   flex-direction: column;
   gap: 8px;
   color: #3c4043;
+}
+
+.relationship-strip em {
+  margin-left: 8px;
+  color: var(--google-grey);
+  font-size: 12px;
+  font-style: normal;
+}
+
+.download-row {
+  margin-top: 16px;
+}
+
+.download-row a {
+  display: inline-flex;
+  border-radius: 999px;
+  padding: 10px 14px;
+  background: var(--google-blue);
+  color: #fff;
+  font-weight: 800;
 }
 
 .defense-grid, .strategy-grid {
@@ -490,12 +549,12 @@ textarea {
 
 @media (max-width: 1180px) {
   .hero, .route-layout, .two-col { grid-template-columns: 1fr; }
-  .columns { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .columns, .pro-columns, .route-flow-columns { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .coverage-row { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 760px) {
   .app-shell { padding: 18px; }
-  .search-inline { grid-template-columns: 1fr; }
-  .suggestions, .columns, .defense-grid, .strategy-grid { grid-template-columns: 1fr; }
+  .search-inline, .search-inline-with-clear { grid-template-columns: 1fr; }
+  .suggestions, .columns, .pro-columns, .route-flow-columns, .defense-grid, .strategy-grid { grid-template-columns: 1fr; }
 }
