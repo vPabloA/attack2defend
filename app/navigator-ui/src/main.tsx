@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import fallbackRoute from './data/log4shell.route.json';
 import './styles.css';
 
-type NodeType = 'cve' | 'cwe' | 'capec' | 'attack' | 'd3fend' | 'artifact' | 'control' | 'detection' | 'evidence' | 'gap';
+type NodeType = 'cve' | 'cwe' | 'capec' | 'attack' | 'd3fend' | 'artifact' | 'control' | 'detection' | 'evidence' | 'gap' | 'action';
 type CoverageStatus = 'covered' | 'partial' | 'missing' | 'unknown' | 'not_applicable';
 type TabId = 'route' | 'attack' | 'd3fend' | 'coverage' | 'export';
 type BundleSource = 'generated' | 'fallback';
@@ -23,6 +23,9 @@ type RouteEdge = {
   relationship: string;
   confidence?: string;
   source_ref?: string;
+  source_kind?: string;
+  owner?: string;
+  priority?: string;
 };
 
 type CoverageRecord = {
@@ -62,10 +65,21 @@ type KnowledgeBundle = {
     outgoing?: Record<string, Array<{ target: string; relationship: string }>>;
     incoming?: Record<string, Array<{ source: string; relationship: string }>>;
     route_inputs?: string[];
-    search?: Array<{ id: string; type: NodeType; name: string; text: string }>;
+    search?: Array<{ id: string; type: string; name: string; text: string }>;
+    cpe_to_cve?: Record<string, string[]>;
+    kev?: Record<string, Record<string, unknown>>;
+    forward?: Record<string, Record<string, string[]>>;
+    reverse?: Record<string, Record<string, string[]>>;
   };
   coverage?: Record<string, CoverageRecord>;
   routes?: RouteMetadata[];
+  semantic_routes?: Array<{
+    route_id?: string;
+    input?: string;
+    coverage_status?: string;
+    confidence_score?: number | string;
+    missing_segments?: string[];
+  }>;
 };
 
 type LegacyRouteData = {
@@ -99,7 +113,7 @@ const fallbackBundle: KnowledgeBundle = {
   routes: [legacyRoute.metadata],
 };
 
-const typeOrder: NodeType[] = ['cve', 'cwe', 'capec', 'attack', 'artifact', 'd3fend', 'control', 'detection', 'evidence', 'gap'];
+const typeOrder: NodeType[] = ['cve', 'artifact', 'cwe', 'capec', 'attack', 'd3fend', 'control', 'detection', 'evidence', 'gap', 'action'];
 
 const typeLabels: Record<NodeType, string> = {
   cve: 'CVE',
@@ -112,6 +126,7 @@ const typeLabels: Record<NodeType, string> = {
   detection: 'Detection',
   evidence: 'Evidence',
   gap: 'Gap',
+  action: 'Action',
 };
 
 const relationshipLabels: Record<string, string> = {
@@ -135,7 +150,7 @@ function App() {
   const [bundle, setBundle] = useState<KnowledgeBundle>(fallbackBundle);
   const [bundleSource, setBundleSource] = useState<BundleSource>('fallback');
   const [query, setQuery] = useState<string>('');
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [activeTab, setActiveTab] = useState<TabId>('route');
   const [searchError, setSearchError] = useState<string>('');
 
@@ -150,29 +165,30 @@ function App() {
           setBundle(nextBundle);
           setBundleSource('generated');
           setQuery('');
-          setSelectedId(null);
+          setSelectedIds([]);
         }
       })
       .catch(() => {
         setBundle(fallbackBundle);
         setBundleSource('fallback');
         setQuery('');
-        setSelectedId(null);
+        setSelectedIds([]);
       });
   }, []);
 
   const nodeMap = useMemo(() => new Map(bundle.nodes.map((node) => [node.id, node])), [bundle.nodes]);
-  const selectedNode = selectedId ? nodeMap.get(selectedId) ?? null : null;
-  const activeRoute = useMemo(() => (selectedNode ? resolveRoute(bundle, selectedNode.id) : null), [bundle, selectedNode]);
+  const selectedNode = selectedIds.length ? nodeMap.get(selectedIds[0]) ?? null : null;
+  const activeRoute = useMemo(() => (selectedIds.length ? resolveRoute(bundle, selectedIds) : null), [bundle, selectedIds]);
   const activeNodes = useMemo(() => {
     if (!activeRoute) return [];
     return activeRoute.nodes.map((id) => nodeMap.get(id)).filter(Boolean) as RouteNode[];
   }, [activeRoute, nodeMap]);
   const routeNodesByType = useMemo(() => groupNodesByType(activeNodes), [activeNodes]);
   const relatedEdges = useMemo(() => {
-    if (!selectedNode) return [];
-    return bundle.edges.filter((edge) => edge.source === selectedNode.id || edge.target === selectedNode.id);
-  }, [bundle.edges, selectedNode]);
+    if (!selectedIds.length) return [];
+    const picked = new Set(selectedIds);
+    return bundle.edges.filter((edge) => picked.has(edge.source) || picked.has(edge.target));
+  }, [bundle.edges, selectedIds]);
   const suggestions = useMemo(() => buildSuggestions(bundle, query), [bundle, query]);
   const coverageRows = useMemo(() => (activeRoute ? buildCoverageRows(bundle, activeRoute) : []), [bundle, activeRoute]);
   const navigatorLayer = useMemo(() => (activeRoute ? buildAttackNavigatorLayer(bundle, activeRoute) : buildAttackNavigatorLayer(bundle, { root: 'EMPTY', nodes: [], edges: [] })), [bundle, activeRoute]);
@@ -190,33 +206,31 @@ function App() {
 
     const exact = nodeMap.get(candidate);
     if (exact) {
-      setSelectedId(exact.id);
-      setQuery(exact.id);
+      selectNode(exact.id);
       setActiveTab('route');
       return;
     }
 
     const fuzzy = bundle.nodes.find((node) => `${node.id} ${node.name}`.toLowerCase().includes(term.toLowerCase()));
     if (fuzzy) {
-      setSelectedId(fuzzy.id);
-      setQuery(fuzzy.id);
+      selectNode(fuzzy.id);
       setActiveTab('route');
       return;
     }
 
-    setSelectedId(null);
+    setSelectedIds([]);
     setSearchError(`No node found for "${term}" in the loaded bundle.`);
   }
 
   function clearSearch() {
     setQuery('');
-    setSelectedId(null);
+    setSelectedIds([]);
     setSearchError('');
     setActiveTab('route');
   }
 
   function selectNode(id: string) {
-    setSelectedId(id);
+    setSelectedIds((prev) => prev.includes(id) ? [id, ...prev.filter((item) => item !== id)] : [id, ...prev].slice(0, 5));
     setQuery(id);
     setSearchError('');
   }
@@ -268,18 +282,19 @@ function App() {
         ))}
       </nav>
 
-      {!selectedNode || !activeRoute ? (
+      {!selectedIds.length || !activeRoute || !selectedNode ? (
         <EmptyState bundleSource={bundleSource} />
       ) : (
         <>
           {activeTab === 'route' && (
             <section className="grid route-layout">
               <div className="panel wide">
-                <PanelTitle title="Route Flow" subtitle="CVE → CWE → CAPEC → ATT&CK → Artifact → D3FEND → Control → Detection → Evidence → Gap." />
+                <PanelTitle title="Route Flow" subtitle="CVE → CPE/Product → CWE → CAPEC → ATT&CK → D3FEND → Defense/SOC CTEM." />
                 <RouteColumns nodesByType={routeNodesByType} selectedId={selectedNode.id} onSelect={selectNode} />
+                <MultiSelectionSummary selectedIds={selectedIds} activeRoute={activeRoute} />
                 <RelationshipStrip edges={activeRoute.edges} />
               </div>
-              <NodeDetail node={selectedNode} relatedEdges={relatedEdges} onSelect={selectNode} nodeMap={nodeMap} />
+              <NodeDetail node={selectedNode} relatedEdges={relatedEdges} onSelect={selectNode} nodeMap={nodeMap} bundle={bundle} />
               <ActionSummary node={selectedNode} activeRoute={activeRoute} coverageRows={coverageRows} />
             </section>
           )}
@@ -370,7 +385,8 @@ function RelationshipStrip({ edges }: { edges: RouteEdge[] }) {
   );
 }
 
-function NodeDetail({ node, relatedEdges, onSelect, nodeMap }: { node: RouteNode; relatedEdges: RouteEdge[]; onSelect: (id: string) => void; nodeMap: Map<string, RouteNode> }) {
+function NodeDetail({ node, relatedEdges, onSelect, nodeMap, bundle }: { node: RouteNode; relatedEdges: RouteEdge[]; onSelect: (id: string) => void; nodeMap: Map<string, RouteNode>; bundle: KnowledgeBundle }) {
+  const semantic = findSemanticRoute(bundle, node.id);
   return (
     <aside className="panel">
       <PanelTitle title="Selected Node" subtitle="Direct relationships and source context." />
@@ -378,6 +394,16 @@ function NodeDetail({ node, relatedEdges, onSelect, nodeMap }: { node: RouteNode
       <h3>{node.id}</h3>
       <p className="node-name">{node.name}</p>
       {node.url && <a href={node.url} target="_blank" rel="noreferrer">Open official reference</a>}
+      {node.type === 'cve' && <KevPanel node={node} bundle={bundle} />}
+      {isCpeNode(node) && <CpePanel node={node} bundle={bundle} onSelect={onSelect} />}
+      {semantic && (
+        <div>
+          <h4>Semantic route status</h4>
+          <p>coverage_status: <strong>{semantic.coverage_status ?? 'unknown'}</strong></p>
+          <p>confidence_score: <strong>{String(semantic.confidence_score ?? 'unknown')}</strong></p>
+          <p>missing_segments: {(semantic.missing_segments ?? []).join(', ') || 'none'}</p>
+        </div>
+      )}
       <h4>Direct relationships</h4>
       <ul className="edge-list compact">
         {relatedEdges.length === 0 && <li>No direct edges found for current input.</li>}
@@ -389,6 +415,7 @@ function NodeDetail({ node, relatedEdges, onSelect, nodeMap }: { node: RouteNode
               <button className="edge-button" onClick={() => onSelect(otherId)}>
                 <code>{edge.source}</code> <span>{relationshipLabels[edge.relationship] ?? edge.relationship}</span> <code>{edge.target}</code>
                 {otherNode && <em>{otherNode.name}</em>}
+                <small>{edge.source_kind ?? 'unknown source'} · {edge.source_ref ?? 'source_ref n/a'} · {edge.confidence ?? 'unknown confidence'} · {edge.owner ?? 'unowned'} · {edge.priority ?? 'normal'}</small>
               </button>
             </li>
           );
@@ -484,15 +511,16 @@ function ExportTab({ markdown, routeJson, navigatorLayer, cadGraph }: { markdown
   );
 }
 
-function resolveRoute(bundle: KnowledgeBundle, root: string): ResolvedRoute {
-  const start = root.toUpperCase();
-  const queue: Array<{ id: string; depth: number }> = [{ id: start, depth: 0 }];
-  const visited = new Set<string>([start]);
+function resolveRoute(bundle: KnowledgeBundle, roots: string[]): ResolvedRoute {
+  const starts = roots.map((item) => item.toUpperCase());
+  const queue: Array<{ id: string; depth: number }> = starts.map((id) => ({ id, depth: 0 }));
+  const visited = new Set<string>(starts);
   const routeEdges: RouteEdge[] = [];
   while (queue.length) {
     const current = queue.shift();
     if (!current || current.depth >= 5) continue;
-    const edges = bundle.edges.filter((edge) => edge.source === current.id || edge.target === current.id);
+    const pivot = getPivotEdges(bundle, current.id);
+    const edges = pivot.length ? pivot : bundle.edges.filter((edge) => edge.source === current.id || edge.target === current.id);
     for (const edge of edges) {
       routeEdges.push(edge);
       const next = edge.source === current.id ? edge.target : edge.source;
@@ -502,7 +530,7 @@ function resolveRoute(bundle: KnowledgeBundle, root: string): ResolvedRoute {
       }
     }
   }
-  return { root: start, nodes: Array.from(visited), edges: dedupeEdges(routeEdges) };
+  return { root: starts[0], nodes: Array.from(visited), edges: dedupeEdges(routeEdges) };
 }
 
 function dedupeEdges(edges: RouteEdge[]) {
@@ -525,6 +553,15 @@ function groupNodesByType(nodes: RouteNode[]) {
 function buildSuggestions(bundle: KnowledgeBundle, query: string) {
   const term = query.trim().toLowerCase();
   if (!term) return [];
+  const indexEntries = bundle.indexes?.search ?? [];
+  if (indexEntries.length) {
+    const nodeMap = new Map(bundle.nodes.map((node) => [node.id, node]));
+    return indexEntries
+      .filter((entry) => entry.text.includes(term) || entry.id.toLowerCase().includes(term) || entry.name.toLowerCase().includes(term))
+      .map((entry) => nodeMap.get(entry.id))
+      .filter(Boolean)
+      .slice(0, 8) as RouteNode[];
+  }
   return bundle.nodes.filter((node) => `${node.id} ${node.name}`.toLowerCase().includes(term)).slice(0, 8);
 }
 
@@ -636,3 +673,26 @@ ${coverageRows.map((row) => `- ${row.id}: ${row.status}${row.gaps.length ? ` | g
 }
 
 createRoot(document.getElementById('root')!).render(<App />);
+
+function isCpeNode(node: RouteNode){ const m=node.metadata as Record<string,unknown>|undefined; return node.id.startsWith('CPE:2.3') || m?.framework==='cpe'; }
+function CpePanel({node,bundle,onSelect}:{node:RouteNode;bundle:KnowledgeBundle;onSelect:(id:string)=>void}){ const m=(node.metadata??{}) as Record<string,unknown>; const related=(bundle.indexes?.cpe_to_cve as Record<string,string[]>|undefined)?.[node.id]??[]; return <div><h4>CPE/Product</h4><p>{String(m.vendor??'unknown')} / {String(m.product??'unknown')} / {String(m.version??'*')}</p><code>{node.id}</code><p>{related.length} CVEs relacionadas</p>{related.map((cve)=><button key={cve} className='secondary-button' onClick={()=>onSelect(cve)}>{cve}</button>)}</div>; }
+function KevPanel({node,bundle}:{node:RouteNode;bundle:KnowledgeBundle}){ const kev=(bundle.indexes?.kev as Record<string,Record<string,unknown>>|undefined)?.[node.id]; if(!kev) return null; return <div className='kev-badge'><strong>KEV</strong><p>{String(kev.required_action??'required_action n/a')}</p><small>{String(kev.vendor??'')} {String(kev.product??'')} {String(kev.date_added??'')}</small></div>; }
+function MultiSelectionSummary({selectedIds,activeRoute}:{selectedIds:string[];activeRoute:ResolvedRoute}){ if(selectedIds.length<2) return null; return <p>Multi-ID: {selectedIds.join(', ')} · nodos compartidos potenciales: {activeRoute.nodes.length}</p>; }
+function findSemanticRoute(bundle: KnowledgeBundle, inputId: string){
+  const upper = inputId.toUpperCase();
+  return (bundle.semantic_routes ?? []).find((item) => (item.input ?? '').toUpperCase() === upper || (item.route_id ?? '').toUpperCase().includes(upper));
+}
+function getPivotEdges(bundle: KnowledgeBundle, id: string): RouteEdge[] {
+  const mapEdges = (from: string, to: string, rel: string) => ({ source: from, target: to, relationship: rel });
+  const out = bundle.indexes?.outgoing?.[id]?.map((item) => mapEdges(id, item.target, item.relationship)) ?? [];
+  const incoming = bundle.indexes?.incoming?.[id]?.map((item) => mapEdges(item.source, id, item.relationship)) ?? [];
+  const forwardEdges: RouteEdge[] = [];
+  const reverseEdges: RouteEdge[] = [];
+  for (const [name, mapping] of Object.entries(bundle.indexes?.forward ?? {})) {
+    for (const target of mapping[id] ?? []) forwardEdges.push(mapEdges(id, target, name));
+  }
+  for (const [name, mapping] of Object.entries(bundle.indexes?.reverse ?? {})) {
+    for (const source of mapping[id] ?? []) reverseEdges.push(mapEdges(source, id, name));
+  }
+  return dedupeEdges([...out, ...incoming, ...forwardEdges, ...reverseEdges]);
+}
