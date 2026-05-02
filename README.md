@@ -1,185 +1,88 @@
 # Attack2Defend Navigator
 
-**Attack2Defend** is a simple static-first navigator that turns public security framework knowledge into SOC/CTEM action.
-
-It connects and navigates:
+**Attack2Defend** is a deterministic, static-first vulnerability-to-defense navigator. It is designed as a stronger successor pattern to CVE2CAPEC/NSFW-style navigation: first recover framework mapping parity, then extend the route into SOC/CTEM defensive evidence and actions.
 
 ```text
-CVE → CWE → CAPEC → MITRE ATT&CK → Artifact → MITRE D3FEND → Control → Detection → Evidence → Gap
+CVE → CWE → CAPEC → MITRE ATT&CK → Artifact → MITRE D3FEND → Control → Detection → Evidence → Gap → Action
 ```
 
-The browser UI does **not** call public APIs. Public sources are fetched by the scheduled builder, written into a local `knowledge-bundle.json`, validated, and served to the React UI.
+The browser UI does **not** call public APIs. Public sources are fetched by the builder, merged with local curated mappings, validated, and published as a local `knowledge-bundle.json` consumed by React/Vite.
 
 ---
 
-## What it is
+## Current operating model
 
-```text
-Search → Route Flow → ATT&CK Layer → D3FEND CAD Graph → Coverage → Export
-```
-
-It is not a graph database, backend API, or AI agent runtime. The only intentionally pending major capability is **Agentic AI / AI Route Analyst**.
-
----
-
-## Current status
-
-| Capability | Status |
+| Layer | Responsibility |
 |---|---|
-| React/Vite search-first UI | Ready |
-| Deterministic curated seeds | Ready |
-| Public ATT&CK collector | Ready |
-| Public CWE collector | Ready |
-| Public CAPEC collector | Ready |
-| Public CISA KEV collector | Ready |
-| Best-effort D3FEND enrichment | Ready |
-| Optional NVD CVE enrichment | Ready |
-| Bundle validator | Ready |
-| Debian/Nginx/cron pre-prod runbook | Ready |
-| Agentic AI / AI Route Analyst runtime | Pending |
+| Public collectors | ATT&CK, CWE, CAPEC, CISA KEV, optional NVD, best-effort D3FEND at build time only. |
+| Mapping backbone | NSFW/CVE2CAPEC-compatible mapping file under `data/mappings/`. |
+| Curated defense mappings | Artifact, control, detection, evidence, gap and action relationships. |
+| Semantic resolver | Phase-constrained routes with coverage status, confidence and missing segments. |
+| UI | Static bundle renderer. No public runtime APIs. |
 
 ---
 
-## Quick start: curated mode
-
-Curated mode is fast and works offline after clone. It uses `data/samples/*.route.json`.
+## Quick start: full local bootstrap
 
 ```bash
-python scripts/knowledge_builder/build_knowledge_base.py
-python scripts/knowledge_builder/validate_bundle.py data/knowledge-bundle.json
-pytest -q
+python3.11 -m venv .venv
+source .venv/bin/activate
+pip install -e ".[dev]"
+make bootstrap-local-full
+make test
+make ui
+```
+
+Open the Vite URL, usually `http://localhost:5173`.
+
+The generated UI bundle is mirrored to:
+
+```text
+app/navigator-ui/public/data/knowledge-bundle.json
 ```
 
 ---
 
-## Quick start: pre-production bootstrap
+## What you can search after bootstrap
 
-Use this when you want the first local knowledge base to hydrate from public sources.
+| Input | Expected behavior |
+|---|---|
+| `CVE-2021-44228` | CVE→CWE→CAPEC/ATT&CK→artifact/control/detection/evidence/gap/action where mapped. |
+| `CVE-2023-34362` | MOVEit-style vulnerable app route with product context and exploit-public-app path. |
+| `CWE-79` | XSS route into CAPEC/ATT&CK and AppSec defensive controls. |
+| `T1190` | Exploit public-facing application route into WAF/AppSec/SOC evidence and gaps. |
+| `T1567` | Exfiltration route into egress monitoring evidence and actions. |
+| `D3-MFA` | D3FEND-first/reverse navigation if present in bundle or curated seeds. |
+
+New/arbitrary CVEs still require NVD/public-source enrichment or a curated mapping record. The UI must not invent missing mappings.
+
+---
+
+## Commands
+
+| Command | Purpose |
+|---|---|
+| `make bootstrap-local-full` | Build base bundle, apply mapping backbone, validate, mirror to UI. |
+| `make build-curated` | Build from curated sample routes only. |
+| `make build-public` | Build with public sources. |
+| `make build-backbone` | Apply local mapping backbone and curated defense mappings. |
+| `make validate` | Validate bundle contract, mapping backbone and semantic routes. |
+| `make test` | Run Python tests and Vite build. |
+| `make ui` | Start React/Vite dev server. |
+| `make preprod` | Public-source pre-prod bootstrap with mapping backbone. |
+
+Optional public-source refresh:
 
 ```bash
-bash scripts/bootstrap_preprod.sh
+A2D_REFRESH_PUBLIC_SOURCES=1 make bootstrap-local-full
 ```
 
-The script runs public-source mode, validates the bundle, mirrors the UI runtime data, and stores a `last-good` copy after successful validation.
-
-Optional NVD recent enrichment is enabled automatically when `NVD_API_KEY` exists:
+Optional NVD enrichment:
 
 ```bash
 export NVD_API_KEY="<optional-api-key>"
-bash scripts/bootstrap_preprod.sh
+make bootstrap-local-full
 ```
-
-Manual equivalent:
-
-```bash
-python scripts/knowledge_builder/build_knowledge_base.py \
-  --with-public-sources \
-  --refresh-public-sources
-
-python scripts/knowledge_builder/validate_bundle.py \
-  data/knowledge-bundle.json \
-  --require-public-sources \
-  --min-nodes 100 \
-  --min-edges 50
-```
-
-Generated outputs:
-
-```text
-data/nodes.json
-data/edges.json
-data/indexes.json
-data/coverage.json
-data/routes.json
-data/metadata.json
-data/knowledge-bundle.json
-data/knowledge-bundle.last-good.json
-data/raw/                         # public-source cache when enabled
-data/snapshots/<timestamp>/
-app/navigator-ui/public/data/knowledge-bundle.json
-app/navigator-ui/public/data/knowledge-bundle.last-good.json
-```
-
----
-
-## Run the UI
-
-```bash
-cd app/navigator-ui
-npm install
-npm run dev
-```
-
-Build static UI:
-
-```bash
-cd app/navigator-ui
-npm run build
-```
-
-The UI is **search-first**:
-
-- Nothing is selected by default.
-- No demo route is shown until the user searches.
-- The UI loads `/data/knowledge-bundle.json` first.
-- If the generated bundle is missing, it shows a visible fallback warning and uses the local Log4Shell sample only for development resilience.
-- The **Clear** button resets query, active route, selected node and exports.
-
----
-
-## Main tabs
-
-| Tab | Purpose |
-|---|---|
-| Route Flow | Concatenated route across CVE/CWE/CAPEC/ATT&CK/Artifact/D3FEND/Control/Detection/Evidence/Gap. |
-| ATT&CK Navigator | ATT&CK layer JSON preview/download for the active route. |
-| D3FEND CAD | CAD-style D3FEND graph JSON preview/download for the active route. |
-| Coverage | Coverage, detections, owners, evidence and gaps. |
-| Export | Markdown, route JSON, ATT&CK layer JSON and D3FEND CAD graph JSON. |
-
----
-
-## Debian pre-production deployment
-
-Use the runbook:
-
-```text
-docs/PREPROD_DEPLOYMENT_DEBIAN.md
-```
-
-Recommended cron:
-
-```cron
-30 2 * * * cd /opt/attack2defend && . .venv/bin/activate && bash scripts/bootstrap_preprod.sh >> /var/log/attack2defend/knowledge_builder.log 2>&1
-```
-
----
-
-## Validation seeds
-
-Guaranteed curated seeds:
-
-| Input | Purpose |
-|---|---|
-| `CVE-2021-44228` | Log4Shell route from CVE to weakness, attack path, defense, controls, detections and evidence. |
-| `T1567` | ATT&CK-first exfiltration route. |
-| `CVE-2024-37079` | Modern CVE route. |
-| `CWE-79` | AppSec/CWE-first route. |
-| `D3-MFA` | D3FEND-first identity route. |
-
-Public-source mode should also expose public nodes such as `T1190`, `CAPEC-63`, and broader CWE/CAPEC/ATT&CK catalog entries depending on source availability.
-
----
-
-## What is intentionally not included yet
-
-| Not included | Reason |
-|---|---|
-| Agentic AI / AI Route Analyst runtime | Next major capability; must consume resolved routes, not invent mappings. |
-| Backend API | Static-first is enough for current pre-prod. |
-| Graph database | JSON bundle is enough until route queries become complex. |
-| Browser runtime public API calls | Public APIs belong in scheduled builder only. |
-| Autonomous remediation | Human approval and ownership come first. |
 
 ---
 
@@ -187,30 +90,46 @@ Public-source mode should also expose public nodes such as `T1190`, `CAPEC-63`, 
 
 ```text
 attack2defend/
-├── app/navigator-ui/                 # React/Vite/TypeScript UI
+├── app/navigator-ui/                 # React/Vite static UI
+├── contracts/                        # Mapping contract
 ├── data/
+│   ├── mappings/                     # Mapping backbone and curated defense mappings
 │   ├── samples/                      # curated route seeds
-│   ├── raw/                          # public-source cache when enabled
-│   ├── knowledge-bundle.json         # generated bundle
-│   └── snapshots/                    # generated snapshots
-├── scripts/
-│   ├── bootstrap_preprod.sh          # simple first-run/public refresh command
-│   └── knowledge_builder/
-│       ├── build_knowledge_base.py   # builder/cron entrypoint
-│       ├── public_collectors.py      # dependency-free public collectors
-│       └── validate_bundle.py        # dependency-free bundle validator
+│   ├── raw/                          # public-source cache
+│   ├── knowledge-bundle.json         # generated static bundle
+│   └── knowledge-bundle.last-good.json
 ├── docs/
+│   ├── LOCALHOST_DEPLOYMENT.md
 │   └── PREPROD_DEPLOYMENT_DEBIAN.md
+├── scripts/
+│   ├── bootstrap_local_full.sh
+│   ├── bootstrap_preprod.sh
+│   ├── knowledge_builder/
+│   └── mapping_builder/
 └── tests/
 ```
 
 ---
 
-## Development principles
+## Validation gates
 
-1. Keep route resolution deterministic.
-2. Use public sources only in the scheduled builder.
-3. Never depend on public APIs at SOC runtime.
-4. Preserve curated/internal coverage across public updates.
-5. UI renders the bundle; it does not fetch external knowledge directly.
-6. Keep the UX search-first and avoid demo-first behavior.
+```bash
+python scripts/knowledge_builder/validate_bundle.py \
+  data/knowledge-bundle.json \
+  --require-mapping-backbone \
+  --require-semantic-routes \
+  --min-mapping-files 1
+```
+
+A route is not considered complete just because it reaches ATT&CK or D3FEND. Complete means it reaches defensive context through controls, detections, evidence, gaps and actions.
+
+---
+
+## Design principles
+
+1. Mappings are the product; the UI is the renderer.
+2. Public API calls happen only in builder/cron, never in browser runtime.
+3. Curated mappings must carry source, confidence and ownership.
+4. Route resolution is semantic and phase-constrained, not free-form graph wandering.
+5. Missing evidence becomes an explicit gap, not a silent failure.
+6. The project must be useful immediately after clone, build and localhost startup.

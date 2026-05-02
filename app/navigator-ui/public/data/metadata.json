@@ -1,5 +1,5 @@
 {
-  "builder_version": "0.2.0",
+  "builder_version": "0.3.0",
   "contract_version": "attack2defend.knowledge_bundle.v1",
   "counts": {
     "coverage_records": 6,
@@ -9,8 +9,18 @@
     "routes": 5,
     "warnings": 0
   },
-  "generated_at": "2026-04-30T13:33:48Z",
+  "generated_at": "2026-05-02T02:16:15Z",
   "mode": "curated_mvp_bundle",
+  "public_collection": {
+    "cache_dir": "/workspace/attack2defend/data/raw",
+    "enabled": false,
+    "failed_collectors": [],
+    "nvd_cves": [],
+    "nvd_enabled": false,
+    "nvd_recent_days": 0,
+    "successful_collectors": []
+  },
+  "public_sources": [],
   "seed_inputs": {
     "available": [
       "CVE-2021-44228",

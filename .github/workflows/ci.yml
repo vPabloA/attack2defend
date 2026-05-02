@@ -8,7 +8,7 @@ on:
 
 jobs:
   python-builder:
-    name: Python builder and tests
+    name: Python builder, backbone and tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -27,8 +27,22 @@ jobs:
       - name: Build deterministic knowledge bundle
         run: python scripts/knowledge_builder/build_knowledge_base.py --no-snapshot
 
-      - name: Validate generated knowledge bundle
-        run: python scripts/knowledge_builder/validate_bundle.py data/knowledge-bundle.json
+      - name: Apply mapping backbone
+        run: python scripts/mapping_builder/apply_mapping_backbone.py --last-good
+
+      - name: Validate backbone parity bundle
+        run: |
+          python scripts/knowledge_builder/validate_bundle.py \
+            data/knowledge-bundle.json \
+            --require-mapping-backbone \
+            --require-semantic-routes \
+            --require-framework-chain \
+            --require-cpe-index \
+            --require-kev-index \
+            --require-bidirectional-indexes \
+            --require-source-confidence \
+            --require-search-index \
+            --min-mapping-files 1
 
       - name: Run Python tests
         run: pytest -q
@@ -98,8 +112,23 @@ jobs:
         run: python scripts/knowledge_builder/build_knowledge_base.py --no-snapshot
         working-directory: ${{ github.workspace }}
 
-      - name: Validate generated knowledge bundle
-        run: python scripts/knowledge_builder/validate_bundle.py data/knowledge-bundle.json
+      - name: Apply mapping backbone
+        run: python scripts/mapping_builder/apply_mapping_backbone.py --last-good
+        working-directory: ${{ github.workspace }}
+
+      - name: Validate UI runtime bundle
+        run: |
+          python scripts/knowledge_builder/validate_bundle.py \
+            data/knowledge-bundle.json \
+            --require-mapping-backbone \
+            --require-semantic-routes \
+            --require-framework-chain \
+            --require-cpe-index \
+            --require-kev-index \
+            --require-bidirectional-indexes \
+            --require-source-confidence \
+            --require-search-index \
+            --min-mapping-files 1
         working-directory: ${{ github.workspace }}
 
       - name: Set up Node.js
