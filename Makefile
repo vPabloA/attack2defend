@@ -1,4 +1,4 @@
-.PHONY: install build-curated build-public build-backbone build-bundle validate test ui preview bootstrap-local-full preprod clean
+.PHONY: install build-curated build-public build-backbone build-bundle validate validate-parity test ui preview bootstrap-local-full preprod clean
 
 PYTHON ?= python3
 UI_DIR := app/navigator-ui
@@ -18,8 +18,19 @@ build-backbone:
 
 build-bundle: build-curated build-backbone
 
-validate:
-	$(PYTHON) scripts/knowledge_builder/validate_bundle.py data/knowledge-bundle.json --require-mapping-backbone --require-semantic-routes --min-mapping-files 1
+validate: validate-parity
+
+validate-parity:
+	$(PYTHON) scripts/knowledge_builder/validate_bundle.py data/knowledge-bundle.json \
+		--require-mapping-backbone \
+		--require-semantic-routes \
+		--require-framework-chain \
+		--require-cpe-index \
+		--require-kev-index \
+		--require-bidirectional-indexes \
+		--require-source-confidence \
+		--require-search-index \
+		--min-mapping-files 1
 
 test:
 	pytest -q
