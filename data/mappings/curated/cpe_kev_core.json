@@ -1,0 +1,89 @@
+{
+  "schema_version": "attack2defend.mapping.v1",
+  "description": "Minimal CPE and KEV parity seed mappings used to make the static bundle behave like nsfw/CVE2CAPEC after first local bootstrap. Public refresh can later replace or expand these records from NVD and CISA KEV.",
+  "license": "attack2defend-curated-public-compatible-baseline",
+  "nodes": [
+    {
+      "id": "CVE-2021-44228",
+      "type": "cve",
+      "name": "Apache Log4j Remote Code Execution (Log4Shell)",
+      "metadata": {
+        "kev": true,
+        "kev_status": "known_exploited",
+        "kev_date_added": "2021-12-10",
+        "vendor": "Apache",
+        "product": "Log4j",
+        "required_action": "Apply vendor updates or mitigations and validate exposed Java applications.",
+        "source_ref": "cisa_kev:nvd:cve-2021-44228",
+        "source_kind": "public-compatible"
+      }
+    },
+    {
+      "id": "CVE-2023-34362",
+      "type": "cve",
+      "name": "MOVEit Transfer SQL Injection",
+      "metadata": {
+        "kev": true,
+        "kev_status": "known_exploited",
+        "kev_date_added": "2023-06-02",
+        "vendor": "Progress",
+        "product": "MOVEit Transfer",
+        "required_action": "Apply vendor guidance, hunt for exploitation indicators and review exposed transfer services.",
+        "source_ref": "cisa_kev:nvd:cve-2023-34362",
+        "source_kind": "public-compatible"
+      }
+    },
+    {
+      "id": "CPE:2.3:A:APACHE:LOG4J:*:*:*:*:*:*:*:*",
+      "type": "artifact",
+      "name": "Apache Log4j affected package family",
+      "metadata": {
+        "framework": "cpe",
+        "vendor": "apache",
+        "product": "log4j",
+        "version": "*",
+        "source_ref": "nvd_cpe:apache:log4j",
+        "source_kind": "public-compatible"
+      }
+    },
+    {
+      "id": "CPE:2.3:A:PROGRESS:MOVEIT_TRANSFER:*:*:*:*:*:*:*:*",
+      "type": "artifact",
+      "name": "Progress MOVEit Transfer affected application family",
+      "metadata": {
+        "framework": "cpe",
+        "vendor": "progress",
+        "product": "moveit_transfer",
+        "version": "*",
+        "source_ref": "nvd_cpe:progress:moveit_transfer",
+        "source_kind": "public-compatible"
+      }
+    }
+  ],
+  "mappings": [
+    {
+      "from": "CVE-2021-44228",
+      "from_type": "cve",
+      "from_name": "Apache Log4j Remote Code Execution (Log4Shell)",
+      "to": "CPE:2.3:A:APACHE:LOG4J:*:*:*:*:*:*:*:*",
+      "to_type": "artifact",
+      "to_name": "Apache Log4j affected package family",
+      "relationship": "affects_product_or_platform",
+      "confidence": "high",
+      "source_ref": "nvd_cpe:cve-2021-44228",
+      "source_kind": "public-compatible"
+    },
+    {
+      "from": "CVE-2023-34362",
+      "from_type": "cve",
+      "from_name": "MOVEit Transfer SQL Injection",
+      "to": "CPE:2.3:A:PROGRESS:MOVEIT_TRANSFER:*:*:*:*:*:*:*:*",
+      "to_type": "artifact",
+      "to_name": "Progress MOVEit Transfer affected application family",
+      "relationship": "affects_product_or_platform",
+      "confidence": "high",
+      "source_ref": "nvd_cpe:cve-2023-34362",
+      "source_kind": "public-compatible"
+    }
+  ]
+}
