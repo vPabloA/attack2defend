@@ -14,22 +14,22 @@ from pathlib import Path
 from typing import Any
 
 CONTRACT_VERSION = "attack2defend.knowledge_bundle.v2"
-BACKBONE_VERSION = "0.1.0"
-VALID_NODE_TYPES = {"cve","cwe","capec","attack","d3fend","artifact","control","detection","evidence","gap","action"}
-TYPE_ORDER = ["cve","cwe","capec","attack","artifact","d3fend","control","detection","evidence","gap","action"]
+BACKBONE_VERSION = "0.2.0"
+VALID_NODE_TYPES = {"cve", "cwe", "capec", "attack", "d3fend", "artifact", "control", "detection", "evidence", "gap", "action"}
+TYPE_ORDER = ["cve", "cwe", "capec", "attack", "artifact", "d3fend", "control", "detection", "evidence", "gap", "action"]
 PAIR_REL = {
-    ("cve","cwe"): "vulnerability_has_weakness",
-    ("cwe","capec"): "weakness_enables_attack_pattern",
-    ("capec","attack"): "attack_pattern_maps_to_technique",
-    ("attack","d3fend"): "technique_mitigated_by_countermeasure",
-    ("attack","artifact"): "affects_or_requires_artifact",
-    ("capec","artifact"): "affects_or_requires_artifact",
-    ("cve","artifact"): "affects_product_or_platform",
-    ("artifact","control"): "protected_by_control",
-    ("control","detection"): "validated_by_detection",
-    ("detection","evidence"): "requires_evidence",
-    ("evidence","gap"): "missing_evidence_creates_gap",
-    ("gap","action"): "closed_by_action",
+    ("cve", "cwe"): "vulnerability_has_weakness",
+    ("cve", "artifact"): "affects_product_or_platform",
+    ("cwe", "capec"): "weakness_enables_attack_pattern",
+    ("capec", "attack"): "attack_pattern_maps_to_technique",
+    ("attack", "d3fend"): "technique_mitigated_by_countermeasure",
+    ("attack", "artifact"): "affects_or_requires_artifact",
+    ("capec", "artifact"): "affects_or_requires_artifact",
+    ("artifact", "control"): "protected_by_control",
+    ("control", "detection"): "validated_by_detection",
+    ("detection", "evidence"): "requires_evidence",
+    ("evidence", "gap"): "missing_evidence_creates_gap",
+    ("gap", "action"): "closed_by_action",
 }
 ALIASES = {
     "has_weakness": "vulnerability_has_weakness",
@@ -190,32 +190,100 @@ def ingest_mapping_file(path: Path, nodes: dict[str, dict[str, Any]], edges: dic
     return count
 
 
+def add_index(mapping: dict[str, list[str]], source: str, target: str) -> None:
+    source_id = nid(source)
+    target_id = nid(target)
+    if not source_id or not target_id:
+        return
+    mapping.setdefault(source_id, [])
+    if target_id not in mapping[source_id]:
+        mapping[source_id].append(target_id)
+
+
 def build_indexes(nodes: list[dict[str, Any]], edges: list[dict[str, Any]], route_inputs: set[str]) -> dict[str, Any]:
     by_type: dict[str, list[str]] = {}
     outgoing: dict[str, list[dict[str, str]]] = {}
     incoming: dict[str, list[dict[str, str]]] = {}
     search: list[dict[str, str]] = []
     relationships: dict[str, int] = {}
+    forward: dict[str, dict[str, list[str]]] = {
+        "cve_to_cwe": {},
+        "cve_to_cpe": {},
+        "cwe_to_capec": {},
+        "capec_to_attack": {},
+        "attack_to_d3fend": {},
+    }
+    reverse: dict[str, dict[str, list[str]]] = {
+        "cwe_to_cve": {},
+        "cpe_to_cve": {},
+        "capec_to_cwe": {},
+        "attack_to_capec": {},
+        "d3fend_to_attack": {},
+    }
+    cpe_to_cve: dict[str, list[str]] = {}
+    kev: dict[str, dict[str, Any]] = {}
+
+    node_map = {nid(node.get("id")): node for node in nodes}
     for node in nodes:
-        node_id = nid(node.get("id")); node_type = ntype(node.get("type"), node_id)
+        node_id = nid(node.get("id"))
+        node_type = ntype(node.get("type"), node_id)
+        metadata = node.get("metadata") if isinstance(node.get("metadata"), dict) else {}
         by_type.setdefault(node_type, []).append(node_id)
-        search.append({"id": node_id, "type": node_type, "name": str(node.get("name") or node_id), "text": f"{node_id} {node.get('name','')}".lower()})
+        search.append({"id": node_id, "type": metadata.get("framework", node_type), "name": str(node.get("name") or node_id), "text": f"{node_id} {node.get('name','')} {metadata.get('vendor','')} {metadata.get('product','')}".lower()})
+        if node_type == "cve" and (metadata.get("kev") is True or metadata.get("kev_status") in {"kev", "known_exploited"}):
+            kev[node_id] = {"id": node_id, "name": node.get("name", node_id), "vendor": metadata.get("vendor"), "product": metadata.get("product"), "date_added": metadata.get("kev_date_added"), "required_action": metadata.get("required_action")}
+
     for edge in edges:
-        source = nid(edge.get("source")); target = nid(edge.get("target")); relationship = str(edge.get("relationship") or "related_to")
+        source = nid(edge.get("source"))
+        target = nid(edge.get("target"))
+        relationship = str(edge.get("relationship") or "related_to")
+        source_type = ntype(node_map.get(source, {}).get("type") or edge.get("source_type"), source)
+        target_type = ntype(node_map.get(target, {}).get("type") or edge.get("target_type"), target)
+        target_metadata = node_map.get(target, {}).get("metadata") if isinstance(node_map.get(target, {}).get("metadata"), dict) else {}
         outgoing.setdefault(source, []).append({"target": target, "relationship": relationship})
         incoming.setdefault(target, []).append({"source": source, "relationship": relationship})
         relationships[relationship] = relationships.get(relationship, 0) + 1
-    return {"by_type": {k: sorted(v) for k, v in sorted(by_type.items())}, "outgoing": outgoing, "incoming": incoming, "relationships": dict(sorted(relationships.items())), "route_inputs": sorted({nid(item) for item in route_inputs if nid(item)}), "search": sorted(search, key=lambda item: (item["type"], item["id"]))}
+
+        if source_type == "cve" and target_type == "cwe" and relationship == "vulnerability_has_weakness":
+            add_index(forward["cve_to_cwe"], source, target)
+            add_index(reverse["cwe_to_cve"], target, source)
+        elif source_type == "cve" and target_type == "artifact" and relationship == "affects_product_or_platform":
+            add_index(forward["cve_to_cpe"], source, target)
+            if str(target).startswith("CPE:2.3") or target_metadata.get("framework") == "cpe":
+                add_index(cpe_to_cve, target, source)
+                add_index(reverse["cpe_to_cve"], target, source)
+        elif source_type == "cwe" and target_type == "capec" and relationship == "weakness_enables_attack_pattern":
+            add_index(forward["cwe_to_capec"], source, target)
+            add_index(reverse["capec_to_cwe"], target, source)
+        elif source_type == "capec" and target_type == "attack" and relationship == "attack_pattern_maps_to_technique":
+            add_index(forward["capec_to_attack"], source, target)
+            add_index(reverse["attack_to_capec"], target, source)
+        elif source_type == "attack" and target_type == "d3fend" and relationship == "technique_mitigated_by_countermeasure":
+            add_index(forward["attack_to_d3fend"], source, target)
+            add_index(reverse["d3fend_to_attack"], target, source)
+
+    return {
+        "by_type": {key: sorted(value) for key, value in sorted(by_type.items())},
+        "outgoing": {key: sorted(value, key=lambda item: (item["relationship"], item["target"])) for key, value in sorted(outgoing.items())},
+        "incoming": {key: sorted(value, key=lambda item: (item["relationship"], item["source"])) for key, value in sorted(incoming.items())},
+        "relationships": dict(sorted(relationships.items())),
+        "route_inputs": sorted({nid(item) for item in route_inputs if nid(item)}),
+        "search": sorted(search, key=lambda item: (item["type"], item["id"])),
+        "forward": {key: {k: sorted(v) for k, v in sorted(value.items())} for key, value in sorted(forward.items())},
+        "reverse": {key: {k: sorted(v) for k, v in sorted(value.items())} for key, value in sorted(reverse.items())},
+        "cpe_to_cve": {key: sorted(value) for key, value in sorted(cpe_to_cve.items())},
+        "kev": dict(sorted(kev.items())),
+    }
 
 
 def route_status(types: set[str]) -> str:
     if len(types) <= 1:
         return "unresolved"
-    if {"cve","cwe","capec","attack","artifact","control","detection","evidence","gap","action"}.issubset(types):
+    if {"cve", "cwe", "capec", "attack", "artifact", "control", "detection", "evidence", "gap", "action"}.issubset(types):
         return "complete"
-    if {"attack","artifact","control","detection","evidence"}.issubset(types):
+    if {"attack", "artifact", "control", "detection", "evidence"}.issubset(types):
         return "partial-defense"
-    if {"cve","cwe","capec","attack","d3fend"}.intersection(types) and not {"control","detection","evidence"}.intersection(types):
+    if {"cve", "cwe", "capec", "attack", "d3fend"}.intersection(types) and not {"control", "detection", "evidence"}.intersection(types):
         return "catalog-only"
     return "partial"
 
@@ -224,8 +292,10 @@ def resolve_route(root: str, nodes: dict[str, dict[str, Any]], edges: list[dict[
     root_id = nid(root)
     if root_id not in nodes:
         return {"root": root_id, "coverage_status": "unresolved", "confidence_score": 0.0, "nodes": [], "edges": [], "missing_segments": TYPE_ORDER}
-    selected = {root_id}; selected_edges: dict[tuple[str,str,str], dict[str,Any]] = {}
-    by_source: dict[str, list[dict[str, Any]]] = {}; by_target: dict[str, list[dict[str, Any]]] = {}
+    selected = {root_id}
+    selected_edges: dict[tuple[str, str, str], dict[str, Any]] = {}
+    by_source: dict[str, list[dict[str, Any]]] = {}
+    by_target: dict[str, list[dict[str, Any]]] = {}
     for edge in edges:
         by_source.setdefault(nid(edge.get("source")), []).append(edge)
         by_target.setdefault(nid(edge.get("target")), []).append(edge)
@@ -251,7 +321,7 @@ def resolve_route(root: str, nodes: dict[str, dict[str, Any]], edges: list[dict[
     types = {ntype(nodes[item].get("type"), item) for item in ordered}
     missing = [item for item in TYPE_ORDER if item not in types]
     status = route_status(types)
-    score = 0.0 if not edge_list else round(min(1.0, max(0.0, sum({"high":1.0,"medium":0.72,"low":0.42,"public_source":0.66}.get(str(edge.get("confidence") or "medium").lower(),0.55) for edge in edge_list) / len(edge_list) + (0.08 if status == "complete" else -0.10 if status in {"unresolved","catalog-only"} else 0))), 2)
+    score = 0.0 if not edge_list else round(min(1.0, max(0.0, sum({"high": 1.0, "medium": 0.72, "low": 0.42, "public_source": 0.66}.get(str(edge.get("confidence") or "medium").lower(), 0.55) for edge in edge_list) / len(edge_list) + (0.08 if status == "complete" else -0.10 if status in {"unresolved", "catalog-only"} else 0))), 2)
     return {"root": root_id, "root_type": ntype(nodes[root_id].get("type"), root_id), "coverage_status": status, "confidence_score": score, "nodes": ordered, "edges": edge_list, "missing_segments": missing, "generated_by": "semantic_route_resolver.v1"}
 
 
@@ -268,8 +338,10 @@ def apply_mapping_backbone(bundle_path: Path, mappings_dir: Path, ui_public_dir:
     edge_list = sorted(edges.values(), key=lambda edge: (nid(edge.get("source")), str(edge.get("relationship")), nid(edge.get("target"))))
     route_inputs = set(bundle.get("indexes", {}).get("route_inputs", [])) if isinstance(bundle.get("indexes"), dict) else set()
     route_inputs.update(route.get("input") for route in bundle.get("routes", []) if isinstance(route, dict) and route.get("input"))
-    route_inputs.update(["CVE-2021-44228","CVE-2024-37079","CVE-2023-34362","CWE-79","T1190","T1567","D3-MFA"])
-    bundle["nodes"] = node_list; bundle["edges"] = edge_list; bundle["coverage"] = {nid(k): v for k, v in sorted(coverage.items())}
+    route_inputs.update(["CVE-2021-44228", "CVE-2024-37079", "CVE-2023-34362", "CWE-79", "CAPEC-63", "T1190", "T1567", "D3-MFA"])
+    bundle["nodes"] = node_list
+    bundle["edges"] = edge_list
+    bundle["coverage"] = {nid(k): v for k, v in sorted(coverage.items())}
     bundle["indexes"] = build_indexes(node_list, edge_list, route_inputs)
     node_map = {nid(node.get("id")): node for node in node_list}
     bundle["semantic_routes"] = [resolve_route(root, node_map, edge_list) for root in sorted(bundle["indexes"]["route_inputs"]) if root in node_map]
