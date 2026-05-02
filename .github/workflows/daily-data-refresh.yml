@@ -1,0 +1,99 @@
+name: Attack2Defend Daily Data Refresh
+
+on:
+  schedule:
+    - cron: '17 3 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  refresh-bundle:
+    name: Refresh static knowledge bundle
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install package
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e '.[dev]'
+
+      - name: Build public-source bundle
+        env:
+          NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
+        run: |
+          if [ -n "${NVD_API_KEY:-}" ]; then
+            python scripts/knowledge_builder/build_knowledge_base.py \
+              --with-public-sources \
+              --refresh-public-sources \
+              --with-nvd \
+              --nvd-recent-days 7
+          else
+            python scripts/knowledge_builder/build_knowledge_base.py \
+              --with-public-sources \
+              --refresh-public-sources
+          fi
+
+      - name: Apply mapping backbone and last-good bundle
+        run: python scripts/mapping_builder/apply_mapping_backbone.py --last-good
+
+      - name: Validate parity bundle
+        run: |
+          python scripts/knowledge_builder/validate_bundle.py \
+            data/knowledge-bundle.json \
+            --require-public-sources \
+            --require-mapping-backbone \
+            --require-semantic-routes \
+            --require-framework-chain \
+            --require-cpe-index \
+            --require-kev-index \
+            --require-bidirectional-indexes \
+            --require-source-confidence \
+            --require-search-index \
+            --min-nodes 100 \
+            --min-edges 60 \
+            --min-mapping-files 1
+
+      - name: Write refresh health report
+        run: |
+          mkdir -p data/health
+          python - <<'PY'
+          import json
+          from datetime import datetime, timezone
+          from pathlib import Path
+
+          bundle = json.loads(Path('data/knowledge-bundle.json').read_text(encoding='utf-8'))
+          metadata = bundle.get('metadata', {})
+          report = {
+              'status': 'PASS',
+              'generated_at': datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
+              'bundle_generated_at': metadata.get('generated_at'),
+              'mode': metadata.get('mode'),
+              'counts': metadata.get('counts', {}),
+              'public_collection': metadata.get('public_collection', {}),
+              'mapping_backbone': metadata.get('mapping_backbone', {}),
+              'coverage_summary': bundle.get('coverage_summary', {}),
+          }
+          Path('data/health/data-refresh-report.json').write_text(json.dumps(report, indent=2, sort_keys=True) + '\n', encoding='utf-8')
+          PY
+
+      - name: Upload bundle artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: attack2defend-knowledge-bundle
+          path: |
+            data/knowledge-bundle.json
+            data/knowledge-bundle.last-good.json
+            data/metadata.json
+            data/health/data-refresh-report.json
+            app/navigator-ui/public/data/knowledge-bundle.json
+            app/navigator-ui/public/data/knowledge-bundle.last-good.json
