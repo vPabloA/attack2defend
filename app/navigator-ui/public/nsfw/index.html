@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Attack2Defend NSFW · Bidirectional framework navigator</title>
+    <link rel="stylesheet" href="./nsfw.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <p class="eyebrow">Attack2Defend · NSFW-compatible navigator</p>
+      <h1>Bidirectional CVE / CWE / CAPEC / ATT&CK / D3FEND</h1>
+      <p>
+        Static, client-side traversal of the canonical mapping files
+        (<code>cve_cwe.json</code>, <code>cwe_capec.json</code>,
+        <code>capec_attack.json</code>, <code>attack_defend.json</code>,
+        <code>cve_cpe.json</code>, <code>kevs.txt</code>). No backend, no public
+        API runtime calls.
+      </p>
+      <div class="status" id="status">Loading canonical mapping bundle…</div>
+    </header>
+
+    <section class="search-card">
+      <label for="search">Enter any framework ID</label>
+      <div class="search-row">
+        <input
+          id="search"
+          type="text"
+          autocomplete="off"
+          placeholder="CVE-2021-44228, CWE-79, CAPEC-66, T1190, D3-WAF, CPE:2.3:..."
+        />
+        <button id="search-button">Resolve</button>
+        <button id="clear-button" class="secondary">Clear</button>
+      </div>
+      <div class="autocomplete" id="autocomplete"></div>
+      <p class="error" id="search-error" hidden></p>
+    </section>
+
+    <main class="grid" id="result" hidden>
+      <section class="panel selected">
+        <h2 id="selected-id">—</h2>
+        <p id="selected-detail">—</p>
+        <div class="badges" id="selected-badges"></div>
+      </section>
+
+      <section class="panel">
+        <h3>CVE → CWE</h3>
+        <ul class="list" id="list-cve-cwe"></ul>
+      </section>
+      <section class="panel">
+        <h3>CWE → CAPEC</h3>
+        <ul class="list" id="list-cwe-capec"></ul>
+      </section>
+      <section class="panel">
+        <h3>CAPEC → ATT&CK</h3>
+        <ul class="list" id="list-capec-attack"></ul>
+      </section>
+      <section class="panel">
+        <h3>ATT&CK → D3FEND</h3>
+        <ul class="list" id="list-attack-defend"></ul>
+      </section>
+      <section class="panel">
+        <h3>CVE → CPE</h3>
+        <ul class="list" id="list-cve-cpe"></ul>
+      </section>
+      <section class="panel">
+        <h3>Reverse traversal</h3>
+        <ul class="list" id="list-reverse"></ul>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <a href="../">Open the full Attack2Defend Navigator (Defense + SOC/CTEM)</a>
+    </footer>
+
+    <script src="./nsfw.js"></script>
+  </body>
+</html>

@@ -1,4 +1,4 @@
-.PHONY: install build-curated build-public build-backbone build-bundle validate validate-parity test ui preview bootstrap-local-full preprod clean
+.PHONY: install build-curated build-public build-backbone build-canonical build-bundle validate validate-parity validate-canonical test ui preview bootstrap-local-full preprod clean
 
 PYTHON ?= python3
 UI_DIR := app/navigator-ui
@@ -16,9 +16,15 @@ build-public:
 build-backbone:
 	$(PYTHON) scripts/mapping_builder/apply_mapping_backbone.py --last-good
 
-build-bundle: build-curated build-backbone
+build-canonical:
+	$(PYTHON) scripts/canonical_exports/build_canonical.py
 
-validate: validate-parity
+build-bundle: build-curated build-backbone build-canonical
+
+validate: validate-parity validate-canonical
+
+validate-canonical:
+	$(PYTHON) scripts/canonical_exports/validate_canonical.py
 
 validate-parity:
 	$(PYTHON) scripts/knowledge_builder/validate_bundle.py data/knowledge-bundle.json \

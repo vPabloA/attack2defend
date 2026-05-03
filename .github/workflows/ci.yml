@@ -44,6 +44,12 @@ jobs:
             --require-search-index \
             --min-mapping-files 1
 
+      - name: Build NSFW + CVE2CAPEC canonical exports
+        run: python scripts/canonical_exports/build_canonical.py
+
+      - name: Validate NSFW + CVE2CAPEC canonical exports
+        run: python scripts/canonical_exports/validate_canonical.py
+
       - name: Run Python tests
         run: pytest -q
 
@@ -129,6 +135,14 @@ jobs:
             --require-source-confidence \
             --require-search-index \
             --min-mapping-files 1
+        working-directory: ${{ github.workspace }}
+
+      - name: Build NSFW + CVE2CAPEC canonical exports
+        run: python scripts/canonical_exports/build_canonical.py
+        working-directory: ${{ github.workspace }}
+
+      - name: Validate NSFW + CVE2CAPEC canonical exports
+        run: python scripts/canonical_exports/validate_canonical.py
         working-directory: ${{ github.workspace }}
 
       - name: Set up Node.js

@@ -1,0 +1,56 @@
+{
+  "T1059": {
+    "description": "",
+    "id": "T1059",
+    "name": "Command and Scripting Interpreter",
+    "url": "https://attack.mitre.org/techniques/T1059/"
+  },
+  "T1059.007": {
+    "description": "",
+    "id": "T1059.007",
+    "name": "Command and Scripting Interpreter: JavaScript",
+    "url": "https://attack.mitre.org/techniques/T1059/007/"
+  },
+  "T1071": {
+    "description": "",
+    "id": "T1071",
+    "name": "Application Layer Protocol",
+    "url": "https://attack.mitre.org/techniques/T1071/"
+  },
+  "T1078": {
+    "description": "",
+    "id": "T1078",
+    "name": "Valid Accounts",
+    "url": "https://attack.mitre.org/techniques/T1078/"
+  },
+  "T1105": {
+    "description": "",
+    "id": "T1105",
+    "name": "Ingress Tool Transfer",
+    "url": "https://attack.mitre.org/techniques/T1105/"
+  },
+  "T1110": {
+    "description": "",
+    "id": "T1110",
+    "name": "Brute Force",
+    "url": "https://attack.mitre.org/techniques/T1110/"
+  },
+  "T1189": {
+    "description": "",
+    "id": "T1189",
+    "name": "Drive-by Compromise",
+    "url": "https://attack.mitre.org/techniques/T1189/"
+  },
+  "T1190": {
+    "description": "",
+    "id": "T1190",
+    "name": "Exploit Public-Facing Application",
+    "url": "https://attack.mitre.org/techniques/T1190/"
+  },
+  "T1567": {
+    "description": "",
+    "id": "T1567",
+    "name": "Exfiltration Over Web Service",
+    "url": "https://attack.mitre.org/techniques/T1567/"
+  }
+}

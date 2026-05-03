@@ -1,0 +1,62 @@
+{
+  "CWE-122": {
+    "description": "",
+    "id": "CWE-122",
+    "name": "Heap-based Buffer Overflow",
+    "url": ""
+  },
+  "CWE-20": {
+    "description": "",
+    "id": "CWE-20",
+    "name": "Improper Input Validation",
+    "url": "https://cwe.mitre.org/data/definitions/20.html"
+  },
+  "CWE-22": {
+    "description": "",
+    "id": "CWE-22",
+    "name": "Path Traversal",
+    "url": ""
+  },
+  "CWE-502": {
+    "description": "",
+    "id": "CWE-502",
+    "name": "Deserialization of Untrusted Data",
+    "url": "https://cwe.mitre.org/data/definitions/502.html"
+  },
+  "CWE-787": {
+    "description": "",
+    "id": "CWE-787",
+    "name": "Out-of-bounds Write",
+    "url": "https://cwe.mitre.org/data/definitions/787.html"
+  },
+  "CWE-79": {
+    "description": "",
+    "id": "CWE-79",
+    "name": "Improper Neutralization of Input During Web Page Generation / Cross-site Scripting",
+    "url": "https://cwe.mitre.org/data/definitions/79.html"
+  },
+  "CWE-89": {
+    "description": "",
+    "id": "CWE-89",
+    "name": "SQL Injection",
+    "url": ""
+  },
+  "CWE-917": {
+    "description": "",
+    "id": "CWE-917",
+    "name": "Expression Language Injection",
+    "url": "https://cwe.mitre.org/data/definitions/917.html"
+  },
+  "CWE-918": {
+    "description": "",
+    "id": "CWE-918",
+    "name": "Server-Side Request Forgery",
+    "url": ""
+  },
+  "CWE-94": {
+    "description": "",
+    "id": "CWE-94",
+    "name": "Code Injection",
+    "url": ""
+  }
+}
