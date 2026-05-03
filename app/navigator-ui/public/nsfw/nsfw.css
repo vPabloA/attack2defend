@@ -1,0 +1,141 @@
+:root {
+  color-scheme: dark;
+  --bg: #0d1117;
+  --panel: #161b22;
+  --panel-border: #30363d;
+  --accent: #58a6ff;
+  --accent-soft: #1f6feb;
+  --text: #c9d1d9;
+  --muted: #8b949e;
+  --kev: #f85149;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  padding: 32px 32px 64px;
+}
+
+.hero { max-width: 1100px; margin: 0 auto 24px; }
+.hero .eyebrow { color: var(--muted); text-transform: uppercase; font-size: 12px; letter-spacing: 0.08em; margin: 0 0 4px; }
+.hero h1 { margin: 0 0 8px; font-size: 28px; line-height: 1.2; }
+.hero p { color: var(--muted); margin: 0 0 12px; max-width: 800px; }
+
+.status {
+  display: inline-block;
+  background: rgba(56, 139, 253, 0.15);
+  border: 1px solid var(--accent-soft);
+  color: var(--accent);
+  border-radius: 999px;
+  padding: 4px 12px;
+  font-size: 12px;
+}
+.status.error { background: rgba(248, 81, 73, 0.15); border-color: var(--kev); color: var(--kev); }
+
+.search-card {
+  max-width: 1100px;
+  margin: 0 auto 24px;
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: 12px;
+  padding: 18px 20px;
+}
+.search-card label { display: block; color: var(--muted); margin-bottom: 8px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; }
+.search-row { display: flex; gap: 8px; }
+.search-row input {
+  flex: 1;
+  background: var(--bg);
+  border: 1px solid var(--panel-border);
+  color: var(--text);
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+.search-row button {
+  background: var(--accent-soft);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 16px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.search-row button.secondary { background: transparent; color: var(--muted); border: 1px solid var(--panel-border); }
+.search-row button:hover { filter: brightness(1.1); }
+
+.autocomplete { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.autocomplete button {
+  background: rgba(56, 139, 253, 0.1);
+  border: 1px solid var(--panel-border);
+  color: var(--accent);
+  padding: 4px 8px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 12px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.error { color: var(--kev); margin: 8px 0 0; }
+
+.grid {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: 12px;
+  padding: 16px 18px;
+  min-height: 110px;
+}
+.panel h2 { margin: 0 0 4px; font-size: 22px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+.panel h3 { margin: 0 0 12px; font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+.panel.selected { grid-column: 1 / -1; }
+.panel.selected p { color: var(--muted); margin: 0 0 10px; }
+
+.badges { display: flex; flex-wrap: wrap; gap: 6px; }
+.badge {
+  background: rgba(110, 118, 129, 0.2);
+  border: 1px solid var(--panel-border);
+  color: var(--muted);
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+.badge.kev { background: rgba(248, 81, 73, 0.18); color: var(--kev); border-color: rgba(248, 81, 73, 0.5); }
+.badge.type { background: rgba(56, 139, 253, 0.15); color: var(--accent); border-color: rgba(56, 139, 253, 0.4); }
+
+.list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 6px; }
+.list li button {
+  background: transparent;
+  border: 1px solid var(--panel-border);
+  color: var(--text);
+  padding: 8px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 13px;
+}
+.list li button:hover { border-color: var(--accent); }
+.list li.empty { color: var(--muted); font-size: 12px; padding: 6px; }
+
+.footer {
+  max-width: 1100px;
+  margin: 32px auto 0;
+  text-align: center;
+}
+.footer a { color: var(--accent); text-decoration: none; font-size: 13px; }
+.footer a:hover { text-decoration: underline; }

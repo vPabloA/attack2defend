@@ -46,6 +46,12 @@ jobs:
       - name: Apply mapping backbone and last-good bundle
         run: python scripts/mapping_builder/apply_mapping_backbone.py --last-good
 
+      - name: Build NSFW + CVE2CAPEC canonical exports
+        run: python scripts/canonical_exports/build_canonical.py
+
+      - name: Validate NSFW + CVE2CAPEC canonical exports
+        run: python scripts/canonical_exports/validate_canonical.py
+
       - name: Validate parity bundle
         run: |
           python scripts/knowledge_builder/validate_bundle.py \
@@ -95,5 +101,9 @@ jobs:
             data/knowledge-bundle.last-good.json
             data/metadata.json
             data/health/data-refresh-report.json
+            data/canonical/nsfw/
+            data/canonical/cve2capec/
             app/navigator-ui/public/data/knowledge-bundle.json
             app/navigator-ui/public/data/knowledge-bundle.last-good.json
+            app/navigator-ui/public/nsfw/data/
+            app/navigator-ui/public/cve2capec/

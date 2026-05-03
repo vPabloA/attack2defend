@@ -1,0 +1,50 @@
+{
+  "CAPEC-100": {
+    "description": "",
+    "id": "CAPEC-100",
+    "name": "Overflow Buffers",
+    "url": "https://capec.mitre.org/data/definitions/100.html"
+  },
+  "CAPEC-126": {
+    "description": "",
+    "id": "CAPEC-126",
+    "name": "Path Traversal",
+    "url": ""
+  },
+  "CAPEC-136": {
+    "description": "",
+    "id": "CAPEC-136",
+    "name": "LDAP Injection",
+    "url": "https://capec.mitre.org/data/definitions/136.html"
+  },
+  "CAPEC-242": {
+    "description": "",
+    "id": "CAPEC-242",
+    "name": "Code Injection",
+    "url": ""
+  },
+  "CAPEC-248": {
+    "description": "",
+    "id": "CAPEC-248",
+    "name": "Command Injection",
+    "url": "https://capec.mitre.org/data/definitions/248.html"
+  },
+  "CAPEC-63": {
+    "description": "",
+    "id": "CAPEC-63",
+    "name": "Cross-Site Scripting (XSS)",
+    "url": "https://capec.mitre.org/data/definitions/63.html"
+  },
+  "CAPEC-66": {
+    "description": "",
+    "id": "CAPEC-66",
+    "name": "SQL Injection",
+    "url": ""
+  },
+  "CAPEC-664": {
+    "description": "",
+    "id": "CAPEC-664",
+    "name": "Server-Side Request Forgery",
+    "url": ""
+  }
+}

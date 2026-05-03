@@ -1,7 +1,7 @@
 [
   {
     "curation_status": "curated_mvp",
-    "file": "/workspace/attack2defend/data/samples/cve-2024-37079-vcenter.route.json",
+    "file": "/home/user/attack2defend/data/samples/cve-2024-37079-vcenter.route.json",
     "id": "route-cve-2024-37079-vcenter",
     "input": "CVE-2024-37079",
     "name": "VMware vCenter DCERPC heap-overflow route",
@@ -9,7 +9,7 @@
   },
   {
     "curation_status": "curated_mvp",
-    "file": "/workspace/attack2defend/data/samples/cwe-79-xss.route.json",
+    "file": "/home/user/attack2defend/data/samples/cwe-79-xss.route.json",
     "id": "route-cwe-79-xss",
     "input": "CWE-79",
     "name": "Cross-site scripting route",
@@ -17,7 +17,7 @@
   },
   {
     "curation_status": "curated_mvp",
-    "file": "/workspace/attack2defend/data/samples/d3-mfa-identity.route.json",
+    "file": "/home/user/attack2defend/data/samples/d3-mfa-identity.route.json",
     "id": "route-d3-mfa-identity",
     "input": "D3-MFA",
     "name": "Multi-factor authentication reverse route",
@@ -25,7 +25,7 @@
   },
   {
     "curation_status": "sample_curated",
-    "file": "/workspace/attack2defend/data/samples/log4shell.route.json",
+    "file": "/home/user/attack2defend/data/samples/log4shell.route.json",
     "id": "sample-log4shell-route",
     "input": "CVE-2021-44228",
     "name": "Log4Shell Attack2Defend sample route",
@@ -33,7 +33,7 @@
   },
   {
     "curation_status": "curated_mvp",
-    "file": "/workspace/attack2defend/data/samples/t1567-exfiltration-web-service.route.json",
+    "file": "/home/user/attack2defend/data/samples/t1567-exfiltration-web-service.route.json",
     "id": "route-t1567-exfiltration-web-service",
     "input": "T1567",
     "name": "Exfiltration Over Web Service defense route",

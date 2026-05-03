@@ -1,0 +1,59 @@
+{
+  "T1059": {
+    "capec": [
+      "CAPEC-242"
+    ],
+    "d3fend": [
+      "D3-PSEP"
+    ]
+  },
+  "T1059.007": {
+    "capec": [
+      "CAPEC-63"
+    ],
+    "d3fend": []
+  },
+  "T1071": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1078": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1105": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1110": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1189": {
+    "capec": [
+      "CAPEC-63"
+    ],
+    "d3fend": []
+  },
+  "T1190": {
+    "capec": [
+      "CAPEC-100",
+      "CAPEC-126",
+      "CAPEC-248",
+      "CAPEC-66",
+      "CAPEC-664"
+    ],
+    "d3fend": [
+      "D3-AI",
+      "D3-AVE",
+      "D3-SU",
+      "D3-WAF"
+    ]
+  },
+  "T1567": {
+    "capec": [],
+    "d3fend": [
+      "D3-DLP"
+    ]
+  }
+}

@@ -1,0 +1,16 @@
+{"description": "", "id": "D3-ACH", "name": "Application Configuration Hardening", "url": "https://d3fend.mitre.org/technique/d3f:ApplicationConfigurationHardening/"}
+{"description": "", "id": "D3-AI", "name": "Asset Inventory", "url": "https://d3fend.mitre.org/technique/d3f:AssetInventory/"}
+{"description": "", "id": "D3-AVE", "name": "Asset Vulnerability Enumeration", "url": "https://d3fend.mitre.org/technique/d3f:AssetVulnerabilityEnumeration/"}
+{"description": "", "id": "D3-DLP", "name": "Data Loss Prevention", "url": ""}
+{"description": "", "id": "D3-DNSAL", "name": "DNS Allowlisting", "url": "https://d3fend.mitre.org/technique/d3f:DNSAllowlisting/"}
+{"description": "", "id": "D3-DNSDL", "name": "DNS Denylisting", "url": "https://d3fend.mitre.org/technique/d3f:DNSDenylisting/"}
+{"description": "", "id": "D3-FA", "name": "File Analysis", "url": "https://d3fend.mitre.org/technique/d3f:FileAnalysis/"}
+{"description": "", "id": "D3-MFA", "name": "Multi-factor Authentication", "url": "https://d3fend.mitre.org/technique/d3f:MultiFactorAuthentication/"}
+{"description": "", "id": "D3-NTA", "name": "Network Traffic Analysis", "url": "https://d3fend.mitre.org/technique/d3f:NetworkTrafficAnalysis/"}
+{"description": "", "id": "D3-OTF", "name": "Outbound Traffic Filtering", "url": "https://d3fend.mitre.org/technique/d3f:OutboundTrafficFiltering/"}
+{"description": "", "id": "D3-PA", "name": "Process Analysis", "url": "https://d3fend.mitre.org/technique/d3f:ProcessAnalysis/"}
+{"description": "", "id": "D3-PSA", "name": "Process Spawn Analysis", "url": "https://d3fend.mitre.org/technique/d3f:ProcessSpawnAnalysis/"}
+{"description": "", "id": "D3-PSEP", "name": "Process Spawn Analysis", "url": ""}
+{"description": "", "id": "D3-SU", "name": "Software Update", "url": "https://d3fend.mitre.org/technique/d3f:SoftwareUpdate/"}
+{"description": "", "id": "D3-UA", "name": "URL Analysis", "url": "https://d3fend.mitre.org/technique/d3f:URLAnalysis/"}
+{"description": "", "id": "D3-WAF", "name": "Web Application Firewall", "url": ""}

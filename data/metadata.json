@@ -9,10 +9,10 @@
     "routes": 5,
     "warnings": 0
   },
-  "generated_at": "2026-05-02T02:16:15Z",
+  "generated_at": "2026-05-03T04:12:16Z",
   "mode": "curated_mvp_bundle",
   "public_collection": {
-    "cache_dir": "/workspace/attack2defend/data/raw",
+    "cache_dir": "/home/user/attack2defend/data/raw",
     "enabled": false,
     "failed_collectors": [],
     "nvd_cves": [],
@@ -38,11 +38,11 @@
     ]
   },
   "source_files": [
-    "/workspace/attack2defend/data/samples/cve-2024-37079-vcenter.route.json",
-    "/workspace/attack2defend/data/samples/cwe-79-xss.route.json",
-    "/workspace/attack2defend/data/samples/d3-mfa-identity.route.json",
-    "/workspace/attack2defend/data/samples/log4shell.route.json",
-    "/workspace/attack2defend/data/samples/t1567-exfiltration-web-service.route.json"
+    "/home/user/attack2defend/data/samples/cve-2024-37079-vcenter.route.json",
+    "/home/user/attack2defend/data/samples/cwe-79-xss.route.json",
+    "/home/user/attack2defend/data/samples/d3-mfa-identity.route.json",
+    "/home/user/attack2defend/data/samples/log4shell.route.json",
+    "/home/user/attack2defend/data/samples/t1567-exfiltration-web-service.route.json"
   ],
   "warnings": []
 }
