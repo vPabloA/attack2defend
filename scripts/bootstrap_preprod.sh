@@ -4,6 +4,9 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 
+echo "[pre] Forcing compatible CVE2CAPEC raw sync"
+bash scripts/sync_cve2capec_raw.sh
+
 PUBLIC_FLAGS=(--with-public-sources --refresh-public-sources)
 VALIDATION_FLAGS=(--require-public-sources --require-mapping-backbone --require-semantic-routes --min-nodes "100" --min-edges "60" --min-mapping-files "1")
 

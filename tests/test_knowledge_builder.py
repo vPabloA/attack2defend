@@ -39,10 +39,13 @@ def build_bundle_for_test(**overrides):
         "public_no_capec": False,
         "public_no_kev": False,
         "public_no_d3fend": False,
+        "public_no_cve2capec": False,
         "with_nvd": False,
         "nvd_cves": [],
         "nvd_recent_days": 0,
         "nvd_api_key": None,
+        "cve2capec_years": [],
+        "max_cve2capec_cves_per_year": None,
         "max_kev_cves": None,
         "max_d3fend_attack_ids": 5,
     }

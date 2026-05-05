@@ -366,10 +366,13 @@ def build_bundle(
     public_no_capec: bool,
     public_no_kev: bool,
     public_no_d3fend: bool,
+    public_no_cve2capec: bool,
     with_nvd: bool,
     nvd_cves: list[str],
     nvd_recent_days: int,
     nvd_api_key: str | None,
+    cve2capec_years: list[int],
+    max_cve2capec_cves_per_year: int | None,
     max_kev_cves: int | None,
     max_d3fend_attack_ids: int,
 ) -> int:
@@ -380,6 +383,8 @@ def build_bundle(
 
     for route_file in route_files:
         ingest_route_file(route_file, state)
+
+    effective_cve2capec_years = cve2capec_years or [datetime.now(timezone.utc).year]
 
     if with_public_sources:
         if collect_public_sources is None:
@@ -395,10 +400,13 @@ def build_bundle(
                     include_capec=not public_no_capec,
                     include_kev=not public_no_kev,
                     include_d3fend=not public_no_d3fend,
+                    include_cve2capec=not public_no_cve2capec,
                     include_nvd=with_nvd,
                     nvd_cves=nvd_cves,
                     nvd_recent_days=nvd_recent_days,
                     nvd_api_key=nvd_api_key,
+                    cve2capec_years=effective_cve2capec_years,
+                    max_cve2capec_cves_per_year=max_cve2capec_cves_per_year,
                     max_kev_cves=max_kev_cves,
                     max_d3fend_attack_ids=max_d3fend_attack_ids,
                     fail_on_error=public_fail_on_error,
@@ -448,6 +456,9 @@ def build_bundle(
             "nvd_enabled": with_nvd or bool(nvd_cves) or nvd_recent_days > 0,
             "nvd_recent_days": nvd_recent_days,
             "nvd_cves": sorted({normalize_id(item) for item in nvd_cves}),
+            "cve2capec_enabled": not public_no_cve2capec,
+            "cve2capec_years": sorted(set(effective_cve2capec_years)),
+            "max_cve2capec_cves_per_year": max_cve2capec_cves_per_year,
             "cache_dir": str(cache_dir),
         },
         "warnings": [asdict(issue) for issue in state.issues if issue.severity == "warning"],
@@ -501,10 +512,13 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser.add_argument("--public-no-capec", action="store_true")
     parser.add_argument("--public-no-kev", action="store_true")
     parser.add_argument("--public-no-d3fend", action="store_true")
+    parser.add_argument("--public-no-cve2capec", action="store_true")
     parser.add_argument("--with-nvd", action="store_true", help="Enable NVD CVE collection. Use with --nvd-cve or --nvd-recent-days.")
     parser.add_argument("--nvd-cve", action="append", default=[], help="Fetch a specific CVE from NVD. May be repeated.")
     parser.add_argument("--nvd-recent-days", type=int, default=0, help="Fetch CVEs modified in the last N days from NVD.")
     parser.add_argument("--nvd-api-key", default=os.environ.get("NVD_API_KEY"))
+    parser.add_argument("--cve2capec-year", action="append", type=int, default=[], help="Fetch Galeax CVE2CAPEC database for this year. Defaults to the current UTC year.")
+    parser.add_argument("--max-cve2capec-cves-per-year", type=int, default=None)
     parser.add_argument("--max-kev-cves", type=int, default=None)
     parser.add_argument("--max-d3fend-attack-ids", type=int, default=250)
     return parser.parse_args(argv)
@@ -530,10 +544,13 @@ def main(argv: list[str] | None = None) -> int:
         public_no_capec=args.public_no_capec,
         public_no_kev=args.public_no_kev,
         public_no_d3fend=args.public_no_d3fend,
+        public_no_cve2capec=args.public_no_cve2capec,
         with_nvd=args.with_nvd,
         nvd_cves=args.nvd_cve,
         nvd_recent_days=args.nvd_recent_days,
         nvd_api_key=args.nvd_api_key,
+        cve2capec_years=args.cve2capec_year,
+        max_cve2capec_cves_per_year=args.max_cve2capec_cves_per_year,
         max_kev_cves=args.max_kev_cves,
         max_d3fend_attack_ids=args.max_d3fend_attack_ids,
     )

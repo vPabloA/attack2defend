@@ -57,6 +57,8 @@ CPE is represented as an `artifact` node with `metadata.framework = "cpe"` so th
 
 The UI may traverse, filter, intersect and render only what is present in `knowledge-bundle.json`. Missing relationships must be shown as missing segments or gaps; they must never be invented at runtime.
 
+The builder may import public framework snapshots, including the Galeax CVE2CAPEC daily database, but those imports must be normalized into `nodes`, `edges` and `indexes` before publication. A CVE visible in the CVE2CAPEC public UI is not runtime-available in Attack2Defend until the Threat Knowledge Builder has materialized it into the bundle.
+
 ## Validation gate
 
 ```bash
