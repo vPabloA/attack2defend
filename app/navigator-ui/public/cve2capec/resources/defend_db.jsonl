@@ -1,16 +1,154 @@
+{"description": "", "id": "D3-AA", "name": "Agent Authentication", "url": "https://d3fend.mitre.org/technique/D3-AA/"}
+{"description": "", "id": "D3-ABPI", "name": "Application-based Process Isolation", "url": "https://d3fend.mitre.org/technique/D3-ABPI/"}
 {"description": "", "id": "D3-ACH", "name": "Application Configuration Hardening", "url": "https://d3fend.mitre.org/technique/d3f:ApplicationConfigurationHardening/"}
+{"description": "", "id": "D3-AEM", "name": "Application Exception Monitoring", "url": "https://d3fend.mitre.org/technique/D3-AEM/"}
 {"description": "", "id": "D3-AI", "name": "Asset Inventory", "url": "https://d3fend.mitre.org/technique/d3f:AssetInventory/"}
+{"description": "", "id": "D3-AL", "name": "Account Locking", "url": "https://d3fend.mitre.org/technique/D3-AL/"}
+{"description": "", "id": "D3-AM", "name": "Access Modeling", "url": "https://d3fend.mitre.org/technique/D3-AM/"}
+{"description": "", "id": "D3-ANAA", "name": "Administrative Network Activity Analysis", "url": "https://d3fend.mitre.org/technique/D3-ANAA/"}
+{"description": "", "id": "D3-ANCI", "name": "Authentication Cache Invalidation", "url": "https://d3fend.mitre.org/technique/D3-ANCI/"}
+{"description": "", "id": "D3-APCA", "name": "Application Protocol Command Analysis", "url": "https://d3fend.mitre.org/technique/D3-APCA/"}
 {"description": "", "id": "D3-AVE", "name": "Asset Vulnerability Enumeration", "url": "https://d3fend.mitre.org/technique/d3f:AssetVulnerabilityEnumeration/"}
+{"description": "", "id": "D3-BA", "name": "Bootloader Authentication", "url": "https://d3fend.mitre.org/technique/D3-BA/"}
+{"description": "", "id": "D3-CA", "name": "Certificate Analysis", "url": "https://d3fend.mitre.org/technique/D3-CA/"}
+{"description": "", "id": "D3-CAA", "name": "Connection Attempt Analysis", "url": "https://d3fend.mitre.org/technique/D3-CAA/"}
+{"description": "", "id": "D3-CBAN", "name": "Certificate-based Authentication", "url": "https://d3fend.mitre.org/technique/D3-CBAN/"}
+{"description": "", "id": "D3-CCSA", "name": "Credential Compromise Scope Analysis", "url": "https://d3fend.mitre.org/technique/D3-CCSA/"}
+{"description": "", "id": "D3-CDP", "name": "Change Default Password", "url": "https://d3fend.mitre.org/technique/D3-CDP/"}
+{"description": "", "id": "D3-CERO", "name": "Certificate Rotation", "url": "https://d3fend.mitre.org/technique/D3-CERO/"}
+{"description": "", "id": "D3-CF", "name": "Content Filtering", "url": "https://d3fend.mitre.org/technique/D3-CF/"}
+{"description": "", "id": "D3-CH", "name": "Credential Hardening", "url": "https://d3fend.mitre.org/technique/D3-CH/"}
+{"description": "", "id": "D3-CI", "name": "Configuration Inventory", "url": "https://d3fend.mitre.org/technique/D3-CI/"}
+{"description": "", "id": "D3-CIA", "name": "Container Image Analysis", "url": "https://d3fend.mitre.org/technique/D3-CIA/"}
+{"description": "", "id": "D3-CM", "name": "Content Modification", "url": "https://d3fend.mitre.org/technique/D3-CM/"}
+{"description": "", "id": "D3-CP", "name": "Certificate Pinning", "url": "https://d3fend.mitre.org/technique/D3-CP/"}
+{"description": "", "id": "D3-CQ", "name": "Content Quarantine", "url": "https://d3fend.mitre.org/technique/D3-CQ/"}
+{"description": "", "id": "D3-CR", "name": "Credential Revocation", "url": "https://d3fend.mitre.org/technique/D3-CR/"}
+{"description": "", "id": "D3-CRO", "name": "Credential Rotation", "url": "https://d3fend.mitre.org/technique/D3-CRO/"}
+{"description": "", "id": "D3-CS", "name": "Credential Scrubbing", "url": "https://d3fend.mitre.org/technique/D3-CS/"}
+{"description": "", "id": "D3-CSPP", "name": "Client-server Payload Profiling", "url": "https://d3fend.mitre.org/technique/D3-CSPP/"}
+{"description": "", "id": "D3-CTS", "name": "Credential Transmission Scoping", "url": "https://d3fend.mitre.org/technique/D3-CTS/"}
+{"description": "", "id": "D3-DA", "name": "Dynamic Analysis", "url": "https://d3fend.mitre.org/technique/D3-DA/"}
+{"description": "", "id": "D3-DAM", "name": "Domain Account Monitoring", "url": "https://d3fend.mitre.org/technique/D3-DAM/"}
+{"description": "", "id": "D3-DE", "name": "Decoy Environment", "url": "https://d3fend.mitre.org/technique/D3-DE/"}
+{"description": "", "id": "D3-DENCR", "name": "Disk Encryption", "url": "https://d3fend.mitre.org/technique/D3-DENCR/"}
+{"description": "", "id": "D3-DF", "name": "Decoy File", "url": "https://d3fend.mitre.org/technique/D3-DF/"}
+{"description": "", "id": "D3-DI", "name": "Data Inventory", "url": "https://d3fend.mitre.org/technique/D3-DI/"}
+{"description": "", "id": "D3-DKE", "name": "Disk Erasure", "url": "https://d3fend.mitre.org/technique/D3-DKE/"}
+{"description": "", "id": "D3-DKF", "name": "Disk Formatting", "url": "https://d3fend.mitre.org/technique/D3-DKF/"}
+{"description": "", "id": "D3-DKP", "name": "Disk Partitioning", "url": "https://d3fend.mitre.org/technique/D3-DKP/"}
 {"description": "", "id": "D3-DLP", "name": "Data Loss Prevention", "url": ""}
+{"description": "", "id": "D3-DLV", "name": "Domain Logic Validation", "url": "https://d3fend.mitre.org/technique/D3-DLV/"}
+{"description": "", "id": "D3-DNR", "name": "Decoy Network Resource", "url": "https://d3fend.mitre.org/technique/D3-DNR/"}
 {"description": "", "id": "D3-DNSAL", "name": "DNS Allowlisting", "url": "https://d3fend.mitre.org/technique/d3f:DNSAllowlisting/"}
 {"description": "", "id": "D3-DNSDL", "name": "DNS Denylisting", "url": "https://d3fend.mitre.org/technique/d3f:DNSDenylisting/"}
+{"description": "", "id": "D3-DNSTA", "name": "DNS Traffic Analysis", "url": "https://d3fend.mitre.org/technique/D3-DNSTA/"}
+{"description": "", "id": "D3-DQSA", "name": "Database Query String Analysis", "url": "https://d3fend.mitre.org/technique/D3-DQSA/"}
+{"description": "", "id": "D3-DRA", "name": "Disable Remote Access", "url": "https://d3fend.mitre.org/technique/D3-DRA/"}
+{"description": "", "id": "D3-DTP", "name": "Domain Trust Policy", "url": "https://d3fend.mitre.org/technique/D3-DTP/"}
+{"description": "", "id": "D3-DUC", "name": "Decoy User Credential", "url": "https://d3fend.mitre.org/technique/D3-DUC/"}
+{"description": "", "id": "D3-EAL", "name": "Executable Allowlisting", "url": "https://d3fend.mitre.org/technique/D3-EAL/"}
+{"description": "", "id": "D3-EDL", "name": "Executable Denylisting", "url": "https://d3fend.mitre.org/technique/D3-EDL/"}
+{"description": "", "id": "D3-EF", "name": "Email Filtering", "url": "https://d3fend.mitre.org/technique/D3-EF/"}
+{"description": "", "id": "D3-EFA", "name": "Emulated File Analysis", "url": "https://d3fend.mitre.org/technique/D3-EFA/"}
+{"description": "", "id": "D3-EHB", "name": "Endpoint Health Beacon", "url": "https://d3fend.mitre.org/technique/D3-EHB/"}
+{"description": "", "id": "D3-ER", "name": "Email Removal", "url": "https://d3fend.mitre.org/technique/D3-ER/"}
 {"description": "", "id": "D3-FA", "name": "File Analysis", "url": "https://d3fend.mitre.org/technique/d3f:FileAnalysis/"}
+{"description": "", "id": "D3-FBA", "name": "Firmware Behavior Analysis", "url": "https://d3fend.mitre.org/technique/D3-FBA/"}
+{"description": "", "id": "D3-FC", "name": "File Carving", "url": "https://d3fend.mitre.org/technique/D3-FC/"}
+{"description": "", "id": "D3-FCA", "name": "File Creation Analysis", "url": "https://d3fend.mitre.org/technique/D3-FCA/"}
+{"description": "", "id": "D3-FE", "name": "File Encryption", "url": "https://d3fend.mitre.org/technique/D3-FE/"}
+{"description": "", "id": "D3-FEMC", "name": "Firmware Embedded Monitoring Code", "url": "https://d3fend.mitre.org/technique/D3-FEMC/"}
+{"description": "", "id": "D3-FEV", "name": "File Eviction", "url": "https://d3fend.mitre.org/technique/D3-FEV/"}
+{"description": "", "id": "D3-FFV", "name": "File Format Verification", "url": "https://d3fend.mitre.org/technique/D3-FFV/"}
+{"description": "", "id": "D3-FIM", "name": "File Integrity Monitoring", "url": "https://d3fend.mitre.org/technique/D3-FIM/"}
+{"description": "", "id": "D3-FRDDL", "name": "Forward Resolution Domain Denylisting", "url": "https://d3fend.mitre.org/technique/D3-FRDDL/"}
+{"description": "", "id": "D3-FV", "name": "Firmware Verification", "url": "https://d3fend.mitre.org/technique/D3-FV/"}
+{"description": "", "id": "D3-HBPI", "name": "Hardware-based Process Isolation", "url": "https://d3fend.mitre.org/technique/D3-HBPI/"}
+{"description": "", "id": "D3-HBWP", "name": "Hardware-based Write Protection", "url": "https://d3fend.mitre.org/technique/D3-HBWP/"}
+{"description": "", "id": "D3-HCI", "name": "Hardware Component Inventory", "url": "https://d3fend.mitre.org/technique/D3-HCI/"}
+{"description": "", "id": "D3-HD", "name": "Homoglyph Detection", "url": "https://d3fend.mitre.org/technique/D3-HD/"}
+{"description": "", "id": "D3-HR", "name": "Host Reboot", "url": "https://d3fend.mitre.org/technique/D3-HR/"}
+{"description": "", "id": "D3-HS", "name": "Host Shutdown", "url": "https://d3fend.mitre.org/technique/D3-HS/"}
+{"description": "", "id": "D3-IAA", "name": "Identifier Activity Analysis", "url": "https://d3fend.mitre.org/technique/D3-IAA/"}
+{"description": "", "id": "D3-IDA", "name": "Input Device Analysis", "url": "https://d3fend.mitre.org/technique/D3-IDA/"}
+{"description": "", "id": "D3-IOPR", "name": "IO Port Restriction", "url": "https://d3fend.mitre.org/technique/D3-IOPR/"}
+{"description": "", "id": "D3-IPCTA", "name": "IPC Traffic Analysis", "url": "https://d3fend.mitre.org/technique/D3-IPCTA/"}
+{"description": "", "id": "D3-ISVA", "name": "Inbound Session Volume Analysis", "url": "https://d3fend.mitre.org/technique/D3-ISVA/"}
+{"description": "", "id": "D3-ITF", "name": "Inbound Traffic Filtering", "url": "https://d3fend.mitre.org/technique/D3-ITF/"}
+{"description": "", "id": "D3-KBPI", "name": "Kernel-based Process Isolation", "url": "https://d3fend.mitre.org/technique/D3-KBPI/"}
+{"description": "", "id": "D3-LAM", "name": "Local Account Monitoring", "url": "https://d3fend.mitre.org/technique/D3-LAM/"}
+{"description": "", "id": "D3-LFP", "name": "Local File Permissions", "url": "https://d3fend.mitre.org/technique/D3-LFP/"}
+{"description": "", "id": "D3-LLM", "name": "Logical Link Mapping", "url": "https://d3fend.mitre.org/technique/D3-LLM/"}
+{"description": "", "id": "D3-MBT", "name": "Memory Boundary Tracking", "url": "https://d3fend.mitre.org/technique/D3-MBT/"}
 {"description": "", "id": "D3-MFA", "name": "Multi-factor Authentication", "url": "https://d3fend.mitre.org/technique/d3f:MultiFactorAuthentication/"}
+{"description": "", "id": "D3-NNI", "name": "Network Node Inventory", "url": "https://d3fend.mitre.org/technique/D3-NNI/"}
+{"description": "", "id": "D3-NRAM", "name": "Network Resource Access Mediation", "url": "https://d3fend.mitre.org/technique/D3-NRAM/"}
 {"description": "", "id": "D3-NTA", "name": "Network Traffic Analysis", "url": "https://d3fend.mitre.org/technique/d3f:NetworkTrafficAnalysis/"}
+{"description": "", "id": "D3-NTCD", "name": "Network Traffic Community Deviation", "url": "https://d3fend.mitre.org/technique/D3-NTCD/"}
+{"description": "", "id": "D3-NTF", "name": "Network Traffic Filtering", "url": "https://d3fend.mitre.org/technique/D3-NTF/"}
+{"description": "", "id": "D3-NTPM", "name": "Network Traffic Policy Mapping", "url": "https://d3fend.mitre.org/technique/D3-NTPM/"}
+{"description": "", "id": "D3-NTSA", "name": "Network Traffic Signature Analysis", "url": "https://d3fend.mitre.org/technique/D3-NTSA/"}
+{"description": "", "id": "D3-OPM", "name": "Operational Process Monitoring", "url": "https://d3fend.mitre.org/technique/D3-OPM/"}
 {"description": "", "id": "D3-OTF", "name": "Outbound Traffic Filtering", "url": "https://d3fend.mitre.org/technique/d3f:OutboundTrafficFiltering/"}
+{"description": "", "id": "D3-OTP", "name": "One-time Password", "url": "https://d3fend.mitre.org/technique/D3-OTP/"}
 {"description": "", "id": "D3-PA", "name": "Process Analysis", "url": "https://d3fend.mitre.org/technique/d3f:ProcessAnalysis/"}
+{"description": "", "id": "D3-PCSV", "name": "Process Code Segment Verification", "url": "https://d3fend.mitre.org/technique/D3-PCSV/"}
+{"description": "", "id": "D3-PHDURA", "name": "Per Host Download-Upload Ratio Analysis", "url": "https://d3fend.mitre.org/technique/D3-PHDURA/"}
+{"description": "", "id": "D3-PLA", "name": "Process Lineage Analysis", "url": "https://d3fend.mitre.org/technique/D3-PLA/"}
+{"description": "", "id": "D3-PLM", "name": "Physical Link Mapping", "url": "https://d3fend.mitre.org/technique/D3-PLM/"}
+{"description": "", "id": "D3-PMAD", "name": "Protocol Metadata Anomaly Detection", "url": "https://d3fend.mitre.org/technique/D3-PMAD/"}
+{"description": "", "id": "D3-PR", "name": "Password Rotation", "url": "https://d3fend.mitre.org/technique/D3-PR/"}
+{"description": "", "id": "D3-PS", "name": "Process Suspension", "url": "https://d3fend.mitre.org/technique/D3-PS/"}
 {"description": "", "id": "D3-PSA", "name": "Process Spawn Analysis", "url": "https://d3fend.mitre.org/technique/d3f:ProcessSpawnAnalysis/"}
-{"description": "", "id": "D3-PSEP", "name": "Process Spawn Analysis", "url": ""}
+{"description": "", "id": "D3-PSEP", "name": "Process Segment Execution Prevention", "url": "https://d3fend.mitre.org/technique/D3-PSEP/"}
+{"description": "", "id": "D3-PSMD", "name": "Process Self-Modification Detection", "url": "https://d3fend.mitre.org/technique/D3-PSMD/"}
+{"description": "", "id": "D3-PT", "name": "Process Termination", "url": "https://d3fend.mitre.org/technique/D3-PT/"}
+{"description": "", "id": "D3-PWA", "name": "Password Authentication", "url": "https://d3fend.mitre.org/technique/D3-PWA/"}
+{"description": "", "id": "D3-RC", "name": "Restore Configuration", "url": "https://d3fend.mitre.org/technique/D3-RC/"}
+{"description": "", "id": "D3-RD", "name": "Restore Database", "url": "https://d3fend.mitre.org/technique/D3-RD/"}
+{"description": "", "id": "D3-RE", "name": "Restore Email", "url": "https://d3fend.mitre.org/technique/D3-RE/"}
+{"description": "", "id": "D3-RF", "name": "Restore File", "url": "https://d3fend.mitre.org/technique/D3-RF/"}
+{"description": "", "id": "D3-RFAM", "name": "Remote File Access Mediation", "url": "https://d3fend.mitre.org/technique/D3-RFAM/"}
+{"description": "", "id": "D3-RH", "name": "Radiation Hardening", "url": "https://d3fend.mitre.org/technique/D3-RH/"}
+{"description": "", "id": "D3-RIC", "name": "Reissue Credential", "url": "https://d3fend.mitre.org/technique/D3-RIC/"}
+{"description": "", "id": "D3-RKD", "name": "Registry Key Deletion", "url": "https://d3fend.mitre.org/technique/D3-RKD/"}
+{"description": "", "id": "D3-RNA", "name": "Restore Network Access", "url": "https://d3fend.mitre.org/technique/D3-RNA/"}
+{"description": "", "id": "D3-RPA", "name": "Relay Pattern Analysis", "url": "https://d3fend.mitre.org/technique/D3-RPA/"}
+{"description": "", "id": "D3-RRID", "name": "Reverse Resolution IP Denylisting", "url": "https://d3fend.mitre.org/technique/D3-RRID/"}
+{"description": "", "id": "D3-RS", "name": "Restore Software", "url": "https://d3fend.mitre.org/technique/D3-RS/"}
+{"description": "", "id": "D3-RTA", "name": "RPC Traffic Analysis", "url": "https://d3fend.mitre.org/technique/D3-RTA/"}
+{"description": "", "id": "D3-RTSD", "name": "Remote Terminal Session Detection", "url": "https://d3fend.mitre.org/technique/D3-RTSD/"}
+{"description": "", "id": "D3-RUAA", "name": "Restore User Account Access", "url": "https://d3fend.mitre.org/technique/D3-RUAA/"}
+{"description": "", "id": "D3-SAOR", "name": "Segment Address Offset Randomization", "url": "https://d3fend.mitre.org/technique/D3-SAOR/"}
+{"description": "", "id": "D3-SBV", "name": "Service Binary Verification", "url": "https://d3fend.mitre.org/technique/D3-SBV/"}
+{"description": "", "id": "D3-SCA", "name": "System Call Analysis", "url": "https://d3fend.mitre.org/technique/D3-SCA/"}
+{"description": "", "id": "D3-SCF", "name": "System Call Filtering", "url": "https://d3fend.mitre.org/technique/D3-SCF/"}
+{"description": "", "id": "D3-SCP", "name": "System Configuration Permissions", "url": "https://d3fend.mitre.org/technique/D3-SCP/"}
+{"description": "", "id": "D3-SDM", "name": "System Daemon Monitoring", "url": "https://d3fend.mitre.org/technique/D3-SDM/"}
+{"description": "", "id": "D3-SFA", "name": "System File Analysis", "url": "https://d3fend.mitre.org/technique/D3-SFA/"}
+{"description": "", "id": "D3-SFCV", "name": "Stack Frame Canary Validation", "url": "https://d3fend.mitre.org/technique/D3-SFCV/"}
+{"description": "", "id": "D3-SFV", "name": "System Firmware Verification", "url": "https://d3fend.mitre.org/technique/D3-SFV/"}
+{"description": "", "id": "D3-SICA", "name": "System Init Config Analysis", "url": "https://d3fend.mitre.org/technique/D3-SICA/"}
+{"description": "", "id": "D3-SJA", "name": "Scheduled Job Analysis", "url": "https://d3fend.mitre.org/technique/D3-SJA/"}
+{"description": "", "id": "D3-SMRA", "name": "Sender MTA Reputation Analysis", "url": "https://d3fend.mitre.org/technique/D3-SMRA/"}
+{"description": "", "id": "D3-SPP", "name": "Strong Password Policy", "url": "https://d3fend.mitre.org/technique/D3-SPP/"}
+{"description": "", "id": "D3-SRA", "name": "Sender Reputation Analysis", "url": "https://d3fend.mitre.org/technique/D3-SRA/"}
+{"description": "", "id": "D3-SSC", "name": "Shadow Stack Comparisons", "url": "https://d3fend.mitre.org/technique/D3-SSC/"}
+{"description": "", "id": "D3-ST", "name": "Session Termination", "url": "https://d3fend.mitre.org/technique/D3-ST/"}
 {"description": "", "id": "D3-SU", "name": "Software Update", "url": "https://d3fend.mitre.org/technique/d3f:SoftwareUpdate/"}
+{"description": "", "id": "D3-SWI", "name": "Software Inventory", "url": "https://d3fend.mitre.org/technique/D3-SWI/"}
+{"description": "", "id": "D3-SYSVA", "name": "System Vulnerability Assessment", "url": "https://d3fend.mitre.org/technique/D3-SYSVA/"}
+{"description": "", "id": "D3-TB", "name": "Token Binding", "url": "https://d3fend.mitre.org/technique/D3-TB/"}
+{"description": "", "id": "D3-TBA", "name": "Token-based Authentication", "url": "https://d3fend.mitre.org/technique/D3-TBA/"}
+{"description": "", "id": "D3-TL", "name": "Trusted Library", "url": "https://d3fend.mitre.org/technique/D3-TL/"}
 {"description": "", "id": "D3-UA", "name": "URL Analysis", "url": "https://d3fend.mitre.org/technique/d3f:URLAnalysis/"}
+{"description": "", "id": "D3-UAP", "name": "User Account Permissions", "url": "https://d3fend.mitre.org/technique/D3-UAP/"}
+{"description": "", "id": "D3-UGLPA", "name": "User Geolocation Logon Pattern Analysis", "url": "https://d3fend.mitre.org/technique/D3-UGLPA/"}
+{"description": "", "id": "D3-ULA", "name": "Unlock Account", "url": "https://d3fend.mitre.org/technique/D3-ULA/"}
+{"description": "", "id": "D3-URA", "name": "URL Reputation Analysis", "url": "https://d3fend.mitre.org/technique/D3-URA/"}
+{"description": "", "id": "D3-USICA", "name": "User Session Init Config Analysis", "url": "https://d3fend.mitre.org/technique/D3-USICA/"}
+{"description": "", "id": "D3-VI", "name": "Variable Initialization", "url": "https://d3fend.mitre.org/technique/D3-VI/"}
+{"description": "", "id": "D3-VS", "name": "Video Surveillance", "url": "https://d3fend.mitre.org/technique/D3-VS/"}
 {"description": "", "id": "D3-WAF", "name": "Web Application Firewall", "url": ""}
+{"description": "", "id": "D3-WSAM", "name": "Web Session Access Mediation", "url": "https://d3fend.mitre.org/technique/D3-WSAM/"}

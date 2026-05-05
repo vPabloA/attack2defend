@@ -14,7 +14,7 @@ The browser UI does **not** call public APIs. Public sources are fetched by the 
 
 | Layer | Responsibility |
 |---|---|
-| Public collectors | ATT&CK, CWE, CAPEC, CISA KEV, optional NVD, best-effort D3FEND at build time only. |
+| Public collectors | ATT&CK, CWE, CAPEC, Galeax CVE2CAPEC current-year database, CISA KEV, optional NVD, best-effort D3FEND at build time only. |
 | Mapping backbone | NSFW/CVE2CAPEC-compatible mapping file under `data/mappings/`. |
 | Curated defense mappings | Artifact, control, detection, evidence, gap and action relationships. |
 | Semantic resolver | Phase-constrained routes with coverage status, confidence and missing segments. |
@@ -77,6 +77,20 @@ Optional public-source refresh:
 
 ```bash
 A2D_REFRESH_PUBLIC_SOURCES=1 make bootstrap-local-full
+```
+
+This now forces a compatible `curl` sync of the Galeax CVE2CAPEC raw cache before the Python builder refreshes public sources.
+
+Manual forced sync only:
+
+```bash
+make sync-cve2capec
+```
+
+Optional Galeax CVE2CAPEC year backfill:
+
+```bash
+python scripts/knowledge_builder/build_knowledge_base.py --with-public-sources --cve2capec-year 2025 --cve2capec-year 2026
 ```
 
 Optional NVD enrichment:

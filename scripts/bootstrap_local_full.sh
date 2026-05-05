@@ -21,6 +21,8 @@ VALIDATION_FLAGS=(
 )
 
 if [[ "${A2D_REFRESH_PUBLIC_SOURCES:-0}" == "1" ]]; then
+  echo "[pre] Forcing compatible CVE2CAPEC raw sync"
+  bash scripts/sync_cve2capec_raw.sh
   PUBLIC_FLAGS+=(--refresh-public-sources)
 fi
 

@@ -56,7 +56,7 @@ Scheduled sync → validated internal snapshot → user search → local respons
 ## Data flow
 
 ```text
-NVD / CVE / CWE / CAPEC / ATT&CK STIX / D3FEND / CISA KEV
+NVD / CVE / CWE / CAPEC / ATT&CK STIX / Galeax CVE2CAPEC / D3FEND / CISA KEV
         ↓
 Collectors
         ↓
@@ -88,6 +88,7 @@ Action Card / UI / Export
 | Source | Use |
 |---|---|
 | NVD / CVE | CVE metadata, CVSS, CWE, references, CPE. |
+| Galeax CVE2CAPEC | Daily CVE→CWE route seed and CVE2CAPEC parity backbone for newly published CVEs. |
 | CISA KEV | Exploited-in-the-wild prioritization. |
 | CWE | Weakness taxonomy. |
 | CAPEC | Attack patterns. |

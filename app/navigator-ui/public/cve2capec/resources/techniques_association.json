@@ -1,39 +1,4082 @@
 {
+  "T0800": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0801": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0802": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0803": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0804": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0805": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0806": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0807": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0809": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0811": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0812": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0813": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0814": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0815": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0816": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0817": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0819": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0820": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0821": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0822": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0823": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0826": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0827": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0828": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0829": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0830": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0831": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0832": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0834": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0835": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0836": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0837": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0838": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0839": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0840": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0842": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0843": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0845": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0846": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0847": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0848": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0849": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0851": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0852": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0853": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0855": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0856": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0857": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0858": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0859": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0860": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0861": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0862": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0863": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0864": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0865": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0866": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0867": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0868": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0869": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0871": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0872": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0873": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0874": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0877": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0878": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0879": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0880": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0881": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0882": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0883": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0884": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0885": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0886": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0887": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0888": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0889": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0890": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0891": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0892": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0893": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0894": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T0895": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1001": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-OTF",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RPA",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1001.001": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-OTF",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RPA",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1001.002": {
+    "capec": [
+      "CAPEC-636"
+    ],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-OTF",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RPA",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1001.003": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-OTF",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RPA",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1003": {
+    "capec": [
+      "CAPEC-150"
+    ],
+    "d3fend": [
+      "D3-ABPI",
+      "D3-AEM",
+      "D3-ANAA",
+      "D3-ANCI",
+      "D3-APCA",
+      "D3-CAA",
+      "D3-CCSA",
+      "D3-CF",
+      "D3-CH",
+      "D3-CM",
+      "D3-CQ",
+      "D3-CR",
+      "D3-CRO",
+      "D3-CSPP",
+      "D3-CTS",
+      "D3-DF",
+      "D3-DI",
+      "D3-DUC",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-HBPI",
+      "D3-HR",
+      "D3-HS",
+      "D3-KBPI",
+      "D3-LFP",
+      "D3-MFA",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-OPM",
+      "D3-PHDURA",
+      "D3-PLA",
+      "D3-PMAD",
+      "D3-PS",
+      "D3-PSA",
+      "D3-PSMD",
+      "D3-PT",
+      "D3-RD",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-RIC",
+      "D3-RTSD",
+      "D3-SCF",
+      "D3-SFA",
+      "D3-UGLPA",
+      "D3-WSAM"
+    ]
+  },
+  "T1003.001": {
+    "capec": [],
+    "d3fend": [
+      "D3-ABPI",
+      "D3-HBPI",
+      "D3-HR",
+      "D3-HS",
+      "D3-KBPI",
+      "D3-PLA",
+      "D3-PS",
+      "D3-PSA",
+      "D3-PSMD",
+      "D3-PT",
+      "D3-SCF",
+      "D3-WSAM"
+    ]
+  },
+  "T1003.002": {
+    "capec": [],
+    "d3fend": [
+      "D3-ABPI",
+      "D3-DI",
+      "D3-HBPI",
+      "D3-HR",
+      "D3-HS",
+      "D3-KBPI",
+      "D3-PLA",
+      "D3-PS",
+      "D3-PSA",
+      "D3-PSMD",
+      "D3-PT",
+      "D3-RD",
+      "D3-SCF",
+      "D3-WSAM"
+    ]
+  },
+  "T1003.003": {
+    "capec": [],
+    "d3fend": [
+      "D3-ANCI",
+      "D3-CCSA",
+      "D3-CH",
+      "D3-CR",
+      "D3-CRO",
+      "D3-CTS",
+      "D3-DUC",
+      "D3-MFA",
+      "D3-RIC"
+    ]
+  },
+  "T1003.004": {
+    "capec": [],
+    "d3fend": [
+      "D3-ABPI",
+      "D3-DI",
+      "D3-HBPI",
+      "D3-HR",
+      "D3-HS",
+      "D3-KBPI",
+      "D3-PLA",
+      "D3-PS",
+      "D3-PSA",
+      "D3-PSMD",
+      "D3-PT",
+      "D3-RD",
+      "D3-SCF"
+    ]
+  },
+  "T1003.005": {
+    "capec": [],
+    "d3fend": [
+      "D3-AEM",
+      "D3-ANCI",
+      "D3-CCSA",
+      "D3-CH",
+      "D3-CR",
+      "D3-CRO",
+      "D3-CTS",
+      "D3-DUC",
+      "D3-MFA",
+      "D3-RIC"
+    ]
+  },
+  "T1003.006": {
+    "capec": [],
+    "d3fend": [
+      "D3-AEM",
+      "D3-ANAA",
+      "D3-APCA",
+      "D3-CAA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-OPM",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1003.007": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DF",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-SFA"
+    ]
+  },
+  "T1003.008": {
+    "capec": [],
+    "d3fend": [
+      "D3-ANCI",
+      "D3-CCSA",
+      "D3-CF",
+      "D3-CH",
+      "D3-CM",
+      "D3-CQ",
+      "D3-CR",
+      "D3-CRO",
+      "D3-CTS",
+      "D3-DF",
+      "D3-DI",
+      "D3-DUC",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-MFA",
+      "D3-RD",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-RIC"
+    ]
+  },
+  "T1005": {
+    "capec": [
+      "CAPEC-204",
+      "CAPEC-37",
+      "CAPEC-545",
+      "CAPEC-647"
+    ],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DF",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM"
+    ]
+  },
+  "T1006": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1007": {
+    "capec": [
+      "CAPEC-574"
+    ],
+    "d3fend": [
+      "D3-EAL",
+      "D3-EDL",
+      "D3-HBPI",
+      "D3-PSA",
+      "D3-SCA",
+      "D3-SCF"
+    ]
+  },
+  "T1008": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-OTF",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RPA",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1010": {
+    "capec": [],
+    "d3fend": [
+      "D3-EAL",
+      "D3-EDL",
+      "D3-HBPI",
+      "D3-PSA",
+      "D3-SCA",
+      "D3-SCF"
+    ]
+  },
+  "T1011": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1011.001": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1012": {
+    "capec": [
+      "CAPEC-647"
+    ],
+    "d3fend": [
+      "D3-DI",
+      "D3-RD",
+      "D3-SCA",
+      "D3-SCF",
+      "D3-SCP"
+    ]
+  },
+  "T1014": {
+    "capec": [
+      "CAPEC-552"
+    ],
+    "d3fend": [
+      "D3-AVE",
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DF",
+      "D3-FA",
+      "D3-FBA",
+      "D3-FE",
+      "D3-FEMC",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-FV",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-RS",
+      "D3-SU",
+      "D3-SWI"
+    ]
+  },
+  "T1016": {
+    "capec": [
+      "CAPEC-309"
+    ],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-HBPI",
+      "D3-LFP",
+      "D3-PSA",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-SCA",
+      "D3-SCF"
+    ]
+  },
+  "T1016.001": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-HBPI",
+      "D3-LFP",
+      "D3-PSA",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-SCA",
+      "D3-SCF"
+    ]
+  },
+  "T1016.002": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-HBPI",
+      "D3-LFP",
+      "D3-PSA",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-SCA",
+      "D3-SCF"
+    ]
+  },
+  "T1018": {
+    "capec": [
+      "CAPEC-292"
+    ],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-CSPP",
+      "D3-DF",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-HBPI",
+      "D3-LFP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-PSA",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-RTSD",
+      "D3-SCA",
+      "D3-SCF",
+      "D3-SFA",
+      "D3-UGLPA"
+    ]
+  },
+  "T1020": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1020.001": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1021": {
+    "capec": [
+      "CAPEC-555"
+    ],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CAA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RTSD",
+      "D3-ST",
+      "D3-UGLPA"
+    ]
+  },
+  "T1021.001": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CAA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RTSD",
+      "D3-ST",
+      "D3-UGLPA"
+    ]
+  },
+  "T1021.002": {
+    "capec": [
+      "CAPEC-561"
+    ],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CAA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1021.003": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CAA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1021.004": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CAA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RTSD",
+      "D3-ST",
+      "D3-UGLPA"
+    ]
+  },
+  "T1021.005": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CAA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1021.006": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CAA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1021.007": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CAA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1021.008": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CAA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1025": {
+    "capec": [],
+    "d3fend": [
+      "D3-HCI",
+      "D3-IOPR",
+      "D3-RH"
+    ]
+  },
+  "T1027": {
+    "capec": [
+      "CAPEC-267",
+      "CAPEC-542"
+    ],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM"
+    ]
+  },
+  "T1027.001": {
+    "capec": [
+      "CAPEC-572",
+      "CAPEC-655"
+    ],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM"
+    ]
+  },
+  "T1027.002": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM"
+    ]
+  },
+  "T1027.003": {
+    "capec": [
+      "CAPEC-636"
+    ],
+    "d3fend": []
+  },
+  "T1027.004": {
+    "capec": [
+      "CAPEC-636"
+    ],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM"
+    ]
+  },
+  "T1027.005": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1027.006": {
+    "capec": [
+      "CAPEC-35"
+    ],
+    "d3fend": []
+  },
+  "T1027.007": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1027.008": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1027.009": {
+    "capec": [
+      "CAPEC-19",
+      "CAPEC-35",
+      "CAPEC-448"
+    ],
+    "d3fend": []
+  },
+  "T1027.010": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1027.011": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1027.012": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1027.013": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1027.014": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1027.015": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1027.016": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1027.017": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1027.018": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1029": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1030": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1033": {
+    "capec": [
+      "CAPEC-577"
+    ],
+    "d3fend": [
+      "D3-ABPI",
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DF",
+      "D3-DI",
+      "D3-DTP",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-HBPI",
+      "D3-HR",
+      "D3-HS",
+      "D3-KBPI",
+      "D3-LFP",
+      "D3-PLA",
+      "D3-PS",
+      "D3-PSA",
+      "D3-PSEP",
+      "D3-PSMD",
+      "D3-PT",
+      "D3-RD",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-SAOR",
+      "D3-SCA",
+      "D3-SCF",
+      "D3-WSAM"
+    ]
+  },
+  "T1036": {
+    "capec": [
+      "CAPEC-177"
+    ],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-SCA",
+      "D3-SCF",
+      "D3-SFA",
+      "D3-SJA"
+    ]
+  },
+  "T1036.001": {
+    "capec": [
+      "CAPEC-473"
+    ],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM"
+    ]
+  },
+  "T1036.002": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1036.003": {
+    "capec": [
+      "CAPEC-165"
+    ],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-SFA"
+    ]
+  },
+  "T1036.004": {
+    "capec": [
+      "CAPEC-504"
+    ],
+    "d3fend": [
+      "D3-SJA"
+    ]
+  },
+  "T1036.005": {
+    "capec": [
+      "CAPEC-543",
+      "CAPEC-616"
+    ],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DF",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-SCA",
+      "D3-SCF"
+    ]
+  },
+  "T1036.006": {
+    "capec": [
+      "CAPEC-11",
+      "CAPEC-649"
+    ],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DF",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM"
+    ]
+  },
+  "T1036.007": {
+    "capec": [
+      "CAPEC-635"
+    ],
+    "d3fend": []
+  },
+  "T1036.008": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1036.009": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1036.010": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1036.011": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1036.012": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1037": {
+    "capec": [
+      "CAPEC-564"
+    ],
+    "d3fend": [
+      "D3-CF",
+      "D3-CI",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-DNR",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-NRAM",
+      "D3-RC",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-SICA"
+    ]
+  },
+  "T1037.001": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM"
+    ]
+  },
+  "T1037.002": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM"
+    ]
+  },
+  "T1037.003": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-DNR",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-NRAM",
+      "D3-RF",
+      "D3-RFAM"
+    ]
+  },
+  "T1037.004": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CI",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RC",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-SICA"
+    ]
+  },
+  "T1037.005": {
+    "capec": [],
+    "d3fend": [
+      "D3-CI",
+      "D3-LFP",
+      "D3-RC",
+      "D3-SICA"
+    ]
+  },
+  "T1039": {
+    "capec": [
+      "CAPEC-639"
+    ],
+    "d3fend": [
+      "D3-DNR",
+      "D3-NRAM"
+    ]
+  },
+  "T1040": {
+    "capec": [
+      "CAPEC-158",
+      "CAPEC-57",
+      "CAPEC-65"
+    ],
+    "d3fend": [
+      "D3-DNSTA"
+    ]
+  },
+  "T1041": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CA",
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-CSPP",
+      "D3-DF",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1046": {
+    "capec": [
+      "CAPEC-300"
+    ],
+    "d3fend": []
+  },
+  "T1047": {
+    "capec": [],
+    "d3fend": [
+      "D3-ANAA",
+      "D3-APCA",
+      "D3-CAA",
+      "D3-CSPP",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-HBPI",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-PSA",
+      "D3-RTSD",
+      "D3-SCA",
+      "D3-SCF",
+      "D3-UGLPA"
+    ]
+  },
+  "T1048": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CA",
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-CSPP",
+      "D3-DF",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-OTF",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-RPA",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1048.001": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-OTF",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RPA",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1048.002": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CA",
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-CSPP",
+      "D3-DF",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-OTF",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-RPA",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1048.003": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-OTF",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RPA",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1049": {
+    "capec": [
+      "CAPEC-309"
+    ],
+    "d3fend": [
+      "D3-SCA",
+      "D3-SCF"
+    ]
+  },
+  "T1052": {
+    "capec": [
+      "CAPEC-675"
+    ],
+    "d3fend": [
+      "D3-HCI",
+      "D3-IOPR",
+      "D3-RH"
+    ]
+  },
+  "T1052.001": {
+    "capec": [],
+    "d3fend": [
+      "D3-HCI",
+      "D3-IOPR",
+      "D3-RH"
+    ]
+  },
+  "T1053": {
+    "capec": [],
+    "d3fend": [
+      "D3-ABPI",
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DF",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-HBPI",
+      "D3-HR",
+      "D3-HS",
+      "D3-KBPI",
+      "D3-LFP",
+      "D3-PLA",
+      "D3-PS",
+      "D3-PSA",
+      "D3-PSMD",
+      "D3-PT",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-SCA",
+      "D3-SCF",
+      "D3-SDM",
+      "D3-SJA"
+    ]
+  },
+  "T1053.002": {
+    "capec": [],
+    "d3fend": [
+      "D3-ABPI",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-HBPI",
+      "D3-HR",
+      "D3-HS",
+      "D3-KBPI",
+      "D3-PLA",
+      "D3-PS",
+      "D3-PSA",
+      "D3-PSMD",
+      "D3-PT",
+      "D3-SCA",
+      "D3-SCF",
+      "D3-SDM",
+      "D3-SJA"
+    ]
+  },
+  "T1053.003": {
+    "capec": [],
+    "d3fend": [
+      "D3-ABPI",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-HBPI",
+      "D3-HR",
+      "D3-HS",
+      "D3-KBPI",
+      "D3-PLA",
+      "D3-PS",
+      "D3-PSA",
+      "D3-PSMD",
+      "D3-PT",
+      "D3-SCA",
+      "D3-SCF",
+      "D3-SDM",
+      "D3-SJA"
+    ]
+  },
+  "T1053.005": {
+    "capec": [],
+    "d3fend": [
+      "D3-ABPI",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-HBPI",
+      "D3-HR",
+      "D3-HS",
+      "D3-KBPI",
+      "D3-PLA",
+      "D3-PS",
+      "D3-PSA",
+      "D3-PSMD",
+      "D3-PT",
+      "D3-SCA",
+      "D3-SCF",
+      "D3-SDM",
+      "D3-SJA"
+    ]
+  },
+  "T1053.006": {
+    "capec": [],
+    "d3fend": [
+      "D3-ABPI",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-HBPI",
+      "D3-HR",
+      "D3-HS",
+      "D3-KBPI",
+      "D3-PLA",
+      "D3-PS",
+      "D3-PSA",
+      "D3-PSMD",
+      "D3-PT",
+      "D3-SCA",
+      "D3-SCF",
+      "D3-SDM",
+      "D3-SJA"
+    ]
+  },
+  "T1053.007": {
+    "capec": [],
+    "d3fend": [
+      "D3-ABPI",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-HBPI",
+      "D3-HR",
+      "D3-HS",
+      "D3-KBPI",
+      "D3-PLA",
+      "D3-PS",
+      "D3-PSA",
+      "D3-PSMD",
+      "D3-PT",
+      "D3-SCA",
+      "D3-SCF",
+      "D3-SDM",
+      "D3-SJA"
+    ]
+  },
+  "T1055": {
+    "capec": [
+      "CAPEC-251",
+      "CAPEC-660"
+    ],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-HBPI",
+      "D3-LFP",
+      "D3-MBT",
+      "D3-PCSV",
+      "D3-PSA",
+      "D3-PSEP",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-SAOR",
+      "D3-SCA",
+      "D3-SCF",
+      "D3-SFA"
+    ]
+  },
+  "T1055.001": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DF",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-SCA",
+      "D3-SCF"
+    ]
+  },
+  "T1055.002": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DF",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM"
+    ]
+  },
+  "T1055.003": {
+    "capec": [
+      "CAPEC-30"
+    ],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-SCA",
+      "D3-SCF"
+    ]
+  },
+  "T1055.004": {
+    "capec": [],
+    "d3fend": [
+      "D3-EAL",
+      "D3-EDL",
+      "D3-HBPI",
+      "D3-PSA",
+      "D3-SCA",
+      "D3-SCF"
+    ]
+  },
+  "T1055.005": {
+    "capec": [],
+    "d3fend": [
+      "D3-SCA",
+      "D3-SCF"
+    ]
+  },
+  "T1055.008": {
+    "capec": [],
+    "d3fend": [
+      "D3-SCA",
+      "D3-SCF"
+    ]
+  },
+  "T1055.009": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DF",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-SFA"
+    ]
+  },
+  "T1055.011": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1055.012": {
+    "capec": [],
+    "d3fend": [
+      "D3-MBT",
+      "D3-PCSV",
+      "D3-PSEP",
+      "D3-SAOR"
+    ]
+  },
+  "T1055.013": {
+    "capec": [],
+    "d3fend": [
+      "D3-EAL",
+      "D3-EDL",
+      "D3-HBPI",
+      "D3-PSA",
+      "D3-SCA",
+      "D3-SCF"
+    ]
+  },
+  "T1055.014": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DF",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-SCA",
+      "D3-SCF"
+    ]
+  },
+  "T1055.015": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1056": {
+    "capec": [
+      "CAPEC-569",
+      "CAPEC-654"
+    ],
+    "d3fend": [
+      "D3-AVE",
+      "D3-HCI",
+      "D3-IDA",
+      "D3-IOPR",
+      "D3-MBT",
+      "D3-PCSV",
+      "D3-PSEP",
+      "D3-RH",
+      "D3-RS",
+      "D3-SAOR",
+      "D3-SBV",
+      "D3-SU",
+      "D3-SWI"
+    ]
+  },
+  "T1056.001": {
+    "capec": [
+      "CAPEC-568"
+    ],
+    "d3fend": [
+      "D3-HCI",
+      "D3-IDA",
+      "D3-IOPR",
+      "D3-RH"
+    ]
+  },
+  "T1056.002": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1056.003": {
+    "capec": [],
+    "d3fend": [
+      "D3-AVE",
+      "D3-RS",
+      "D3-SBV",
+      "D3-SU",
+      "D3-SWI"
+    ]
+  },
+  "T1056.004": {
+    "capec": [
+      "CAPEC-383"
+    ],
+    "d3fend": [
+      "D3-MBT",
+      "D3-PCSV",
+      "D3-PSEP",
+      "D3-SAOR"
+    ]
+  },
+  "T1057": {
+    "capec": [
+      "CAPEC-573"
+    ],
+    "d3fend": [
+      "D3-EAL",
+      "D3-EDL",
+      "D3-HBPI",
+      "D3-PSA",
+      "D3-SCA",
+      "D3-SCF"
+    ]
+  },
   "T1059": {
     "capec": [
       "CAPEC-242"
     ],
     "d3fend": [
-      "D3-PSEP"
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-PSEP",
+      "D3-RF",
+      "D3-RFAM"
+    ]
+  },
+  "T1059.001": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM"
+    ]
+  },
+  "T1059.002": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM"
+    ]
+  },
+  "T1059.003": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM"
+    ]
+  },
+  "T1059.004": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM"
+    ]
+  },
+  "T1059.005": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM"
+    ]
+  },
+  "T1059.006": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM"
     ]
   },
   "T1059.007": {
     "capec": [
       "CAPEC-63"
     ],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM"
+    ]
+  },
+  "T1059.008": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM"
+    ]
+  },
+  "T1059.009": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM"
+    ]
+  },
+  "T1059.010": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM"
+    ]
+  },
+  "T1059.011": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM"
+    ]
+  },
+  "T1059.012": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM"
+    ]
+  },
+  "T1059.013": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM"
+    ]
+  },
+  "T1068": {
+    "capec": [],
+    "d3fend": [
+      "D3-MBT",
+      "D3-PCSV",
+      "D3-PSEP",
+      "D3-SAOR",
+      "D3-SFCV",
+      "D3-SSC"
+    ]
+  },
+  "T1069": {
+    "capec": [
+      "CAPEC-576"
+    ],
+    "d3fend": []
+  },
+  "T1069.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1069.002": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1069.003": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1070": {
+    "capec": [
+      "CAPEC-268"
+    ],
+    "d3fend": [
+      "D3-AEM",
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DF",
+      "D3-DNR",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-NRAM",
+      "D3-OPM",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-SFA"
+    ]
+  },
+  "T1070.001": {
+    "capec": [],
+    "d3fend": [
+      "D3-AEM",
+      "D3-OPM"
+    ]
+  },
+  "T1070.002": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DF",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-SFA"
+    ]
+  },
+  "T1070.003": {
+    "capec": [],
+    "d3fend": [
+      "D3-AEM",
+      "D3-OPM"
+    ]
+  },
+  "T1070.004": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DF",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM"
+    ]
+  },
+  "T1070.005": {
+    "capec": [],
+    "d3fend": [
+      "D3-DNR",
+      "D3-NRAM"
+    ]
+  },
+  "T1070.006": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1070.007": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1070.008": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1070.009": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1070.010": {
+    "capec": [],
     "d3fend": []
   },
   "T1071": {
     "capec": [],
-    "d3fend": []
+    "d3fend": [
+      "D3-APCA",
+      "D3-CA",
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-CSPP",
+      "D3-DF",
+      "D3-DNSAL",
+      "D3-DNSDL",
+      "D3-DNSTA",
+      "D3-FA",
+      "D3-FC",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-FRDDL",
+      "D3-LFP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-OTF",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-RPA",
+      "D3-RRID",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1071.001": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CA",
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-CSPP",
+      "D3-DF",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-OTF",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-RPA",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1071.002": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CA",
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-CSPP",
+      "D3-DF",
+      "D3-FA",
+      "D3-FC",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-OTF",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-RPA",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1071.003": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CA",
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-CSPP",
+      "D3-DF",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-OTF",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-RPA",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1071.004": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CA",
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-CSPP",
+      "D3-DF",
+      "D3-DNSAL",
+      "D3-DNSDL",
+      "D3-DNSTA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-FRDDL",
+      "D3-LFP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-OTF",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-RPA",
+      "D3-RRID",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1071.005": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CA",
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-CSPP",
+      "D3-DF",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-OTF",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-RPA",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1072": {
+    "capec": [
+      "CAPEC-187",
+      "CAPEC-657"
+    ],
+    "d3fend": [
+      "D3-AVE",
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DF",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-RS",
+      "D3-SBV",
+      "D3-SU",
+      "D3-SWI"
+    ]
+  },
+  "T1074": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DF",
+      "D3-DNR",
+      "D3-FA",
+      "D3-FCA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-NRAM",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-SCA",
+      "D3-SCF"
+    ]
+  },
+  "T1074.001": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DF",
+      "D3-FA",
+      "D3-FCA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-SCA",
+      "D3-SCF"
+    ]
+  },
+  "T1074.002": {
+    "capec": [],
+    "d3fend": [
+      "D3-DNR",
+      "D3-NRAM"
+    ]
   },
   "T1078": {
+    "capec": [
+      "CAPEC-560"
+    ],
+    "d3fend": [
+      "D3-AA",
+      "D3-AL",
+      "D3-AM",
+      "D3-CDP",
+      "D3-DAM",
+      "D3-LAM",
+      "D3-RUAA",
+      "D3-UAP",
+      "D3-ULA"
+    ]
+  },
+  "T1078.001": {
+    "capec": [
+      "CAPEC-70"
+    ],
+    "d3fend": [
+      "D3-AA",
+      "D3-AL",
+      "D3-AM",
+      "D3-CDP",
+      "D3-RUAA",
+      "D3-UAP",
+      "D3-ULA"
+    ]
+  },
+  "T1078.002": {
+    "capec": [],
+    "d3fend": [
+      "D3-AA",
+      "D3-AL",
+      "D3-AM",
+      "D3-CDP",
+      "D3-DAM",
+      "D3-RUAA",
+      "D3-UAP",
+      "D3-ULA"
+    ]
+  },
+  "T1078.003": {
+    "capec": [],
+    "d3fend": [
+      "D3-AA",
+      "D3-AL",
+      "D3-AM",
+      "D3-CDP",
+      "D3-LAM",
+      "D3-RUAA",
+      "D3-UAP",
+      "D3-ULA"
+    ]
+  },
+  "T1078.004": {
+    "capec": [],
+    "d3fend": [
+      "D3-AA",
+      "D3-AL",
+      "D3-AM",
+      "D3-CDP",
+      "D3-RUAA",
+      "D3-UAP",
+      "D3-ULA"
+    ]
+  },
+  "T1080": {
+    "capec": [
+      "CAPEC-562"
+    ],
+    "d3fend": [
+      "D3-DNR",
+      "D3-NRAM"
+    ]
+  },
+  "T1082": {
+    "capec": [
+      "CAPEC-312",
+      "CAPEC-313",
+      "CAPEC-580"
+    ],
+    "d3fend": [
+      "D3-DE",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-HBPI",
+      "D3-PSA",
+      "D3-SCA",
+      "D3-SCF"
+    ]
+  },
+  "T1083": {
+    "capec": [
+      "CAPEC-127",
+      "CAPEC-497"
+    ],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DF",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM"
+    ]
+  },
+  "T1087": {
+    "capec": [
+      "CAPEC-575"
+    ],
+    "d3fend": [
+      "D3-AA",
+      "D3-AL",
+      "D3-AM",
+      "D3-CDP",
+      "D3-DAM",
+      "D3-LAM",
+      "D3-RUAA",
+      "D3-UAP",
+      "D3-ULA"
+    ]
+  },
+  "T1087.001": {
+    "capec": [],
+    "d3fend": [
+      "D3-AA",
+      "D3-AL",
+      "D3-AM",
+      "D3-CDP",
+      "D3-LAM",
+      "D3-RUAA",
+      "D3-UAP",
+      "D3-ULA"
+    ]
+  },
+  "T1087.002": {
+    "capec": [],
+    "d3fend": [
+      "D3-AA",
+      "D3-AL",
+      "D3-AM",
+      "D3-CDP",
+      "D3-DAM",
+      "D3-RUAA",
+      "D3-UAP",
+      "D3-ULA"
+    ]
+  },
+  "T1087.003": {
     "capec": [],
     "d3fend": []
+  },
+  "T1087.004": {
+    "capec": [],
+    "d3fend": [
+      "D3-AA",
+      "D3-AL",
+      "D3-AM",
+      "D3-CDP",
+      "D3-RUAA",
+      "D3-UAP",
+      "D3-ULA"
+    ]
+  },
+  "T1090": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CAA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-OTF",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RPA",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1090.001": {
+    "capec": [
+      "CAPEC-465"
+    ],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CAA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1090.002": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-OTF",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RPA",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1090.003": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-OTF",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RPA",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1090.004": {
+    "capec": [
+      "CAPEC-481"
+    ],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-OTF",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RPA",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1091": {
+    "capec": [
+      "CAPEC-457"
+    ],
+    "d3fend": [
+      "D3-HCI",
+      "D3-IOPR",
+      "D3-RH"
+    ]
+  },
+  "T1092": {
+    "capec": [
+      "CAPEC-457"
+    ],
+    "d3fend": [
+      "D3-HCI",
+      "D3-IOPR",
+      "D3-RH"
+    ]
+  },
+  "T1095": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-OTF",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RPA",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1098": {
+    "capec": [],
+    "d3fend": [
+      "D3-AA",
+      "D3-AL",
+      "D3-AM",
+      "D3-ANAA",
+      "D3-ANCI",
+      "D3-APCA",
+      "D3-CAA",
+      "D3-CCSA",
+      "D3-CDP",
+      "D3-CH",
+      "D3-CR",
+      "D3-CRO",
+      "D3-CSPP",
+      "D3-CTS",
+      "D3-DAM",
+      "D3-DUC",
+      "D3-MFA",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RIC",
+      "D3-RTSD",
+      "D3-RUAA",
+      "D3-UAP",
+      "D3-UGLPA",
+      "D3-ULA"
+    ]
+  },
+  "T1098.001": {
+    "capec": [],
+    "d3fend": [
+      "D3-AA",
+      "D3-AL",
+      "D3-AM",
+      "D3-ANAA",
+      "D3-ANCI",
+      "D3-APCA",
+      "D3-CAA",
+      "D3-CCSA",
+      "D3-CDP",
+      "D3-CH",
+      "D3-CR",
+      "D3-CRO",
+      "D3-CSPP",
+      "D3-CTS",
+      "D3-DUC",
+      "D3-MFA",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RIC",
+      "D3-RTSD",
+      "D3-RUAA",
+      "D3-UAP",
+      "D3-UGLPA",
+      "D3-ULA"
+    ]
+  },
+  "T1098.002": {
+    "capec": [],
+    "d3fend": [
+      "D3-AA",
+      "D3-AL",
+      "D3-AM",
+      "D3-CDP",
+      "D3-DAM",
+      "D3-RUAA",
+      "D3-UAP",
+      "D3-ULA"
+    ]
+  },
+  "T1098.003": {
+    "capec": [],
+    "d3fend": [
+      "D3-AA",
+      "D3-AL",
+      "D3-AM",
+      "D3-CDP",
+      "D3-DAM",
+      "D3-RUAA",
+      "D3-UAP",
+      "D3-ULA"
+    ]
+  },
+  "T1098.004": {
+    "capec": [],
+    "d3fend": [
+      "D3-AA",
+      "D3-AL",
+      "D3-AM",
+      "D3-CDP",
+      "D3-RUAA",
+      "D3-UAP",
+      "D3-ULA"
+    ]
+  },
+  "T1098.005": {
+    "capec": [],
+    "d3fend": [
+      "D3-AA",
+      "D3-AL",
+      "D3-AM",
+      "D3-CDP",
+      "D3-RUAA",
+      "D3-UAP",
+      "D3-ULA"
+    ]
+  },
+  "T1098.006": {
+    "capec": [],
+    "d3fend": [
+      "D3-AA",
+      "D3-AL",
+      "D3-AM",
+      "D3-CDP",
+      "D3-RUAA",
+      "D3-UAP",
+      "D3-ULA"
+    ]
+  },
+  "T1098.007": {
+    "capec": [],
+    "d3fend": [
+      "D3-AA",
+      "D3-AL",
+      "D3-AM",
+      "D3-CDP",
+      "D3-RUAA",
+      "D3-UAP",
+      "D3-ULA"
+    ]
+  },
+  "T1102": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-OTF",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RPA",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1102.001": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-OTF",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RPA",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1102.002": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-OTF",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RPA",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1102.003": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-OTF",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RPA",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1104": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-OTF",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RPA",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
   },
   "T1105": {
     "capec": [],
-    "d3fend": []
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-OTF",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RPA",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1106": {
+    "capec": [],
+    "d3fend": [
+      "D3-SCA",
+      "D3-SCF"
+    ]
   },
   "T1110": {
+    "capec": [
+      "CAPEC-112"
+    ],
+    "d3fend": [
+      "D3-AEM",
+      "D3-ANAA",
+      "D3-ANCI",
+      "D3-APCA",
+      "D3-CAA",
+      "D3-CCSA",
+      "D3-CDP",
+      "D3-CH",
+      "D3-CR",
+      "D3-CRO",
+      "D3-CSPP",
+      "D3-CTS",
+      "D3-DUC",
+      "D3-MFA",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-OPM",
+      "D3-OTP",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-PR",
+      "D3-PWA",
+      "D3-RIC",
+      "D3-RTSD",
+      "D3-SPP",
+      "D3-UGLPA"
+    ]
+  },
+  "T1110.001": {
+    "capec": [
+      "CAPEC-49"
+    ],
+    "d3fend": [
+      "D3-AEM",
+      "D3-ANCI",
+      "D3-CCSA",
+      "D3-CDP",
+      "D3-CH",
+      "D3-CR",
+      "D3-CRO",
+      "D3-CTS",
+      "D3-DUC",
+      "D3-MFA",
+      "D3-OPM",
+      "D3-OTP",
+      "D3-PR",
+      "D3-PWA",
+      "D3-RIC",
+      "D3-SPP"
+    ]
+  },
+  "T1110.002": {
+    "capec": [
+      "CAPEC-55"
+    ],
+    "d3fend": [
+      "D3-ANCI",
+      "D3-CCSA",
+      "D3-CDP",
+      "D3-CH",
+      "D3-CR",
+      "D3-CRO",
+      "D3-CTS",
+      "D3-DUC",
+      "D3-MFA",
+      "D3-OTP",
+      "D3-PR",
+      "D3-PWA",
+      "D3-RIC",
+      "D3-SPP"
+    ]
+  },
+  "T1110.003": {
+    "capec": [
+      "CAPEC-565"
+    ],
+    "d3fend": [
+      "D3-AEM",
+      "D3-ANAA",
+      "D3-ANCI",
+      "D3-APCA",
+      "D3-CAA",
+      "D3-CCSA",
+      "D3-CDP",
+      "D3-CH",
+      "D3-CR",
+      "D3-CRO",
+      "D3-CSPP",
+      "D3-CTS",
+      "D3-DUC",
+      "D3-MFA",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-OPM",
+      "D3-OTP",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-PR",
+      "D3-PWA",
+      "D3-RIC",
+      "D3-RTSD",
+      "D3-SPP",
+      "D3-UGLPA"
+    ]
+  },
+  "T1110.004": {
+    "capec": [
+      "CAPEC-600"
+    ],
+    "d3fend": [
+      "D3-AEM",
+      "D3-ANAA",
+      "D3-APCA",
+      "D3-CAA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-OPM",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1111": {
+    "capec": [
+      "CAPEC-158",
+      "CAPEC-609",
+      "CAPEC-651"
+    ],
+    "d3fend": [
+      "D3-HCI",
+      "D3-RH"
+    ]
+  },
+  "T1112": {
+    "capec": [
+      "CAPEC-203"
+    ],
+    "d3fend": [
+      "D3-DI",
+      "D3-RD",
+      "D3-SCP"
+    ]
+  },
+  "T1113": {
+    "capec": [
+      "CAPEC-648"
+    ],
+    "d3fend": [
+      "D3-SCA",
+      "D3-SCF"
+    ]
+  },
+  "T1114": {
+    "capec": [],
+    "d3fend": [
+      "D3-ACH",
+      "D3-CF",
+      "D3-CI",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-DI",
+      "D3-DRA",
+      "D3-EF",
+      "D3-EFA",
+      "D3-EHB",
+      "D3-ER",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-HD",
+      "D3-LFP",
+      "D3-LLM",
+      "D3-NNI",
+      "D3-PLM",
+      "D3-RC",
+      "D3-RE",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-RNA",
+      "D3-SMRA",
+      "D3-SRA"
+    ]
+  },
+  "T1114.001": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-DI",
+      "D3-EF",
+      "D3-EFA",
+      "D3-ER",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-HD",
+      "D3-LFP",
+      "D3-RE",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-SMRA",
+      "D3-SRA"
+    ]
+  },
+  "T1114.002": {
+    "capec": [
+      "CAPEC-555"
+    ],
+    "d3fend": [
+      "D3-EHB",
+      "D3-ER",
+      "D3-LLM",
+      "D3-NNI",
+      "D3-PLM",
+      "D3-RNA"
+    ]
+  },
+  "T1114.003": {
+    "capec": [],
+    "d3fend": [
+      "D3-ACH",
+      "D3-CI",
+      "D3-DRA",
+      "D3-RC"
+    ]
+  },
+  "T1115": {
+    "capec": [
+      "CAPEC-637"
+    ],
+    "d3fend": []
+  },
+  "T1119": {
+    "capec": [
+      "CAPEC-150"
+    ],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DF",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM"
+    ]
+  },
+  "T1120": {
+    "capec": [
+      "CAPEC-646"
+    ],
+    "d3fend": []
+  },
+  "T1123": {
+    "capec": [
+      "CAPEC-634"
+    ],
+    "d3fend": [
+      "D3-HCI",
+      "D3-IDA",
+      "D3-IOPR",
+      "D3-RH"
+    ]
+  },
+  "T1124": {
+    "capec": [
+      "CAPEC-295"
+    ],
+    "d3fend": [
+      "D3-EAL",
+      "D3-EDL",
+      "D3-HBPI",
+      "D3-PSA",
+      "D3-SCA",
+      "D3-SCF"
+    ]
+  },
+  "T1125": {
+    "capec": [
+      "CAPEC-634"
+    ],
+    "d3fend": [
+      "D3-HCI",
+      "D3-IDA",
+      "D3-IOPR",
+      "D3-RH",
+      "D3-VS"
+    ]
+  },
+  "T1127": {
+    "capec": [
+      "CAPEC-670"
+    ],
+    "d3fend": [
+      "D3-AVE",
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DF",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-RS",
+      "D3-SU",
+      "D3-SWI"
+    ]
+  },
+  "T1127.001": {
+    "capec": [],
+    "d3fend": [
+      "D3-AVE",
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DF",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-RS",
+      "D3-SU",
+      "D3-SWI"
+    ]
+  },
+  "T1127.002": {
     "capec": [],
     "d3fend": []
+  },
+  "T1127.003": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1129": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1132": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-OTF",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RPA",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1132.001": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-OTF",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RPA",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1132.002": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-OTF",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RPA",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1133": {
+    "capec": [
+      "CAPEC-555"
+    ],
+    "d3fend": [
+      "D3-ST"
+    ]
+  },
+  "T1134": {
+    "capec": [
+      "CAPEC-21",
+      "CAPEC-633"
+    ],
+    "d3fend": [
+      "D3-AEM",
+      "D3-AM",
+      "D3-ANCI",
+      "D3-CCSA",
+      "D3-CH",
+      "D3-CI",
+      "D3-CR",
+      "D3-CRO",
+      "D3-CTS",
+      "D3-DUC",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-HBPI",
+      "D3-MFA",
+      "D3-NTPM",
+      "D3-OPM",
+      "D3-PSA",
+      "D3-RC",
+      "D3-RIC",
+      "D3-SCA",
+      "D3-SCF",
+      "D3-ST",
+      "D3-TB",
+      "D3-TBA"
+    ]
+  },
+  "T1134.001": {
+    "capec": [
+      "CAPEC-60"
+    ],
+    "d3fend": [
+      "D3-ANCI",
+      "D3-CCSA",
+      "D3-CH",
+      "D3-CR",
+      "D3-CRO",
+      "D3-CTS",
+      "D3-DUC",
+      "D3-MFA",
+      "D3-RIC",
+      "D3-TB",
+      "D3-TBA"
+    ]
+  },
+  "T1134.002": {
+    "capec": [
+      "CAPEC-196"
+    ],
+    "d3fend": [
+      "D3-AEM",
+      "D3-ANCI",
+      "D3-CCSA",
+      "D3-CH",
+      "D3-CR",
+      "D3-CRO",
+      "D3-CTS",
+      "D3-DUC",
+      "D3-MFA",
+      "D3-OPM",
+      "D3-RIC",
+      "D3-TB",
+      "D3-TBA"
+    ]
+  },
+  "T1134.003": {
+    "capec": [
+      "CAPEC-196"
+    ],
+    "d3fend": [
+      "D3-AEM",
+      "D3-ANCI",
+      "D3-CCSA",
+      "D3-CH",
+      "D3-CR",
+      "D3-CRO",
+      "D3-CTS",
+      "D3-DUC",
+      "D3-MFA",
+      "D3-OPM",
+      "D3-RIC",
+      "D3-ST",
+      "D3-TB",
+      "D3-TBA"
+    ]
+  },
+  "T1134.004": {
+    "capec": [],
+    "d3fend": [
+      "D3-EAL",
+      "D3-EDL",
+      "D3-HBPI",
+      "D3-PSA",
+      "D3-SCA",
+      "D3-SCF"
+    ]
+  },
+  "T1134.005": {
+    "capec": [],
+    "d3fend": [
+      "D3-AM",
+      "D3-CI",
+      "D3-NTPM",
+      "D3-RC"
+    ]
+  },
+  "T1135": {
+    "capec": [
+      "CAPEC-643"
+    ],
+    "d3fend": []
+  },
+  "T1136": {
+    "capec": [],
+    "d3fend": [
+      "D3-AA",
+      "D3-AL",
+      "D3-AM",
+      "D3-CDP",
+      "D3-DAM",
+      "D3-LAM",
+      "D3-RUAA",
+      "D3-UAP",
+      "D3-ULA"
+    ]
+  },
+  "T1136.001": {
+    "capec": [],
+    "d3fend": [
+      "D3-AA",
+      "D3-AL",
+      "D3-AM",
+      "D3-CDP",
+      "D3-LAM",
+      "D3-RUAA",
+      "D3-UAP",
+      "D3-ULA"
+    ]
+  },
+  "T1136.002": {
+    "capec": [],
+    "d3fend": [
+      "D3-AA",
+      "D3-AL",
+      "D3-AM",
+      "D3-CDP",
+      "D3-DAM",
+      "D3-RUAA",
+      "D3-UAP",
+      "D3-ULA"
+    ]
+  },
+  "T1136.003": {
+    "capec": [],
+    "d3fend": [
+      "D3-AA",
+      "D3-AL",
+      "D3-AM",
+      "D3-CDP",
+      "D3-RUAA",
+      "D3-UAP",
+      "D3-ULA"
+    ]
+  },
+  "T1137": {
+    "capec": [],
+    "d3fend": [
+      "D3-AVE",
+      "D3-CF",
+      "D3-CI",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-DI",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RC",
+      "D3-RD",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-RS",
+      "D3-SCP",
+      "D3-SU",
+      "D3-SWI"
+    ]
+  },
+  "T1137.001": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CI",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RC",
+      "D3-RF",
+      "D3-RFAM"
+    ]
+  },
+  "T1137.002": {
+    "capec": [],
+    "d3fend": [
+      "D3-CI",
+      "D3-CQ",
+      "D3-RC"
+    ]
+  },
+  "T1137.003": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-DI",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM"
+    ]
+  },
+  "T1137.004": {
+    "capec": [],
+    "d3fend": [
+      "D3-CI",
+      "D3-RC"
+    ]
+  },
+  "T1137.005": {
+    "capec": [],
+    "d3fend": [
+      "D3-CI",
+      "D3-RC"
+    ]
+  },
+  "T1137.006": {
+    "capec": [],
+    "d3fend": [
+      "D3-AVE",
+      "D3-DI",
+      "D3-RD",
+      "D3-RS",
+      "D3-SCP",
+      "D3-SU",
+      "D3-SWI"
+    ]
+  },
+  "T1140": {
+    "capec": [],
+    "d3fend": [
+      "D3-AEM",
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-HBPI",
+      "D3-LFP",
+      "D3-OPM",
+      "D3-PSA",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-SCA",
+      "D3-SCF"
+    ]
+  },
+  "T1176": {
+    "capec": [
+      "CAPEC-698"
+    ],
+    "d3fend": [
+      "D3-AVE",
+      "D3-RS",
+      "D3-SU",
+      "D3-SWI"
+    ]
+  },
+  "T1176.001": {
+    "capec": [],
+    "d3fend": [
+      "D3-AVE",
+      "D3-RS",
+      "D3-SU",
+      "D3-SWI"
+    ]
+  },
+  "T1176.002": {
+    "capec": [],
+    "d3fend": [
+      "D3-AVE",
+      "D3-RS",
+      "D3-SU",
+      "D3-SWI"
+    ]
+  },
+  "T1185": {
+    "capec": [
+      "CAPEC-593",
+      "CAPEC-662"
+    ],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1187": {
+    "capec": [],
+    "d3fend": [
+      "D3-AEM",
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DF",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-OPM",
+      "D3-RF",
+      "D3-RFAM"
+    ]
   },
   "T1189": {
     "capec": [
       "CAPEC-63"
     ],
-    "d3fend": []
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-HD",
+      "D3-IAA",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-OTF",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-PSEP",
+      "D3-RPA",
+      "D3-RTSD",
+      "D3-SAOR",
+      "D3-UA",
+      "D3-UGLPA",
+      "D3-URA"
+    ]
   },
   "T1190": {
     "capec": [
@@ -45,15 +4088,5696 @@
     ],
     "d3fend": [
       "D3-AI",
+      "D3-APCA",
       "D3-AVE",
+      "D3-CSPP",
+      "D3-DQSA",
+      "D3-ISVA",
+      "D3-ITF",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-PSEP",
+      "D3-RTSD",
+      "D3-SAOR",
       "D3-SU",
+      "D3-UGLPA",
       "D3-WAF"
     ]
+  },
+  "T1195": {
+    "capec": [
+      "CAPEC-438",
+      "CAPEC-439",
+      "CAPEC-446"
+    ],
+    "d3fend": [
+      "D3-AVE",
+      "D3-HCI",
+      "D3-RH",
+      "D3-RS",
+      "D3-SU",
+      "D3-SWI"
+    ]
+  },
+  "T1195.001": {
+    "capec": [
+      "CAPEC-442",
+      "CAPEC-445",
+      "CAPEC-511",
+      "CAPEC-538",
+      "CAPEC-670",
+      "CAPEC-691",
+      "CAPEC-695"
+    ],
+    "d3fend": [
+      "D3-AVE",
+      "D3-RS",
+      "D3-SU",
+      "D3-SWI"
+    ]
+  },
+  "T1195.002": {
+    "capec": [
+      "CAPEC-186",
+      "CAPEC-442",
+      "CAPEC-443",
+      "CAPEC-523",
+      "CAPEC-669",
+      "CAPEC-673",
+      "CAPEC-678",
+      "CAPEC-691"
+    ],
+    "d3fend": [
+      "D3-AVE",
+      "D3-RS",
+      "D3-SU",
+      "D3-SWI"
+    ]
+  },
+  "T1195.003": {
+    "capec": [
+      "CAPEC-440",
+      "CAPEC-443",
+      "CAPEC-516",
+      "CAPEC-520",
+      "CAPEC-522",
+      "CAPEC-531",
+      "CAPEC-537",
+      "CAPEC-539",
+      "CAPEC-671",
+      "CAPEC-672",
+      "CAPEC-674",
+      "CAPEC-677"
+    ],
+    "d3fend": [
+      "D3-HCI",
+      "D3-RH"
+    ]
+  },
+  "T1197": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CAA",
+      "D3-CSPP",
+      "D3-IPCTA",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-OTF",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RPA",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1199": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CAA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RTSD",
+      "D3-ST",
+      "D3-UGLPA"
+    ]
+  },
+  "T1200": {
+    "capec": [
+      "CAPEC-440"
+    ],
+    "d3fend": [
+      "D3-HCI",
+      "D3-RH"
+    ]
+  },
+  "T1201": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1202": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1203": {
+    "capec": [],
+    "d3fend": [
+      "D3-MBT",
+      "D3-PCSV",
+      "D3-PSEP",
+      "D3-SAOR",
+      "D3-SFCV",
+      "D3-SSC"
+    ]
+  },
+  "T1204": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-CSPP",
+      "D3-DA",
+      "D3-DF",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-HD",
+      "D3-IAA",
+      "D3-LFP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-OTF",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-RPA",
+      "D3-RTSD",
+      "D3-UA",
+      "D3-UGLPA",
+      "D3-URA"
+    ]
+  },
+  "T1204.001": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-HD",
+      "D3-IAA",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-OTF",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RPA",
+      "D3-RTSD",
+      "D3-UA",
+      "D3-UGLPA",
+      "D3-URA"
+    ]
+  },
+  "T1204.002": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM"
+    ]
+  },
+  "T1204.003": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1204.004": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1204.005": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1205": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1205.001": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1205.002": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1207": {
+    "capec": [],
+    "d3fend": [
+      "D3-ANAA",
+      "D3-APCA",
+      "D3-CAA",
+      "D3-CSPP",
+      "D3-DI",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RD",
+      "D3-RTSD",
+      "D3-SCP",
+      "D3-UGLPA"
+    ]
+  },
+  "T1210": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CAA",
+      "D3-CSPP",
+      "D3-MBT",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-PCSV",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-PSEP",
+      "D3-RTSD",
+      "D3-SAOR",
+      "D3-SFCV",
+      "D3-SSC",
+      "D3-UGLPA"
+    ]
+  },
+  "T1211": {
+    "capec": [
+      "CAPEC-665"
+    ],
+    "d3fend": [
+      "D3-MBT",
+      "D3-PCSV",
+      "D3-PSEP",
+      "D3-SAOR",
+      "D3-SFCV",
+      "D3-SSC"
+    ]
+  },
+  "T1212": {
+    "capec": [],
+    "d3fend": [
+      "D3-ABPI",
+      "D3-AVE",
+      "D3-HBPI",
+      "D3-HR",
+      "D3-HS",
+      "D3-KBPI",
+      "D3-MBT",
+      "D3-PCSV",
+      "D3-PLA",
+      "D3-PS",
+      "D3-PSA",
+      "D3-PSEP",
+      "D3-PSMD",
+      "D3-PT",
+      "D3-RS",
+      "D3-SAOR",
+      "D3-SBV",
+      "D3-SCF",
+      "D3-SFCV",
+      "D3-SSC",
+      "D3-SU",
+      "D3-SWI",
+      "D3-WSAM"
+    ]
+  },
+  "T1213": {
+    "capec": [
+      "CAPEC-150"
+    ],
+    "d3fend": [
+      "D3-DI",
+      "D3-DNR",
+      "D3-NRAM",
+      "D3-RD"
+    ]
+  },
+  "T1213.001": {
+    "capec": [],
+    "d3fend": [
+      "D3-DNR",
+      "D3-NRAM"
+    ]
+  },
+  "T1213.002": {
+    "capec": [],
+    "d3fend": [
+      "D3-DNR",
+      "D3-NRAM"
+    ]
+  },
+  "T1213.003": {
+    "capec": [],
+    "d3fend": [
+      "D3-DI",
+      "D3-RD"
+    ]
+  },
+  "T1213.004": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1213.005": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1213.006": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1216": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1216.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1216.002": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1217": {
+    "capec": [
+      "CAPEC-169"
+    ],
+    "d3fend": []
+  },
+  "T1218": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-AVE",
+      "D3-CF",
+      "D3-CI",
+      "D3-CM",
+      "D3-CQ",
+      "D3-CSPP",
+      "D3-DA",
+      "D3-DF",
+      "D3-DI",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FCA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-HBPI",
+      "D3-LFP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-PSA",
+      "D3-PSEP",
+      "D3-RC",
+      "D3-RD",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-RS",
+      "D3-RTSD",
+      "D3-SAOR",
+      "D3-SCA",
+      "D3-SCF",
+      "D3-SCP",
+      "D3-SU",
+      "D3-SWI",
+      "D3-UGLPA"
+    ]
+  },
+  "T1218.001": {
+    "capec": [
+      "CAPEC-636"
+    ],
+    "d3fend": [
+      "D3-EAL",
+      "D3-EDL",
+      "D3-FCA",
+      "D3-HBPI",
+      "D3-PSA",
+      "D3-SCA",
+      "D3-SCF"
+    ]
+  },
+  "T1218.002": {
+    "capec": [],
+    "d3fend": [
+      "D3-CI",
+      "D3-CQ",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-HBPI",
+      "D3-PSA",
+      "D3-RC",
+      "D3-SCA",
+      "D3-SCF"
+    ]
+  },
+  "T1218.003": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-HBPI",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-PSA",
+      "D3-RTSD",
+      "D3-SCA",
+      "D3-SCF",
+      "D3-UGLPA"
+    ]
+  },
+  "T1218.004": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1218.005": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-DI",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-HBPI",
+      "D3-LFP",
+      "D3-PSA",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-SCA",
+      "D3-SCF"
+    ]
+  },
+  "T1218.007": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1218.008": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1218.009": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1218.010": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1218.011": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DF",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-HBPI",
+      "D3-LFP",
+      "D3-PSA",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-SCA",
+      "D3-SCF"
+    ]
+  },
+  "T1218.012": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1218.013": {
+    "capec": [],
+    "d3fend": [
+      "D3-PSEP",
+      "D3-SAOR",
+      "D3-SCA",
+      "D3-SCF"
+    ]
+  },
+  "T1218.014": {
+    "capec": [],
+    "d3fend": [
+      "D3-AVE",
+      "D3-DI",
+      "D3-RD",
+      "D3-RS",
+      "D3-SCP",
+      "D3-SU",
+      "D3-SWI"
+    ]
+  },
+  "T1218.015": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1219": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-OTF",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RPA",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1219.001": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-OTF",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RPA",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1219.002": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-OTF",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RPA",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1219.003": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-OTF",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RPA",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1220": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-HBPI",
+      "D3-LFP",
+      "D3-PSA",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-SCA",
+      "D3-SCF"
+    ]
+  },
+  "T1221": {
+    "capec": [
+      "CAPEC-636"
+    ],
+    "d3fend": []
+  },
+  "T1222": {
+    "capec": [],
+    "d3fend": [
+      "D3-AM",
+      "D3-CI",
+      "D3-NTPM",
+      "D3-RC"
+    ]
+  },
+  "T1222.001": {
+    "capec": [],
+    "d3fend": [
+      "D3-AM",
+      "D3-CI",
+      "D3-NTPM",
+      "D3-RC"
+    ]
+  },
+  "T1222.002": {
+    "capec": [],
+    "d3fend": [
+      "D3-AM",
+      "D3-CI",
+      "D3-NTPM",
+      "D3-RC"
+    ]
+  },
+  "T1398": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1404": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1406": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1406.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1406.002": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1407": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1409": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1414": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1417": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1417.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1417.002": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1418": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1418.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1420": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1421": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1422": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1422.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1422.002": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1423": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1424": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1426": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1428": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1429": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1430": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1430.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1430.002": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1437": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1437.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1451": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1453": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1456": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1458": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1461": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1464": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1471": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1474": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1474.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1474.002": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1474.003": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1480": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1480.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1480.002": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1481": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1481.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1481.002": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1481.003": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1482": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1484": {
+    "capec": [],
+    "d3fend": [
+      "D3-AM",
+      "D3-CI",
+      "D3-NTPM",
+      "D3-RC"
+    ]
+  },
+  "T1484.001": {
+    "capec": [],
+    "d3fend": [
+      "D3-AM",
+      "D3-CI",
+      "D3-NTPM",
+      "D3-RC"
+    ]
+  },
+  "T1484.002": {
+    "capec": [],
+    "d3fend": [
+      "D3-AM",
+      "D3-CI",
+      "D3-NTPM",
+      "D3-RC"
+    ]
+  },
+  "T1485": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1485.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1486": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DF",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM"
+    ]
+  },
+  "T1489": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1490": {
+    "capec": [],
+    "d3fend": [
+      "D3-AVE",
+      "D3-CI",
+      "D3-RC",
+      "D3-RS",
+      "D3-SU",
+      "D3-SWI"
+    ]
+  },
+  "T1491": {
+    "capec": [
+      "CAPEC-148"
+    ],
+    "d3fend": [
+      "D3-DNR",
+      "D3-NRAM"
+    ]
+  },
+  "T1491.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1491.002": {
+    "capec": [],
+    "d3fend": [
+      "D3-DNR",
+      "D3-NRAM"
+    ]
+  },
+  "T1495": {
+    "capec": [
+      "CAPEC-532"
+    ],
+    "d3fend": []
+  },
+  "T1496": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1496.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1496.002": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1496.003": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1496.004": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1497": {
+    "capec": [],
+    "d3fend": [
+      "D3-AVE",
+      "D3-RS",
+      "D3-SCA",
+      "D3-SCF",
+      "D3-SU",
+      "D3-SWI"
+    ]
+  },
+  "T1497.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1497.002": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1497.003": {
+    "capec": [],
+    "d3fend": [
+      "D3-AVE",
+      "D3-RS",
+      "D3-SCA",
+      "D3-SCF",
+      "D3-SU",
+      "D3-SWI"
+    ]
+  },
+  "T1498": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-ISVA",
+      "D3-ITF",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1498.001": {
+    "capec": [
+      "CAPEC-125",
+      "CAPEC-482",
+      "CAPEC-528",
+      "CAPEC-666"
+    ],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-ISVA",
+      "D3-ITF",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1498.002": {
+    "capec": [
+      "CAPEC-490"
+    ],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-ISVA",
+      "D3-ITF",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1499": {
+    "capec": [
+      "CAPEC-125",
+      "CAPEC-131",
+      "CAPEC-227"
+    ],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-ISVA",
+      "D3-ITF",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1499.001": {
+    "capec": [
+      "CAPEC-482",
+      "CAPEC-666"
+    ],
+    "d3fend": []
+  },
+  "T1499.002": {
+    "capec": [
+      "CAPEC-469",
+      "CAPEC-482",
+      "CAPEC-488",
+      "CAPEC-489",
+      "CAPEC-528"
+    ],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-ISVA",
+      "D3-ITF",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1499.003": {
+    "capec": [
+      "CAPEC-130"
+    ],
+    "d3fend": []
+  },
+  "T1499.004": {
+    "capec": [
+      "CAPEC-25"
+    ],
+    "d3fend": []
+  },
+  "T1505": {
+    "capec": [],
+    "d3fend": [
+      "D3-ABPI",
+      "D3-AVE",
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-CS",
+      "D3-DA",
+      "D3-DF",
+      "D3-DLV",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-EHB",
+      "D3-ER",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-HBPI",
+      "D3-HR",
+      "D3-HS",
+      "D3-KBPI",
+      "D3-LFP",
+      "D3-LLM",
+      "D3-NNI",
+      "D3-PLA",
+      "D3-PLM",
+      "D3-PS",
+      "D3-PSA",
+      "D3-PSMD",
+      "D3-PT",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-RNA",
+      "D3-RS",
+      "D3-SCA",
+      "D3-SCF",
+      "D3-SU",
+      "D3-SWI",
+      "D3-TL",
+      "D3-VI",
+      "D3-WSAM"
+    ]
+  },
+  "T1505.001": {
+    "capec": [],
+    "d3fend": [
+      "D3-ABPI",
+      "D3-AVE",
+      "D3-CS",
+      "D3-DLV",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-HBPI",
+      "D3-PSA",
+      "D3-RS",
+      "D3-SCA",
+      "D3-SCF",
+      "D3-SU",
+      "D3-SWI",
+      "D3-TL",
+      "D3-VI"
+    ]
+  },
+  "T1505.002": {
+    "capec": [],
+    "d3fend": [
+      "D3-ABPI",
+      "D3-EHB",
+      "D3-ER",
+      "D3-HBPI",
+      "D3-HR",
+      "D3-HS",
+      "D3-KBPI",
+      "D3-LLM",
+      "D3-NNI",
+      "D3-PLA",
+      "D3-PLM",
+      "D3-PS",
+      "D3-PSA",
+      "D3-PSMD",
+      "D3-PT",
+      "D3-RNA",
+      "D3-SCF",
+      "D3-WSAM"
+    ]
+  },
+  "T1505.003": {
+    "capec": [
+      "CAPEC-650"
+    ],
+    "d3fend": [
+      "D3-ABPI",
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-EHB",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-HBPI",
+      "D3-HR",
+      "D3-HS",
+      "D3-KBPI",
+      "D3-LFP",
+      "D3-LLM",
+      "D3-NNI",
+      "D3-PLA",
+      "D3-PLM",
+      "D3-PS",
+      "D3-PSA",
+      "D3-PSMD",
+      "D3-PT",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-RNA",
+      "D3-SCF"
+    ]
+  },
+  "T1505.004": {
+    "capec": [
+      "CAPEC-698"
+    ],
+    "d3fend": [
+      "D3-AVE",
+      "D3-RS",
+      "D3-SU",
+      "D3-SWI"
+    ]
+  },
+  "T1505.005": {
+    "capec": [
+      "CAPEC-558",
+      "CAPEC-640",
+      "CAPEC-642"
+    ],
+    "d3fend": []
+  },
+  "T1505.006": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1509": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1512": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1513": {
+    "capec": [
+      "CAPEC-648"
+    ],
+    "d3fend": []
+  },
+  "T1516": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1517": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1518": {
+    "capec": [],
+    "d3fend": [
+      "D3-CI",
+      "D3-CQ",
+      "D3-RC",
+      "D3-SCA",
+      "D3-SCF"
+    ]
+  },
+  "T1518.001": {
+    "capec": [
+      "CAPEC-581"
+    ],
+    "d3fend": [
+      "D3-CI",
+      "D3-CQ",
+      "D3-RC",
+      "D3-SCA",
+      "D3-SCF"
+    ]
+  },
+  "T1518.002": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1521": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1521.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1521.002": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1521.003": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1525": {
+    "capec": [],
+    "d3fend": [
+      "D3-CIA"
+    ]
+  },
+  "T1526": {
+    "capec": [],
+    "d3fend": [
+      "D3-CI",
+      "D3-RC"
+    ]
+  },
+  "T1528": {
+    "capec": [
+      "CAPEC-21"
+    ],
+    "d3fend": [
+      "D3-ANCI",
+      "D3-CCSA",
+      "D3-CH",
+      "D3-CR",
+      "D3-CRO",
+      "D3-CTS",
+      "D3-DUC",
+      "D3-MFA",
+      "D3-RIC",
+      "D3-TB",
+      "D3-TBA"
+    ]
+  },
+  "T1529": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1530": {
+    "capec": [
+      "CAPEC-150"
+    ],
+    "d3fend": []
+  },
+  "T1531": {
+    "capec": [
+      "CAPEC-2"
+    ],
+    "d3fend": [
+      "D3-AA",
+      "D3-AL",
+      "D3-AM",
+      "D3-CDP",
+      "D3-RUAA",
+      "D3-UAP",
+      "D3-ULA"
+    ]
+  },
+  "T1532": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1533": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1534": {
+    "capec": [
+      "CAPEC-163"
+    ],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-DI",
+      "D3-EF",
+      "D3-EFA",
+      "D3-ER",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-HD",
+      "D3-LFP",
+      "D3-RE",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-SMRA",
+      "D3-SRA"
+    ]
+  },
+  "T1535": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1537": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1538": {
+    "capec": [],
+    "d3fend": [
+      "D3-CI",
+      "D3-RC"
+    ]
+  },
+  "T1539": {
+    "capec": [
+      "CAPEC-21",
+      "CAPEC-31"
+    ],
+    "d3fend": [
+      "D3-ANCI",
+      "D3-CCSA",
+      "D3-CH",
+      "D3-CR",
+      "D3-CRO",
+      "D3-CTS",
+      "D3-DUC",
+      "D3-MFA",
+      "D3-RIC"
+    ]
+  },
+  "T1541": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1542": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-AVE",
+      "D3-BA",
+      "D3-CSPP",
+      "D3-FBA",
+      "D3-FEMC",
+      "D3-FV",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RS",
+      "D3-RTSD",
+      "D3-SFV",
+      "D3-SU",
+      "D3-SWI",
+      "D3-UGLPA"
+    ]
+  },
+  "T1542.001": {
+    "capec": [
+      "CAPEC-532"
+    ],
+    "d3fend": [
+      "D3-AVE",
+      "D3-FBA",
+      "D3-FEMC",
+      "D3-FV",
+      "D3-RS",
+      "D3-SFV",
+      "D3-SU",
+      "D3-SWI"
+    ]
+  },
+  "T1542.002": {
+    "capec": [
+      "CAPEC-638",
+      "CAPEC-665"
+    ],
+    "d3fend": [
+      "D3-AVE",
+      "D3-FBA",
+      "D3-FEMC",
+      "D3-FV",
+      "D3-RS",
+      "D3-SU",
+      "D3-SWI"
+    ]
+  },
+  "T1542.003": {
+    "capec": [
+      "CAPEC-552"
+    ],
+    "d3fend": [
+      "D3-AVE",
+      "D3-BA",
+      "D3-RS",
+      "D3-SU",
+      "D3-SWI"
+    ]
+  },
+  "T1542.004": {
+    "capec": [],
+    "d3fend": [
+      "D3-AVE",
+      "D3-FBA",
+      "D3-FEMC",
+      "D3-FV",
+      "D3-RS",
+      "D3-SFV",
+      "D3-SU",
+      "D3-SWI"
+    ]
+  },
+  "T1542.005": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1543": {
+    "capec": [
+      "CAPEC-550",
+      "CAPEC-551"
+    ],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DF",
+      "D3-DI",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RD",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-SCP",
+      "D3-SFA"
+    ]
+  },
+  "T1543.001": {
+    "capec": [
+      "CAPEC-564"
+    ],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DF",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM"
+    ]
+  },
+  "T1543.002": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DF",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-SFA"
+    ]
+  },
+  "T1543.003": {
+    "capec": [
+      "CAPEC-478"
+    ],
+    "d3fend": [
+      "D3-DI",
+      "D3-RD",
+      "D3-SCP"
+    ]
+  },
+  "T1543.004": {
+    "capec": [
+      "CAPEC-564"
+    ],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DF",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM"
+    ]
+  },
+  "T1543.005": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1544": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1546": {
+    "capec": [],
+    "d3fend": [
+      "D3-ABPI",
+      "D3-AEM",
+      "D3-ANAA",
+      "D3-APCA",
+      "D3-AVE",
+      "D3-CAA",
+      "D3-CF",
+      "D3-CI",
+      "D3-CM",
+      "D3-CQ",
+      "D3-CSPP",
+      "D3-DA",
+      "D3-DF",
+      "D3-DI",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-HBPI",
+      "D3-HR",
+      "D3-HS",
+      "D3-KBPI",
+      "D3-LFP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-OPM",
+      "D3-PHDURA",
+      "D3-PLA",
+      "D3-PMAD",
+      "D3-PS",
+      "D3-PSA",
+      "D3-PSMD",
+      "D3-PT",
+      "D3-RC",
+      "D3-RD",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-RS",
+      "D3-RTSD",
+      "D3-SCA",
+      "D3-SCF",
+      "D3-SCP",
+      "D3-SU",
+      "D3-SWI",
+      "D3-UGLPA",
+      "D3-USICA"
+    ]
+  },
+  "T1546.001": {
+    "capec": [
+      "CAPEC-556"
+    ],
+    "d3fend": [
+      "D3-CI",
+      "D3-CQ",
+      "D3-RC"
+    ]
+  },
+  "T1546.002": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CI",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RC",
+      "D3-RF",
+      "D3-RFAM"
+    ]
+  },
+  "T1546.003": {
+    "capec": [],
+    "d3fend": [
+      "D3-AEM",
+      "D3-ANAA",
+      "D3-APCA",
+      "D3-CAA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-OPM",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1546.004": {
+    "capec": [
+      "CAPEC-19"
+    ],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DF",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-USICA"
+    ]
+  },
+  "T1546.005": {
+    "capec": [],
+    "d3fend": [
+      "D3-AEM",
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-OPM",
+      "D3-RF",
+      "D3-RFAM"
+    ]
+  },
+  "T1546.006": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM"
+    ]
+  },
+  "T1546.007": {
+    "capec": [],
+    "d3fend": [
+      "D3-ABPI",
+      "D3-CI",
+      "D3-CQ",
+      "D3-HBPI",
+      "D3-HR",
+      "D3-HS",
+      "D3-KBPI",
+      "D3-PLA",
+      "D3-PS",
+      "D3-PSA",
+      "D3-PSMD",
+      "D3-PT",
+      "D3-RC",
+      "D3-SCF"
+    ]
+  },
+  "T1546.008": {
+    "capec": [
+      "CAPEC-558"
+    ],
+    "d3fend": [
+      "D3-ANAA",
+      "D3-APCA",
+      "D3-CAA",
+      "D3-CF",
+      "D3-CI",
+      "D3-CM",
+      "D3-CQ",
+      "D3-CSPP",
+      "D3-DA",
+      "D3-DF",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RC",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1546.009": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CI",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DF",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-HBPI",
+      "D3-LFP",
+      "D3-PSA",
+      "D3-RC",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-SCA",
+      "D3-SCF"
+    ]
+  },
+  "T1546.010": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CI",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DF",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-HBPI",
+      "D3-LFP",
+      "D3-PSA",
+      "D3-RC",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-SCA",
+      "D3-SCF"
+    ]
+  },
+  "T1546.011": {
+    "capec": [],
+    "d3fend": [
+      "D3-AVE",
+      "D3-CI",
+      "D3-RC",
+      "D3-RS",
+      "D3-SU",
+      "D3-SWI"
+    ]
+  },
+  "T1546.012": {
+    "capec": [],
+    "d3fend": [
+      "D3-DI",
+      "D3-RD",
+      "D3-SCP"
+    ]
+  },
+  "T1546.013": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM"
+    ]
+  },
+  "T1546.014": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CI",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DF",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RC",
+      "D3-RF",
+      "D3-RFAM"
+    ]
+  },
+  "T1546.015": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-DI",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RD",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-SCP"
+    ]
+  },
+  "T1546.016": {
+    "capec": [
+      "CAPEC-19"
+    ],
+    "d3fend": []
+  },
+  "T1546.017": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1546.018": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1547": {
+    "capec": [
+      "CAPEC-564"
+    ],
+    "d3fend": [
+      "D3-AVE",
+      "D3-CF",
+      "D3-CI",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RC",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-RS",
+      "D3-SICA",
+      "D3-SU",
+      "D3-SWI"
+    ]
+  },
+  "T1547.001": {
+    "capec": [
+      "CAPEC-270"
+    ],
+    "d3fend": [
+      "D3-CF",
+      "D3-CI",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RC",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-SICA"
+    ]
+  },
+  "T1547.002": {
+    "capec": [],
+    "d3fend": [
+      "D3-CI",
+      "D3-CQ",
+      "D3-RC"
+    ]
+  },
+  "T1547.003": {
+    "capec": [],
+    "d3fend": [
+      "D3-CI",
+      "D3-CQ",
+      "D3-RC"
+    ]
+  },
+  "T1547.004": {
+    "capec": [
+      "CAPEC-579"
+    ],
+    "d3fend": [
+      "D3-CI",
+      "D3-CQ",
+      "D3-RC"
+    ]
+  },
+  "T1547.005": {
+    "capec": [],
+    "d3fend": [
+      "D3-CI",
+      "D3-CQ",
+      "D3-RC"
+    ]
+  },
+  "T1547.006": {
+    "capec": [
+      "CAPEC-552"
+    ],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DF",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM"
+    ]
+  },
+  "T1547.007": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DF",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM"
+    ]
+  },
+  "T1547.008": {
+    "capec": [],
+    "d3fend": [
+      "D3-AVE",
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DF",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-RS",
+      "D3-SU",
+      "D3-SWI"
+    ]
+  },
+  "T1547.009": {
+    "capec": [
+      "CAPEC-132"
+    ],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM"
+    ]
+  },
+  "T1547.010": {
+    "capec": [],
+    "d3fend": [
+      "D3-CI",
+      "D3-CQ",
+      "D3-RC"
+    ]
+  },
+  "T1547.012": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1547.013": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1547.014": {
+    "capec": [
+      "CAPEC-270"
+    ],
+    "d3fend": []
+  },
+  "T1547.015": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1548": {
+    "capec": [
+      "CAPEC-114",
+      "CAPEC-115",
+      "CAPEC-122",
+      "CAPEC-233"
+    ],
+    "d3fend": [
+      "D3-AA",
+      "D3-AEM",
+      "D3-AL",
+      "D3-AM",
+      "D3-CDP",
+      "D3-CF",
+      "D3-CI",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-DI",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-HBPI",
+      "D3-LFP",
+      "D3-NTPM",
+      "D3-OPM",
+      "D3-PSA",
+      "D3-RC",
+      "D3-RD",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-RUAA",
+      "D3-SCA",
+      "D3-SCF",
+      "D3-SCP",
+      "D3-SFA",
+      "D3-UAP",
+      "D3-ULA"
+    ]
+  },
+  "T1548.001": {
+    "capec": [],
+    "d3fend": [
+      "D3-AM",
+      "D3-CI",
+      "D3-NTPM",
+      "D3-RC"
+    ]
+  },
+  "T1548.002": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CI",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-HBPI",
+      "D3-LFP",
+      "D3-PSA",
+      "D3-RC",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-SCA",
+      "D3-SCF"
+    ]
+  },
+  "T1548.003": {
+    "capec": [],
+    "d3fend": [
+      "D3-AEM",
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DF",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-OPM",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-SFA"
+    ]
+  },
+  "T1548.004": {
+    "capec": [
+      "CAPEC-654"
+    ],
+    "d3fend": [
+      "D3-DI",
+      "D3-RD",
+      "D3-SCA",
+      "D3-SCF",
+      "D3-SCP"
+    ]
+  },
+  "T1548.005": {
+    "capec": [],
+    "d3fend": [
+      "D3-AA",
+      "D3-AL",
+      "D3-AM",
+      "D3-CDP",
+      "D3-CI",
+      "D3-NTPM",
+      "D3-RC",
+      "D3-RUAA",
+      "D3-UAP",
+      "D3-ULA"
+    ]
+  },
+  "T1548.006": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1550": {
+    "capec": [],
+    "d3fend": [
+      "D3-ABPI",
+      "D3-ANCI",
+      "D3-APCA",
+      "D3-CCSA",
+      "D3-CH",
+      "D3-CR",
+      "D3-CRO",
+      "D3-CSPP",
+      "D3-CTS",
+      "D3-DUC",
+      "D3-HBPI",
+      "D3-HR",
+      "D3-HS",
+      "D3-KBPI",
+      "D3-MFA",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-PHDURA",
+      "D3-PLA",
+      "D3-PMAD",
+      "D3-PS",
+      "D3-PSA",
+      "D3-PSMD",
+      "D3-PT",
+      "D3-RIC",
+      "D3-RTSD",
+      "D3-SCF",
+      "D3-TB",
+      "D3-TBA",
+      "D3-UGLPA",
+      "D3-WSAM"
+    ]
+  },
+  "T1550.001": {
+    "capec": [
+      "CAPEC-593"
+    ],
+    "d3fend": [
+      "D3-ABPI",
+      "D3-ANCI",
+      "D3-APCA",
+      "D3-CCSA",
+      "D3-CH",
+      "D3-CR",
+      "D3-CRO",
+      "D3-CSPP",
+      "D3-CTS",
+      "D3-DUC",
+      "D3-HBPI",
+      "D3-HR",
+      "D3-HS",
+      "D3-KBPI",
+      "D3-MFA",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-PHDURA",
+      "D3-PLA",
+      "D3-PMAD",
+      "D3-PS",
+      "D3-PSA",
+      "D3-PSMD",
+      "D3-PT",
+      "D3-RIC",
+      "D3-RTSD",
+      "D3-SCF",
+      "D3-TB",
+      "D3-TBA",
+      "D3-UGLPA",
+      "D3-WSAM"
+    ]
+  },
+  "T1550.002": {
+    "capec": [
+      "CAPEC-644"
+    ],
+    "d3fend": [
+      "D3-ABPI",
+      "D3-HBPI",
+      "D3-HR",
+      "D3-HS",
+      "D3-KBPI",
+      "D3-PLA",
+      "D3-PS",
+      "D3-PSA",
+      "D3-PSMD",
+      "D3-PT",
+      "D3-SCF",
+      "D3-WSAM"
+    ]
+  },
+  "T1550.003": {
+    "capec": [
+      "CAPEC-645"
+    ],
+    "d3fend": [
+      "D3-ABPI",
+      "D3-HBPI",
+      "D3-HR",
+      "D3-HS",
+      "D3-KBPI",
+      "D3-PLA",
+      "D3-PS",
+      "D3-PSA",
+      "D3-PSMD",
+      "D3-PT",
+      "D3-SCF",
+      "D3-WSAM"
+    ]
+  },
+  "T1550.004": {
+    "capec": [
+      "CAPEC-60"
+    ],
+    "d3fend": [
+      "D3-ABPI",
+      "D3-ANCI",
+      "D3-APCA",
+      "D3-CCSA",
+      "D3-CH",
+      "D3-CR",
+      "D3-CRO",
+      "D3-CSPP",
+      "D3-CTS",
+      "D3-DUC",
+      "D3-HBPI",
+      "D3-HR",
+      "D3-HS",
+      "D3-KBPI",
+      "D3-MFA",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-PHDURA",
+      "D3-PLA",
+      "D3-PMAD",
+      "D3-PS",
+      "D3-PSA",
+      "D3-PSMD",
+      "D3-PT",
+      "D3-RIC",
+      "D3-RTSD",
+      "D3-SCF",
+      "D3-UGLPA",
+      "D3-WSAM"
+    ]
+  },
+  "T1552": {
+    "capec": [],
+    "d3fend": [
+      "D3-AM",
+      "D3-ANCI",
+      "D3-CCSA",
+      "D3-CF",
+      "D3-CH",
+      "D3-CI",
+      "D3-CM",
+      "D3-CQ",
+      "D3-CR",
+      "D3-CRO",
+      "D3-CTS",
+      "D3-DF",
+      "D3-DI",
+      "D3-DUC",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-MFA",
+      "D3-NTPM",
+      "D3-RC",
+      "D3-RD",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-RIC",
+      "D3-SCP"
+    ]
+  },
+  "T1552.001": {
+    "capec": [
+      "CAPEC-191",
+      "CAPEC-639"
+    ],
+    "d3fend": [
+      "D3-ANCI",
+      "D3-CCSA",
+      "D3-CF",
+      "D3-CH",
+      "D3-CM",
+      "D3-CQ",
+      "D3-CR",
+      "D3-CRO",
+      "D3-CTS",
+      "D3-DF",
+      "D3-DUC",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-MFA",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-RIC"
+    ]
+  },
+  "T1552.002": {
+    "capec": [
+      "CAPEC-647"
+    ],
+    "d3fend": [
+      "D3-ANCI",
+      "D3-CCSA",
+      "D3-CH",
+      "D3-CR",
+      "D3-CRO",
+      "D3-CTS",
+      "D3-DI",
+      "D3-DUC",
+      "D3-MFA",
+      "D3-RD",
+      "D3-RIC",
+      "D3-SCP"
+    ]
+  },
+  "T1552.003": {
+    "capec": [
+      "CAPEC-639"
+    ],
+    "d3fend": [
+      "D3-ANCI",
+      "D3-CCSA",
+      "D3-CF",
+      "D3-CH",
+      "D3-CM",
+      "D3-CQ",
+      "D3-CR",
+      "D3-CRO",
+      "D3-CTS",
+      "D3-DF",
+      "D3-DUC",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-MFA",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-RIC"
+    ]
+  },
+  "T1552.004": {
+    "capec": [
+      "CAPEC-37",
+      "CAPEC-474",
+      "CAPEC-485",
+      "CAPEC-639"
+    ],
+    "d3fend": [
+      "D3-ANCI",
+      "D3-CCSA",
+      "D3-CH",
+      "D3-CR",
+      "D3-CRO",
+      "D3-CTS",
+      "D3-DUC",
+      "D3-MFA",
+      "D3-RIC"
+    ]
+  },
+  "T1552.005": {
+    "capec": [],
+    "d3fend": [
+      "D3-ANCI",
+      "D3-CCSA",
+      "D3-CH",
+      "D3-CI",
+      "D3-CR",
+      "D3-CRO",
+      "D3-CTS",
+      "D3-DUC",
+      "D3-MFA",
+      "D3-RC",
+      "D3-RIC"
+    ]
+  },
+  "T1552.006": {
+    "capec": [
+      "CAPEC-639"
+    ],
+    "d3fend": [
+      "D3-AM",
+      "D3-ANCI",
+      "D3-CCSA",
+      "D3-CH",
+      "D3-CI",
+      "D3-CR",
+      "D3-CRO",
+      "D3-CTS",
+      "D3-DUC",
+      "D3-MFA",
+      "D3-NTPM",
+      "D3-RC",
+      "D3-RIC"
+    ]
+  },
+  "T1552.007": {
+    "capec": [],
+    "d3fend": [
+      "D3-ANCI",
+      "D3-CCSA",
+      "D3-CH",
+      "D3-CR",
+      "D3-CRO",
+      "D3-CTS",
+      "D3-DUC",
+      "D3-MFA",
+      "D3-RIC"
+    ]
+  },
+  "T1552.008": {
+    "capec": [],
+    "d3fend": [
+      "D3-ANCI",
+      "D3-CCSA",
+      "D3-CH",
+      "D3-CR",
+      "D3-CRO",
+      "D3-CTS",
+      "D3-DUC",
+      "D3-MFA",
+      "D3-RIC"
+    ]
+  },
+  "T1553": {
+    "capec": [],
+    "d3fend": [
+      "D3-CI",
+      "D3-CQ",
+      "D3-RC"
+    ]
+  },
+  "T1553.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1553.002": {
+    "capec": [
+      "CAPEC-206",
+      "CAPEC-473",
+      "CAPEC-68"
+    ],
+    "d3fend": []
+  },
+  "T1553.003": {
+    "capec": [],
+    "d3fend": [
+      "D3-CI",
+      "D3-CQ",
+      "D3-RC"
+    ]
+  },
+  "T1553.004": {
+    "capec": [
+      "CAPEC-479"
+    ],
+    "d3fend": []
+  },
+  "T1553.005": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1553.006": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1554": {
+    "capec": [
+      "CAPEC-642"
+    ],
+    "d3fend": [
+      "D3-AVE",
+      "D3-RS",
+      "D3-SU",
+      "D3-SWI"
+    ]
+  },
+  "T1555": {
+    "capec": [
+      "CAPEC-150"
+    ],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DF",
+      "D3-DI",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RD",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-SCA",
+      "D3-SCF"
+    ]
+  },
+  "T1555.001": {
+    "capec": [
+      "CAPEC-545"
+    ],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DF",
+      "D3-DI",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RD",
+      "D3-RF",
+      "D3-RFAM"
+    ]
+  },
+  "T1555.002": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DF",
+      "D3-DI",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RD",
+      "D3-RF",
+      "D3-RFAM"
+    ]
+  },
+  "T1555.003": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DF",
+      "D3-DI",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RD",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-SCA",
+      "D3-SCF"
+    ]
+  },
+  "T1555.004": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DF",
+      "D3-DI",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RD",
+      "D3-RF",
+      "D3-RFAM"
+    ]
+  },
+  "T1555.005": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DF",
+      "D3-DI",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RD",
+      "D3-RF",
+      "D3-RFAM"
+    ]
+  },
+  "T1555.006": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DF",
+      "D3-DI",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RD",
+      "D3-RF",
+      "D3-RFAM"
+    ]
+  },
+  "T1556": {
+    "capec": [
+      "CAPEC-665"
+    ],
+    "d3fend": [
+      "D3-ABPI",
+      "D3-AM",
+      "D3-CF",
+      "D3-CI",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DF",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-HBPI",
+      "D3-HR",
+      "D3-HS",
+      "D3-KBPI",
+      "D3-LFP",
+      "D3-NTPM",
+      "D3-PLA",
+      "D3-PS",
+      "D3-PSA",
+      "D3-PSMD",
+      "D3-PT",
+      "D3-RC",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-SCF",
+      "D3-SFA",
+      "D3-WSAM"
+    ]
+  },
+  "T1556.001": {
+    "capec": [],
+    "d3fend": [
+      "D3-ABPI",
+      "D3-HBPI",
+      "D3-HR",
+      "D3-HS",
+      "D3-KBPI",
+      "D3-PLA",
+      "D3-PS",
+      "D3-PSA",
+      "D3-PSMD",
+      "D3-PT",
+      "D3-SCF",
+      "D3-WSAM"
+    ]
+  },
+  "T1556.002": {
+    "capec": [],
+    "d3fend": [
+      "D3-ABPI",
+      "D3-CF",
+      "D3-CI",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DF",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-HBPI",
+      "D3-HR",
+      "D3-HS",
+      "D3-KBPI",
+      "D3-LFP",
+      "D3-PLA",
+      "D3-PS",
+      "D3-PSA",
+      "D3-PSMD",
+      "D3-PT",
+      "D3-RC",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-SCF",
+      "D3-WSAM"
+    ]
+  },
+  "T1556.003": {
+    "capec": [],
+    "d3fend": [
+      "D3-ABPI",
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DF",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-HBPI",
+      "D3-HR",
+      "D3-HS",
+      "D3-KBPI",
+      "D3-LFP",
+      "D3-PLA",
+      "D3-PS",
+      "D3-PSA",
+      "D3-PSMD",
+      "D3-PT",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-SCF",
+      "D3-SFA",
+      "D3-WSAM"
+    ]
+  },
+  "T1556.004": {
+    "capec": [],
+    "d3fend": [
+      "D3-ABPI",
+      "D3-HBPI",
+      "D3-HR",
+      "D3-HS",
+      "D3-KBPI",
+      "D3-PLA",
+      "D3-PS",
+      "D3-PSA",
+      "D3-PSMD",
+      "D3-PT",
+      "D3-SCF",
+      "D3-WSAM"
+    ]
+  },
+  "T1556.005": {
+    "capec": [],
+    "d3fend": [
+      "D3-ABPI",
+      "D3-HBPI",
+      "D3-HR",
+      "D3-HS",
+      "D3-KBPI",
+      "D3-PLA",
+      "D3-PS",
+      "D3-PSA",
+      "D3-PSMD",
+      "D3-PT",
+      "D3-SCF",
+      "D3-WSAM"
+    ]
+  },
+  "T1556.006": {
+    "capec": [
+      "CAPEC-578"
+    ],
+    "d3fend": [
+      "D3-ABPI",
+      "D3-HBPI",
+      "D3-HR",
+      "D3-HS",
+      "D3-KBPI",
+      "D3-PLA",
+      "D3-PS",
+      "D3-PSA",
+      "D3-PSMD",
+      "D3-PT",
+      "D3-SCF",
+      "D3-WSAM"
+    ]
+  },
+  "T1556.007": {
+    "capec": [],
+    "d3fend": [
+      "D3-ABPI",
+      "D3-HBPI",
+      "D3-HR",
+      "D3-HS",
+      "D3-KBPI",
+      "D3-PLA",
+      "D3-PS",
+      "D3-PSA",
+      "D3-PSMD",
+      "D3-PT",
+      "D3-SCF",
+      "D3-WSAM"
+    ]
+  },
+  "T1556.008": {
+    "capec": [],
+    "d3fend": [
+      "D3-ABPI",
+      "D3-HBPI",
+      "D3-HR",
+      "D3-HS",
+      "D3-KBPI",
+      "D3-PLA",
+      "D3-PS",
+      "D3-PSA",
+      "D3-PSMD",
+      "D3-PT",
+      "D3-SCF",
+      "D3-WSAM"
+    ]
+  },
+  "T1556.009": {
+    "capec": [],
+    "d3fend": [
+      "D3-ABPI",
+      "D3-AM",
+      "D3-CI",
+      "D3-HBPI",
+      "D3-HR",
+      "D3-HS",
+      "D3-KBPI",
+      "D3-NTPM",
+      "D3-PLA",
+      "D3-PS",
+      "D3-PSA",
+      "D3-PSMD",
+      "D3-PT",
+      "D3-RC",
+      "D3-SCF",
+      "D3-WSAM"
+    ]
+  },
+  "T1557": {
+    "capec": [
+      "CAPEC-94"
+    ],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CAA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1557.001": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CAA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1557.002": {
+    "capec": [
+      "CAPEC-141"
+    ],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1557.003": {
+    "capec": [
+      "CAPEC-697"
+    ],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1557.004": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1558": {
+    "capec": [
+      "CAPEC-652"
+    ],
+    "d3fend": [
+      "D3-ANCI",
+      "D3-APCA",
+      "D3-CCSA",
+      "D3-CH",
+      "D3-CR",
+      "D3-CRO",
+      "D3-CSPP",
+      "D3-CTS",
+      "D3-DUC",
+      "D3-MFA",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RIC",
+      "D3-RTA",
+      "D3-RTSD",
+      "D3-TB",
+      "D3-TBA",
+      "D3-UGLPA"
+    ]
+  },
+  "T1558.001": {
+    "capec": [],
+    "d3fend": [
+      "D3-ANCI",
+      "D3-CCSA",
+      "D3-CH",
+      "D3-CR",
+      "D3-CRO",
+      "D3-CTS",
+      "D3-DUC",
+      "D3-MFA",
+      "D3-RIC",
+      "D3-TB",
+      "D3-TBA"
+    ]
+  },
+  "T1558.002": {
+    "capec": [],
+    "d3fend": [
+      "D3-ANCI",
+      "D3-CCSA",
+      "D3-CH",
+      "D3-CR",
+      "D3-CRO",
+      "D3-CTS",
+      "D3-DUC",
+      "D3-MFA",
+      "D3-RIC",
+      "D3-TB",
+      "D3-TBA"
+    ]
+  },
+  "T1558.003": {
+    "capec": [
+      "CAPEC-509"
+    ],
+    "d3fend": [
+      "D3-ANCI",
+      "D3-APCA",
+      "D3-CCSA",
+      "D3-CH",
+      "D3-CR",
+      "D3-CRO",
+      "D3-CSPP",
+      "D3-CTS",
+      "D3-DUC",
+      "D3-MFA",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RIC",
+      "D3-RTA",
+      "D3-RTSD",
+      "D3-TB",
+      "D3-TBA",
+      "D3-UGLPA"
+    ]
+  },
+  "T1558.004": {
+    "capec": [],
+    "d3fend": [
+      "D3-ANCI",
+      "D3-CCSA",
+      "D3-CH",
+      "D3-CR",
+      "D3-CRO",
+      "D3-CTS",
+      "D3-DUC",
+      "D3-MFA",
+      "D3-RIC",
+      "D3-TB",
+      "D3-TBA"
+    ]
+  },
+  "T1558.005": {
+    "capec": [],
+    "d3fend": [
+      "D3-ANCI",
+      "D3-CCSA",
+      "D3-CH",
+      "D3-CR",
+      "D3-CRO",
+      "D3-CTS",
+      "D3-DUC",
+      "D3-MFA",
+      "D3-RIC",
+      "D3-TB",
+      "D3-TBA"
+    ]
+  },
+  "T1559": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1559.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1559.002": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1559.003": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1560": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DF",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM"
+    ]
+  },
+  "T1560.001": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DF",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM"
+    ]
+  },
+  "T1560.002": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DF",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM"
+    ]
+  },
+  "T1560.003": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DF",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM"
+    ]
+  },
+  "T1561": {
+    "capec": [],
+    "d3fend": [
+      "D3-DKP"
+    ]
+  },
+  "T1561.001": {
+    "capec": [],
+    "d3fend": [
+      "D3-DKP"
+    ]
+  },
+  "T1561.002": {
+    "capec": [],
+    "d3fend": [
+      "D3-DKP"
+    ]
+  },
+  "T1562": {
+    "capec": [],
+    "d3fend": [
+      "D3-ABPI",
+      "D3-ACH",
+      "D3-CF",
+      "D3-CI",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-DRA",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-EHB",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-HBPI",
+      "D3-HR",
+      "D3-HS",
+      "D3-KBPI",
+      "D3-LFP",
+      "D3-LLM",
+      "D3-NNI",
+      "D3-PLA",
+      "D3-PLM",
+      "D3-PS",
+      "D3-PSA",
+      "D3-PSMD",
+      "D3-PT",
+      "D3-RC",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-RKD",
+      "D3-SCF",
+      "D3-SDM",
+      "D3-SICA",
+      "D3-SYSVA"
+    ]
+  },
+  "T1562.001": {
+    "capec": [
+      "CAPEC-578"
+    ],
+    "d3fend": [
+      "D3-ABPI",
+      "D3-HBPI",
+      "D3-HR",
+      "D3-HS",
+      "D3-KBPI",
+      "D3-PLA",
+      "D3-PS",
+      "D3-PSA",
+      "D3-PSMD",
+      "D3-PT",
+      "D3-SCF",
+      "D3-SDM"
+    ]
+  },
+  "T1562.002": {
+    "capec": [
+      "CAPEC-268",
+      "CAPEC-571",
+      "CAPEC-578"
+    ],
+    "d3fend": [
+      "D3-ACH",
+      "D3-CI",
+      "D3-DRA",
+      "D3-RC"
+    ]
+  },
+  "T1562.003": {
+    "capec": [
+      "CAPEC-13",
+      "CAPEC-268"
+    ],
+    "d3fend": [
+      "D3-ACH",
+      "D3-CF",
+      "D3-CI",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-DRA",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RC",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-RKD"
+    ]
+  },
+  "T1562.004": {
+    "capec": [
+      "CAPEC-578"
+    ],
+    "d3fend": [
+      "D3-CI",
+      "D3-RC"
+    ]
+  },
+  "T1562.006": {
+    "capec": [
+      "CAPEC-571"
+    ],
+    "d3fend": []
+  },
+  "T1562.007": {
+    "capec": [
+      "CAPEC-578"
+    ],
+    "d3fend": [
+      "D3-CI",
+      "D3-RC"
+    ]
+  },
+  "T1562.008": {
+    "capec": [
+      "CAPEC-268",
+      "CAPEC-571",
+      "CAPEC-578"
+    ],
+    "d3fend": [
+      "D3-CI",
+      "D3-RC"
+    ]
+  },
+  "T1562.009": {
+    "capec": [
+      "CAPEC-578"
+    ],
+    "d3fend": [
+      "D3-CI",
+      "D3-CQ",
+      "D3-RC",
+      "D3-SICA"
+    ]
+  },
+  "T1562.010": {
+    "capec": [],
+    "d3fend": [
+      "D3-SYSVA"
+    ]
+  },
+  "T1562.011": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1562.012": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1562.013": {
+    "capec": [],
+    "d3fend": [
+      "D3-EHB",
+      "D3-LLM",
+      "D3-NNI",
+      "D3-PLM"
+    ]
+  },
+  "T1563": {
+    "capec": [
+      "CAPEC-593"
+    ],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RTSD",
+      "D3-ST",
+      "D3-UGLPA"
+    ]
+  },
+  "T1563.001": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RTSD",
+      "D3-ST",
+      "D3-UGLPA"
+    ]
+  },
+  "T1563.002": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RTSD",
+      "D3-ST",
+      "D3-UGLPA"
+    ]
+  },
+  "T1564": {
+    "capec": [],
+    "d3fend": [
+      "D3-ACH",
+      "D3-AVE",
+      "D3-CF",
+      "D3-CI",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DENCR",
+      "D3-DF",
+      "D3-DI",
+      "D3-DRA",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FFV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RC",
+      "D3-RD",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-RS",
+      "D3-SBV",
+      "D3-SCP",
+      "D3-SU",
+      "D3-SWI",
+      "D3-USICA"
+    ]
+  },
+  "T1564.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1564.002": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DF",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-USICA"
+    ]
+  },
+  "T1564.003": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DF",
+      "D3-DI",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RD",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-SCP"
+    ]
+  },
+  "T1564.004": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1564.005": {
+    "capec": [],
+    "d3fend": [
+      "D3-DENCR",
+      "D3-DI",
+      "D3-RD",
+      "D3-SCP"
+    ]
+  },
+  "T1564.006": {
+    "capec": [],
+    "d3fend": [
+      "D3-AVE",
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DF",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-RS",
+      "D3-SBV",
+      "D3-SU",
+      "D3-SWI"
+    ]
+  },
+  "T1564.007": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-DI",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM"
+    ]
+  },
+  "T1564.008": {
+    "capec": [],
+    "d3fend": [
+      "D3-ACH",
+      "D3-CI",
+      "D3-DRA",
+      "D3-RC"
+    ]
+  },
+  "T1564.009": {
+    "capec": [
+      "CAPEC-35"
+    ],
+    "d3fend": [
+      "D3-FFV"
+    ]
+  },
+  "T1564.010": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1564.011": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1564.012": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1564.013": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1564.014": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1565": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-CSPP",
+      "D3-DA",
+      "D3-DF",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1565.001": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DF",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM"
+    ]
+  },
+  "T1565.002": {
+    "capec": [
+      "CAPEC-668"
+    ],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1565.003": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM"
+    ]
+  },
+  "T1566": {
+    "capec": [
+      "CAPEC-98"
+    ],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-CSPP",
+      "D3-DA",
+      "D3-DF",
+      "D3-DI",
+      "D3-EF",
+      "D3-EFA",
+      "D3-ER",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-HD",
+      "D3-IAA",
+      "D3-ISVA",
+      "D3-ITF",
+      "D3-LFP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RE",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-RTSD",
+      "D3-SMRA",
+      "D3-SRA",
+      "D3-UA",
+      "D3-UGLPA",
+      "D3-URA"
+    ]
+  },
+  "T1566.001": {
+    "capec": [
+      "CAPEC-163"
+    ],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-CSPP",
+      "D3-DA",
+      "D3-DF",
+      "D3-DI",
+      "D3-EF",
+      "D3-EFA",
+      "D3-ER",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-HD",
+      "D3-ISVA",
+      "D3-ITF",
+      "D3-LFP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RE",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-RTSD",
+      "D3-SMRA",
+      "D3-SRA",
+      "D3-UGLPA"
+    ]
+  },
+  "T1566.002": {
+    "capec": [
+      "CAPEC-163"
+    ],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-CSPP",
+      "D3-DA",
+      "D3-DF",
+      "D3-DI",
+      "D3-EF",
+      "D3-EFA",
+      "D3-ER",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-HD",
+      "D3-IAA",
+      "D3-ISVA",
+      "D3-ITF",
+      "D3-LFP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RE",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-RTSD",
+      "D3-SMRA",
+      "D3-SRA",
+      "D3-UA",
+      "D3-UGLPA",
+      "D3-URA"
+    ]
+  },
+  "T1566.003": {
+    "capec": [
+      "CAPEC-163"
+    ],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DF",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-HD",
+      "D3-IAA",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-UA",
+      "D3-URA"
+    ]
+  },
+  "T1566.004": {
+    "capec": [],
+    "d3fend": []
   },
   "T1567": {
     "capec": [],
     "d3fend": [
-      "D3-DLP"
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-DLP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-OTF",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RPA",
+      "D3-RTSD",
+      "D3-UGLPA"
     ]
+  },
+  "T1567.001": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-OTF",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RPA",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1567.002": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-OTF",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RPA",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1567.003": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-OTF",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RPA",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1567.004": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-OTF",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RPA",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1568": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-DNSAL",
+      "D3-DNSDL",
+      "D3-DNSTA",
+      "D3-FRDDL",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-OTF",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RPA",
+      "D3-RRID",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1568.001": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-DNSAL",
+      "D3-DNSDL",
+      "D3-DNSTA",
+      "D3-FRDDL",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-OTF",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RPA",
+      "D3-RRID",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1568.002": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-DNSAL",
+      "D3-DNSDL",
+      "D3-DNSTA",
+      "D3-FRDDL",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-OTF",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RPA",
+      "D3-RRID",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1568.003": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-DNSAL",
+      "D3-DNSDL",
+      "D3-DNSTA",
+      "D3-FRDDL",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-OTF",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RPA",
+      "D3-RRID",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1569": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1569.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1569.002": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1569.003": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1570": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CAA",
+      "D3-CSPP",
+      "D3-FC",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1571": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-OTF",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RPA",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1572": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-OTF",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RPA",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1573": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CA",
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-CSPP",
+      "D3-DF",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-OTF",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-RPA",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1573.001": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CSPP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-OTF",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RPA",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1573.002": {
+    "capec": [],
+    "d3fend": [
+      "D3-APCA",
+      "D3-CA",
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-CSPP",
+      "D3-DF",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-NTCD",
+      "D3-NTF",
+      "D3-NTSA",
+      "D3-OTF",
+      "D3-PHDURA",
+      "D3-PMAD",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-RPA",
+      "D3-RTSD",
+      "D3-UGLPA"
+    ]
+  },
+  "T1574": {
+    "capec": [],
+    "d3fend": [
+      "D3-AVE",
+      "D3-CF",
+      "D3-CI",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RC",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-RS",
+      "D3-SBV",
+      "D3-SFA",
+      "D3-SICA",
+      "D3-SU",
+      "D3-SWI"
+    ]
+  },
+  "T1574.001": {
+    "capec": [
+      "CAPEC-471"
+    ],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DF",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM"
+    ]
+  },
+  "T1574.002": {
+    "capec": [
+      "CAPEC-641"
+    ],
+    "d3fend": []
+  },
+  "T1574.004": {
+    "capec": [
+      "CAPEC-471"
+    ],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DF",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM"
+    ]
+  },
+  "T1574.005": {
+    "capec": [
+      "CAPEC-17",
+      "CAPEC-642"
+    ],
+    "d3fend": [
+      "D3-AVE",
+      "D3-RS",
+      "D3-SBV",
+      "D3-SU",
+      "D3-SWI"
+    ]
+  },
+  "T1574.006": {
+    "capec": [
+      "CAPEC-13",
+      "CAPEC-640"
+    ],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DF",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-SFA"
+    ]
+  },
+  "T1574.007": {
+    "capec": [
+      "CAPEC-13",
+      "CAPEC-38"
+    ],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM"
+    ]
+  },
+  "T1574.008": {
+    "capec": [
+      "CAPEC-159",
+      "CAPEC-471"
+    ],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM"
+    ]
+  },
+  "T1574.009": {
+    "capec": [
+      "CAPEC-38"
+    ],
+    "d3fend": [
+      "D3-CF",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DA",
+      "D3-DF",
+      "D3-EAL",
+      "D3-EDL",
+      "D3-EFA",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM"
+    ]
+  },
+  "T1574.010": {
+    "capec": [
+      "CAPEC-1",
+      "CAPEC-17",
+      "CAPEC-180"
+    ],
+    "d3fend": [
+      "D3-AVE",
+      "D3-RS",
+      "D3-SBV",
+      "D3-SU",
+      "D3-SWI"
+    ]
+  },
+  "T1574.011": {
+    "capec": [
+      "CAPEC-478"
+    ],
+    "d3fend": [
+      "D3-CI",
+      "D3-CQ",
+      "D3-RC",
+      "D3-SICA"
+    ]
+  },
+  "T1574.012": {
+    "capec": [],
+    "d3fend": [
+      "D3-CF",
+      "D3-CI",
+      "D3-CM",
+      "D3-CQ",
+      "D3-DF",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RC",
+      "D3-RF",
+      "D3-RFAM"
+    ]
+  },
+  "T1574.013": {
+    "capec": [
+      "CAPEC-640"
+    ],
+    "d3fend": []
+  },
+  "T1574.014": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1575": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1577": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1578": {
+    "capec": [],
+    "d3fend": [
+      "D3-CI",
+      "D3-EHB",
+      "D3-LLM",
+      "D3-NNI",
+      "D3-PLM",
+      "D3-RC",
+      "D3-RNA"
+    ]
+  },
+  "T1578.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1578.002": {
+    "capec": [],
+    "d3fend": [
+      "D3-CI",
+      "D3-EHB",
+      "D3-LLM",
+      "D3-NNI",
+      "D3-PLM",
+      "D3-RC",
+      "D3-RNA"
+    ]
+  },
+  "T1578.003": {
+    "capec": [],
+    "d3fend": [
+      "D3-CI",
+      "D3-EHB",
+      "D3-LLM",
+      "D3-NNI",
+      "D3-PLM",
+      "D3-RC",
+      "D3-RNA"
+    ]
+  },
+  "T1578.004": {
+    "capec": [],
+    "d3fend": [
+      "D3-CI",
+      "D3-EHB",
+      "D3-LLM",
+      "D3-NNI",
+      "D3-PLM",
+      "D3-RC",
+      "D3-RNA"
+    ]
+  },
+  "T1578.005": {
+    "capec": [],
+    "d3fend": [
+      "D3-CI",
+      "D3-RC"
+    ]
+  },
+  "T1580": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1582": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1583": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1583.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1583.002": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1583.003": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1583.004": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1583.005": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1583.006": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1583.007": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1583.008": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1584": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1584.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1584.002": {
+    "capec": [
+      "CAPEC-142"
+    ],
+    "d3fend": []
+  },
+  "T1584.003": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1584.004": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1584.005": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1584.006": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1584.007": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1584.008": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1585": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1585.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1585.002": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1585.003": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1586": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1586.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1586.002": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1586.003": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1587": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1587.001": {
+    "capec": [
+      "CAPEC-542"
+    ],
+    "d3fend": []
+  },
+  "T1587.002": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1587.003": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1587.004": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1588": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1588.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1588.002": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1588.003": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1588.004": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1588.005": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1588.006": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1588.007": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1589": {
+    "capec": [
+      "CAPEC-407"
+    ],
+    "d3fend": []
+  },
+  "T1589.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1589.002": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1589.003": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1590": {
+    "capec": [
+      "CAPEC-309"
+    ],
+    "d3fend": []
+  },
+  "T1590.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1590.002": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1590.003": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1590.004": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1590.005": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1590.006": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1591": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1591.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1591.002": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1591.003": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1591.004": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1592": {
+    "capec": [
+      "CAPEC-169"
+    ],
+    "d3fend": []
+  },
+  "T1592.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1592.002": {
+    "capec": [
+      "CAPEC-541"
+    ],
+    "d3fend": []
+  },
+  "T1592.003": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1592.004": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1593": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1593.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1593.002": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1593.003": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1594": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1595": {
+    "capec": [
+      "CAPEC-169"
+    ],
+    "d3fend": []
+  },
+  "T1595.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1595.002": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1595.003": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1596": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1596.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1596.002": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1596.003": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1596.004": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1596.005": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1597": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1597.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1597.002": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1598": {
+    "capec": [
+      "CAPEC-98"
+    ],
+    "d3fend": []
+  },
+  "T1598.001": {
+    "capec": [
+      "CAPEC-163"
+    ],
+    "d3fend": []
+  },
+  "T1598.002": {
+    "capec": [
+      "CAPEC-163"
+    ],
+    "d3fend": []
+  },
+  "T1598.003": {
+    "capec": [
+      "CAPEC-163"
+    ],
+    "d3fend": []
+  },
+  "T1598.004": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1599": {
+    "capec": [
+      "CAPEC-700"
+    ],
+    "d3fend": []
+  },
+  "T1599.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1600": {
+    "capec": [
+      "CAPEC-620"
+    ],
+    "d3fend": []
+  },
+  "T1600.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1600.002": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1601": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1601.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1601.002": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1602": {
+    "capec": [
+      "CAPEC-150"
+    ],
+    "d3fend": []
+  },
+  "T1602.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1602.002": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1603": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1604": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1606": {
+    "capec": [
+      "CAPEC-196"
+    ],
+    "d3fend": [
+      "D3-ANCI",
+      "D3-CCSA",
+      "D3-CH",
+      "D3-CR",
+      "D3-CRO",
+      "D3-CTS",
+      "D3-DUC",
+      "D3-MFA",
+      "D3-RIC"
+    ]
+  },
+  "T1606.001": {
+    "capec": [
+      "CAPEC-464"
+    ],
+    "d3fend": [
+      "D3-ANCI",
+      "D3-CCSA",
+      "D3-CH",
+      "D3-CR",
+      "D3-CRO",
+      "D3-CTS",
+      "D3-DUC",
+      "D3-MFA",
+      "D3-RIC"
+    ]
+  },
+  "T1606.002": {
+    "capec": [],
+    "d3fend": [
+      "D3-ANCI",
+      "D3-CCSA",
+      "D3-CH",
+      "D3-CR",
+      "D3-CRO",
+      "D3-CTS",
+      "D3-DUC",
+      "D3-MFA",
+      "D3-RIC"
+    ]
+  },
+  "T1608": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1608.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1608.002": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1608.003": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1608.004": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1608.005": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1608.006": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1609": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1610": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1611": {
+    "capec": [
+      "CAPEC-480"
+    ],
+    "d3fend": []
+  },
+  "T1612": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1613": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1614": {
+    "capec": [
+      "CAPEC-694"
+    ],
+    "d3fend": [
+      "D3-CI",
+      "D3-DI",
+      "D3-RC",
+      "D3-RD",
+      "D3-SCP"
+    ]
+  },
+  "T1614.001": {
+    "capec": [],
+    "d3fend": [
+      "D3-CI",
+      "D3-DI",
+      "D3-RC",
+      "D3-RD",
+      "D3-SCP"
+    ]
+  },
+  "T1615": {
+    "capec": [
+      "CAPEC-576"
+    ],
+    "d3fend": [
+      "D3-AM",
+      "D3-CI",
+      "D3-NTPM",
+      "D3-RC"
+    ]
+  },
+  "T1616": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1617": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1619": {
+    "capec": [],
+    "d3fend": [
+      "D3-DENCR",
+      "D3-DKE",
+      "D3-DKF",
+      "D3-HBWP",
+      "D3-HCI",
+      "D3-RH"
+    ]
+  },
+  "T1620": {
+    "capec": [
+      "CAPEC-640"
+    ],
+    "d3fend": [
+      "D3-PSEP",
+      "D3-SAOR"
+    ]
+  },
+  "T1621": {
+    "capec": [],
+    "d3fend": [
+      "D3-ABPI",
+      "D3-HBPI",
+      "D3-HR",
+      "D3-HS",
+      "D3-KBPI",
+      "D3-PLA",
+      "D3-PS",
+      "D3-PSA",
+      "D3-PSMD",
+      "D3-PT",
+      "D3-SCF",
+      "D3-WSAM"
+    ]
+  },
+  "T1622": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1623": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1623.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1624": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1624.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1625": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1625.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1626": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1626.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1627": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1627.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1628": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1628.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1628.002": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1628.003": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1629": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1629.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1629.002": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1629.003": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1630": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1630.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1630.002": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1630.003": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1631": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1631.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1632": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1632.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1633": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1633.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1634": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1634.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1635": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1635.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1636": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1636.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1636.002": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1636.003": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1636.004": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1636.005": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1637": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1637.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1638": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1639": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1639.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1640": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1641": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1641.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1642": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1643": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1644": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1645": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1646": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1647": {
+    "capec": [
+      "CAPEC-203"
+    ],
+    "d3fend": []
+  },
+  "T1648": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1649": {
+    "capec": [],
+    "d3fend": [
+      "D3-AVE",
+      "D3-CA",
+      "D3-CBAN",
+      "D3-CERO",
+      "D3-CF",
+      "D3-CM",
+      "D3-CP",
+      "D3-CQ",
+      "D3-DF",
+      "D3-FA",
+      "D3-FE",
+      "D3-FEV",
+      "D3-FIM",
+      "D3-LFP",
+      "D3-RF",
+      "D3-RFAM",
+      "D3-RS",
+      "D3-SBV",
+      "D3-SU",
+      "D3-SWI"
+    ]
+  },
+  "T1650": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1651": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1652": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1653": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1654": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1655": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1655.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1656": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1657": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1658": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1659": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1660": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1661": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1662": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1663": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1664": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1665": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1666": {
+    "capec": [],
+    "d3fend": [
+      "D3-CI",
+      "D3-RC"
+    ]
+  },
+  "T1667": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1668": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1669": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1670": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1671": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1672": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1673": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1674": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1675": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1676": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1677": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1678": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1679": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1680": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1681": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1682": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1683": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1683.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1683.002": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1684": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1684.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1684.002": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1685": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1685.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1685.002": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1685.003": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1685.004": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1685.005": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1685.006": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1686": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1686.001": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1686.002": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1686.003": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1687": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1688": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1689": {
+    "capec": [],
+    "d3fend": []
+  },
+  "T1690": {
+    "capec": [],
+    "d3fend": []
   }
 }

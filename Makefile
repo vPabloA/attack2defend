@@ -1,4 +1,4 @@
-.PHONY: install build-curated build-public build-backbone build-canonical build-bundle validate validate-parity validate-canonical test ui preview bootstrap-local-full preprod clean
+.PHONY: install build-curated build-public build-backbone build-canonical build-bundle validate validate-parity validate-canonical test ui preview bootstrap-local-full preprod sync-cve2capec clean
 
 PYTHON ?= python3
 UI_DIR := app/navigator-ui
@@ -53,6 +53,9 @@ bootstrap-local-full:
 
 preprod:
 	bash scripts/bootstrap_preprod.sh
+
+sync-cve2capec:
+	bash scripts/sync_cve2capec_raw.sh
 
 clean:
 	rm -rf data/snapshots $(UI_DIR)/dist
