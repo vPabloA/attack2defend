@@ -2,6 +2,36 @@
 
 **Attack2Defend** is a deterministic, static-first vulnerability-to-defense navigator. It is the operational, end-to-end union of the [frncscrlnd/nsfw](https://github.com/frncscrlnd/nsfw) bidirectional framework navigator and the [Galeax/CVE2CAPEC](https://github.com/Galeax/CVE2CAPEC) CVE→CWE→CAPEC→ATT&CK→D3FEND mapping pipeline, extended with the SOC/CTEM defensive layer (artifacts, controls, detections, evidence, gaps, actions).
 
+---
+
+## Attack2Defend North Star
+
+**Full traceability, curated decision.**
+
+Attack2Defend preserves the full technical traceability from `CVE → CWE → CAPEC → ATT&CK → D3FEND`, but it must not force the user to reason from the complete graph dump.
+
+The product must:
+
+- show the full graph as evidence and traceability;
+- present a curated route ranked by defensive relevance;
+- use official sources as the grounding context;
+- allow AI cherry-picking only under strict validation;
+- never invent IDs, relationships, impact, or coverage;
+- speak in consultative, actionable language;
+- deliver defensive decisions, not technical dumps.
+
+Core rule:
+
+```text
+Full graph is deterministic.
+Curated route is AI-assisted.
+Context is official-RAG grounded.
+Final output is schema-validated.
+Validator wins.
+```
+
+---
+
 ```text
 CVE → CWE → CAPEC → MITRE ATT&CK → Artifact → MITRE D3FEND → Control → Detection → Evidence → Gap → Action
 ```
@@ -146,9 +176,10 @@ This checks that the canonical mapping files exist, parse as JSON/JSONL, and tha
 
 ## Design principles
 
-1. Mappings are the product; the UI is the renderer.
-2. Public API calls happen only in builder/cron, never in browser runtime.
-3. Curated mappings must carry source, confidence and ownership.
-4. Route resolution is semantic and phase-constrained, not free-form graph wandering.
-5. Missing evidence becomes an explicit gap, not a silent failure.
-6. The project must be useful immediately after clone, build and localhost startup.
+1. Full traceability, curated decision.
+2. Mappings are the product; the UI is the renderer.
+3. Public API calls happen only in builder/cron, never in browser runtime.
+4. Curated mappings must carry source, confidence and ownership.
+5. Route resolution is semantic and phase-constrained, not free-form graph wandering.
+6. Missing evidence becomes an explicit gap, not a silent failure.
+7. The project must be useful immediately after clone, build and localhost startup.
