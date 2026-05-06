@@ -1,4 +1,4 @@
-.PHONY: install build-curated build-public build-backbone build-canonical build-bundle validate validate-parity validate-canonical test ui preview bootstrap-local-full preprod clean
+.PHONY: install install-ai build-curated build-public build-backbone build-canonical build-bundle validate validate-parity validate-canonical test ui preview bootstrap-local-full preprod clean curate curate-dry-run promote
 
 PYTHON ?= python3
 UI_DIR := app/navigator-ui
@@ -6,6 +6,9 @@ UI_DIR := app/navigator-ui
 install:
 	$(PYTHON) -m pip install -e ".[dev]"
 	cd $(UI_DIR) && npm install
+
+install-ai: ## Install AI curation dependencies (requires ANTHROPIC_API_KEY to run)
+	$(PYTHON) -m pip install -e ".[ai]"
 
 build-curated:
 	$(PYTHON) scripts/knowledge_builder/build_knowledge_base.py
@@ -56,3 +59,31 @@ preprod:
 
 clean:
 	rm -rf data/snapshots $(UI_DIR)/dist
+
+# ── Defense Intelligence Navigator (optional, behind flag) ─────────────────
+# Requires: pip install -e ".[ai]"  +  ANTHROPIC_API_KEY env var
+# Never modifies data/knowledge-bundle.json or data/mappings/ directly.
+# All output goes to data/candidates/{run_id}/ for human review first.
+
+curate: ## Run offline AI curation — scans gaps + proposes candidates via LLM
+	$(PYTHON) scripts/intelligence/run_curator.py \
+		--bundle data/knowledge-bundle.json \
+		--cache-dir data/raw \
+		--output-dir data/candidates
+
+curate-dry-run: ## Scan gaps only — no LLM calls, no ANTHROPIC_API_KEY needed
+	$(PYTHON) scripts/intelligence/run_curator.py \
+		--bundle data/knowledge-bundle.json \
+		--cache-dir data/raw \
+		--output-dir data/candidates \
+		--dry-run
+
+promote: ## Interactive candidate review + promotion to data/mappings/ai_promoted/
+	$(PYTHON) scripts/intelligence/promote_candidates.py \
+		--candidates-dir data/candidates \
+		--output-dir data/mappings/ai_promoted
+
+promote-list: ## List all pending candidates without interactive review
+	$(PYTHON) scripts/intelligence/promote_candidates.py \
+		--candidates-dir data/candidates \
+		--list-only
