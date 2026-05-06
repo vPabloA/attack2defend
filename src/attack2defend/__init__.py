@@ -11,6 +11,7 @@ from .contracts import (
     RouteResult,
 )
 from .resolver import RouteResolver, infer_node_type
+from .capability import resolve_defense_route
 
 __all__ = [
     "CoverageRecord",
@@ -23,4 +24,5 @@ __all__ = [
     "RouteResult",
     "RouteResolver",
     "infer_node_type",
+    "resolve_defense_route",
 ]

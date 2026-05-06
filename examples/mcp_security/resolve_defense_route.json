@@ -1,0 +1,1187 @@
+{
+  "capability": "attack2defend.resolve_defense_route",
+  "input": "CVE-2024-37079",
+  "normalized_input": "CVE-2024-37079",
+  "input_type": "cve",
+  "coverage_status": "action-gap",
+  "confidence": "medium",
+  "executive_summary_es": "Attack2Defend resolvio la consulta con threat route 'complete' y defense readiness 'action-gap'. La prioridad operativa inicial es 'medium' y se deriva solo del bundle local.",
+  "decision_context_es": "La ruta contiene 17 nodos de amenaza, 6 Control, 6 Detection, 7 Evidence, 4 Gap y 3 Action. Los resultados son consumibles por CLI, API futura, MCP futuro y mcp-security.",
+  "risk_rationale_es": "La prioridad es media porque el bundle declara gaps que requieren validacion y accion de cierre.",
+  "threat_route_map": {
+    "status": "complete",
+    "nodes": [
+      {
+        "id": "CAPEC-100",
+        "type": "capec",
+        "name": "Overflow Buffers",
+        "description": "",
+        "url": "https://capec.mitre.org/data/definitions/100.html",
+        "official_link": "https://capec.mitre.org/data/definitions/100.html",
+        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json",
+        "metadata": {
+          "source_kind": "public-compatible",
+          "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        }
+      },
+      {
+        "id": "CAPEC-126",
+        "type": "capec",
+        "name": "Path Traversal",
+        "description": "",
+        "url": "",
+        "official_link": "https://capec.mitre.org/data/definitions/126.html",
+        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json",
+        "metadata": {
+          "source_kind": "public-compatible",
+          "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        }
+      },
+      {
+        "id": "CVE-2024-37079",
+        "type": "cve",
+        "name": "VMware vCenter Server DCERPC heap-overflow RCE",
+        "description": "",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-37079",
+        "official_link": "https://nvd.nist.gov/vuln/detail/CVE-2024-37079",
+        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json",
+        "metadata": {
+          "product_family": "VMware vCenter Server",
+          "source_kind": "public-compatible",
+          "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        }
+      },
+      {
+        "id": "CWE-22",
+        "type": "cwe",
+        "name": "Path Traversal",
+        "description": "",
+        "url": "",
+        "official_link": "https://cwe.mitre.org/data/definitions/22.html",
+        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json",
+        "metadata": {
+          "source_kind": "public-compatible",
+          "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        }
+      },
+      {
+        "id": "CWE-787",
+        "type": "cwe",
+        "name": "Out-of-bounds Write",
+        "description": "",
+        "url": "https://cwe.mitre.org/data/definitions/787.html",
+        "official_link": "https://cwe.mitre.org/data/definitions/787.html",
+        "source_ref": "missing_source_ref",
+        "metadata": {}
+      },
+      {
+        "id": "D3-AI",
+        "type": "d3fend",
+        "name": "Asset Inventory",
+        "description": "",
+        "url": "https://d3fend.mitre.org/technique/d3f:AssetInventory/",
+        "official_link": "https://d3fend.mitre.org/technique/D3-AI/",
+        "source_ref": "missing_source_ref",
+        "metadata": {}
+      },
+      {
+        "id": "D3-AVE",
+        "type": "d3fend",
+        "name": "Asset Vulnerability Enumeration",
+        "description": "",
+        "url": "https://d3fend.mitre.org/technique/d3f:AssetVulnerabilityEnumeration/",
+        "official_link": "https://d3fend.mitre.org/technique/D3-AVE/",
+        "source_ref": "missing_source_ref",
+        "metadata": {}
+      },
+      {
+        "id": "D3-NTA",
+        "type": "d3fend",
+        "name": "Network Traffic Analysis",
+        "description": "",
+        "url": "https://d3fend.mitre.org/technique/d3f:NetworkTrafficAnalysis/",
+        "official_link": "https://d3fend.mitre.org/technique/D3-NTA/",
+        "source_ref": "missing_source_ref",
+        "metadata": {}
+      },
+      {
+        "id": "D3-PA",
+        "type": "d3fend",
+        "name": "Process Analysis",
+        "description": "",
+        "url": "https://d3fend.mitre.org/technique/d3f:ProcessAnalysis/",
+        "official_link": "https://d3fend.mitre.org/technique/D3-PA/",
+        "source_ref": "missing_source_ref",
+        "metadata": {}
+      },
+      {
+        "id": "D3-PSA",
+        "type": "d3fend",
+        "name": "Process Spawn Analysis",
+        "description": "",
+        "url": "https://d3fend.mitre.org/technique/d3f:ProcessSpawnAnalysis/",
+        "official_link": "https://d3fend.mitre.org/technique/D3-PSA/",
+        "source_ref": "missing_source_ref",
+        "metadata": {}
+      },
+      {
+        "id": "D3-PSEP",
+        "type": "d3fend",
+        "name": "Process Spawn Analysis",
+        "description": "",
+        "url": "",
+        "official_link": "https://d3fend.mitre.org/technique/D3-PSEP/",
+        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json",
+        "metadata": {
+          "source_kind": "public-compatible",
+          "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        }
+      },
+      {
+        "id": "D3-SU",
+        "type": "d3fend",
+        "name": "Software Update",
+        "description": "",
+        "url": "https://d3fend.mitre.org/technique/d3f:SoftwareUpdate/",
+        "official_link": "https://d3fend.mitre.org/technique/D3-SU/",
+        "source_ref": "missing_source_ref",
+        "metadata": {}
+      },
+      {
+        "id": "D3-WAF",
+        "type": "d3fend",
+        "name": "Web Application Firewall",
+        "description": "",
+        "url": "",
+        "official_link": "https://d3fend.mitre.org/technique/D3-WAF/",
+        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json",
+        "metadata": {
+          "source_kind": "public-compatible",
+          "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        }
+      },
+      {
+        "id": "T1059",
+        "type": "attack",
+        "name": "Command and Scripting Interpreter",
+        "description": "",
+        "url": "https://attack.mitre.org/techniques/T1059/",
+        "official_link": "https://attack.mitre.org/techniques/T1059/",
+        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json",
+        "metadata": {
+          "source_kind": "public-compatible",
+          "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        }
+      },
+      {
+        "id": "T1071",
+        "type": "attack",
+        "name": "Application Layer Protocol",
+        "description": "",
+        "url": "https://attack.mitre.org/techniques/T1071/",
+        "official_link": "https://attack.mitre.org/techniques/T1071/",
+        "source_ref": "missing_source_ref",
+        "metadata": {}
+      },
+      {
+        "id": "T1105",
+        "type": "attack",
+        "name": "Ingress Tool Transfer",
+        "description": "",
+        "url": "https://attack.mitre.org/techniques/T1105/",
+        "official_link": "https://attack.mitre.org/techniques/T1105/",
+        "source_ref": "missing_source_ref",
+        "metadata": {}
+      },
+      {
+        "id": "T1190",
+        "type": "attack",
+        "name": "Exploit Public-Facing Application",
+        "description": "",
+        "url": "https://attack.mitre.org/techniques/T1190/",
+        "official_link": "https://attack.mitre.org/techniques/T1190/",
+        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json",
+        "metadata": {
+          "source_kind": "public-compatible",
+          "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        }
+      }
+    ],
+    "edges": [
+      {
+        "source": "CVE-2024-37079",
+        "target": "CWE-787",
+        "relationship": "vulnerability_has_weakness",
+        "confidence": "curated",
+        "source_ref": "generated:knowledge_builder:sample_bundle"
+      },
+      {
+        "source": "CVE-2024-37079",
+        "target": "CWE-22",
+        "relationship": "vulnerability_has_weakness",
+        "confidence": "medium",
+        "source_ref": "baseline:cve-2024-37079"
+      },
+      {
+        "source": "CWE-787",
+        "target": "CAPEC-100",
+        "relationship": "weakness_enables_attack_pattern",
+        "confidence": "curated",
+        "source_ref": "generated:knowledge_builder:sample_bundle"
+      },
+      {
+        "source": "CWE-22",
+        "target": "CAPEC-126",
+        "relationship": "weakness_enables_attack_pattern",
+        "confidence": "high",
+        "source_ref": "baseline:cwe-capec"
+      },
+      {
+        "source": "CAPEC-100",
+        "target": "T1190",
+        "relationship": "attack_pattern_maps_to_technique",
+        "confidence": "high",
+        "source_ref": "baseline:capec-attack"
+      },
+      {
+        "source": "CAPEC-126",
+        "target": "T1190",
+        "relationship": "attack_pattern_maps_to_technique",
+        "confidence": "high",
+        "source_ref": "baseline:capec-attack"
+      },
+      {
+        "source": "T1190",
+        "target": "D3-NTA",
+        "relationship": "validated_by_detection",
+        "confidence": "medium",
+        "source_ref": "generated:knowledge_builder:sample_bundle"
+      },
+      {
+        "source": "T1190",
+        "target": "T1059",
+        "relationship": "may_lead_to_post_exploitation",
+        "confidence": "medium",
+        "source_ref": "generated:knowledge_builder:sample_bundle"
+      },
+      {
+        "source": "T1190",
+        "target": "D3-AI",
+        "relationship": "technique_mitigated_by_countermeasure",
+        "confidence": "medium",
+        "source_ref": "generated:knowledge_builder:sample_bundle"
+      },
+      {
+        "source": "T1190",
+        "target": "D3-AVE",
+        "relationship": "technique_mitigated_by_countermeasure",
+        "confidence": "medium",
+        "source_ref": "generated:knowledge_builder:sample_bundle"
+      },
+      {
+        "source": "T1190",
+        "target": "D3-SU",
+        "relationship": "technique_mitigated_by_countermeasure",
+        "confidence": "medium",
+        "source_ref": "generated:knowledge_builder:sample_bundle"
+      },
+      {
+        "source": "T1190",
+        "target": "D3-WAF",
+        "relationship": "technique_mitigated_by_countermeasure",
+        "confidence": "medium",
+        "source_ref": "baseline:attack-d3fend"
+      },
+      {
+        "source": "T1059",
+        "target": "D3-PA",
+        "relationship": "validated_by_detection",
+        "confidence": "medium",
+        "source_ref": "generated:knowledge_builder:sample_bundle"
+      },
+      {
+        "source": "T1059",
+        "target": "D3-PSA",
+        "relationship": "validated_by_detection",
+        "confidence": "medium",
+        "source_ref": "generated:knowledge_builder:sample_bundle"
+      },
+      {
+        "source": "T1059",
+        "target": "T1105",
+        "relationship": "may_lead_to_post_exploitation",
+        "confidence": "medium",
+        "source_ref": "generated:knowledge_builder:sample_bundle"
+      },
+      {
+        "source": "T1059",
+        "target": "D3-PSEP",
+        "relationship": "technique_mitigated_by_countermeasure",
+        "confidence": "medium",
+        "source_ref": "baseline:attack-d3fend"
+      },
+      {
+        "source": "T1105",
+        "target": "T1071",
+        "relationship": "may_lead_to_post_exploitation",
+        "confidence": "medium",
+        "source_ref": "generated:knowledge_builder:sample_bundle"
+      }
+    ],
+    "missing_segments": [],
+    "official_links": [
+      {
+        "node_id": "CAPEC-100",
+        "node_type": "capec",
+        "url": "https://capec.mitre.org/data/definitions/100.html",
+        "source": "official_framework"
+      },
+      {
+        "node_id": "CAPEC-126",
+        "node_type": "capec",
+        "url": "https://capec.mitre.org/data/definitions/126.html",
+        "source": "official_framework"
+      },
+      {
+        "node_id": "CVE-2024-37079",
+        "node_type": "cve",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-37079",
+        "source": "official_framework"
+      },
+      {
+        "node_id": "CWE-22",
+        "node_type": "cwe",
+        "url": "https://cwe.mitre.org/data/definitions/22.html",
+        "source": "official_framework"
+      },
+      {
+        "node_id": "CWE-787",
+        "node_type": "cwe",
+        "url": "https://cwe.mitre.org/data/definitions/787.html",
+        "source": "official_framework"
+      },
+      {
+        "node_id": "D3-AI",
+        "node_type": "d3fend",
+        "url": "https://d3fend.mitre.org/technique/D3-AI/",
+        "source": "official_framework"
+      },
+      {
+        "node_id": "D3-AVE",
+        "node_type": "d3fend",
+        "url": "https://d3fend.mitre.org/technique/D3-AVE/",
+        "source": "official_framework"
+      },
+      {
+        "node_id": "D3-NTA",
+        "node_type": "d3fend",
+        "url": "https://d3fend.mitre.org/technique/D3-NTA/",
+        "source": "official_framework"
+      },
+      {
+        "node_id": "D3-PA",
+        "node_type": "d3fend",
+        "url": "https://d3fend.mitre.org/technique/D3-PA/",
+        "source": "official_framework"
+      },
+      {
+        "node_id": "D3-PSA",
+        "node_type": "d3fend",
+        "url": "https://d3fend.mitre.org/technique/D3-PSA/",
+        "source": "official_framework"
+      },
+      {
+        "node_id": "D3-PSEP",
+        "node_type": "d3fend",
+        "url": "https://d3fend.mitre.org/technique/D3-PSEP/",
+        "source": "official_framework"
+      },
+      {
+        "node_id": "D3-SU",
+        "node_type": "d3fend",
+        "url": "https://d3fend.mitre.org/technique/D3-SU/",
+        "source": "official_framework"
+      },
+      {
+        "node_id": "D3-WAF",
+        "node_type": "d3fend",
+        "url": "https://d3fend.mitre.org/technique/D3-WAF/",
+        "source": "official_framework"
+      },
+      {
+        "node_id": "T1059",
+        "node_type": "attack",
+        "url": "https://attack.mitre.org/techniques/T1059/",
+        "source": "official_framework"
+      },
+      {
+        "node_id": "T1071",
+        "node_type": "attack",
+        "url": "https://attack.mitre.org/techniques/T1071/",
+        "source": "official_framework"
+      },
+      {
+        "node_id": "T1105",
+        "node_type": "attack",
+        "url": "https://attack.mitre.org/techniques/T1105/",
+        "source": "official_framework"
+      },
+      {
+        "node_id": "T1190",
+        "node_type": "attack",
+        "url": "https://attack.mitre.org/techniques/T1190/",
+        "source": "official_framework"
+      }
+    ],
+    "source_refs": [
+      "/home/user/attack2defend/data/mappings/backbone_core.json",
+      "baseline:attack-d3fend",
+      "baseline:capec-attack",
+      "baseline:cve-2024-37079",
+      "baseline:cwe-capec",
+      "coverage:CVE-2024-37079",
+      "curated:soc-ctem",
+      "generated:knowledge_builder:sample_bundle"
+    ]
+  },
+  "defense_readiness_map": {
+    "status": "action-gap",
+    "summary_es": "Defense Readiness esta en estado 'action-gap': 6 Control, 6 Detection, 7 Evidence y 3 Action.",
+    "controls": [
+      {
+        "id": "CTRL-EDR-PROCESS",
+        "type": "control",
+        "name": "EDR process telemetry and command-line capture",
+        "description": "",
+        "url": "",
+        "official_link": "",
+        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json",
+        "metadata": {
+          "source_kind": "public-compatible",
+          "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        }
+      },
+      {
+        "id": "CTRL-PATCH-MANAGEMENT",
+        "type": "control",
+        "name": "Patch management evidence",
+        "description": "",
+        "url": "",
+        "official_link": "",
+        "source_ref": "missing_source_ref",
+        "metadata": {
+          "source_gap": "missing_source_ref"
+        }
+      },
+      {
+        "id": "CTRL-SWG-PROXY",
+        "type": "control",
+        "name": "SWG / proxy logging",
+        "description": "",
+        "url": "",
+        "official_link": "",
+        "source_ref": "missing_source_ref",
+        "metadata": {
+          "source_gap": "missing_source_ref"
+        }
+      },
+      {
+        "id": "CTRL-VIRTUAL-PATCH",
+        "type": "control",
+        "name": "Virtual patch / perimeter restriction",
+        "description": "",
+        "url": "",
+        "official_link": "",
+        "source_ref": "missing_source_ref",
+        "metadata": {
+          "source_gap": "missing_source_ref"
+        }
+      },
+      {
+        "id": "CTRL-WAF-LOGGING",
+        "type": "control",
+        "name": "WAF logging and normalized HTTP telemetry",
+        "description": "",
+        "url": "",
+        "official_link": "",
+        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json",
+        "metadata": {
+          "source_kind": "public-compatible",
+          "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        }
+      },
+      {
+        "id": "CTRL-WAF-VIRTUAL-PATCH",
+        "type": "control",
+        "name": "WAF virtual patching and exploit blocking",
+        "description": "",
+        "url": "",
+        "official_link": "",
+        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json",
+        "metadata": {
+          "source_kind": "public-compatible",
+          "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        }
+      }
+    ],
+    "detections": [
+      {
+        "id": "DET-CLOUD-UPLOAD-ANOMALY",
+        "type": "detection",
+        "name": "Anomalous upload to external cloud service",
+        "description": "",
+        "url": "",
+        "official_link": "",
+        "source_ref": "missing_source_ref",
+        "metadata": {
+          "source_gap": "missing_source_ref"
+        }
+      },
+      {
+        "id": "DET-NON-BROWSER-UPLOAD",
+        "type": "detection",
+        "name": "Non-browser process uploading to external web service",
+        "description": "",
+        "url": "",
+        "official_link": "",
+        "source_ref": "missing_source_ref",
+        "metadata": {
+          "source_gap": "missing_source_ref"
+        }
+      },
+      {
+        "id": "DET-PUBLIC-APP-EXPLOIT-ATTEMPT",
+        "type": "detection",
+        "name": "Public-facing application exploit attempt",
+        "description": "",
+        "url": "",
+        "official_link": "",
+        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json",
+        "metadata": {
+          "source_kind": "public-compatible",
+          "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        }
+      },
+      {
+        "id": "DET-RPC-EXPLOIT-ATTEMPT",
+        "type": "detection",
+        "name": "Suspicious RPC exploit attempt against vCenter",
+        "description": "",
+        "url": "",
+        "official_link": "",
+        "source_ref": "missing_source_ref",
+        "metadata": {
+          "source_gap": "missing_source_ref"
+        }
+      },
+      {
+        "id": "DET-WAF-SUSPICIOUS-PAYLOAD",
+        "type": "detection",
+        "name": "Suspicious HTTP payload blocked or challenged",
+        "description": "",
+        "url": "",
+        "official_link": "",
+        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json",
+        "metadata": {
+          "source_kind": "public-compatible",
+          "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        }
+      },
+      {
+        "id": "DET-WEB-TO-SHELL-PROCESS",
+        "type": "detection",
+        "name": "Web process spawned shell or scripting interpreter",
+        "description": "",
+        "url": "",
+        "official_link": "",
+        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json",
+        "metadata": {
+          "source_kind": "public-compatible",
+          "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        }
+      }
+    ],
+    "evidence": [
+      {
+        "id": "EV-DNS-LOGS",
+        "type": "evidence",
+        "name": "DNS logs",
+        "description": "",
+        "url": "",
+        "official_link": "",
+        "source_ref": "missing_source_ref",
+        "metadata": {
+          "source_gap": "missing_source_ref"
+        }
+      },
+      {
+        "id": "EV-EDR-NETWORK",
+        "type": "evidence",
+        "name": "EDR network telemetry",
+        "description": "",
+        "url": "",
+        "official_link": "",
+        "source_ref": "missing_source_ref",
+        "metadata": {
+          "source_gap": "missing_source_ref"
+        }
+      },
+      {
+        "id": "EV-FIREWALL-LOGS",
+        "type": "evidence",
+        "name": "Firewall or load balancer logs",
+        "description": "",
+        "url": "",
+        "official_link": "",
+        "source_ref": "missing_source_ref",
+        "metadata": {
+          "source_gap": "missing_source_ref"
+        }
+      },
+      {
+        "id": "EV-HTTP-REQUEST-CONTEXT",
+        "type": "evidence",
+        "name": "HTTP method URL parameters headers source IP response code",
+        "description": "",
+        "url": "",
+        "official_link": "",
+        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json",
+        "metadata": {
+          "source_kind": "public-compatible",
+          "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        }
+      },
+      {
+        "id": "EV-PROCESS-COMMAND-LINE",
+        "type": "evidence",
+        "name": "Parent process command line user host and timestamp",
+        "description": "",
+        "url": "",
+        "official_link": "",
+        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json",
+        "metadata": {
+          "source_kind": "public-compatible",
+          "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        }
+      },
+      {
+        "id": "EV-PROXY-LOGS",
+        "type": "evidence",
+        "name": "Proxy logs",
+        "description": "",
+        "url": "",
+        "official_link": "",
+        "source_ref": "missing_source_ref",
+        "metadata": {
+          "source_gap": "missing_source_ref"
+        }
+      },
+      {
+        "id": "EV-WAF-RULE-ACTION",
+        "type": "evidence",
+        "name": "WAF rule ID action payload signature and request metadata",
+        "description": "",
+        "url": "",
+        "official_link": "",
+        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json",
+        "metadata": {
+          "source_kind": "public-compatible",
+          "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        }
+      }
+    ],
+    "gaps": [
+      {
+        "id": "GAP-CVE-2024-37079-1",
+        "type": "gap",
+        "name": "Confirm affected vCenter exposure and version",
+        "description": "Confirm affected vCenter exposure and version",
+        "url": "",
+        "official_link": "",
+        "source_ref": "coverage:CVE-2024-37079",
+        "metadata": {
+          "source_ref": "coverage:CVE-2024-37079",
+          "related_id": "CVE-2024-37079"
+        }
+      },
+      {
+        "id": "GAP-ENDPOINT-PROCESS-TELEMETRY",
+        "type": "gap",
+        "name": "Endpoint command-line telemetry missing or incomplete",
+        "description": "",
+        "url": "",
+        "official_link": "",
+        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json",
+        "metadata": {
+          "source_kind": "public-compatible",
+          "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        }
+      },
+      {
+        "id": "GAP-MISSING-APP-HTTP-LOGS",
+        "type": "gap",
+        "name": "Missing normalized application or reverse proxy HTTP logs",
+        "description": "",
+        "url": "",
+        "official_link": "",
+        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json",
+        "metadata": {
+          "source_kind": "public-compatible",
+          "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        }
+      },
+      {
+        "id": "GAP-WAF-NOT-INGESTED",
+        "type": "gap",
+        "name": "WAF logs not ingested or action semantics not normalized",
+        "description": "",
+        "url": "",
+        "official_link": "",
+        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json",
+        "metadata": {
+          "source_kind": "public-compatible",
+          "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "ACT-APPSEC-ENABLE-HTTP-TELEMETRY",
+        "type": "action",
+        "name": "Enable normalized application and reverse proxy HTTP telemetry",
+        "description": "",
+        "url": "",
+        "official_link": "",
+        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json",
+        "metadata": {
+          "source_kind": "public-compatible",
+          "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        }
+      },
+      {
+        "id": "ACT-SOC-ENABLE-PROCESS-TELEMETRY",
+        "type": "action",
+        "name": "Enable EDR process command-line telemetry and web-to-shell correlation",
+        "description": "",
+        "url": "",
+        "official_link": "",
+        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json",
+        "metadata": {
+          "source_kind": "public-compatible",
+          "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        }
+      },
+      {
+        "id": "ACT-SOC-INGEST-WAF-LOGS",
+        "type": "action",
+        "name": "Ingest and normalize WAF logs including action rule ID and request context",
+        "description": "",
+        "url": "",
+        "official_link": "",
+        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json",
+        "metadata": {
+          "source_kind": "public-compatible",
+          "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        }
+      }
+    ],
+    "gap_explanation_es": "El bundle declara gaps operativos que deben cerrarse con evidencia: Confirm affected vCenter exposure and version; Endpoint command-line telemetry missing or incomplete; Missing normalized application or reverse proxy HTTP logs; WAF logs not ingested or action semantics not normalized.",
+    "missing_segments": [
+      "action"
+    ],
+    "source_refs": [
+      "/home/user/attack2defend/data/mappings/backbone_core.json",
+      "baseline:attack-d3fend",
+      "baseline:capec-attack",
+      "baseline:cve-2024-37079",
+      "baseline:cwe-capec",
+      "coverage:CVE-2024-37079",
+      "curated:soc-ctem",
+      "generated:knowledge_builder:sample_bundle"
+    ]
+  },
+  "bridges": [
+    {
+      "source": "D3-NTA",
+      "target": "CTRL-SWG-PROXY",
+      "relationship": "implemented_by_control",
+      "confidence": "internal_control_mapping",
+      "source_ref": "generated:knowledge_builder:sample_bundle"
+    },
+    {
+      "source": "D3-NTA",
+      "target": "CTRL-VIRTUAL-PATCH",
+      "relationship": "implemented_by_control",
+      "confidence": "internal_control_mapping",
+      "source_ref": "generated:knowledge_builder:sample_bundle"
+    },
+    {
+      "source": "D3-SU",
+      "target": "CTRL-PATCH-MANAGEMENT",
+      "relationship": "implemented_by_control",
+      "confidence": "internal_control_mapping",
+      "source_ref": "generated:knowledge_builder:sample_bundle"
+    },
+    {
+      "source": "CTRL-SWG-PROXY",
+      "target": "DET-CLOUD-UPLOAD-ANOMALY",
+      "relationship": "validated_by_detection",
+      "confidence": "internal_detection_mapping",
+      "source_ref": "generated:knowledge_builder:sample_bundle"
+    },
+    {
+      "source": "CTRL-SWG-PROXY",
+      "target": "DET-NON-BROWSER-UPLOAD",
+      "relationship": "validated_by_detection",
+      "confidence": "internal_detection_mapping",
+      "source_ref": "generated:knowledge_builder:sample_bundle"
+    },
+    {
+      "source": "CTRL-VIRTUAL-PATCH",
+      "target": "DET-RPC-EXPLOIT-ATTEMPT",
+      "relationship": "validated_by_detection",
+      "confidence": "internal_detection_mapping",
+      "source_ref": "generated:knowledge_builder:sample_bundle"
+    },
+    {
+      "source": "CTRL-EDR-PROCESS",
+      "target": "DET-WEB-TO-SHELL-PROCESS",
+      "relationship": "validated_by_detection",
+      "confidence": "high",
+      "source_ref": "curated:detection"
+    },
+    {
+      "source": "CTRL-WAF-LOGGING",
+      "target": "DET-WAF-SUSPICIOUS-PAYLOAD",
+      "relationship": "validated_by_detection",
+      "confidence": "high",
+      "source_ref": "curated:detection"
+    },
+    {
+      "source": "CTRL-WAF-VIRTUAL-PATCH",
+      "target": "DET-PUBLIC-APP-EXPLOIT-ATTEMPT",
+      "relationship": "validated_by_detection",
+      "confidence": "high",
+      "source_ref": "curated:detection"
+    },
+    {
+      "source": "DET-CLOUD-UPLOAD-ANOMALY",
+      "target": "EV-DNS-LOGS",
+      "relationship": "requires_evidence",
+      "confidence": "internal_evidence_mapping",
+      "source_ref": "generated:knowledge_builder:sample_bundle"
+    },
+    {
+      "source": "DET-CLOUD-UPLOAD-ANOMALY",
+      "target": "EV-PROXY-LOGS",
+      "relationship": "requires_evidence",
+      "confidence": "internal_evidence_mapping",
+      "source_ref": "generated:knowledge_builder:sample_bundle"
+    },
+    {
+      "source": "DET-NON-BROWSER-UPLOAD",
+      "target": "EV-EDR-NETWORK",
+      "relationship": "requires_evidence",
+      "confidence": "internal_evidence_mapping",
+      "source_ref": "generated:knowledge_builder:sample_bundle"
+    },
+    {
+      "source": "DET-PUBLIC-APP-EXPLOIT-ATTEMPT",
+      "target": "EV-HTTP-REQUEST-CONTEXT",
+      "relationship": "requires_evidence",
+      "confidence": "high",
+      "source_ref": "curated:evidence"
+    },
+    {
+      "source": "DET-RPC-EXPLOIT-ATTEMPT",
+      "target": "EV-FIREWALL-LOGS",
+      "relationship": "requires_evidence",
+      "confidence": "internal_evidence_mapping",
+      "source_ref": "generated:knowledge_builder:sample_bundle"
+    },
+    {
+      "source": "DET-WAF-SUSPICIOUS-PAYLOAD",
+      "target": "EV-WAF-RULE-ACTION",
+      "relationship": "requires_evidence",
+      "confidence": "high",
+      "source_ref": "curated:evidence"
+    },
+    {
+      "source": "DET-WEB-TO-SHELL-PROCESS",
+      "target": "EV-PROCESS-COMMAND-LINE",
+      "relationship": "requires_evidence",
+      "confidence": "high",
+      "source_ref": "curated:evidence"
+    },
+    {
+      "source": "EV-HTTP-REQUEST-CONTEXT",
+      "target": "GAP-MISSING-APP-HTTP-LOGS",
+      "relationship": "missing_evidence_creates_gap",
+      "confidence": "high",
+      "source_ref": "curated:gap"
+    },
+    {
+      "source": "EV-PROCESS-COMMAND-LINE",
+      "target": "GAP-ENDPOINT-PROCESS-TELEMETRY",
+      "relationship": "missing_evidence_creates_gap",
+      "confidence": "high",
+      "source_ref": "curated:gap"
+    },
+    {
+      "source": "EV-WAF-RULE-ACTION",
+      "target": "GAP-WAF-NOT-INGESTED",
+      "relationship": "missing_evidence_creates_gap",
+      "confidence": "high",
+      "source_ref": "curated:gap"
+    },
+    {
+      "source": "GAP-ENDPOINT-PROCESS-TELEMETRY",
+      "target": "ACT-SOC-ENABLE-PROCESS-TELEMETRY",
+      "relationship": "closed_by_action",
+      "confidence": "high",
+      "source_ref": "curated:action"
+    },
+    {
+      "source": "GAP-MISSING-APP-HTTP-LOGS",
+      "target": "ACT-APPSEC-ENABLE-HTTP-TELEMETRY",
+      "relationship": "closed_by_action",
+      "confidence": "high",
+      "source_ref": "curated:action"
+    },
+    {
+      "source": "GAP-WAF-NOT-INGESTED",
+      "target": "ACT-SOC-INGEST-WAF-LOGS",
+      "relationship": "closed_by_action",
+      "confidence": "high",
+      "source_ref": "curated:action"
+    },
+    {
+      "source": "T1059",
+      "target": "DET-WEB-TO-SHELL-PROCESS",
+      "relationship": "should_be_detected_by",
+      "confidence": "derived_from_bundle",
+      "source_ref": "bundle_derived"
+    },
+    {
+      "source": "T1059",
+      "target": "EV-PROCESS-COMMAND-LINE",
+      "relationship": "requires_evidence",
+      "confidence": "derived_from_bundle",
+      "source_ref": "bundle_derived"
+    },
+    {
+      "source": "T1190",
+      "target": "DET-PUBLIC-APP-EXPLOIT-ATTEMPT",
+      "relationship": "should_be_detected_by",
+      "confidence": "derived_from_bundle",
+      "source_ref": "bundle_derived"
+    },
+    {
+      "source": "T1190",
+      "target": "DET-WAF-SUSPICIOUS-PAYLOAD",
+      "relationship": "should_be_detected_by",
+      "confidence": "derived_from_bundle",
+      "source_ref": "bundle_derived"
+    },
+    {
+      "source": "T1190",
+      "target": "EV-FIREWALL-LOGS",
+      "relationship": "requires_evidence",
+      "confidence": "derived_from_bundle",
+      "source_ref": "bundle_derived"
+    },
+    {
+      "source": "T1190",
+      "target": "EV-HTTP-REQUEST-CONTEXT",
+      "relationship": "requires_evidence",
+      "confidence": "derived_from_bundle",
+      "source_ref": "bundle_derived"
+    },
+    {
+      "source": "T1190",
+      "target": "EV-WAF-RULE-ACTION",
+      "relationship": "requires_evidence",
+      "confidence": "derived_from_bundle",
+      "source_ref": "bundle_derived"
+    }
+  ],
+  "priority": {
+    "threat_relevance": "known",
+    "exposure": "unknown",
+    "defense_gap": "medium",
+    "final_priority": "medium",
+    "rationale": "Priority derived from bundle coverage only. GTI enrichment not applied.",
+    "rationale_es": "Prioridad media: existe cobertura parcial, pero faltan segmentos o evidencia para cerrar la decision."
+  },
+  "recommended_actions": [
+    {
+      "id": "ACT-APPSEC-ENABLE-HTTP-TELEMETRY",
+      "type": "action",
+      "description_es": "Ejecutar la accion de remediacion registrada en el bundle.",
+      "owner_guidance_es": "Asignar al owner operativo indicado en coverage y validar evidencia de cierre.",
+      "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json",
+      "related_gap_id": "GAP-CVE-2024-37079-1"
+    },
+    {
+      "id": "ACT-SOC-ENABLE-PROCESS-TELEMETRY",
+      "type": "action",
+      "description_es": "Ejecutar la accion de remediacion registrada en el bundle.",
+      "owner_guidance_es": "Asignar al owner operativo indicado en coverage y validar evidencia de cierre.",
+      "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json",
+      "related_gap_id": "GAP-CVE-2024-37079-1"
+    },
+    {
+      "id": "ACT-SOC-INGEST-WAF-LOGS",
+      "type": "action",
+      "description_es": "Ejecutar la accion de remediacion registrada en el bundle.",
+      "owner_guidance_es": "Asignar al owner operativo indicado en coverage y validar evidencia de cierre.",
+      "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json",
+      "related_gap_id": "GAP-CVE-2024-37079-1"
+    }
+  ],
+  "owners": [
+    "AppSec",
+    "Infra",
+    "SOC",
+    "Virtualization"
+  ],
+  "official_links": [
+    {
+      "node_id": "CAPEC-100",
+      "node_type": "capec",
+      "url": "https://capec.mitre.org/data/definitions/100.html",
+      "source": "official_framework"
+    },
+    {
+      "node_id": "CAPEC-126",
+      "node_type": "capec",
+      "url": "https://capec.mitre.org/data/definitions/126.html",
+      "source": "official_framework"
+    },
+    {
+      "node_id": "CVE-2024-37079",
+      "node_type": "cve",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-37079",
+      "source": "official_framework"
+    },
+    {
+      "node_id": "CWE-22",
+      "node_type": "cwe",
+      "url": "https://cwe.mitre.org/data/definitions/22.html",
+      "source": "official_framework"
+    },
+    {
+      "node_id": "CWE-787",
+      "node_type": "cwe",
+      "url": "https://cwe.mitre.org/data/definitions/787.html",
+      "source": "official_framework"
+    },
+    {
+      "node_id": "D3-AI",
+      "node_type": "d3fend",
+      "url": "https://d3fend.mitre.org/technique/D3-AI/",
+      "source": "official_framework"
+    },
+    {
+      "node_id": "D3-AVE",
+      "node_type": "d3fend",
+      "url": "https://d3fend.mitre.org/technique/D3-AVE/",
+      "source": "official_framework"
+    },
+    {
+      "node_id": "D3-NTA",
+      "node_type": "d3fend",
+      "url": "https://d3fend.mitre.org/technique/D3-NTA/",
+      "source": "official_framework"
+    },
+    {
+      "node_id": "D3-PA",
+      "node_type": "d3fend",
+      "url": "https://d3fend.mitre.org/technique/D3-PA/",
+      "source": "official_framework"
+    },
+    {
+      "node_id": "D3-PSA",
+      "node_type": "d3fend",
+      "url": "https://d3fend.mitre.org/technique/D3-PSA/",
+      "source": "official_framework"
+    },
+    {
+      "node_id": "D3-PSEP",
+      "node_type": "d3fend",
+      "url": "https://d3fend.mitre.org/technique/D3-PSEP/",
+      "source": "official_framework"
+    },
+    {
+      "node_id": "D3-SU",
+      "node_type": "d3fend",
+      "url": "https://d3fend.mitre.org/technique/D3-SU/",
+      "source": "official_framework"
+    },
+    {
+      "node_id": "D3-WAF",
+      "node_type": "d3fend",
+      "url": "https://d3fend.mitre.org/technique/D3-WAF/",
+      "source": "official_framework"
+    },
+    {
+      "node_id": "T1059",
+      "node_type": "attack",
+      "url": "https://attack.mitre.org/techniques/T1059/",
+      "source": "official_framework"
+    },
+    {
+      "node_id": "T1071",
+      "node_type": "attack",
+      "url": "https://attack.mitre.org/techniques/T1071/",
+      "source": "official_framework"
+    },
+    {
+      "node_id": "T1105",
+      "node_type": "attack",
+      "url": "https://attack.mitre.org/techniques/T1105/",
+      "source": "official_framework"
+    },
+    {
+      "node_id": "T1190",
+      "node_type": "attack",
+      "url": "https://attack.mitre.org/techniques/T1190/",
+      "source": "official_framework"
+    }
+  ],
+  "source_refs": [
+    "/home/user/attack2defend/data/mappings/backbone_core.json",
+    "baseline:attack-d3fend",
+    "baseline:capec-attack",
+    "baseline:cve-2024-37079",
+    "baseline:cwe-capec",
+    "coverage:CVE-2024-37079",
+    "curated:soc-ctem",
+    "generated:knowledge_builder:sample_bundle"
+  ],
+  "integration_context": {
+    "gti_ready": true,
+    "mcp_security_ready": true,
+    "mcp_server_ready": false,
+    "requires_runtime_enrichment": false
+  },
+  "bundle_metadata": {
+    "builder_version": "0.3.0",
+    "contract_version": "attack2defend.knowledge_bundle.v2",
+    "counts": {
+      "coverage_records": 7,
+      "edges": 115,
+      "mapping_files": 2,
+      "mapping_records": 50,
+      "nodes": 111,
+      "route_inputs": 5,
+      "routes": 5,
+      "semantic_routes": 8,
+      "warnings": 0
+    },
+    "generated_at": "2026-05-03T04:12:16Z",
+    "mode": "mapping_backbone_bundle",
+    "warnings": []
+  },
+  "generated_from": "data/knowledge-bundle.json"
+}
