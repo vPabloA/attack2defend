@@ -6,6 +6,7 @@ __pycache__/
 .DS_Store
 dist/
 build/
+*.egg-info/
 .coverage
 node_modules/
 *.tsbuildinfo
