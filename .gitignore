@@ -4,9 +4,14 @@ __pycache__/
 .venv/
 .env
 .DS_Store
+.local/
+logs/
+reports/
 dist/
 build/
 *.egg-info/
 .coverage
 node_modules/
 *.tsbuildinfo
+data/raw/
+data/snapshots/

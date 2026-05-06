@@ -13,6 +13,8 @@ from __future__ import annotations
 import gzip
 import json
 import re
+import shutil
+import subprocess
 import time
 import urllib.error
 import urllib.parse
@@ -31,12 +33,20 @@ CAPEC_LATEST_XML_ZIP_URL = "https://capec.mitre.org/data/xml/capec_latest.xml.zi
 CISA_KEV_URL = "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json"
 NVD_CVE_API_URL = "https://services.nvd.nist.gov/rest/json/cves/2.0"
 D3FEND_ATTACK_API_URL = "https://d3fend.mitre.org/api/offensive-technique/attack/{attack_id}.json"
+CVE2CAPEC_RAW_BASE_URL = "https://raw.githubusercontent.com/Galeax/CVE2CAPEC/main"
+CVE2CAPEC_LAST_UPDATE_URL = f"{CVE2CAPEC_RAW_BASE_URL}/lastUpdate.txt"
+CVE2CAPEC_DATABASE_URL = f"{CVE2CAPEC_RAW_BASE_URL}/database/CVE-{{year}}.jsonl"
+CVE2CAPEC_CWE_DB_URL = f"{CVE2CAPEC_RAW_BASE_URL}/resources/cwe_db.json"
+CVE2CAPEC_CAPEC_DB_URL = f"{CVE2CAPEC_RAW_BASE_URL}/resources/capec_db.json"
+CVE2CAPEC_TECHNIQUES_DB_URL = f"{CVE2CAPEC_RAW_BASE_URL}/resources/techniques_db.json"
+CVE2CAPEC_DEFEND_DB_URL = f"{CVE2CAPEC_RAW_BASE_URL}/resources/defend_db.jsonl"
 
-CWE_ID_RE = re.compile(r"^CWE-?([0-9]+)$", re.IGNORECASE)
-CAPEC_ID_RE = re.compile(r"^CAPEC-?([0-9]+)$", re.IGNORECASE)
-ATTACK_ID_RE = re.compile(r"^T[0-9]{4}(?:\.[0-9]{3})?$", re.IGNORECASE)
+CWE_ID_RE = re.compile(r"^(?:CWE-?)?([0-9]+)$", re.IGNORECASE)
+CAPEC_ID_RE = re.compile(r"^(?:CAPEC-?)?([0-9]+)$", re.IGNORECASE)
+ATTACK_ID_RE = re.compile(r"^T?[0-9]{4}(?:\.[0-9]{3})?$", re.IGNORECASE)
 CVE_ID_RE = re.compile(r"^CVE-[0-9]{4}-[0-9]{4,}$", re.IGNORECASE)
 D3FEND_ID_RE = re.compile(r"^D3-[A-Z0-9-]+$", re.IGNORECASE)
+ATTACK_ENTRY_RE = re.compile(r"ENTRY ID:([0-9]{4}(?:\.[0-9]{3})?)", re.IGNORECASE)
 
 
 @dataclass(slots=True)
@@ -99,7 +109,9 @@ def capec_id(value: Any) -> str | None:
 
 def attack_id(value: Any) -> str | None:
     text = str(value or "").strip().upper()
-    return text if ATTACK_ID_RE.match(text) else None
+    if not ATTACK_ID_RE.match(text):
+        return None
+    return text if text.startswith("T") else f"T{text}"
 
 
 def cve_id(value: Any) -> str | None:
@@ -132,14 +144,46 @@ DEFAULT_HEADERS = {
 }
 
 
+def fetch_bytes_via_curl(url: str, cache_path: Path, *, timeout: int = 45) -> bytes:
+    if shutil.which("curl") is None:
+        raise RuntimeError("curl is not available")
+    cache_path.parent.mkdir(parents=True, exist_ok=True)
+    completed = subprocess.run(
+        [
+            "curl",
+            "--fail",
+            "--location",
+            "--silent",
+            "--show-error",
+            "--max-time",
+            str(timeout),
+            "--output",
+            str(cache_path),
+            url,
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    if completed.stderr.strip():
+        raise RuntimeError(completed.stderr.strip())
+    return cache_path.read_bytes()
+
+
 def fetch_bytes(url: str, cache_path: Path, *, timeout: int = 45, refresh: bool = False, headers: dict[str, str] | None = None) -> bytes:
     cache_path.parent.mkdir(parents=True, exist_ok=True)
     if cache_path.exists() and not refresh:
         return cache_path.read_bytes()
 
     request = urllib.request.Request(url, headers={**DEFAULT_HEADERS, **(headers or {})})
-    with urllib.request.urlopen(request, timeout=timeout) as response:
-        data = response.read()
+    try:
+        with urllib.request.urlopen(request, timeout=timeout) as response:
+            data = response.read()
+    except urllib.error.URLError as exc:
+        if "raw.githubusercontent.com" not in url:
+            raise
+        data = fetch_bytes_via_curl(url, cache_path, timeout=timeout)
+        return data
     cache_path.write_bytes(data)
     return data
 
@@ -152,6 +196,24 @@ def fetch_json(url: str, cache_path: Path, *, timeout: int = 45, refresh: bool =
     if not isinstance(payload, dict):
         raise ValueError(f"Expected JSON object from {url}")
     return payload
+
+
+def parse_jsonl_objects(data: bytes, source: str, result: CollectorResult) -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
+    for line_number, line in enumerate(data.decode("utf-8").splitlines(), start=1):
+        text = line.strip()
+        if not text:
+            continue
+        try:
+            payload = json.loads(text)
+        except json.JSONDecodeError as exc:
+            result.warnings.append(f"Ignoring invalid JSONL row in {source}:{line_number}: {exc}")
+            continue
+        if isinstance(payload, dict):
+            rows.append(payload)
+        else:
+            result.warnings.append(f"Ignoring non-object JSONL row in {source}:{line_number}")
+    return rows
 
 
 def read_first_xml_from_zip(data: bytes) -> ET.Element:
@@ -394,6 +456,227 @@ def ingest_nvd_payload(payload: dict[str, Any], result: CollectorResult) -> None
                     result.add_edge(vid, weakness_id, "has_weakness", confidence="public_source", source_ref="nvd_api")
 
 
+def extract_attack_ids_from_capec_techniques(raw_value: Any) -> list[str]:
+    return sorted({value for value in (attack_id(match.group(1)) for match in ATTACK_ENTRY_RE.finditer(str(raw_value or ""))) if value})
+
+
+def add_cve2capec_d3fend_node(result: CollectorResult, record: dict[str, Any], *, source_ref: str) -> str | None:
+    did = d3fend_id(record.get("id"))
+    if not did:
+        return None
+    tactic = str(record.get("tactic") or "").strip()
+    artifact = str(record.get("artifact") or "").strip()
+    result.add_node({
+        "id": did,
+        "type": "d3fend",
+        "name": record.get("technique") or did,
+        "url": f"https://d3fend.mitre.org/technique/{did}/",
+        "metadata": {
+            "source": source_ref,
+            "d3fend_tactic": tactic,
+            "tactic": tactic,
+            "artifact": artifact,
+        },
+    })
+    return did
+
+
+def ingest_cve2capec_resources(
+    result: CollectorResult,
+    *,
+    cwe_db: dict[str, Any],
+    capec_db: dict[str, Any],
+    techniques_db: dict[str, Any],
+    defend_rows: list[dict[str, Any]],
+) -> None:
+    for raw_cwe, record in cwe_db.items():
+        weakness_id = cwe_id(raw_cwe)
+        if not weakness_id or not isinstance(record, dict):
+            continue
+        result.add_node({
+            "id": weakness_id,
+            "type": "cwe",
+            "name": weakness_id,
+            "url": f"https://cwe.mitre.org/data/definitions/{weakness_id.split('-')[1]}.html",
+            "metadata": {"source": "galeax_cve2capec_cwe_db"},
+        })
+        for raw_parent in record.get("ChildOf", []) or []:
+            parent_id = cwe_id(raw_parent)
+            if parent_id:
+                result.add_node({
+                    "id": parent_id,
+                    "type": "cwe",
+                    "name": parent_id,
+                    "url": f"https://cwe.mitre.org/data/definitions/{parent_id.split('-')[1]}.html",
+                    "metadata": {"source": "galeax_cve2capec_cwe_db"},
+                })
+                result.add_edge(weakness_id, parent_id, "child_of", confidence="public_source", source_ref="galeax_cve2capec_cwe_db")
+        for raw_capec in record.get("RelatedAttackPatterns", []) or []:
+            pattern_id = capec_id(raw_capec)
+            if pattern_id:
+                result.add_node({
+                    "id": pattern_id,
+                    "type": "capec",
+                    "name": pattern_id,
+                    "url": f"https://capec.mitre.org/data/definitions/{pattern_id.split('-')[1]}.html",
+                    "metadata": {"source": "galeax_cve2capec_cwe_db"},
+                })
+                result.add_edge(weakness_id, pattern_id, "may_enable_attack_pattern", confidence="public_source", source_ref="galeax_cve2capec_cwe_db")
+
+    for raw_capec, record in capec_db.items():
+        pattern_id = capec_id(raw_capec)
+        if not pattern_id or not isinstance(record, dict):
+            continue
+        result.add_node({
+            "id": pattern_id,
+            "type": "capec",
+            "name": record.get("name") or pattern_id,
+            "url": f"https://capec.mitre.org/data/definitions/{pattern_id.split('-')[1]}.html",
+            "metadata": {"source": "galeax_cve2capec_capec_db"},
+        })
+        for technique_id in extract_attack_ids_from_capec_techniques(record.get("techniques")):
+            result.add_node({
+                "id": technique_id,
+                "type": "attack",
+                "name": technique_id,
+                "url": f"https://attack.mitre.org/techniques/{technique_id.replace('.', '/')}/",
+                "metadata": {"source": "galeax_cve2capec_capec_db"},
+            })
+            result.add_edge(pattern_id, technique_id, "may_map_to_attack_technique", confidence="public_source", source_ref="galeax_cve2capec_capec_db")
+
+    for raw_technique, tactics in techniques_db.items():
+        technique_id = attack_id(raw_technique)
+        if not technique_id:
+            continue
+        result.add_node({
+            "id": technique_id,
+            "type": "attack",
+            "name": technique_id,
+            "url": f"https://attack.mitre.org/techniques/{technique_id.replace('.', '/')}/",
+            "metadata": {"source": "galeax_cve2capec_techniques_db", "tactics": tactics if isinstance(tactics, list) else []},
+        })
+
+    for row in defend_rows:
+        for raw_technique, records in row.items():
+            technique_id = attack_id(raw_technique)
+            if not technique_id or not isinstance(records, list):
+                continue
+            result.add_node({
+                "id": technique_id,
+                "type": "attack",
+                "name": technique_id,
+                "url": f"https://attack.mitre.org/techniques/{technique_id.replace('.', '/')}/",
+                "metadata": {"source": "galeax_cve2capec_defend_db"},
+            })
+            for record in records:
+                if not isinstance(record, dict):
+                    continue
+                did = add_cve2capec_d3fend_node(result, record, source_ref="galeax_cve2capec_defend_db")
+                if did:
+                    result.add_edge(technique_id, did, "may_be_defended_by", confidence="public_source", source_ref="galeax_cve2capec_defend_db")
+
+
+def ingest_cve2capec_database_row(result: CollectorResult, row: dict[str, Any], *, source_ref: str) -> None:
+    for raw_cve, record in row.items():
+        vid = cve_id(raw_cve)
+        if not vid or not isinstance(record, dict):
+            continue
+        cwes = sorted({value for value in (cwe_id(item) for item in record.get("CWE", []) or []) if value})
+        capecs = sorted({value for value in (capec_id(item) for item in record.get("CAPEC", []) or []) if value})
+        techniques = sorted({value for value in (attack_id(item) for item in record.get("TECHNIQUES", []) or []) if value})
+        d3fend_ids: set[str] = set()
+        for defend_record in record.get("DEFEND", []) or []:
+            if isinstance(defend_record, dict):
+                did = add_cve2capec_d3fend_node(result, defend_record, source_ref=source_ref)
+                if did:
+                    d3fend_ids.add(did)
+
+        result.add_node({
+            "id": vid,
+            "type": "cve",
+            "name": vid,
+            "url": f"https://nvd.nist.gov/vuln/detail/{vid}",
+            "metadata": {
+                "source": source_ref,
+                "cwe": cwes,
+                "capec": capecs,
+                "techniques": techniques,
+                "d3fend": sorted(d3fend_ids),
+            },
+        })
+        result.route_inputs.add(vid)
+        result.routes.append({"id": f"route-cve2capec-{vid.lower()}", "input": vid, "name": vid, "curation_status": "public_cve2capec", "source": source_ref})
+
+        for weakness_id in cwes:
+            result.add_node({
+                "id": weakness_id,
+                "type": "cwe",
+                "name": weakness_id,
+                "url": f"https://cwe.mitre.org/data/definitions/{weakness_id.split('-')[1]}.html",
+                "metadata": {"source": source_ref},
+            })
+            result.add_edge(vid, weakness_id, "has_weakness", confidence="public_source", source_ref=source_ref)
+        for pattern_id in capecs:
+            result.add_node({
+                "id": pattern_id,
+                "type": "capec",
+                "name": pattern_id,
+                "url": f"https://capec.mitre.org/data/definitions/{pattern_id.split('-')[1]}.html",
+                "metadata": {"source": source_ref},
+            })
+        for technique_id in techniques:
+            result.add_node({
+                "id": technique_id,
+                "type": "attack",
+                "name": technique_id,
+                "url": f"https://attack.mitre.org/techniques/{technique_id.replace('.', '/')}/",
+                "metadata": {"source": source_ref},
+            })
+
+
+def collect_cve2capec(
+    cache_dir: Path,
+    *,
+    refresh: bool = False,
+    timeout: int = 45,
+    years: list[int] | None = None,
+    max_cves_per_year: int | None = None,
+) -> CollectorResult:
+    """Collect Galeax CVE2CAPEC daily database rows into the local bundle.
+
+    This is a builder-time source adapter. The Navigator UI still consumes only
+    the generated local knowledge bundle at runtime.
+    """
+    result = CollectorResult()
+    selected_years = sorted({int(year) for year in (years or [datetime.now(timezone.utc).year])})
+
+    try:
+        fetch_bytes(CVE2CAPEC_LAST_UPDATE_URL, cache_dir / "cve2capec" / "lastUpdate.txt", refresh=refresh, timeout=timeout)
+        result.sources.append(CVE2CAPEC_LAST_UPDATE_URL)
+    except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError, ValueError) as exc:
+        result.warnings.append(f"CVE2CAPEC lastUpdate fetch failed: {exc}")
+
+    cwe_db = fetch_json(CVE2CAPEC_CWE_DB_URL, cache_dir / "cve2capec" / "resources" / "cwe_db.json", refresh=refresh, timeout=timeout)
+    capec_db = fetch_json(CVE2CAPEC_CAPEC_DB_URL, cache_dir / "cve2capec" / "resources" / "capec_db.json", refresh=refresh, timeout=timeout)
+    techniques_db = fetch_json(CVE2CAPEC_TECHNIQUES_DB_URL, cache_dir / "cve2capec" / "resources" / "techniques_db.json", refresh=refresh, timeout=timeout)
+    defend_bytes = fetch_bytes(CVE2CAPEC_DEFEND_DB_URL, cache_dir / "cve2capec" / "resources" / "defend_db.jsonl", refresh=refresh, timeout=timeout)
+    result.sources.extend([CVE2CAPEC_CWE_DB_URL, CVE2CAPEC_CAPEC_DB_URL, CVE2CAPEC_TECHNIQUES_DB_URL, CVE2CAPEC_DEFEND_DB_URL])
+    defend_rows = parse_jsonl_objects(defend_bytes, CVE2CAPEC_DEFEND_DB_URL, result)
+    ingest_cve2capec_resources(result, cwe_db=cwe_db, capec_db=capec_db, techniques_db=techniques_db, defend_rows=defend_rows)
+
+    for year in selected_years:
+        url = CVE2CAPEC_DATABASE_URL.format(year=year)
+        data = fetch_bytes(url, cache_dir / "cve2capec" / "database" / f"CVE-{year}.jsonl", refresh=refresh, timeout=timeout)
+        result.sources.append(url)
+        rows = parse_jsonl_objects(data, url, result)
+        if max_cves_per_year is not None:
+            rows = rows[:max_cves_per_year]
+        for row in rows:
+            ingest_cve2capec_database_row(result, row, source_ref="galeax_cve2capec_database")
+
+    return result
+
+
 def collect_d3fend_for_attack_ids(
     attack_ids: list[str],
     cache_dir: Path,
@@ -459,10 +742,13 @@ def collect_public_sources(
     include_capec: bool = True,
     include_kev: bool = True,
     include_d3fend: bool = True,
+    include_cve2capec: bool = True,
     include_nvd: bool = False,
     nvd_cves: list[str] | None = None,
     nvd_recent_days: int = 0,
     nvd_api_key: str | None = None,
+    cve2capec_years: list[int] | None = None,
+    max_cve2capec_cves_per_year: int | None = None,
     max_kev_cves: int | None = None,
     max_d3fend_attack_ids: int = 250,
     fail_on_error: bool = False,
@@ -491,6 +777,17 @@ def collect_public_sources(
         run("kev", lambda: collect_kev(cache_dir, refresh=refresh, timeout=timeout, max_cves=max_kev_cves))
     if include_nvd or nvd_cves or nvd_recent_days > 0:
         run("nvd", lambda: collect_nvd(cache_dir, cves=nvd_cves or [], recent_days=nvd_recent_days, api_key=nvd_api_key, refresh=refresh, timeout=timeout))
+    if include_cve2capec:
+        run(
+            "cve2capec",
+            lambda: collect_cve2capec(
+                cache_dir,
+                refresh=refresh,
+                timeout=timeout,
+                years=cve2capec_years,
+                max_cves_per_year=max_cve2capec_cves_per_year,
+            ),
+        )
     if include_d3fend:
         attack_ids = [node_id for node_id, node in aggregate.nodes.items() if node.get("type") == "attack"]
         run("d3fend", lambda: collect_d3fend_for_attack_ids(attack_ids, cache_dir, refresh=refresh, timeout=timeout, max_attack_ids=max_d3fend_attack_ids))

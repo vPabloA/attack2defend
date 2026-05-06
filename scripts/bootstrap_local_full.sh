@@ -4,6 +4,8 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 
+PYTHON_BIN="${PYTHON:-python3}"
+A2D_MAX_CVE2CAPEC_CVES_PER_YEAR="${A2D_MAX_CVE2CAPEC_CVES_PER_YEAR:-500}"
 PUBLIC_FLAGS=(--with-public-sources)
 VALIDATION_FLAGS=(
   --require-public-sources
@@ -21,7 +23,17 @@ VALIDATION_FLAGS=(
 )
 
 if [[ "${A2D_REFRESH_PUBLIC_SOURCES:-0}" == "1" ]]; then
+  echo "[pre] Forcing compatible CVE2CAPEC raw sync"
+  bash scripts/sync_cve2capec_raw.sh
   PUBLIC_FLAGS+=(--refresh-public-sources)
+fi
+
+if [[ -n "${A2D_CVE2CAPEC_YEAR:-}" ]]; then
+  PUBLIC_FLAGS+=(--cve2capec-year "$A2D_CVE2CAPEC_YEAR")
+fi
+
+if [[ "$A2D_MAX_CVE2CAPEC_CVES_PER_YEAR" != "all" ]]; then
+  PUBLIC_FLAGS+=(--max-cve2capec-cves-per-year "$A2D_MAX_CVE2CAPEC_CVES_PER_YEAR")
 fi
 
 if [[ -n "${NVD_API_KEY:-}" ]]; then
@@ -32,19 +44,19 @@ else
 fi
 
 echo "[1/4] Building base knowledge bundle"
-python scripts/knowledge_builder/build_knowledge_base.py "${PUBLIC_FLAGS[@]}"
+"$PYTHON_BIN" scripts/knowledge_builder/build_knowledge_base.py "${PUBLIC_FLAGS[@]}"
 
 echo "[2/6] Applying mapping backbone, CPE/KEV parity seeds and curated defense mappings"
-python scripts/mapping_builder/apply_mapping_backbone.py --last-good
+"$PYTHON_BIN" scripts/mapping_builder/apply_mapping_backbone.py --last-good
 
 echo "[3/6] Validating mapping-backbone parity bundle"
-python scripts/knowledge_builder/validate_bundle.py data/knowledge-bundle.json "${VALIDATION_FLAGS[@]}"
+"$PYTHON_BIN" scripts/knowledge_builder/validate_bundle.py data/knowledge-bundle.json "${VALIDATION_FLAGS[@]}"
 
 echo "[4/6] Building NSFW + CVE2CAPEC canonical mapping exports"
-python scripts/canonical_exports/build_canonical.py
+"$PYTHON_BIN" scripts/canonical_exports/build_canonical.py
 
 echo "[5/6] Validating NSFW + CVE2CAPEC canonical exports"
-python scripts/canonical_exports/validate_canonical.py
+"$PYTHON_BIN" scripts/canonical_exports/validate_canonical.py
 
 echo "[6/6] Verifying UI runtime bundle mirror"
 test -s app/navigator-ui/public/data/knowledge-bundle.json
