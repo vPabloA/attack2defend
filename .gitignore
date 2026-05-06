@@ -15,3 +15,15 @@ node_modules/
 *.tsbuildinfo
 data/raw/
 data/snapshots/
+data/edges.json
+data/indexes.json
+data/knowledge-bundle.json
+data/metadata.json
+data/nodes.json
+data/routes.json
+app/navigator-ui/public/data/edges.json
+app/navigator-ui/public/data/indexes.json
+app/navigator-ui/public/data/knowledge-bundle.json
+app/navigator-ui/public/data/metadata.json
+app/navigator-ui/public/data/nodes.json
+app/navigator-ui/public/data/routes.json
