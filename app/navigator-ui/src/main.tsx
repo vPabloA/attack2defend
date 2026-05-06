@@ -139,6 +139,20 @@ const relationshipLabels: Record<string, string> = {
   requires_evidence: 'requires',
 };
 
+const allowedForwardTypeTransitions: Partial<Record<NodeType, NodeType[]>> = {
+  cve: ['artifact', 'cwe', 'capec', 'attack', 'd3fend', 'control', 'detection', 'evidence', 'gap', 'action'],
+  artifact: ['cwe', 'capec', 'attack', 'd3fend', 'control', 'detection', 'evidence', 'gap', 'action'],
+  cwe: ['cwe', 'capec', 'attack', 'd3fend', 'control', 'detection', 'evidence', 'gap', 'action'],
+  capec: ['attack', 'd3fend', 'control', 'detection', 'evidence', 'gap', 'action'],
+  attack: ['artifact', 'd3fend', 'control', 'detection', 'evidence', 'gap', 'action'],
+  d3fend: ['artifact', 'control', 'detection', 'evidence', 'gap', 'action'],
+  control: ['detection', 'evidence', 'gap', 'action'],
+  detection: ['evidence', 'gap', 'action'],
+  evidence: ['gap', 'action'],
+  gap: ['action'],
+  action: [],
+};
+
 function App() {
   const [bundle, setBundle] = useState<KnowledgeBundle>(fallbackBundle);
   const [bundleSource, setBundleSource] = useState<BundleSource>('fallback');
@@ -496,24 +510,46 @@ function ExportTab({ markdown, routeJson, navigatorLayer, cadGraph }: { markdown
 }
 
 function resolveRoute(bundle: KnowledgeBundle, roots: string[]): ResolvedRoute {
-  const starts = roots.map((item) => item.toUpperCase());
-  const queue: Array<{ id: string; depth: number }> = starts.map((id) => ({ id, depth: 0 }));
-  const visited = new Set<string>(starts);
+  const starts = roots.map((item) => item.toUpperCase()).filter(Boolean);
+  const nodeMap = new Map(bundle.nodes.map((node) => [node.id, node]));
+  const outgoing = new Map<string, RouteEdge[]>();
+  for (const edge of bundle.edges) {
+    const current = outgoing.get(edge.source) ?? [];
+    current.push(edge);
+    outgoing.set(edge.source, current);
+  }
+
+  const queue: Array<{ id: string; depth: number }> = starts
+    .filter((id) => nodeMap.has(id))
+    .map((id) => ({ id, depth: 0 }));
+  const visited = new Set<string>(queue.map((item) => item.id));
   const routeEdges: RouteEdge[] = [];
+
   while (queue.length) {
     const current = queue.shift();
     if (!current || current.depth >= 5) continue;
-    const edges = bundle.edges.filter((edge) => edge.source === current.id || edge.target === current.id);
+
+    const currentNode = nodeMap.get(current.id);
+    if (!currentNode) continue;
+
+    const edges = outgoing.get(current.id) ?? [];
     for (const edge of edges) {
+      const nextNode = nodeMap.get(edge.target);
+      if (!nextNode) continue;
+      if (!isAllowedForwardTransition(currentNode.type, nextNode.type)) continue;
+
       routeEdges.push(edge);
-      const next = edge.source === current.id ? edge.target : edge.source;
-      if (!visited.has(next)) {
-        visited.add(next);
-        queue.push({ id: next, depth: current.depth + 1 });
-      }
+      if (visited.has(nextNode.id)) continue;
+      visited.add(nextNode.id);
+      queue.push({ id: nextNode.id, depth: current.depth + 1 });
     }
   }
+
   return { root: starts[0], nodes: Array.from(visited), edges: dedupeEdges(routeEdges) };
+}
+
+function isAllowedForwardTransition(sourceType: NodeType, targetType: NodeType) {
+  return (allowedForwardTypeTransitions[sourceType] ?? []).includes(targetType);
 }
 
 function dedupeEdges(edges: RouteEdge[]) {
