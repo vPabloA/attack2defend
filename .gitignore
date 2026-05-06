@@ -9,3 +9,7 @@ build/
 .coverage
 node_modules/
 *.tsbuildinfo
+.local/
+data/raw/
+data/snapshots/
+src/*.egg-info/

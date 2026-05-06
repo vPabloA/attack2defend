@@ -1,0 +1,880 @@
+{
+  "capability": "attack2defend.resolve_defense_route",
+  "input": "CVE-2024-37079",
+  "normalized_input": "CVE-2024-37079",
+  "input_type": "cve",
+  "coverage_status": "ready",
+  "confidence": "high",
+  "executive_summary_es": "Attack2Defend resolvio la consulta con threat route 'complete' y defense readiness 'ready'. La prioridad operativa inicial es 'low' y se deriva solo del bundle local.",
+  "decision_context_es": "La ruta contiene 18 nodos de amenaza, 2 Control, 3 Detection, 1 Evidence, 1 Gap y 1 Action. Los resultados son consumibles por CLI, API futura, MCP futuro y mcp-security.",
+  "risk_rationale_es": "La prioridad es media porque el bundle declara gaps que requieren validacion y accion de cierre.",
+  "threat_route_map": {
+    "status": "complete",
+    "nodes": [
+      {
+        "id": "CAPEC-100",
+        "type": "capec",
+        "name": "Overflow Buffers",
+        "description": "Buffer Overflow attacks target improper or missing bounds checking on buffer operations, typically triggered by input injected by an adversary. As a consequence, an adversary is able to write past the boundaries of allocated buffer regions in memory, causing a program crash or potentially redirection of execution as per the adversaries' choice.",
+        "url": "https://capec.mitre.org/data/definitions/100.html",
+        "official_link": "https://capec.mitre.org/data/definitions/100.html",
+        "source_ref": "galeax_cve2capec_database",
+        "metadata": {
+          "source": "galeax_cve2capec_database",
+          "status": "Draft"
+        }
+      },
+      {
+        "id": "CVE-2024-37079",
+        "type": "cve",
+        "name": "VMware vCenter Server DCERPC heap-overflow RCE",
+        "description": "",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-37079",
+        "official_link": "https://nvd.nist.gov/vuln/detail/CVE-2024-37079",
+        "source_ref": "cisa_kev",
+        "metadata": {
+          "date_added": "2026-01-23",
+          "due_date": "2026-02-13",
+          "known_ransomware_campaign_use": "Unknown",
+          "product": "VMware vCenter Server",
+          "product_family": "VMware vCenter Server",
+          "required_action": "Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if mitigations are unavailable.",
+          "source": "cisa_kev",
+          "vendor_project": "Broadcom"
+        }
+      },
+      {
+        "id": "CWE-787",
+        "type": "cwe",
+        "name": "Out-of-bounds Write",
+        "description": "The product writes data past the end, or before the beginning, of the intended buffer.",
+        "url": "https://cwe.mitre.org/data/definitions/787.html",
+        "official_link": "https://cwe.mitre.org/data/definitions/787.html",
+        "source_ref": "galeax_cve2capec_database",
+        "metadata": {
+          "abstraction": "Base",
+          "source": "galeax_cve2capec_database",
+          "status": "Draft"
+        }
+      },
+      {
+        "id": "D3-AI",
+        "type": "d3fend",
+        "name": "Asset Inventory",
+        "description": "",
+        "url": "https://d3fend.mitre.org/technique/d3f:AssetInventory/",
+        "official_link": "https://d3fend.mitre.org/technique/D3-AI/",
+        "source_ref": "missing_source_ref",
+        "metadata": {}
+      },
+      {
+        "id": "D3-APCA",
+        "type": "d3fend",
+        "name": "Application Protocol Command Analysis",
+        "description": "",
+        "url": "https://d3fend.mitre.org/technique/D3-APCA/",
+        "official_link": "https://d3fend.mitre.org/technique/D3-APCA/",
+        "source_ref": "galeax_cve2capec_database",
+        "metadata": {
+          "artifact": "Network Traffic",
+          "d3fend_tactic": "Detect",
+          "source": "galeax_cve2capec_database",
+          "tactic": "Detect"
+        }
+      },
+      {
+        "id": "D3-AVE",
+        "type": "d3fend",
+        "name": "Asset Vulnerability Enumeration",
+        "description": "",
+        "url": "https://d3fend.mitre.org/technique/d3f:AssetVulnerabilityEnumeration/",
+        "official_link": "https://d3fend.mitre.org/technique/D3-AVE/",
+        "source_ref": "galeax_cve2capec_database",
+        "metadata": {
+          "artifact": "Software",
+          "d3fend_tactic": "Model",
+          "source": "galeax_cve2capec_database",
+          "tactic": "Model"
+        }
+      },
+      {
+        "id": "D3-CSPP",
+        "type": "d3fend",
+        "name": "Client-server Payload Profiling",
+        "description": "",
+        "url": "https://d3fend.mitre.org/technique/D3-CSPP/",
+        "official_link": "https://d3fend.mitre.org/technique/D3-CSPP/",
+        "source_ref": "galeax_cve2capec_database",
+        "metadata": {
+          "artifact": "Network Traffic",
+          "d3fend_tactic": "Detect",
+          "source": "galeax_cve2capec_database",
+          "tactic": "Detect"
+        }
+      },
+      {
+        "id": "D3-DQSA",
+        "type": "d3fend",
+        "name": "Database Query String Analysis",
+        "description": "",
+        "url": "https://d3fend.mitre.org/technique/D3-DQSA/",
+        "official_link": "https://d3fend.mitre.org/technique/D3-DQSA/",
+        "source_ref": "galeax_cve2capec_defend_db",
+        "metadata": {
+          "artifact": "Database Query",
+          "d3fend_tactic": "Detect",
+          "source": "galeax_cve2capec_defend_db",
+          "tactic": "Detect"
+        }
+      },
+      {
+        "id": "D3-ISVA",
+        "type": "d3fend",
+        "name": "Inbound Session Volume Analysis",
+        "description": "",
+        "url": "https://d3fend.mitre.org/technique/D3-ISVA/",
+        "official_link": "https://d3fend.mitre.org/technique/D3-ISVA/",
+        "source_ref": "galeax_cve2capec_database",
+        "metadata": {
+          "artifact": "Inbound Internet Network Traffic",
+          "d3fend_tactic": "Detect",
+          "source": "galeax_cve2capec_database",
+          "tactic": "Detect"
+        }
+      },
+      {
+        "id": "D3-ITF",
+        "type": "d3fend",
+        "name": "Inbound Traffic Filtering",
+        "description": "",
+        "url": "https://d3fend.mitre.org/technique/D3-ITF/",
+        "official_link": "https://d3fend.mitre.org/technique/D3-ITF/",
+        "source_ref": "galeax_cve2capec_database",
+        "metadata": {
+          "artifact": "Inbound Network Traffic",
+          "d3fend_tactic": "Isolate",
+          "source": "galeax_cve2capec_database",
+          "tactic": "Isolate"
+        }
+      },
+      {
+        "id": "D3-NTA",
+        "type": "d3fend",
+        "name": "Network Traffic Analysis",
+        "description": "",
+        "url": "https://d3fend.mitre.org/technique/d3f:NetworkTrafficAnalysis/",
+        "official_link": "https://d3fend.mitre.org/technique/D3-NTA/",
+        "source_ref": "missing_source_ref",
+        "metadata": {}
+      },
+      {
+        "id": "D3-NTCD",
+        "type": "d3fend",
+        "name": "Network Traffic Community Deviation",
+        "description": "",
+        "url": "https://d3fend.mitre.org/technique/D3-NTCD/",
+        "official_link": "https://d3fend.mitre.org/technique/D3-NTCD/",
+        "source_ref": "galeax_cve2capec_database",
+        "metadata": {
+          "artifact": "Network Traffic",
+          "d3fend_tactic": "Detect",
+          "source": "galeax_cve2capec_database",
+          "tactic": "Detect"
+        }
+      },
+      {
+        "id": "D3-NTF",
+        "type": "d3fend",
+        "name": "Network Traffic Filtering",
+        "description": "",
+        "url": "https://d3fend.mitre.org/technique/D3-NTF/",
+        "official_link": "https://d3fend.mitre.org/technique/D3-NTF/",
+        "source_ref": "galeax_cve2capec_database",
+        "metadata": {
+          "artifact": "Network Traffic",
+          "d3fend_tactic": "Isolate",
+          "source": "galeax_cve2capec_database",
+          "tactic": "Isolate"
+        }
+      },
+      {
+        "id": "D3-NTSA",
+        "type": "d3fend",
+        "name": "Network Traffic Signature Analysis",
+        "description": "",
+        "url": "https://d3fend.mitre.org/technique/D3-NTSA/",
+        "official_link": "https://d3fend.mitre.org/technique/D3-NTSA/",
+        "source_ref": "galeax_cve2capec_database",
+        "metadata": {
+          "artifact": "Network Traffic",
+          "d3fend_tactic": "Detect",
+          "source": "galeax_cve2capec_database",
+          "tactic": "Detect"
+        }
+      },
+      {
+        "id": "D3-PHDURA",
+        "type": "d3fend",
+        "name": "Per Host Download-Upload Ratio Analysis",
+        "description": "",
+        "url": "https://d3fend.mitre.org/technique/D3-PHDURA/",
+        "official_link": "https://d3fend.mitre.org/technique/D3-PHDURA/",
+        "source_ref": "galeax_cve2capec_database",
+        "metadata": {
+          "artifact": "Network Traffic",
+          "d3fend_tactic": "Detect",
+          "source": "galeax_cve2capec_database",
+          "tactic": "Detect"
+        }
+      },
+      {
+        "id": "D3-PMAD",
+        "type": "d3fend",
+        "name": "Protocol Metadata Anomaly Detection",
+        "description": "",
+        "url": "https://d3fend.mitre.org/technique/D3-PMAD/",
+        "official_link": "https://d3fend.mitre.org/technique/D3-PMAD/",
+        "source_ref": "galeax_cve2capec_database",
+        "metadata": {
+          "artifact": "Network Traffic",
+          "d3fend_tactic": "Detect",
+          "source": "galeax_cve2capec_database",
+          "tactic": "Detect"
+        }
+      },
+      {
+        "id": "D3-PSEP",
+        "type": "d3fend",
+        "name": "Process Segment Execution Prevention",
+        "description": "",
+        "url": "https://d3fend.mitre.org/technique/D3-PSEP/",
+        "official_link": "https://d3fend.mitre.org/technique/D3-PSEP/",
+        "source_ref": "galeax_cve2capec_database",
+        "metadata": {
+          "artifact": "Process Segment",
+          "d3fend_tactic": "Harden",
+          "source": "galeax_cve2capec_database",
+          "tactic": "Harden"
+        }
+      },
+      {
+        "id": "T1190",
+        "type": "attack",
+        "name": "Exploit Public-Facing Application",
+        "description": "Adversaries may attempt to exploit a weakness in an Internet-facing host or system to initially access a network. The weakness in the system can be a software bug, a temporary glitch, or a misconfiguration.\n\nExploited applications are often websites/web servers, but can also include databases (like SQL), standard services (like SMB or SSH), network device administration and management protocols (like SNMP and Smart Install), and any other system with Internet-accessible open sockets.(Citation: NVD CVE-2016-6662)(Citation: CIS Multiple SMB Vulnerabilities)(Citation: US-CERT TA18-106A Network Infrastructure Devices 2018)(Citation: Cisco Blog Legacy Device Attacks)(Citation: NVD CVE-2014-7169) On ESXi infrastructure, adversaries may exploit exposed OpenSLP services; they may alternatively exploit exposed VMware vCenter servers.(Citation: Recorded Future ESXiArgs Ransomware 2023)(Citation: Ars Technica VMWare Code Execution Vulnerability 2021) Depending on the flaw being exploited, this may also involve [Exploitation for Stealth](https://attack.mitre.org/techniques/T1211) or [Exploitation for Client Execution](https://attack.mitre.org/techniques/T1203).\n\nIf an application is hosted on cloud-based infrastructure and/or is containerized, then exploiting it may lead to compromise of the underlying instance or container. This can allow an adversary a path to access the cloud or container APIs (e.g., via the [Cloud Instance Metadata API](https://attack.mitre.org/techniques/T1552/005)), exploit container host access via [Escape to Host](https://attack.mitre.org/techniques/T1611), or take advantage of weak identity and access management policies.\n\nAdversaries may also exploit edge network infrastructure and related appliances, specifically targeting devices that do not support robust host-based defenses.(Citation: Mandiant Fortinet Zero Day)(Citation: Wired Russia Cyberwar)\n\nFor websites and databases, the OWASP top 10 and CWE top 25 highlight the most common web-based vulnerabilities.(Citation: OWASP Top 10)(Citation: CWE top 25)",
+        "url": "https://attack.mitre.org/techniques/T1190/",
+        "official_link": "https://attack.mitre.org/techniques/T1190/",
+        "source_ref": "galeax_cve2capec_defend_db",
+        "metadata": {
+          "kill_chain_phases": [
+            {
+              "kill_chain_name": "mitre-attack",
+              "phase_name": "initial-access"
+            }
+          ],
+          "source": "galeax_cve2capec_defend_db",
+          "tactics": [
+            "Initial Access"
+          ],
+          "x_mitre_data_sources": [],
+          "x_mitre_platforms": [
+            "Containers",
+            "ESXi",
+            "IaaS",
+            "Linux",
+            "macOS",
+            "Network Devices",
+            "Windows"
+          ]
+        }
+      }
+    ],
+    "edges": [
+      {
+        "source": "CVE-2024-37079",
+        "target": "CWE-787",
+        "relationship": "has_weakness",
+        "confidence": "curated",
+        "source_ref": ""
+      },
+      {
+        "source": "CWE-787",
+        "target": "CAPEC-100",
+        "relationship": "may_enable_attack_pattern",
+        "confidence": "curated",
+        "source_ref": ""
+      },
+      {
+        "source": "CAPEC-100",
+        "target": "T1190",
+        "relationship": "may_map_to_attack_technique",
+        "confidence": "curated",
+        "source_ref": ""
+      },
+      {
+        "source": "T1190",
+        "target": "D3-NTA",
+        "relationship": "may_be_detected_by",
+        "confidence": "unknown",
+        "source_ref": ""
+      },
+      {
+        "source": "T1190",
+        "target": "D3-AI",
+        "relationship": "may_be_defended_by",
+        "confidence": "unknown",
+        "source_ref": ""
+      },
+      {
+        "source": "T1190",
+        "target": "D3-APCA",
+        "relationship": "may_be_defended_by",
+        "confidence": "public_source",
+        "source_ref": "galeax_cve2capec_defend_db"
+      },
+      {
+        "source": "T1190",
+        "target": "D3-AVE",
+        "relationship": "may_be_defended_by",
+        "confidence": "unknown",
+        "source_ref": ""
+      },
+      {
+        "source": "T1190",
+        "target": "D3-CSPP",
+        "relationship": "may_be_defended_by",
+        "confidence": "public_source",
+        "source_ref": "galeax_cve2capec_defend_db"
+      },
+      {
+        "source": "T1190",
+        "target": "D3-DQSA",
+        "relationship": "may_be_defended_by",
+        "confidence": "public_source",
+        "source_ref": "galeax_cve2capec_defend_db"
+      },
+      {
+        "source": "T1190",
+        "target": "D3-ISVA",
+        "relationship": "may_be_defended_by",
+        "confidence": "public_source",
+        "source_ref": "galeax_cve2capec_defend_db"
+      },
+      {
+        "source": "T1190",
+        "target": "D3-ITF",
+        "relationship": "may_be_defended_by",
+        "confidence": "public_source",
+        "source_ref": "galeax_cve2capec_defend_db"
+      },
+      {
+        "source": "T1190",
+        "target": "D3-NTCD",
+        "relationship": "may_be_defended_by",
+        "confidence": "public_source",
+        "source_ref": "galeax_cve2capec_defend_db"
+      },
+      {
+        "source": "T1190",
+        "target": "D3-NTF",
+        "relationship": "may_be_defended_by",
+        "confidence": "public_source",
+        "source_ref": "galeax_cve2capec_defend_db"
+      },
+      {
+        "source": "T1190",
+        "target": "D3-NTSA",
+        "relationship": "may_be_defended_by",
+        "confidence": "public_source",
+        "source_ref": "galeax_cve2capec_defend_db"
+      },
+      {
+        "source": "T1190",
+        "target": "D3-PHDURA",
+        "relationship": "may_be_defended_by",
+        "confidence": "public_source",
+        "source_ref": "galeax_cve2capec_defend_db"
+      },
+      {
+        "source": "T1190",
+        "target": "D3-PMAD",
+        "relationship": "may_be_defended_by",
+        "confidence": "public_source",
+        "source_ref": "galeax_cve2capec_defend_db"
+      },
+      {
+        "source": "T1190",
+        "target": "D3-PSEP",
+        "relationship": "may_be_defended_by",
+        "confidence": "public_source",
+        "source_ref": "galeax_cve2capec_defend_db"
+      }
+    ],
+    "missing_segments": [],
+    "official_links": [
+      {
+        "node_id": "CAPEC-100",
+        "node_type": "capec",
+        "url": "https://capec.mitre.org/data/definitions/100.html",
+        "source": "official_framework"
+      },
+      {
+        "node_id": "CVE-2024-37079",
+        "node_type": "cve",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-37079",
+        "source": "official_framework"
+      },
+      {
+        "node_id": "CWE-787",
+        "node_type": "cwe",
+        "url": "https://cwe.mitre.org/data/definitions/787.html",
+        "source": "official_framework"
+      },
+      {
+        "node_id": "D3-AI",
+        "node_type": "d3fend",
+        "url": "https://d3fend.mitre.org/technique/D3-AI/",
+        "source": "official_framework"
+      },
+      {
+        "node_id": "D3-APCA",
+        "node_type": "d3fend",
+        "url": "https://d3fend.mitre.org/technique/D3-APCA/",
+        "source": "official_framework"
+      },
+      {
+        "node_id": "D3-AVE",
+        "node_type": "d3fend",
+        "url": "https://d3fend.mitre.org/technique/D3-AVE/",
+        "source": "official_framework"
+      },
+      {
+        "node_id": "D3-CSPP",
+        "node_type": "d3fend",
+        "url": "https://d3fend.mitre.org/technique/D3-CSPP/",
+        "source": "official_framework"
+      },
+      {
+        "node_id": "D3-DQSA",
+        "node_type": "d3fend",
+        "url": "https://d3fend.mitre.org/technique/D3-DQSA/",
+        "source": "official_framework"
+      },
+      {
+        "node_id": "D3-ISVA",
+        "node_type": "d3fend",
+        "url": "https://d3fend.mitre.org/technique/D3-ISVA/",
+        "source": "official_framework"
+      },
+      {
+        "node_id": "D3-ITF",
+        "node_type": "d3fend",
+        "url": "https://d3fend.mitre.org/technique/D3-ITF/",
+        "source": "official_framework"
+      },
+      {
+        "node_id": "D3-NTA",
+        "node_type": "d3fend",
+        "url": "https://d3fend.mitre.org/technique/D3-NTA/",
+        "source": "official_framework"
+      },
+      {
+        "node_id": "D3-NTCD",
+        "node_type": "d3fend",
+        "url": "https://d3fend.mitre.org/technique/D3-NTCD/",
+        "source": "official_framework"
+      },
+      {
+        "node_id": "D3-NTF",
+        "node_type": "d3fend",
+        "url": "https://d3fend.mitre.org/technique/D3-NTF/",
+        "source": "official_framework"
+      },
+      {
+        "node_id": "D3-NTSA",
+        "node_type": "d3fend",
+        "url": "https://d3fend.mitre.org/technique/D3-NTSA/",
+        "source": "official_framework"
+      },
+      {
+        "node_id": "D3-PHDURA",
+        "node_type": "d3fend",
+        "url": "https://d3fend.mitre.org/technique/D3-PHDURA/",
+        "source": "official_framework"
+      },
+      {
+        "node_id": "D3-PMAD",
+        "node_type": "d3fend",
+        "url": "https://d3fend.mitre.org/technique/D3-PMAD/",
+        "source": "official_framework"
+      },
+      {
+        "node_id": "D3-PSEP",
+        "node_type": "d3fend",
+        "url": "https://d3fend.mitre.org/technique/D3-PSEP/",
+        "source": "official_framework"
+      },
+      {
+        "node_id": "T1190",
+        "node_type": "attack",
+        "url": "https://attack.mitre.org/techniques/T1190/",
+        "source": "official_framework"
+      }
+    ],
+    "source_refs": [
+      "cisa_kev",
+      "coverage:CVE-2024-37079",
+      "galeax_cve2capec_database",
+      "galeax_cve2capec_defend_db",
+      "node:CVE-2024-37079:metadata.required_action"
+    ]
+  },
+  "defense_readiness_map": {
+    "status": "ready",
+    "summary_es": "Defense Readiness esta en estado 'ready': 2 Control, 3 Detection, 1 Evidence y 1 Action.",
+    "controls": [
+      {
+        "id": "CTRL-SWG-PROXY",
+        "type": "control",
+        "name": "SWG / proxy logging",
+        "description": "",
+        "url": "",
+        "official_link": "",
+        "source_ref": "missing_source_ref",
+        "metadata": {
+          "source_gap": "missing_source_ref"
+        }
+      },
+      {
+        "id": "CTRL-VIRTUAL-PATCH",
+        "type": "control",
+        "name": "Virtual patch / perimeter restriction",
+        "description": "",
+        "url": "",
+        "official_link": "",
+        "source_ref": "missing_source_ref",
+        "metadata": {
+          "source_gap": "missing_source_ref"
+        }
+      }
+    ],
+    "detections": [
+      {
+        "id": "DET-CLOUD-UPLOAD-ANOMALY",
+        "type": "detection",
+        "name": "Anomalous upload to external cloud service",
+        "description": "",
+        "url": "",
+        "official_link": "",
+        "source_ref": "missing_source_ref",
+        "metadata": {
+          "source_gap": "missing_source_ref"
+        }
+      },
+      {
+        "id": "DET-NON-BROWSER-UPLOAD",
+        "type": "detection",
+        "name": "Non-browser process uploading to external web service",
+        "description": "",
+        "url": "",
+        "official_link": "",
+        "source_ref": "missing_source_ref",
+        "metadata": {
+          "source_gap": "missing_source_ref"
+        }
+      },
+      {
+        "id": "DET-RPC-EXPLOIT-ATTEMPT",
+        "type": "detection",
+        "name": "Suspicious RPC exploit attempt against vCenter",
+        "description": "",
+        "url": "",
+        "official_link": "",
+        "source_ref": "missing_source_ref",
+        "metadata": {
+          "source_gap": "missing_source_ref"
+        }
+      }
+    ],
+    "evidence": [
+      {
+        "id": "EV-FIREWALL-LOGS",
+        "type": "evidence",
+        "name": "Firewall or load balancer logs",
+        "description": "",
+        "url": "",
+        "official_link": "",
+        "source_ref": "missing_source_ref",
+        "metadata": {
+          "source_gap": "missing_source_ref"
+        }
+      }
+    ],
+    "gaps": [
+      {
+        "id": "GAP-CVE-2024-37079-1",
+        "type": "gap",
+        "name": "Confirm affected vCenter exposure and version",
+        "description": "Confirm affected vCenter exposure and version",
+        "url": "",
+        "official_link": "",
+        "source_ref": "coverage:CVE-2024-37079",
+        "metadata": {
+          "source_ref": "coverage:CVE-2024-37079",
+          "related_id": "CVE-2024-37079"
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "ACTION-CVE-2024-37079-REMEDIATE",
+        "type": "action",
+        "name": "Apply required remediation",
+        "description": "Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if mitigations are unavailable.",
+        "url": "",
+        "official_link": "",
+        "source_ref": "node:CVE-2024-37079:metadata.required_action",
+        "metadata": {
+          "source_ref": "node:CVE-2024-37079:metadata.required_action",
+          "related_id": "CVE-2024-37079"
+        }
+      }
+    ],
+    "gap_explanation_es": "El bundle declara gaps operativos que deben cerrarse con evidencia: Confirm affected vCenter exposure and version.",
+    "missing_segments": [],
+    "source_refs": [
+      "cisa_kev",
+      "coverage:CVE-2024-37079",
+      "galeax_cve2capec_database",
+      "galeax_cve2capec_defend_db",
+      "node:CVE-2024-37079:metadata.required_action"
+    ]
+  },
+  "bridges": [
+    {
+      "source": "D3-NTA",
+      "target": "CTRL-SWG-PROXY",
+      "relationship": "implemented_by_control",
+      "confidence": "internal_control_mapping",
+      "source_ref": "bundle_edge"
+    },
+    {
+      "source": "D3-NTA",
+      "target": "CTRL-VIRTUAL-PATCH",
+      "relationship": "implemented_by_control",
+      "confidence": "internal_control_mapping",
+      "source_ref": "bundle_edge"
+    },
+    {
+      "source": "CTRL-SWG-PROXY",
+      "target": "DET-CLOUD-UPLOAD-ANOMALY",
+      "relationship": "validated_by_detection",
+      "confidence": "internal_detection_mapping",
+      "source_ref": "bundle_edge"
+    },
+    {
+      "source": "CTRL-SWG-PROXY",
+      "target": "DET-NON-BROWSER-UPLOAD",
+      "relationship": "validated_by_detection",
+      "confidence": "internal_detection_mapping",
+      "source_ref": "bundle_edge"
+    },
+    {
+      "source": "CTRL-VIRTUAL-PATCH",
+      "target": "DET-RPC-EXPLOIT-ATTEMPT",
+      "relationship": "validated_by_detection",
+      "confidence": "internal_detection_mapping",
+      "source_ref": "bundle_edge"
+    },
+    {
+      "source": "DET-RPC-EXPLOIT-ATTEMPT",
+      "target": "EV-FIREWALL-LOGS",
+      "relationship": "requires_evidence",
+      "confidence": "internal_evidence_mapping",
+      "source_ref": "bundle_edge"
+    },
+    {
+      "source": "T1190",
+      "target": "EV-FIREWALL-LOGS",
+      "relationship": "requires_evidence",
+      "confidence": "derived_from_bundle",
+      "source_ref": "bundle_derived"
+    },
+    {
+      "source": "CVE-2024-37079",
+      "target": "ACTION-CVE-2024-37079-REMEDIATE",
+      "relationship": "requires_action",
+      "confidence": "derived_from_bundle",
+      "source_ref": "bundle_derived"
+    },
+    {
+      "source": "GAP-CVE-2024-37079-1",
+      "target": "ACTION-CVE-2024-37079-REMEDIATE",
+      "relationship": "closed_by_action",
+      "confidence": "derived_from_bundle",
+      "source_ref": "bundle_derived"
+    }
+  ],
+  "priority": {
+    "threat_relevance": "known",
+    "exposure": "known",
+    "defense_gap": "low",
+    "final_priority": "low",
+    "rationale": "Priority derived from bundle coverage only. GTI enrichment not applied.",
+    "rationale_es": "Prioridad baja: el bundle contiene cobertura defensiva con evidencia o accion asociada."
+  },
+  "recommended_actions": [
+    {
+      "id": "ACTION-CVE-2024-37079-REMEDIATE",
+      "type": "action",
+      "description_es": "Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if mitigations are unavailable.",
+      "owner_guidance_es": "Asignar al owner operativo indicado en coverage y validar evidencia de cierre.",
+      "source_ref": "node:CVE-2024-37079:metadata.required_action",
+      "related_gap_id": "GAP-CVE-2024-37079-1"
+    }
+  ],
+  "owners": [
+    "Infra",
+    "SOC",
+    "Virtualization"
+  ],
+  "official_links": [
+    {
+      "node_id": "CAPEC-100",
+      "node_type": "capec",
+      "url": "https://capec.mitre.org/data/definitions/100.html",
+      "source": "official_framework"
+    },
+    {
+      "node_id": "CVE-2024-37079",
+      "node_type": "cve",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-37079",
+      "source": "official_framework"
+    },
+    {
+      "node_id": "CWE-787",
+      "node_type": "cwe",
+      "url": "https://cwe.mitre.org/data/definitions/787.html",
+      "source": "official_framework"
+    },
+    {
+      "node_id": "D3-AI",
+      "node_type": "d3fend",
+      "url": "https://d3fend.mitre.org/technique/D3-AI/",
+      "source": "official_framework"
+    },
+    {
+      "node_id": "D3-APCA",
+      "node_type": "d3fend",
+      "url": "https://d3fend.mitre.org/technique/D3-APCA/",
+      "source": "official_framework"
+    },
+    {
+      "node_id": "D3-AVE",
+      "node_type": "d3fend",
+      "url": "https://d3fend.mitre.org/technique/D3-AVE/",
+      "source": "official_framework"
+    },
+    {
+      "node_id": "D3-CSPP",
+      "node_type": "d3fend",
+      "url": "https://d3fend.mitre.org/technique/D3-CSPP/",
+      "source": "official_framework"
+    },
+    {
+      "node_id": "D3-DQSA",
+      "node_type": "d3fend",
+      "url": "https://d3fend.mitre.org/technique/D3-DQSA/",
+      "source": "official_framework"
+    },
+    {
+      "node_id": "D3-ISVA",
+      "node_type": "d3fend",
+      "url": "https://d3fend.mitre.org/technique/D3-ISVA/",
+      "source": "official_framework"
+    },
+    {
+      "node_id": "D3-ITF",
+      "node_type": "d3fend",
+      "url": "https://d3fend.mitre.org/technique/D3-ITF/",
+      "source": "official_framework"
+    },
+    {
+      "node_id": "D3-NTA",
+      "node_type": "d3fend",
+      "url": "https://d3fend.mitre.org/technique/D3-NTA/",
+      "source": "official_framework"
+    },
+    {
+      "node_id": "D3-NTCD",
+      "node_type": "d3fend",
+      "url": "https://d3fend.mitre.org/technique/D3-NTCD/",
+      "source": "official_framework"
+    },
+    {
+      "node_id": "D3-NTF",
+      "node_type": "d3fend",
+      "url": "https://d3fend.mitre.org/technique/D3-NTF/",
+      "source": "official_framework"
+    },
+    {
+      "node_id": "D3-NTSA",
+      "node_type": "d3fend",
+      "url": "https://d3fend.mitre.org/technique/D3-NTSA/",
+      "source": "official_framework"
+    },
+    {
+      "node_id": "D3-PHDURA",
+      "node_type": "d3fend",
+      "url": "https://d3fend.mitre.org/technique/D3-PHDURA/",
+      "source": "official_framework"
+    },
+    {
+      "node_id": "D3-PMAD",
+      "node_type": "d3fend",
+      "url": "https://d3fend.mitre.org/technique/D3-PMAD/",
+      "source": "official_framework"
+    },
+    {
+      "node_id": "D3-PSEP",
+      "node_type": "d3fend",
+      "url": "https://d3fend.mitre.org/technique/D3-PSEP/",
+      "source": "official_framework"
+    },
+    {
+      "node_id": "T1190",
+      "node_type": "attack",
+      "url": "https://attack.mitre.org/techniques/T1190/",
+      "source": "official_framework"
+    }
+  ],
+  "source_refs": [
+    "cisa_kev",
+    "coverage:CVE-2024-37079",
+    "galeax_cve2capec_database",
+    "galeax_cve2capec_defend_db",
+    "node:CVE-2024-37079:metadata.required_action"
+  ],
+  "integration_context": {
+    "gti_ready": true,
+    "mcp_security_ready": true,
+    "mcp_server_ready": false,
+    "requires_runtime_enrichment": false
+  },
+  "bundle_metadata": {
+    "builder_version": "0.3.0",
+    "contract_version": "attack2defend.knowledge_bundle.v1",
+    "counts": {
+      "coverage_records": 6,
+      "edges": 61908,
+      "nodes": 20446,
+      "route_inputs": 17746,
+      "routes": 17793,
+      "warnings": 0
+    },
+    "generated_at": "2026-05-04T17:17:33Z",
+    "mode": "public_sources_bundle",
+    "warnings": []
+  },
+  "generated_from": "data/knowledge-bundle.json"
+}

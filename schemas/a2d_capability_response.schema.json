@@ -1,0 +1,293 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://attack2defend.local/schemas/a2d_capability_response.schema.json",
+  "title": "Attack2Defend Capability Response",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "capability",
+    "input",
+    "normalized_input",
+    "input_type",
+    "coverage_status",
+    "confidence",
+    "executive_summary_es",
+    "decision_context_es",
+    "risk_rationale_es",
+    "threat_route_map",
+    "defense_readiness_map",
+    "bridges",
+    "priority",
+    "recommended_actions",
+    "owners",
+    "official_links",
+    "source_refs",
+    "integration_context",
+    "bundle_metadata",
+    "generated_from"
+  ],
+  "properties": {
+    "capability": { "const": "attack2defend.resolve_defense_route" },
+    "input": { "type": "string" },
+    "normalized_input": { "type": "string" },
+    "input_type": {
+      "enum": ["cve", "cwe", "capec", "attack", "d3fend", "control", "detection", "evidence", "gap", "action", "unknown"]
+    },
+    "coverage_status": {
+      "enum": ["complete", "partial", "catalog-only", "ready", "partial-defense", "detection-gap", "evidence-gap", "action-gap", "unresolved"]
+    },
+    "confidence": { "enum": ["low", "medium", "high"] },
+    "executive_summary_es": { "type": "string" },
+    "decision_context_es": { "type": "string" },
+    "risk_rationale_es": { "type": "string" },
+    "threat_route_map": { "$ref": "#/$defs/threat_route_map" },
+    "defense_readiness_map": { "$ref": "#/$defs/defense_readiness_map" },
+    "bridges": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/bridge" }
+    },
+    "priority": { "$ref": "#/$defs/priority" },
+    "recommended_actions": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/recommended_action" }
+    },
+    "owners": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "official_links": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/official_link" }
+    },
+    "source_refs": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "integration_context": { "$ref": "#/$defs/integration_context" },
+    "bundle_metadata": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "generated_from": { "type": "string" }
+  },
+  "$defs": {
+    "threat_route_map": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "nodes", "edges", "missing_segments", "official_links", "source_refs"],
+      "properties": {
+        "status": { "enum": ["complete", "partial", "catalog-only", "unresolved"] },
+        "nodes": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/threat_node" }
+        },
+        "edges": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/edge" }
+        },
+        "missing_segments": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "official_links": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/official_link" }
+        },
+        "source_refs": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "defense_readiness_map": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "summary_es",
+        "controls",
+        "detections",
+        "evidence",
+        "gaps",
+        "actions",
+        "gap_explanation_es",
+        "missing_segments",
+        "source_refs"
+      ],
+      "properties": {
+        "status": { "enum": ["ready", "partial-defense", "detection-gap", "evidence-gap", "action-gap", "unresolved"] },
+        "summary_es": { "type": "string" },
+        "controls": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/control_node" }
+        },
+        "detections": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/detection_node" }
+        },
+        "evidence": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/evidence_node" }
+        },
+        "gaps": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/gap_node" }
+        },
+        "actions": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/action_node" }
+        },
+        "gap_explanation_es": { "type": "string" },
+        "missing_segments": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "source_refs": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "base_node": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "type", "name", "description", "url", "official_link", "source_ref", "metadata"],
+      "properties": {
+        "id": { "type": "string" },
+        "type": { "type": "string" },
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "url": { "type": "string" },
+        "official_link": { "type": "string" },
+        "source_ref": { "type": "string" },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    },
+    "threat_node": {
+      "allOf": [
+        { "$ref": "#/$defs/base_node" },
+        {
+          "type": "object",
+          "properties": {
+            "type": { "enum": ["cve", "cwe", "capec", "attack", "d3fend"] }
+          }
+        }
+      ]
+    },
+    "control_node": {
+      "allOf": [
+        { "$ref": "#/$defs/base_node" },
+        { "type": "object", "properties": { "type": { "const": "control" } } }
+      ]
+    },
+    "detection_node": {
+      "allOf": [
+        { "$ref": "#/$defs/base_node" },
+        { "type": "object", "properties": { "type": { "const": "detection" } } }
+      ]
+    },
+    "evidence_node": {
+      "allOf": [
+        { "$ref": "#/$defs/base_node" },
+        { "type": "object", "properties": { "type": { "const": "evidence" } } }
+      ]
+    },
+    "gap_node": {
+      "allOf": [
+        { "$ref": "#/$defs/base_node" },
+        { "type": "object", "properties": { "type": { "const": "gap" } } }
+      ]
+    },
+    "action_node": {
+      "allOf": [
+        { "$ref": "#/$defs/base_node" },
+        { "type": "object", "properties": { "type": { "const": "action" } } }
+      ]
+    },
+    "edge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "target", "relationship", "confidence", "source_ref"],
+      "properties": {
+        "source": { "type": "string" },
+        "target": { "type": "string" },
+        "relationship": { "type": "string" },
+        "confidence": { "type": "string" },
+        "source_ref": { "type": "string" }
+      }
+    },
+    "bridge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "target", "relationship", "confidence", "source_ref"],
+      "properties": {
+        "source": { "type": "string" },
+        "target": { "type": "string" },
+        "relationship": {
+          "enum": [
+            "implemented_by_control",
+            "should_be_detected_by",
+            "requires_evidence",
+            "requires_action",
+            "closed_by_action",
+            "validated_by_detection",
+            "missing_evidence_creates_gap"
+          ]
+        },
+        "confidence": { "type": "string" },
+        "source_ref": { "type": "string" }
+      }
+    },
+    "official_link": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["node_id", "node_type", "url", "source"],
+      "properties": {
+        "node_id": { "type": "string" },
+        "node_type": { "enum": ["cve", "cwe", "capec", "attack", "d3fend"] },
+        "url": { "type": "string" },
+        "source": { "type": "string" }
+      }
+    },
+    "priority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["threat_relevance", "exposure", "defense_gap", "final_priority", "rationale", "rationale_es"],
+      "properties": {
+        "threat_relevance": { "enum": ["unknown", "known"] },
+        "exposure": { "enum": ["unknown", "known"] },
+        "defense_gap": { "enum": ["unknown", "low", "medium", "high"] },
+        "final_priority": { "enum": ["unknown", "low", "medium", "high"] },
+        "rationale": { "type": "string" },
+        "rationale_es": { "type": "string" }
+      }
+    },
+    "recommended_action": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "type", "description_es", "owner_guidance_es", "source_ref", "related_gap_id"],
+      "properties": {
+        "id": { "type": "string" },
+        "type": { "const": "action" },
+        "description_es": { "type": "string" },
+        "owner_guidance_es": { "type": "string" },
+        "source_ref": { "type": "string" },
+        "related_gap_id": { "type": "string" }
+      }
+    },
+    "integration_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["gti_ready", "mcp_security_ready", "mcp_server_ready", "requires_runtime_enrichment"],
+      "properties": {
+        "gti_ready": { "type": "boolean" },
+        "mcp_security_ready": { "type": "boolean" },
+        "mcp_server_ready": { "type": "boolean" },
+        "requires_runtime_enrichment": { "type": "boolean" }
+      }
+    }
+  }
+}
