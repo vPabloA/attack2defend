@@ -1,0 +1,49 @@
+# Attack2Defend Defense Intelligence Navigator — Curator Configuration
+#
+# This file is optional. All fields have sane defaults.
+# Edit to tune the curation behaviour for your environment.
+#
+# Static-first principle: this config controls the offline curation layer only.
+# It never affects the deterministic build pipeline or the UI bundle.
+
+# ── LLM settings ──────────────────────────────────────────────────────────────
+# Claude model to use for curation (requires ANTHROPIC_API_KEY)
+model: "claude-sonnet-4-6"
+
+# Temperature (0.0 = fully deterministic, recommended for evidence-based work)
+temperature: 0.0
+
+# Max output tokens per LLM call
+max_tokens: 4096
+
+# ── Gap scanning ──────────────────────────────────────────────────────────────
+# Maximum number of gaps to process per run.
+# Keep low (20–50) for fast iteration; increase for comprehensive sweeps.
+max_gaps_per_run: 50
+
+# Gap types to scan. Comment out types you want to skip.
+gap_types:
+  - missing_d3fend     # ATT&CK technique with no D3FEND countermeasures
+  - missing_capec      # CWE with no CAPEC attack pattern link
+  - missing_attack     # CAPEC with no ATT&CK technique link
+  - partial_coverage   # semantic route status is partial or catalog-only
+  - coverage_gap       # coverage record declares explicit gaps
+
+# ── Evidence gating ───────────────────────────────────────────────────────────
+# Minimum confidence level to propose a mapping.
+# Candidates below this threshold are emitted as status=needs_evidence.
+confidence_threshold: "medium"
+
+# Block promotion if no source_ref URL is present.
+# Disabling this violates the "no source = no edge" invariant.
+require_evidence_url: true
+
+# ── Priority heuristics ───────────────────────────────────────────────────────
+# Elevate priority for gaps touching CISA KEV CVEs
+boost_kev: true
+
+# Elevate priority for gaps in nodes that appear in active semantic routes
+boost_active_routes: true
+
+# ── Output ────────────────────────────────────────────────────────────────────
+output_format: "json"

@@ -9,6 +9,17 @@ dependencies = []
 dev = [
   "pytest>=8.0.0",
 ]
+ai = [
+  "langchain-core>=0.3",
+  "langchain-anthropic>=0.3",
+  "langgraph>=0.2",
+  "pydantic>=2.0",
+  "pyyaml>=6.0",
+]
+all = [
+  "attack2defend[ai]",
+  "attack2defend[dev]",
+]
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]
