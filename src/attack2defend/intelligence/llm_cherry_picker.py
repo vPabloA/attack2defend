@@ -1,8 +1,8 @@
 """Validator-gated LLM cherry-picker adapter.
 
-This module is deliberately provider-light. It defines the safe contract for
-using Gemini, OpenAI, or Anthropic in offline/build-time curation without adding
-mandatory SDK dependencies or browser/runtime calls.
+This module is build-time/offline only. It can call Gemini, OpenAI, or
+Anthropic when --llm is explicitly requested and the matching API key exists.
+The UI never imports this module and never calls providers.
 
 LLM output is never trusted directly:
   1. deterministic full graph builds the official context pack;
@@ -15,8 +15,11 @@ from __future__ import annotations
 
 import json
 import os
+import re
+import urllib.error
+import urllib.request
 from dataclasses import dataclass
-from typing import Any, Protocol
+from typing import Any, Callable, Protocol
 
 from .curated_route import CURATED_ROUTE_LIMITS, build_curated_route, validate_curated_route
 
@@ -27,6 +30,11 @@ DEFAULT_MODELS = {
     "anthropic": "claude-3-5-haiku-latest",
 }
 ALLOWED_PROVIDERS = tuple(DEFAULT_MODELS)
+JsonTransport = Callable[[str, dict[str, str], dict[str, Any], float], dict[str, Any]]
+
+
+class MissingAPIKeyError(RuntimeError):
+    """Raised when LLM mode is requested but the configured provider has no key."""
 
 
 @dataclass(frozen=True)
@@ -39,6 +47,7 @@ class AiCherryPickerConfig:
     require_validation: bool
     allow_external_knowledge: bool
     runtime_public_api_calls: bool
+    timeout_seconds: float
 
     @classmethod
     def from_env(cls) -> "AiCherryPickerConfig":
@@ -59,21 +68,131 @@ class AiCherryPickerConfig:
             require_validation=parse_bool(os.getenv("A2D_CHERRY_PICKER_REQUIRE_VALIDATION", "true")),
             allow_external_knowledge=parse_bool(os.getenv("A2D_CHERRY_PICKER_ALLOW_EXTERNAL_KNOWLEDGE", "false")),
             runtime_public_api_calls=parse_bool(os.getenv("A2D_CHERRY_PICKER_RUNTIME_PUBLIC_API_CALLS", "false")),
+            timeout_seconds=float(os.getenv("A2D_CHERRY_PICKER_TIMEOUT_SECONDS", "60") or "60"),
         )
 
 
 class JsonLLMClient(Protocol):
-    """Minimal provider abstraction for future SDK-backed clients."""
+    """Minimal provider abstraction for SDK-free build-time clients."""
 
     def complete_json(self, *, system_prompt: str, user_prompt: str, config: AiCherryPickerConfig) -> dict[str, Any]:
         """Return a JSON object shaped like a curated route."""
 
 
-class DisabledLLMClient:
-    """Safe default client: never calls a provider."""
+class MissingAPIKeyClient:
+    """Safe client used when provider keys are absent."""
 
     def complete_json(self, *, system_prompt: str, user_prompt: str, config: AiCherryPickerConfig) -> dict[str, Any]:
-        raise RuntimeError("LLM provider execution is disabled; deterministic fallback required")
+        raise MissingAPIKeyError(f"missing API key for provider {config.provider}")
+
+
+class DisabledLLMClient(MissingAPIKeyClient):
+    """Backward-compatible safe default client: never calls a provider."""
+
+
+class GeminiJsonClient:
+    def __init__(self, *, api_key: str, endpoint_template: str | None = None, transport: JsonTransport | None = None) -> None:
+        self.api_key = api_key
+        self.endpoint_template = endpoint_template or "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={api_key}"
+        self.transport = transport or post_json
+
+    def complete_json(self, *, system_prompt: str, user_prompt: str, config: AiCherryPickerConfig) -> dict[str, Any]:
+        url = self.endpoint_template.format(model=config.model, api_key=self.api_key)
+        payload = {
+            "systemInstruction": {"parts": [{"text": system_prompt}]},
+            "contents": [{"role": "user", "parts": [{"text": user_prompt}]}],
+            "generationConfig": {
+                "temperature": config.temperature,
+                "maxOutputTokens": config.max_output_tokens,
+                "responseMimeType": "application/json",
+            },
+        }
+        response = self.transport(url, {"Content-Type": "application/json"}, payload, config.timeout_seconds)
+        text = response["candidates"][0]["content"]["parts"][0]["text"]
+        return parse_json_object(text)
+
+
+class OpenAIResponsesJsonClient:
+    def __init__(self, *, api_key: str, endpoint: str | None = None, transport: JsonTransport | None = None) -> None:
+        self.api_key = api_key
+        self.endpoint = endpoint or "https://api.openai.com/v1/responses"
+        self.transport = transport or post_json
+
+    def complete_json(self, *, system_prompt: str, user_prompt: str, config: AiCherryPickerConfig) -> dict[str, Any]:
+        payload = {
+            "model": config.model,
+            "instructions": system_prompt,
+            "input": user_prompt,
+            "max_output_tokens": config.max_output_tokens,
+            "text": {"format": {"type": "json_object"}},
+        }
+        response = self.transport(
+            self.endpoint,
+            {"Authorization": f"Bearer {self.api_key}", "Content-Type": "application/json"},
+            payload,
+            config.timeout_seconds,
+        )
+        return parse_json_object(extract_openai_text(response))
+
+
+class AnthropicMessagesJsonClient:
+    def __init__(self, *, api_key: str, endpoint: str | None = None, transport: JsonTransport | None = None) -> None:
+        self.api_key = api_key
+        self.endpoint = endpoint or "https://api.anthropic.com/v1/messages"
+        self.transport = transport or post_json
+
+    def complete_json(self, *, system_prompt: str, user_prompt: str, config: AiCherryPickerConfig) -> dict[str, Any]:
+        payload = {
+            "model": config.model,
+            "max_tokens": config.max_output_tokens,
+            "temperature": config.temperature,
+            "system": system_prompt,
+            "messages": [{"role": "user", "content": user_prompt}],
+        }
+        response = self.transport(
+            self.endpoint,
+            {
+                "x-api-key": self.api_key,
+                "anthropic-version": "2023-06-01",
+                "Content-Type": "application/json",
+            },
+            payload,
+            config.timeout_seconds,
+        )
+        return parse_json_object(extract_anthropic_text(response))
+
+
+def build_llm_client_from_env(config: AiCherryPickerConfig, *, transport: JsonTransport | None = None) -> JsonLLMClient:
+    """Build a real provider client only when the matching key is present."""
+
+    if config.provider == "gemini":
+        key = first_env("GEMINI_API_KEY", "GOOGLE_API_KEY")
+        if not key:
+            return MissingAPIKeyClient()
+        return GeminiJsonClient(
+            api_key=key,
+            endpoint_template=os.getenv("A2D_GEMINI_ENDPOINT_TEMPLATE") or None,
+            transport=transport,
+        )
+    if config.provider == "openai":
+        key = first_env("OPENAI_API_KEY")
+        if not key:
+            return MissingAPIKeyClient()
+        return OpenAIResponsesJsonClient(
+            api_key=key,
+            endpoint=os.getenv("A2D_OPENAI_RESPONSES_ENDPOINT") or None,
+            transport=transport,
+        )
+    if config.provider == "anthropic":
+        key = first_env("ANTHROPIC_API_KEY")
+        if not key:
+            return MissingAPIKeyClient()
+        return AnthropicMessagesJsonClient(
+            api_key=key,
+            endpoint=os.getenv("A2D_ANTHROPIC_MESSAGES_ENDPOINT") or None,
+            transport=transport,
+        )
+    return MissingAPIKeyClient()
 
 
 def build_llm_system_prompt() -> str:
@@ -128,13 +247,16 @@ def cherry_pick_route(
         deterministic["llm_adapter"] = adapter_metadata(cfg, used=False, fallback_reason="unsafe_external_knowledge_or_runtime_api")
         return deterministic
 
-    llm_client = client or DisabledLLMClient()
+    llm_client = client or build_llm_client_from_env(cfg)
     try:
         proposed = llm_client.complete_json(
             system_prompt=build_llm_system_prompt(),
             user_prompt=build_llm_user_prompt(official_context_pack),
             config=cfg,
         )
+    except MissingAPIKeyError:
+        deterministic["llm_adapter"] = adapter_metadata(cfg, used=False, fallback_reason="missing_api_key")
+        return deterministic
     except Exception as exc:  # pragma: no cover - provider availability varies
         deterministic["llm_adapter"] = adapter_metadata(cfg, used=False, fallback_reason=f"provider_error:{type(exc).__name__}")
         return deterministic
@@ -153,6 +275,52 @@ def cherry_pick_route(
     }
     proposed["llm_adapter"] = adapter_metadata(cfg, used=True, fallback_reason="")
     return proposed
+
+
+def post_json(url: str, headers: dict[str, str], payload: dict[str, Any], timeout_seconds: float) -> dict[str, Any]:
+    body = json.dumps(payload).encode("utf-8")
+    request = urllib.request.Request(url, data=body, headers=headers, method="POST")
+    try:
+        with urllib.request.urlopen(request, timeout=timeout_seconds) as response:  # noqa: S310 - explicit provider endpoint from config/env.
+            return json.loads(response.read().decode("utf-8"))
+    except urllib.error.HTTPError as exc:  # pragma: no cover - depends on provider runtime.
+        detail = exc.read().decode("utf-8", errors="replace")[:500]
+        raise RuntimeError(f"provider HTTP {exc.code}: {detail}") from exc
+
+
+def parse_json_object(text: str) -> dict[str, Any]:
+    cleaned = text.strip()
+    if cleaned.startswith("```"):
+        cleaned = re.sub(r"^```(?:json)?\s*", "", cleaned)
+        cleaned = re.sub(r"\s*```$", "", cleaned).strip()
+    try:
+        parsed = json.loads(cleaned)
+    except json.JSONDecodeError:
+        match = re.search(r"\{.*\}", cleaned, flags=re.DOTALL)
+        if not match:
+            raise
+        parsed = json.loads(match.group(0))
+    if not isinstance(parsed, dict):
+        raise ValueError("provider response did not contain a JSON object")
+    return parsed
+
+
+def extract_openai_text(response: dict[str, Any]) -> str:
+    if isinstance(response.get("output_text"), str):
+        return response["output_text"]
+    for item in response.get("output", []):
+        for content in item.get("content", []):
+            if content.get("type") == "output_text" and isinstance(content.get("text"), str):
+                return content["text"]
+    raise ValueError("OpenAI response did not contain output_text")
+
+
+def extract_anthropic_text(response: dict[str, Any]) -> str:
+    parts = response.get("content", [])
+    for part in parts:
+        if part.get("type") == "text" and isinstance(part.get("text"), str):
+            return part["text"]
+    raise ValueError("Anthropic response did not contain text content")
 
 
 def adapter_metadata(
@@ -175,6 +343,14 @@ def adapter_metadata(
         "fallback_reason": fallback_reason,
         "errors": errors or [],
     }
+
+
+def first_env(*names: str) -> str:
+    for name in names:
+        value = os.getenv(name, "").strip()
+        if value:
+            return value
+    return ""
 
 
 def parse_bool(value: str | None) -> bool:
