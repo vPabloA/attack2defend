@@ -1,7 +1,7 @@
 [project]
 name = "attack2defend"
-version = "0.1.0"
-description = "Operational navigator for CVE/CWE/CAPEC/ATT&CK/D3FEND routes, CTI/TH actions and defensive coverage."
+version = "1.0.0"
+description = "Static-first cyber defense navigator for CVE/CWE/CAPEC/ATT&CK/D3FEND routes, evidence, gaps and actions."
 requires-python = ">=3.11"
 dependencies = []
 
