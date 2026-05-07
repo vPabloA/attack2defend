@@ -43,6 +43,7 @@ DEFAULT_MODELS = {
 AUTO_PROVIDER_ORDER: tuple[str, ...] = ("openai", "gemini", "anthropic")
 ALLOWED_PROVIDERS = tuple(DEFAULT_MODELS)
 JsonTransport = Callable[[str, dict[str, str], dict[str, Any], float], dict[str, Any]]
+_CERTIFI_CAFILE: str | None = None
 
 # Regex patterns that identify secrets in text — used for sanitization only
 _SECRET_PATTERNS = (
@@ -634,7 +635,7 @@ def post_json(
     try:
         if _transport is not None:
             return _transport(url, headers, payload, timeout_seconds)
-        with urllib.request.urlopen(request, timeout=timeout_seconds) as response:  # noqa: S310
+        with urllib.request.urlopen(request, timeout=timeout_seconds, context=_default_ssl_context()) as response:  # noqa: S310
             return json.loads(response.read().decode("utf-8"))
     except urllib.error.HTTPError as exc:
         raw_body = exc.read().decode("utf-8", errors="replace")
@@ -665,6 +666,25 @@ def post_json(
             error_type="timeout",
             message=f"connection timed out after {timeout_seconds}s",
         ) from exc
+
+
+def _default_ssl_context() -> ssl.SSLContext:
+    """Return a verifying SSL context, using certifi when Python lacks a CA file."""
+    cafile = ssl.get_default_verify_paths().cafile or _certifi_cafile()
+    return ssl.create_default_context(cafile=cafile)
+
+
+def _certifi_cafile() -> str | None:
+    global _CERTIFI_CAFILE
+    if _CERTIFI_CAFILE is not None:
+        return _CERTIFI_CAFILE
+    try:
+        import certifi  # type: ignore[import-not-found]
+    except Exception:
+        _CERTIFI_CAFILE = ""
+    else:
+        _CERTIFI_CAFILE = certifi.where()
+    return _CERTIFI_CAFILE or None
 
 
 def _http_error_type(status: int) -> str:

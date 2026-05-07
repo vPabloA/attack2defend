@@ -31,3 +31,5 @@ app/navigator-ui/public/data/knowledge-bundle.json
 app/navigator-ui/public/data/metadata.json
 app/navigator-ui/public/data/nodes.json
 app/navigator-ui/public/data/routes.json
+validate_api_keys.py
+app/navigator-ui/public/data/ai-curated-route.json

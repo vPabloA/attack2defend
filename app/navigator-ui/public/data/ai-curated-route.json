@@ -1,193 +1,134 @@
 {
-  "ai_status": "fallback_deterministic",
-  "selection_method": "deterministic_prefilter",
+  "ai_status": "llm_validated",
+  "selection_method": "llm_cherry_picker",
   "llm_adapter": {
-    "used": false,
-    "reason": "missing_api_key"
+    "used": true,
+    "reason": ""
   },
-  "provider": "gemini",
-  "model": "gemini-2.5-flash-lite",
+  "provider": "anthropic",
+  "model": "claude-haiku-4-5-20251001",
   "validator_status": "pass",
-  "generated_at": "2026-05-07T19:10:58.055195+00:00",
+  "generated_at": "2026-05-07T21:16:26.228558+00:00",
   "curated_route": {
+    "task": "Select a defensive curated route from the official context pack only.",
+    "selection_method": "llm_cherry_picker",
+    "runtime_public_api_calls": false,
     "schema_version": "1.0",
     "input": "CVE-2024-37079",
     "normalized_input": "CVE-2024-37079",
-    "mode": "official_rag_grounded",
-    "selection_method": "deterministic_prefilter",
-    "ai_ready": true,
-    "runtime_public_api_calls": false,
-    "limits": {
-      "cve": 1,
-      "cwe": 3,
-      "capec": 6,
-      "attack": 8,
-      "d3fend": 6
-    },
-    "stages": [
-      {
-        "type": "cve",
-        "label": "CVE",
-        "available_count": 1,
-        "selected": [
-          {
-            "id": "CVE-2024-37079",
-            "type": "cve",
-            "name": "VMware vCenter Server DCERPC heap-overflow RCE",
-            "official_link": "https://nvd.nist.gov/vuln/detail/CVE-2024-37079",
-            "source_ref": "missing_source_ref",
-            "rank": 1,
-            "score": 140,
-            "reason_es": "Seleccionado por cercanía al grafo y disponibilidad de enlace oficial verificable."
-          }
-        ]
-      },
-      {
-        "type": "cwe",
-        "label": "CWE",
-        "available_count": 1,
-        "selected": [
-          {
-            "id": "CWE-787",
-            "type": "cwe",
-            "name": "Out-of-bounds Write",
-            "official_link": "https://cwe.mitre.org/data/definitions/787.html",
-            "source_ref": "galeax_cve2capec_database",
-            "rank": 1,
-            "score": 60,
-            "reason_es": "Seleccionado por cercanía al grafo y disponibilidad de enlace oficial verificable."
-          }
-        ]
-      },
-      {
-        "type": "capec",
-        "label": "CAPEC",
-        "available_count": 1,
-        "selected": [
-          {
-            "id": "CAPEC-100",
-            "type": "capec",
-            "name": "Overflow Buffers",
-            "official_link": "https://capec.mitre.org/data/definitions/100.html",
-            "source_ref": "galeax_cve2capec_database",
-            "rank": 1,
-            "score": 60,
-            "reason_es": "Seleccionado por cercanía al grafo y disponibilidad de enlace oficial verificable."
-          }
-        ]
-      },
-      {
-        "type": "attack",
-        "label": "ATT&CK",
-        "available_count": 1,
-        "selected": [
-          {
-            "id": "T1190",
-            "type": "attack",
-            "name": "Exploit Public-Facing Application",
-            "official_link": "https://attack.mitre.org/techniques/T1190/",
-            "source_ref": "galeax_cve2capec_defend_db",
-            "rank": 1,
-            "score": 164,
-            "reason_es": "Seleccionado porque conecta la vulnerabilidad con explotación de una aplicación o servicio expuesto."
-          }
-        ]
-      },
-      {
-        "type": "d3fend",
-        "label": "D3FEND",
-        "available_count": 14,
-        "selected": [
-          {
-            "id": "D3-AVE",
-            "type": "d3fend",
-            "name": "Asset Vulnerability Enumeration",
-            "official_link": "https://d3fend.mitre.org/technique/D3-AVE/",
-            "source_ref": "galeax_cve2capec_database",
-            "rank": 1,
-            "score": 128,
-            "reason_es": "Seleccionado por utilidad defensiva directa para actualización, inventario, enumeración, tráfico o análisis de artefactos."
-          },
-          {
-            "id": "D3-AI",
-            "type": "d3fend",
-            "name": "Asset Inventory",
-            "official_link": "https://d3fend.mitre.org/technique/D3-AI/",
-            "source_ref": "missing_source_ref",
-            "rank": 2,
-            "score": 108,
-            "reason_es": "Seleccionado por utilidad defensiva directa para actualización, inventario, enumeración, tráfico o análisis de artefactos."
-          },
-          {
-            "id": "D3-NTA",
-            "type": "d3fend",
-            "name": "Network Traffic Analysis",
-            "official_link": "https://d3fend.mitre.org/technique/D3-NTA/",
-            "source_ref": "missing_source_ref",
-            "rank": 3,
-            "score": 108,
-            "reason_es": "Seleccionado por utilidad defensiva directa para actualización, inventario, enumeración, tráfico o análisis de artefactos."
-          },
-          {
-            "id": "D3-ISVA",
-            "type": "d3fend",
-            "name": "Inbound Session Volume Analysis",
-            "official_link": "https://d3fend.mitre.org/technique/D3-ISVA/",
-            "source_ref": "galeax_cve2capec_database",
-            "rank": 4,
-            "score": 68,
-            "reason_es": "Seleccionado por cercanía al grafo y disponibilidad de enlace oficial verificable."
-          },
-          {
-            "id": "D3-NTCD",
-            "type": "d3fend",
-            "name": "Network Traffic Community Deviation",
-            "official_link": "https://d3fend.mitre.org/technique/D3-NTCD/",
-            "source_ref": "galeax_cve2capec_database",
-            "rank": 5,
-            "score": 68,
-            "reason_es": "Seleccionado por cercanía al grafo y disponibilidad de enlace oficial verificable."
-          },
-          {
-            "id": "D3-NTF",
-            "type": "d3fend",
-            "name": "Network Traffic Filtering",
-            "official_link": "https://d3fend.mitre.org/technique/D3-NTF/",
-            "source_ref": "galeax_cve2capec_database",
-            "rank": 6,
-            "score": 68,
-            "reason_es": "Seleccionado por cercanía al grafo y disponibilidad de enlace oficial verificable."
-          }
-        ]
-      }
-    ],
+    "built_at": "2026-05-07T21:16:17.301723+00:00",
     "full_traceability_counts": {
       "cve": 1,
       "cwe": 1,
       "capec": 1,
       "attack": 1,
-      "d3fend": 14
+      "d3fend": 6
     },
-    "rationale_es": "La ruta curada selecciona un subconjunto verificable de mayor relevancia defensiva (10 nodos seleccionados de 18 candidatos). El grafo completo permanece disponible como trazabilidad; la selección no confirma cobertura real del entorno.",
+    "selected_route": {
+      "cve": [
+        {
+          "id": "CVE-2024-37079",
+          "type": "cve",
+          "name": "VMware vCenter Server DCERPC heap-overflow RCE",
+          "official_url": "https://nvd.nist.gov/vuln/detail/CVE-2024-37079",
+          "source_type": "nvd",
+          "reason_es": "Vulnerabilidad objetivo que requiere defensa contra explotación de aplicación pública en VMware vCenter Server"
+        }
+      ],
+      "cwe": [
+        {
+          "id": "CWE-787",
+          "type": "cwe",
+          "name": "Out-of-bounds Write",
+          "official_url": "https://cwe.mitre.org/data/definitions/787.html",
+          "source_type": "mitre_cwe",
+          "reason_es": "Debilidad raíz del desbordamiento de búfer de montón en DCERPC que causa la vulnerabilidad"
+        }
+      ],
+      "capec": [
+        {
+          "id": "CAPEC-100",
+          "type": "capec",
+          "name": "Overflow Buffers",
+          "official_url": "https://capec.mitre.org/data/definitions/100.html",
+          "source_type": "mitre_capec",
+          "reason_es": "Patrón de ataque de desbordamiento de búfer que describe el mecanismo de explotación de la vulnerabilidad"
+        }
+      ],
+      "attack": [
+        {
+          "id": "T1190",
+          "type": "attack",
+          "name": "Exploit Public-Facing Application",
+          "official_url": "https://attack.mitre.org/techniques/T1190/",
+          "source_type": "mitre_attack",
+          "reason_es": "Técnica de acceso inicial que describe la explotación de VMware vCenter Server expuesto en Internet"
+        }
+      ],
+      "d3fend": [
+        {
+          "id": "D3-ITF",
+          "type": "d3fend",
+          "name": "Inbound Traffic Filtering",
+          "official_url": "https://d3fend.mitre.org/technique/D3-ITF/",
+          "source_type": "mitre_d3fend",
+          "reason_es": "Defensa de filtrado de tráfico entrante para restringir acceso a DCERPC y servicios de vCenter"
+        },
+        {
+          "id": "D3-NTA",
+          "type": "d3fend",
+          "name": "Network Traffic Analysis",
+          "official_url": "https://d3fend.mitre.org/technique/D3-NTA/",
+          "source_type": "mitre_d3fend",
+          "reason_es": "Análisis de tráfico de red para detectar patrones anómalos de explotación de desbordamiento"
+        },
+        {
+          "id": "D3-NTSA",
+          "type": "d3fend",
+          "name": "Network Traffic Signature Analysis",
+          "official_url": "https://d3fend.mitre.org/technique/D3-NTSA/",
+          "source_type": "mitre_d3fend",
+          "reason_es": "Análisis de firmas de tráfico para identificar intentos de explotación de heap-overflow en DCERPC"
+        },
+        {
+          "id": "D3-AVE",
+          "type": "d3fend",
+          "name": "Asset Vulnerability Enumeration",
+          "official_url": "https://d3fend.mitre.org/technique/D3-AVE/",
+          "source_type": "mitre_d3fend",
+          "reason_es": "Enumeración de vulnerabilidades de activos para identificar instancias de vCenter Server susceptibles"
+        },
+        {
+          "id": "D3-PSEP",
+          "type": "d3fend",
+          "name": "Process Segment Execution Prevention",
+          "official_url": "https://d3fend.mitre.org/technique/D3-PSEP/",
+          "source_type": "mitre_d3fend",
+          "reason_es": "Prevención de ejecución de segmentos de proceso para mitigar ejecución de código remoto post-explotación"
+        }
+      ]
+    },
     "validation": {
       "status": "pass",
       "errors": [],
       "validator": "a2d_curated_route_validator"
     },
     "llm_adapter": {
-      "used": false,
+      "used": true,
       "mode": "llm",
-      "provider": "gemini",
-      "model": "gemini-2.5-flash-lite",
+      "provider": "anthropic",
+      "model": "claude-haiku-4-5-20251001",
       "temperature": 0.0,
       "max_output_tokens": 4000,
       "require_validation": true,
       "allow_external_knowledge": false,
       "runtime_public_api_calls": false,
-      "fallback_reason": "missing_api_key",
+      "fallback_reason": "",
       "errors": [],
       "provider_errors": [],
-      "providers_attempted": []
+      "providers_attempted": [
+        "anthropic"
+      ]
     }
   }
 }

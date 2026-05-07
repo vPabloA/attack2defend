@@ -97,6 +97,24 @@ def build_ai_artifact(route: dict, *, input_id: str) -> dict:
     }
 
 
+def build_artifact(route: dict, *, input_id: str, pretty: bool) -> dict:
+    """Build a portable, secret-free curated-route artifact."""
+    adapter = route.get("llm_adapter", {})
+    return {
+        "artifact_type": "a2d_curated_route_artifact",
+        "schema_version": route.get("schema_version", "1.0"),
+        "input": input_id,
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "ai_status": _ai_status(route),
+        "selection_method": route.get("selection_method", "deterministic"),
+        "provider": adapter.get("provider", ""),
+        "model": adapter.get("model", ""),
+        "validation_status": route.get("validation", {}).get("status", "unknown"),
+        "pretty": pretty,
+        "curated_route": route,
+    }
+
+
 def print_debug(route: dict, *, file=sys.stderr) -> None:
     adapter = route.get("llm_adapter", {})
     print("=== LLM provider diagnostics ===", file=file)

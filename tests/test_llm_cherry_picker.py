@@ -211,7 +211,7 @@ def test_llm_mode_falls_back_when_provider_is_disabled():
 def test_valid_mock_llm_output_can_pass_validator():
     capability, context = _capability_and_context()
     baseline = build_curated_route(capability, context)
-    cfg = _llm_config(provider="openai", model="gpt-5-nano")
+    cfg = _llm_config(provider="openai", model="gpt-4o-mini")
 
     route = cherry_pick_route(capability, context, config=cfg, client=ValidMockClient(baseline))
 
@@ -223,7 +223,7 @@ def test_valid_mock_llm_output_can_pass_validator():
 
 def test_invented_llm_output_is_blocked_and_falls_back():
     capability, context = _capability_and_context()
-    cfg = _llm_config(provider="anthropic", model="claude-3-5-haiku-latest")
+    cfg = _llm_config(provider="anthropic", model="claude-haiku-4-5-20251001")
 
     route = cherry_pick_route(capability, context, config=cfg, client=InventingMockClient())
 
@@ -590,7 +590,7 @@ def test_fail_on_provider_error_exits_with_code_3(monkeypatch, tmp_path):
 
 def test_provider_error_includes_structured_diagnostic():
     capability, context = _capability_and_context()
-    cfg = _llm_config(provider="openai", model="gpt-5-nano")
+    cfg = _llm_config(provider="openai", model="gpt-4o-mini")
 
     route = cherry_pick_route(capability, context, config=cfg, client=FailingMockClient("http_429", 429))
 
@@ -607,7 +607,7 @@ def test_provider_error_includes_structured_diagnostic():
 
 def test_provider_error_dict_never_contains_bearer_token():
     capability, context = _capability_and_context()
-    cfg = _llm_config(provider="anthropic", model="claude-3-5-haiku-latest")
+    cfg = _llm_config(provider="anthropic", model="claude-haiku-4-5-20251001")
 
     route = cherry_pick_route(capability, context, config=cfg, client=FailingMockClient("http_401", 401))
 
@@ -648,7 +648,7 @@ def test_gemini_client_wraps_transport_error_as_provider_call_error():
 def test_openai_client_wraps_transport_error_as_provider_call_error():
     raw = _make_http_error_transport(401, '{"error": "invalid key sk-secret"}')
     client = OpenAIResponsesJsonClient(api_key="FAKE", transport=_make_classified_transport(raw))
-    cfg = _llm_config(provider="openai", model="gpt-5-nano")
+    cfg = _llm_config(provider="openai", model="gpt-4o-mini")
 
     with pytest.raises(ProviderCallError) as exc_info:
         client.complete_json(system_prompt="s", user_prompt="u", config=cfg)
@@ -664,7 +664,7 @@ def test_anthropic_client_wraps_ssl_error():
     ssl_err = ssl.SSLError("CERTIFICATE_VERIFY_FAILED")
     raw = _make_url_error_transport(ssl_err)
     client = AnthropicMessagesJsonClient(api_key="FAKE", transport=_make_classified_transport(raw))
-    cfg = _llm_config(provider="anthropic", model="claude-3-5-haiku-latest")
+    cfg = _llm_config(provider="anthropic", model="claude-haiku-4-5-20251001")
 
     with pytest.raises(ProviderCallError) as exc_info:
         client.complete_json(system_prompt="s", user_prompt="u", config=cfg)
