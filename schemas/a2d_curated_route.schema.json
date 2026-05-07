@@ -97,6 +97,19 @@
         "reason_es": { "type": "string", "minLength": 1 }
       }
     },
+    "provider_error": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "provider": { "type": "string" },
+        "model": { "type": "string" },
+        "endpoint_sanitized": { "type": "string" },
+        "http_status": { "type": ["integer", "null"] },
+        "error_type": { "type": "string" },
+        "message": { "type": "string" },
+        "response_body_sanitized": { "type": ["string", "null"] }
+      }
+    },
     "llm_adapter": {
       "type": "object",
       "additionalProperties": false,
@@ -104,7 +117,7 @@
       "properties": {
         "used": { "type": "boolean" },
         "mode": { "type": "string" },
-        "provider": { "enum": ["gemini", "openai", "anthropic"] },
+        "provider": { "type": "string" },
         "model": { "type": "string" },
         "temperature": { "type": "number" },
         "max_output_tokens": { "type": "integer", "minimum": 1 },
@@ -112,7 +125,9 @@
         "allow_external_knowledge": { "const": false },
         "runtime_public_api_calls": { "const": false },
         "fallback_reason": { "type": "string" },
-        "errors": { "type": "array", "items": { "type": "string" } }
+        "errors": { "type": "array", "items": { "type": "string" } },
+        "provider_errors": { "type": "array", "items": { "$ref": "#/$defs/provider_error" } },
+        "providers_attempted": { "type": "array", "items": { "type": "string" } }
       }
     }
   }

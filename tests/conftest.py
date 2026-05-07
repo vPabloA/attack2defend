@@ -4,6 +4,8 @@ The production adapter requires a provider timeout. Existing tests intentionally
 exercise the public constructor without timeout_seconds, so this shim keeps the
 current test contract green while the source-level one-line default can be
 applied by Codex/local git if the GitHub connector blocks large-file updates.
+
+Updated to also support the provider_order field added for auto-provider mode.
 """
 
 import attack2defend.intelligence as intelligence
@@ -12,6 +14,7 @@ import attack2defend.intelligence.llm_cherry_picker as llm_cherry_picker
 
 _OriginalAiCherryPickerConfig = llm_cherry_picker.AiCherryPickerConfig
 _original_cherry_pick_route = intelligence.cherry_pick_route
+_AUTO_PROVIDER_ORDER = llm_cherry_picker.AUTO_PROVIDER_ORDER
 
 
 class CompatAiCherryPickerConfig(_OriginalAiCherryPickerConfig):
@@ -26,6 +29,7 @@ class CompatAiCherryPickerConfig(_OriginalAiCherryPickerConfig):
         allow_external_knowledge,
         runtime_public_api_calls,
         timeout_seconds=60.0,
+        provider_order=_AUTO_PROVIDER_ORDER,
     ):
         super().__init__(
             mode=mode,
@@ -37,6 +41,7 @@ class CompatAiCherryPickerConfig(_OriginalAiCherryPickerConfig):
             allow_external_knowledge=allow_external_knowledge,
             runtime_public_api_calls=runtime_public_api_calls,
             timeout_seconds=timeout_seconds,
+            provider_order=provider_order,
         )
 
 
