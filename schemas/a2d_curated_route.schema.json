@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://attack2defend.local/schemas/a2d_curated_route.schema.json",
+  "title": "Attack2Defend Curated Route",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "input",
+    "normalized_input",
+    "mode",
+    "selection_method",
+    "ai_ready",
+    "runtime_public_api_calls",
+    "limits",
+    "stages",
+    "full_traceability_counts",
+    "rationale_es",
+    "validation"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0" },
+    "input": { "type": "string" },
+    "normalized_input": { "type": "string" },
+    "mode": { "const": "official_rag_grounded" },
+    "selection_method": { "enum": ["deterministic_prefilter", "llm_cherry_picker"] },
+    "ai_ready": { "type": "boolean" },
+    "runtime_public_api_calls": { "const": false },
+    "limits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cve", "cwe", "capec", "attack", "d3fend"],
+      "properties": {
+        "cve": { "const": 1 },
+        "cwe": { "const": 3 },
+        "capec": { "const": 6 },
+        "attack": { "const": 8 },
+        "d3fend": { "const": 6 }
+      }
+    },
+    "stages": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "items": { "$ref": "#/$defs/stage" }
+    },
+    "full_traceability_counts": { "$ref": "#/$defs/counts" },
+    "rationale_es": { "type": "string", "minLength": 1 },
+    "validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "errors", "validator"],
+      "properties": {
+        "status": { "enum": ["pass", "fail"] },
+        "errors": { "type": "array", "items": { "type": "string" } },
+        "validator": { "const": "a2d_curated_route_validator" }
+      }
+    }
+  },
+  "$defs": {
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cve", "cwe", "capec", "attack", "d3fend"],
+      "properties": {
+        "cve": { "type": "integer", "minimum": 0 },
+        "cwe": { "type": "integer", "minimum": 0 },
+        "capec": { "type": "integer", "minimum": 0 },
+        "attack": { "type": "integer", "minimum": 0 },
+        "d3fend": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "stage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "label", "available_count", "selected"],
+      "properties": {
+        "type": { "enum": ["cve", "cwe", "capec", "attack", "d3fend"] },
+        "label": { "type": "string" },
+        "available_count": { "type": "integer", "minimum": 0 },
+        "selected": { "type": "array", "items": { "$ref": "#/$defs/selected" } }
+      }
+    },
+    "selected": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "type", "name", "official_link", "source_ref", "rank", "score", "reason_es"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "type": { "enum": ["cve", "cwe", "capec", "attack", "d3fend"] },
+        "name": { "type": "string" },
+        "official_link": { "type": "string" },
+        "source_ref": { "type": "string" },
+        "rank": { "type": "integer", "minimum": 1 },
+        "score": { "type": "integer" },
+        "reason_es": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}
