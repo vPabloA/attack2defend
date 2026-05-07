@@ -21,15 +21,25 @@ from .candidates import (
     write_candidate_batch,
 )
 from .config import CuratorConfig
+from .curated_route import (
+    CURATED_ROUTE_LIMITS,
+    build_curated_route,
+    build_official_context_pack,
+    validate_curated_route,
+)
 
 __all__ = [
     "BacklogItem",
+    "CURATED_ROUTE_LIMITS",
     "CandidateProposal",
     "CandidateStatus",
     "CandidateType",
     "CuratorConfig",
     "EvidenceRef",
     "ProposedEdge",
+    "build_curated_route",
+    "build_official_context_pack",
     "load_candidates_from_dir",
+    "validate_curated_route",
     "write_candidate_batch",
 ]

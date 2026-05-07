@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://attack2defend.local/schemas/a2d_official_context_pack.schema.json",
+  "title": "Attack2Defend Official Context Pack",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "input", "normalized_input", "built_at", "source_policy", "entries", "full_traceability_counts"],
+  "properties": {
+    "schema_version": { "const": "1.0" },
+    "input": { "type": "string" },
+    "normalized_input": { "type": "string" },
+    "built_at": { "type": "string" },
+    "source_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["allowed_sources", "runtime_public_api_calls", "llm_may_use_external_knowledge", "validator_wins"],
+      "properties": {
+        "allowed_sources": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+        "runtime_public_api_calls": { "const": false },
+        "llm_may_use_external_knowledge": { "const": false },
+        "validator_wins": { "const": true }
+      }
+    },
+    "entries": { "type": "array", "items": { "$ref": "#/$defs/entry" } },
+    "full_traceability_counts": { "$ref": "#/$defs/counts" }
+  },
+  "$defs": {
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cve", "cwe", "capec", "attack", "d3fend"],
+      "properties": {
+        "cve": { "type": "integer", "minimum": 0 },
+        "cwe": { "type": "integer", "minimum": 0 },
+        "capec": { "type": "integer", "minimum": 0 },
+        "attack": { "type": "integer", "minimum": 0 },
+        "d3fend": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "type", "name", "description", "official_url", "source_ref", "source_type", "facts", "official_context_available"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "type": { "enum": ["cve", "cwe", "capec", "attack", "d3fend"] },
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "official_url": { "type": "string" },
+        "source_ref": { "type": "string" },
+        "source_type": { "type": "string" },
+        "facts": { "type": "array", "items": { "type": "string" } },
+        "official_context_available": { "type": "boolean" }
+      }
+    }
+  }
+}
