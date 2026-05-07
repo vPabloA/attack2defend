@@ -55,7 +55,8 @@
         "errors": { "type": "array", "items": { "type": "string" } },
         "validator": { "const": "a2d_curated_route_validator" }
       }
-    }
+    },
+    "llm_adapter": { "$ref": "#/$defs/llm_adapter" }
   },
   "$defs": {
     "counts": {
@@ -94,6 +95,24 @@
         "rank": { "type": "integer", "minimum": 1 },
         "score": { "type": "integer" },
         "reason_es": { "type": "string", "minLength": 1 }
+      }
+    },
+    "llm_adapter": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["used", "mode", "provider", "model", "temperature", "max_output_tokens", "require_validation", "allow_external_knowledge", "runtime_public_api_calls", "fallback_reason", "errors"],
+      "properties": {
+        "used": { "type": "boolean" },
+        "mode": { "type": "string" },
+        "provider": { "enum": ["gemini", "openai", "anthropic"] },
+        "model": { "type": "string" },
+        "temperature": { "type": "number" },
+        "max_output_tokens": { "type": "integer", "minimum": 1 },
+        "require_validation": { "type": "boolean" },
+        "allow_external_knowledge": { "const": false },
+        "runtime_public_api_calls": { "const": false },
+        "fallback_reason": { "type": "string" },
+        "errors": { "type": "array", "items": { "type": "string" } }
       }
     }
   }
