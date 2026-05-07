@@ -89,6 +89,7 @@ type D3fendCadGraph = ReturnType<typeof buildD3fendCadGraph>;
 type CapabilityNode = RouteNode & { sourceRef: string; officialLink: string };
 type CapabilitySection = { type: NodeType; label: string; nodes: CapabilityNode[]; emptyMessage: string };
 type CapabilityBridge = { source: string; target: string; relationship: string; confidence: string; source_ref: string };
+type CuratedRoute = { stages: Array<{ type: NodeType; label: string; nodes: CapabilityNode[] }>; counts: Partial<Record<NodeType, number>>; isPending: boolean };
 type RecommendedAction = { id: string; type: 'action'; description_es: string; owner_guidance_es: string; source_ref: string; related_gap_id: string };
 type CapabilityView = {
   capability: 'attack2defend.resolve_defense_route';
@@ -237,11 +238,12 @@ function App() {
   const navigatorLayer = useMemo(() => (activeRoute ? buildAttackNavigatorLayer(bundle, activeRoute) : buildAttackNavigatorLayer(bundle, { root: 'EMPTY', nodes: [], edges: [] })), [bundle, activeRoute]);
   const d3fendCadGraph = useMemo(() => (activeRoute ? buildD3fendCadGraph(bundle, activeRoute) : buildD3fendCadGraph(bundle, { root: 'EMPTY', nodes: [], edges: [] })), [bundle, activeRoute]);
   const capabilityView = useMemo(() => (activeRoute && selectedNode ? buildCapabilityView(bundle, activeRoute, selectedNode) : null), [bundle, activeRoute, selectedNode]);
+  const curatedRoute = useMemo(() => (capabilityView ? buildCuratedRoute(capabilityView) : null), [capabilityView]);
   const markdownExport = useMemo(() => {
     if (!activeRoute || !selectedNode) return '';
     return buildMarkdownExport(bundle, activeRoute, selectedNode);
   }, [bundle, activeRoute, selectedNode]);
-  const capabilityJson = useMemo(() => (capabilityView ? JSON.stringify(capabilityView.exportPayload, null, 2) : ''), [capabilityView]);
+  const capabilityJson = useMemo(() => (capabilityView && curatedRoute ? JSON.stringify(buildCapabilityExportPackage(capabilityView, curatedRoute), null, 2) : ''), [capabilityView, curatedRoute]);
 
   function submitSearch() {
     const term = query.trim();
@@ -284,21 +286,14 @@ function App() {
     <main className="app-shell">
       <header className="hero">
         <div>
-          <p className="eyebrow">Attack2Defend · Defense Readiness Cockpit</p>
-          <h1>Threat Route + Defense Readiness</h1>
-          <p className="hero-copy">Busca una CVE, CWE, CAPEC, ATT&CK, D3FEND, Control, Detection, Evidence, Gap o Action. La UI opera solo con el bundle local: static-first, contract-first y lista para mcp-security.</p>
-          <BundleBanner bundle={bundle} bundleSource={bundleSource} />
-          <div className="metric-row">
-            <Metric label="Nodes" value={String(bundle.nodes.length)} />
-            <Metric label="Edges" value={String(bundle.edges.length)} />
-            <Metric label="Routes" value={String(bundle.routes?.length ?? bundle.indexes?.route_inputs?.length ?? 0)} />
-            <Metric label="Source" value={bundleSource === 'generated' ? 'Generated bundle' : 'Fallback sample'} />
-          </div>
+          <p className="eyebrow">Attack2Defend</p>
+          <h1>Attack2Defend</h1>
+          <p className="hero-copy">Convierte vulnerabilidades en decisiones defensivas accionables.</p>
         </div>
         <div className="search-card">
           <label htmlFor="route-search">Buscar ID o nombre</label>
           <div className="search-inline search-inline-with-clear">
-            <input id="route-search" value={query} onChange={(event) => setQuery(event.target.value)} onKeyDown={(event) => event.key === 'Enter' && submitSearch()} placeholder="CVE-2021-44228, T1190, CAPEC-63, CWE-79, D3-MFA..." />
+            <input id="route-search" value={query} onChange={(event) => setQuery(event.target.value)} onKeyDown={(event) => event.key === 'Enter' && submitSearch()} placeholder="CVE-2026-41940, CVE-2021-44228, T1190, CWE-306..." />
             <button onClick={submitSearch}>Buscar</button>
             <button className="secondary-button" onClick={clearSearch}>Limpiar</button>
           </div>
@@ -317,7 +312,7 @@ function App() {
 
       <nav className="tabs" aria-label="Navigator tabs">
         {[
-          ['route', 'Cockpit'],
+          ['route', 'Análisis'],
           ['attack', 'ATT&CK Navigator'],
           ['d3fend', 'D3FEND CAD'],
           ['coverage', 'Coverage'],
@@ -331,9 +326,8 @@ function App() {
         <EmptyState bundleSource={bundleSource} />
       ) : (
         <>
-          {capabilityView && <CapabilityHeader view={capabilityView} />}
           {activeTab === 'route' && (
-            capabilityView ? <CockpitTab view={capabilityView} selectedId={selectedNode.id} onSelect={selectNode} /> : null
+            capabilityView && curatedRoute ? <AnalysisTab view={capabilityView} curatedRoute={curatedRoute} bundle={bundle} bundleSource={bundleSource} onSelect={selectNode} /> : null
           )}
 
           {activeTab === 'attack' && <AttackNavigatorTab bundle={bundle} activeRoute={activeRoute} navigatorLayer={navigatorLayer} />}
@@ -377,7 +371,7 @@ function EmptyState({ bundleSource }: { bundleSource: BundleSource }) {
   return (
     <section className="panel empty-state">
       <h2>Busca para iniciar</h2>
-      <p>Ingresa una CVE, CWE, CAPEC, técnica ATT&CK, técnica D3FEND, Control, Detection, Evidence, Gap o Action. Nada se preselecciona: el cockpit se deriva del bundle local.</p>
+      <p>Ingresa una CVE, CWE, CAPEC, técnica ATT&CK, técnica D3FEND, Control, Detection, Evidence, Gap o Action. Nada se preselecciona: el análisis se deriva del bundle local.</p>
       <div className="empty-examples">
         <code>CVE-2021-44228</code>
         <code>T1190</code>
@@ -390,143 +384,181 @@ function EmptyState({ bundleSource }: { bundleSource: BundleSource }) {
   );
 }
 
-function CapabilityHeader({ view }: { view: CapabilityView }) {
+
+function AnalysisTab({ view, curatedRoute, bundle, bundleSource, onSelect }: { view: CapabilityView; curatedRoute: CuratedRoute; bundle: KnowledgeBundle; bundleSource: BundleSource; onSelect: (id: string) => void }) {
+  const counts = fullTraceabilityCounts(view);
+  const exportPayload = buildCapabilityExportPackage(view, curatedRoute);
   return (
-    <section className="capability-header">
-      <div className="capability-identity">
-        <span>Input buscado</span>
-        <strong>{view.normalized_input}</strong>
-        <em>{typeLabels[view.input_type as NodeType] ?? 'Unknown'}</em>
-      </div>
-      <Metric label="Coverage status" value={view.coverage_status} />
-      <Metric label="Confidence" value={view.confidence} />
-      <Metric label="Priority" value={view.priority.final_priority} />
-      <div className="capability-badges">
-        <span>Bundle-first</span>
-        <span>Static runtime</span>
-        <span>mcp-security ready</span>
-        <span>GTI-ready · not applied</span>
-      </div>
+    <section className="analysis-stack">
+      <PreliminarySummary view={view} />
+      <CuratedRoutePanel curatedRoute={curatedRoute} onSelect={onSelect} />
+      <ConclusionPanel view={view} curatedRoute={curatedRoute} />
+      <ValidationPanel view={view} />
+      <SuggestedDetectionsPanel curatedRoute={curatedRoute} />
+      <PotentialGapsPanel />
+      <OwnerActionsPanel />
+      <FullTraceabilityPanel view={view} counts={counts} onSelect={onSelect} />
+      <TechnicalDetailPanel bundle={bundle} bundleSource={bundleSource} view={view} />
+      <section className="panel export-primary">
+        <PanelTitle title="Exportar JSON" subtitle="Payload portable con capability, ruta curada, conteos de trazabilidad y source_ref sanitizados." />
+        <DownloadLinks filename="attack2defend-capability.json" payload={exportPayload} />
+        <textarea value={JSON.stringify(exportPayload, null, 2)} readOnly />
+      </section>
     </section>
   );
 }
 
-function CockpitTab({ view, selectedId, onSelect }: { view: CapabilityView; selectedId: string; onSelect: (id: string) => void }) {
+function PreliminarySummary({ view }: { view: CapabilityView }) {
   return (
-    <section className="cockpit-grid">
-      <ThreatRoutePanel view={view} selectedId={selectedId} onSelect={onSelect} />
-      <DefenseReadinessPanel view={view} selectedId={selectedId} onSelect={onSelect} />
-      <BridgePanel bridges={view.bridges} />
-      <DecisionPanel view={view} />
+    <section className="panel summary-panel">
+      <PanelTitle title="Resumen defensivo preliminar" subtitle="Lectura consultiva derivada solo del bundle local." />
+      <div className="summary-grid">
+        <SummaryItem label="ID consultado" value={view.normalized_input} />
+        <SummaryItem label="Tipo" value={typeLabels[view.input_type as NodeType] ?? 'Desconocido'} />
+        <SummaryItem label="Lectura defensiva preliminar" value={preliminaryReading(view)} />
+        <SummaryItem label="Prioridad preliminar" value={preliminaryPriority(view.priority.final_priority)} />
+        <SummaryItem label="Confianza del mapeo" value={mappingConfidence(view.confidence)} />
+      </div>
+      <p className="summary-disclaimer">Esta vista no confirma afectación ni cobertura real del entorno. Indica qué debe validarse para considerar el riesgo cubierto.</p>
     </section>
   );
 }
 
-function ThreatRoutePanel({ view, selectedId, onSelect }: { view: CapabilityView; selectedId: string; onSelect: (id: string) => void }) {
-  return (
-    <section className="panel cockpit-panel threat-panel">
-      <PanelTitle title="Ruta de amenaza" subtitle="Threat Route Map: CVE → CWE → CAPEC → ATT&CK → D3FEND." />
-      <div className="map-status-row">
-        <span className={`status ${statusTone(view.threatStatus)}`}>{view.threatStatus}</span>
-        <small>{view.official_links.length} official links · {view.source_refs.length} fuentes portables</small>
-      </div>
-      <div className="map-section-stack">
-        {view.threatSections.map((section) => (
-          <CapabilityNodeGroup key={section.type} section={section} selectedId={selectedId} onSelect={onSelect} />
-        ))}
-      </div>
-    </section>
-  );
+function SummaryItem({ label, value }: { label: string; value: string }) {
+  return <article className="summary-item"><span>{label}</span><strong>{value}</strong></article>;
 }
 
-function DefenseReadinessPanel({ view, selectedId, onSelect }: { view: CapabilityView; selectedId: string; onSelect: (id: string) => void }) {
+function CuratedRoutePanel({ curatedRoute, onSelect }: { curatedRoute: CuratedRoute; onSelect: (id: string) => void }) {
   return (
-    <section className="panel cockpit-panel defense-panel">
-      <PanelTitle title="Preparación defensiva" subtitle="Defense Readiness Map: Control → Detection → Evidence → Gap → Action." />
-      <div className="map-status-row">
-        <span className={`status ${statusTone(view.defenseStatus)}`}>{view.defenseStatus}</span>
-        <small>{view.owners.length ? `Owners sugeridos: ${view.owners.join(', ')}` : 'Owners por validar'}</small>
-      </div>
-      <div className="map-section-stack">
-        {view.defenseSections.map((section) => (
-          <CapabilityNodeGroup key={section.type} section={section} selectedId={selectedId} onSelect={onSelect} />
-        ))}
-      </div>
-    </section>
-  );
-}
-
-function CapabilityNodeGroup({ section, selectedId, onSelect }: { section: CapabilitySection; selectedId: string; onSelect: (id: string) => void }) {
-  const [expanded, setExpanded] = useState(false);
-  const visible = expanded ? section.nodes : section.nodes.slice(0, 5);
-  return (
-    <article className={`capability-section ${section.type}`}>
-      <header>
-        <h3>{section.label}</h3>
-        <span>{section.nodes.length}</span>
-      </header>
-      {visible.map((node) => (
-        <button key={node.id} className={`capability-node ${node.type} ${selectedId === node.id ? 'selected' : ''}`} onClick={() => onSelect(node.id)}>
-          <strong>{node.id}</strong>
-          <span>{node.name}</span>
-          <small>{node.sourceRef && node.sourceRef !== 'missing_source_ref' ? `Fuente: ${node.sourceRef}` : 'Fuente: requiere validación'}</small>
-          {node.officialLink && <a href={node.officialLink} target="_blank" rel="noreferrer" onClick={(event) => event.stopPropagation()}>Official link</a>}
-        </button>
-      ))}
-      {!section.nodes.length && <p className="operational-gap">{section.emptyMessage}</p>}
-      {section.nodes.length > 5 && (
-        <button className="show-more-button" onClick={() => setExpanded((current) => !current)}>
-          {expanded ? 'Mostrar menos' : `Mostrar ${section.nodes.length - 5} más`}
-        </button>
+    <section className="panel curated-route-panel">
+      <PanelTitle title="Ruta curada de mayor relevancia" subtitle="CVE → CWE → CAPEC → ATT&CK → D3FEND" />
+      {curatedRoute.isPending ? <p className="operational-gap">Ruta curada pendiente de validación.</p> : (
+        <div className="curated-steps">
+          {curatedRoute.stages.map((stage) => (
+            <article key={stage.type} className={`curated-stage ${stage.type}`}>
+              <header><span>{stage.label}</span><strong>{stage.nodes.length}</strong></header>
+              <div className="curated-node-list">
+                {stage.nodes.map((node) => <TraceabilityNode key={node.id} node={node} onSelect={onSelect} compact />)}
+                {!stage.nodes.length && <p>Sin nodo disponible en el bundle.</p>}
+              </div>
+            </article>
+          ))}
+        </div>
       )}
+    </section>
+  );
+}
+
+function ConclusionPanel({ view, curatedRoute }: { view: CapabilityView; curatedRoute: CuratedRoute }) {
+  return (
+    <section className="panel consultative-panel">
+      <PanelTitle title="Conclusión" subtitle="Síntesis consultiva para priorizar validaciones, no para declarar cobertura." />
+      <ul className="consultative-list">
+        {buildConsultativeConclusion(view, curatedRoute).map((item) => <li key={item}>{item}</li>)}
+      </ul>
+    </section>
+  );
+}
+
+function ValidationPanel({ view }: { view: CapabilityView }) {
+  return (
+    <section className="panel consultative-panel">
+      <PanelTitle title="Validaciones recomendadas" subtitle="Owners sugeridos para confirmar afectación, exposición y evidencia operacional." />
+      <div className="validation-list">
+        {buildRecommendedValidations(view).map((item) => (
+          <article key={`${item.owner}-${item.text}`} className="validation-card"><strong>{item.text}</strong><span>{item.owner}</span></article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function SuggestedDetectionsPanel({ curatedRoute }: { curatedRoute: CuratedRoute }) {
+  const detections = buildSuggestedDetections(curatedRoute);
+  return (
+    <section className="panel consultative-panel">
+      <PanelTitle title="Detecciones sugeridas" subtitle="Ideas de detección a validar o convertir en hunting; no representan detecciones existentes." />
+      <ul className="consultative-list">{detections.map((item) => <li key={item}>{item}</li>)}</ul>
+    </section>
+  );
+}
+
+function PotentialGapsPanel() {
+  return (
+    <section className="panel consultative-panel">
+      <PanelTitle title="Brechas potenciales" subtitle="Puntos mínimos que impiden declarar el riesgo como cubierto sin evidencia." />
+      <div className="chip-list">{['Inventario no confirmado', 'Exposición no validada', 'Evidencia/logs no confirmados', 'Detección no validada', 'Acción de cierre no documentada'].map((gap) => <span key={gap}>{gap}</span>)}</div>
+    </section>
+  );
+}
+
+function OwnerActionsPanel() {
+  const ownerActions: Array<{ owner: string; actions: string[] }> = [
+    { owner: 'Vulnerability Manager', actions: ['Confirmar activos afectados y versión o condición vulnerable.', 'Priorizar remediación según exposición y criticidad del activo.'] },
+    { owner: 'Infra', actions: ['Validar exposición del servicio o superficie administrativa.', 'Definir reducción temporal de exposición si aplica.'] },
+    { owner: 'SOC', actions: ['Revisar logs y evidencia asociada al vector sugerido.', 'Validar hunting de actividad posterior si hay señales.'] },
+    { owner: 'Detection Engineering', actions: ['Validar detecciones o queries para la ruta priorizada.', 'Definir evidencia requerida para medir efectividad.'] },
+    { owner: 'CTI/TH', actions: ['Revisar contexto de explotación y técnicas plausibles.', 'Priorizar hipótesis de hunting con evidencia observable.'] },
+    { owner: 'CSMA', actions: ['Confirmar postura de controles relacionada con la ruta.', 'Definir criterio de cierre con owner y evidencia.'] },
+  ];
+  return (
+    <section className="panel consultative-panel">
+      <PanelTitle title="Acciones sugeridas por owner" subtitle="Máximo dos acciones consultivas por rol." />
+      <div className="owner-action-grid">{ownerActions.map((group) => <article key={group.owner} className="owner-card"><h3>{group.owner}</h3><ul>{group.actions.map((action) => <li key={action}>{action}</li>)}</ul></article>)}</div>
+    </section>
+  );
+}
+
+function FullTraceabilityPanel({ view, counts, onSelect }: { view: CapabilityView; counts: Partial<Record<NodeType, number>>; onSelect: (id: string) => void }) {
+  return (
+    <details className="panel details-panel">
+      <summary><span>Trazabilidad completa</span><strong>{formatTraceabilityCounts(counts)}</strong><em>Ver detalle técnico</em></summary>
+      <div className="traceability-groups">
+        {view.threatSections.map((section) => <TraceabilityGroup key={section.type} section={section} onSelect={onSelect} />)}
+      </div>
+    </details>
+  );
+}
+
+function TraceabilityGroup({ section, onSelect }: { section: CapabilitySection; onSelect: (id: string) => void }) {
+  return (
+    <article className={`traceability-group ${section.type}`}>
+      <header><h3>{section.label}</h3><span>{section.nodes.length}</span></header>
+      <div className="traceability-node-grid">
+        {section.nodes.map((node) => <TraceabilityNode key={node.id} node={node} onSelect={onSelect} />)}
+        {!section.nodes.length && <p className="operational-gap">{section.emptyMessage}</p>}
+      </div>
     </article>
   );
 }
 
-function BridgePanel({ bridges }: { bridges: CapabilityBridge[] }) {
+function TraceabilityNode({ node, onSelect, compact = false }: { node: CapabilityNode; onSelect: (id: string) => void; compact?: boolean }) {
   return (
-    <section className="panel bridge-panel">
-      <PanelTitle title="Bridges" subtitle="Conexiones explícitas entre Threat Route y Defense Readiness. No es una cadena monolítica." />
-      <div className="bridge-list">
-        {bridges.slice(0, 18).map((bridge) => (
-          <div key={`${bridge.source}-${bridge.relationship}-${bridge.target}`} className="bridge-card">
-            <code>{bridge.source}</code>
-            <span>{bridge.relationship}</span>
-            <code>{bridge.target}</code>
-            <small>{bridge.confidence} · {bridge.source_ref}</small>
-          </div>
-        ))}
-        {!bridges.length && <p className="operational-gap">Existe contexto de ruta, pero no hay bridges explícitos hacia preparación defensiva en el bundle.</p>}
-        {bridges.length > 18 && <p className="bridge-overflow">Mostrando 18 de {bridges.length} bridges para evitar ruido visual.</p>}
-      </div>
-    </section>
+    <article className={`traceability-node ${node.type} ${compact ? 'compact' : ''}`}>
+      <button onClick={() => onSelect(node.id)}>{node.id}</button>
+      <strong>{node.name}</strong>
+      {node.officialLink && <a href={node.officialLink} target="_blank" rel="noreferrer">Official link</a>}
+      <small>source_ref: {node.sourceRef && node.sourceRef !== 'missing_source_ref' ? node.sourceRef : 'missing_source_ref'}</small>
+    </article>
   );
 }
 
-function DecisionPanel({ view }: { view: CapabilityView }) {
+function TechnicalDetailPanel({ bundle, bundleSource, view }: { bundle: KnowledgeBundle; bundleSource: BundleSource; view: CapabilityView }) {
+  const generatedAt = bundle.metadata.generated_at ?? 'not available';
+  const mode = bundle.metadata.mode ?? 'unknown';
+  const warnings = (bundle.metadata.warnings?.length ?? 0) + (bundle.metadata.public_source_failures?.length ?? 0);
   return (
-    <section className="panel decision-panel">
-      <PanelTitle title="Decisión operativa" subtitle="Lectura ejecutiva en español para SOC, AppSec, Infra y CISO." />
-      <div className="decision-copy">
-        <p><strong>Resumen:</strong> {view.executive_summary_es}</p>
-        <p><strong>Contexto:</strong> {view.decision_context_es}</p>
-        <p><strong>Riesgo:</strong> {view.risk_rationale_es}</p>
-        <p><strong>Gaps:</strong> {view.gap_explanation_es}</p>
-        <p><strong>Prioridad:</strong> {view.priority.rationale_es}</p>
+    <details className="panel details-panel technical-details">
+      <summary><span>Detalle técnico</span><strong>{bundle.nodes.length} nodes · {bundle.edges.length} edges · {bundle.routes?.length ?? bundle.indexes?.route_inputs?.length ?? 0} routes</strong><em>Expandir</em></summary>
+      <div className="technical-grid">
+        <SummaryItem label="Fuente del bundle" value={bundleSource === 'generated' ? 'Generated bundle' : 'Fallback sample'} />
+        <SummaryItem label="Modo" value={mode} />
+        <SummaryItem label="Generado" value={generatedAt} />
+        <SummaryItem label="Warnings" value={String(warnings)} />
+        <SummaryItem label="Official links" value={String(view.official_links.length)} />
+        <SummaryItem label="Source refs portables" value={String(view.source_refs.length)} />
       </div>
-      <h3>Acciones recomendadas</h3>
-      <div className="recommendation-list">
-        {view.recommended_actions.map((action) => (
-          <article key={action.id} className="recommendation-card">
-            <strong>{action.id}</strong>
-            <p>{action.description_es}</p>
-            <small>Owner sugerido: {action.owner_guidance_es}</small>
-            <em>Fuente: {action.source_ref}</em>
-          </article>
-        ))}
-        {!view.recommended_actions.length && <p className="operational-gap">No hay Action modelada; se requiere definir cierre, owner y evidencia verificable.</p>}
-      </div>
-    </section>
+    </details>
   );
 }
 
@@ -673,7 +705,7 @@ function ExportTab({ markdown, routeJson, capabilityJson, navigatorLayer, cadGra
   return (
     <section className="grid two-col">
       <section className="panel export-primary">
-        <PanelTitle title="Exportar JSON" subtitle="Capability JSON compatible con attack2defend.resolve_defense_route y mcp-security." />
+        <PanelTitle title="Exportar JSON" subtitle="Capability JSON portable para revisión, automatización y evidencia de decisión." />
         <DownloadLinks filename="attack2defend-capability.json" payload={capabilityPayload} />
         <textarea value={capabilityJson} readOnly />
       </section>
@@ -761,6 +793,115 @@ function buildCoverageRows(bundle: KnowledgeBundle, route: ResolvedRoute): Cover
   }
   const relationshipRows = route.nodes.filter((id) => ['CTRL-', 'DET-', 'EV-'].some((prefix) => id.startsWith(prefix))).map((id) => ({ id, status: 'unknown' as CoverageStatus, controls: id.startsWith('CTRL-') ? [id] : [], detections: id.startsWith('DET-') ? [id] : [], evidence: id.startsWith('EV-') ? [id] : [], gaps: [], owners: [] }));
   return [...rows, ...relationshipRows].filter((row, index, all) => all.findIndex((item) => item.id === row.id) === index);
+}
+
+
+function buildCuratedRoute(view: CapabilityView): CuratedRoute {
+  const limits: Partial<Record<NodeType, number>> = { cve: 1, cwe: 3, capec: 6, attack: 8, d3fend: 6 };
+  const stages = threatMapTypes.map((type) => {
+    const section = view.threatSections.find((item) => item.type === type);
+    const nodes = [...(section?.nodes ?? [])]
+      .map((node, index) => ({ node, score: curatedNodeScore(node, type, index) }))
+      .sort((left, right) => right.score - left.score || left.node.id.localeCompare(right.node.id))
+      .slice(0, limits[type] ?? 0)
+      .map((item) => item.node);
+    return { type, label: typeLabels[type], nodes };
+  });
+  const counts = Object.fromEntries(stages.map((stage) => [stage.type, stage.nodes.length])) as Partial<Record<NodeType, number>>;
+  return { stages, counts, isPending: stages.every((stage) => stage.nodes.length === 0) };
+}
+
+function curatedNodeScore(node: CapabilityNode, type: NodeType, index: number) {
+  let score = 1000 - index * 10;
+  if (node.officialLink) score += 120;
+  if (node.sourceRef && node.sourceRef !== 'missing_source_ref') score += 80;
+  if (type === 'cwe' && node.id === 'CWE-306') score += 500;
+  if (isGenericNode(node)) score -= 70;
+  return score;
+}
+
+function isGenericNode(node: CapabilityNode) {
+  const text = `${node.id} ${node.name} ${node.description ?? ''}`.toLowerCase();
+  return ['other', 'generic', 'general', 'unspecified', 'catalog', 'miscellaneous'].some((word) => text.includes(word));
+}
+
+function fullTraceabilityCounts(view: CapabilityView): Partial<Record<NodeType, number>> {
+  return Object.fromEntries(view.threatSections.map((section) => [section.type, section.nodes.length])) as Partial<Record<NodeType, number>>;
+}
+
+function formatTraceabilityCounts(counts: Partial<Record<NodeType, number>>) {
+  return `CVE ${counts.cve ?? 0} · CWE ${counts.cwe ?? 0} · CAPEC ${counts.capec ?? 0} · ATT&CK ${counts.attack ?? 0} · D3FEND ${counts.d3fend ?? 0}`;
+}
+
+function buildCapabilityExportPackage(view: CapabilityView, curatedRoute: CuratedRoute) {
+  return sanitizeAny({
+    capability_payload: view.exportPayload,
+    curated_route: {
+      stages: curatedRoute.stages.map((stage) => ({
+        type: stage.type,
+        label: stage.label,
+        nodes: stage.nodes.map(toCapabilityNodeExport),
+      })),
+      pending_validation: curatedRoute.isPending,
+    },
+    full_traceability_counts: fullTraceabilityCounts(view),
+    sanitized_source_refs: view.source_refs.map(sanitizeSourceRef),
+  });
+}
+
+function preliminaryReading(view: CapabilityView) {
+  const present = view.threatSections.filter((section) => section.nodes.length).map((section) => section.label);
+  if (!present.length) return 'Requiere validación: no hay ruta de amenaza suficiente en el bundle local.';
+  return `Requiere validación: ruta preliminar con ${present.join(', ')}. Capacidad sugerida y evidencia requerida deben confirmarse en el entorno.`;
+}
+
+function preliminaryPriority(priority: string) {
+  if (priority === 'high') return 'Prioridad preliminar alta';
+  if (priority === 'medium') return 'Prioridad preliminar media';
+  if (priority === 'low') return 'Prioridad preliminar baja, sujeta a evidencia requerida';
+  return 'Prioridad preliminar por definir';
+}
+
+function mappingConfidence(confidence: string) {
+  if (confidence === 'high') return 'Confianza del mapeo alta';
+  if (confidence === 'medium') return 'Confianza del mapeo media';
+  return 'Confianza del mapeo baja o pendiente';
+}
+
+function buildConsultativeConclusion(view: CapabilityView, curatedRoute: CuratedRoute) {
+  const routeText = curatedRoute.stages.filter((stage) => stage.nodes.length).map((stage) => stage.label.toLowerCase()).join(', ');
+  const hasAuth = curatedRoute.stages.some((stage) => stage.nodes.some((node) => `${node.id} ${node.name}`.toLowerCase().includes('auth')));
+  const focus = hasAuth ? 'autenticación, acceso, explotación de superficie expuesta y defensas verificables' : `${routeText || 'la ruta disponible'}, exposición, evidencia operacional y defensas verificables`;
+  return [
+    `La lectura se centra en ${focus}.`,
+    'Las rutas posteriores son plausibles, no confirmadas.',
+    'La prioridad depende de exposición, versión y evidencia operacional.',
+    view.source_refs.length ? 'La trazabilidad completa queda disponible como evidencia de origen, sin declarar cobertura real.' : 'Falta evidencia de origen suficiente para cerrar una decisión sin curaduría adicional.',
+  ];
+}
+
+function buildRecommendedValidations(view: CapabilityView) {
+  const items = [
+    { text: 'Confirmar activos afectados', owner: 'Vulnerability Manager / Infra' },
+    { text: 'Confirmar versión o condición vulnerable', owner: 'Vulnerability Manager' },
+    { text: 'Validar exposición', owner: 'Infra' },
+    { text: 'Revisar logs/evidencia asociada', owner: 'SOC' },
+    { text: 'Validar detecciones o hunting', owner: 'Detection Engineering / SOC' },
+    { text: 'Revisar persistencia si hay señales', owner: 'SOC / DFIR' },
+  ];
+  if (view.normalized_input === 'CVE-2026-41940') {
+    return [{ text: 'Validar producto afectado, versión, exposición administrativa, logs y evidencia de explotación', owner: 'Vulnerability Manager / Infra / SOC' }, ...items];
+  }
+  return items;
+}
+
+function buildSuggestedDetections(curatedRoute: CuratedRoute) {
+  if (curatedRoute.isPending) return ['Detecciones sugeridas pendientes de curaduría.'];
+  const allText = curatedRoute.stages.flatMap((stage) => stage.nodes).map((node) => `${node.id} ${node.name} ${node.description ?? ''}`.toLowerCase()).join(' ');
+  const detections = new Set<string>(['Acceso anómalo al servicio expuesto', 'Artefactos de sesión o autenticación sospechosa', 'Cambios administrativos posteriores']);
+  if (allText.includes('command') || allText.includes('execution') || allText.includes('execute')) detections.add('Ejecución de comandos post-explotación');
+  if (allText.includes('web') || allText.includes('file') || allText.includes('upload')) detections.add('Web shell o modificación de archivos si la ruta lo sugiere');
+  return [...detections];
 }
 
 function buildCapabilityView(bundle: KnowledgeBundle, route: ResolvedRoute, selectedNode: RouteNode): CapabilityView {
@@ -1081,7 +1222,7 @@ function buildExecutiveSummaryEs(threatStatus: string, defenseStatus: string, pr
 function buildDecisionContextEs(threatSections: CapabilitySection[], defenseSections: CapabilitySection[]) {
   const threatCount = threatSections.reduce((sum, section) => sum + section.nodes.length, 0);
   const defenseCount = defenseSections.reduce((sum, section) => sum + section.nodes.length, 0);
-  return `La vista separa ${threatCount} nodos de amenaza y ${defenseCount} nodos operativos. El resultado es consumible por CLI, API futura, MCP futuro y mcp-security sin llamadas públicas desde la UI.`;
+  return `La vista separa ${threatCount} nodos de amenaza y ${defenseCount} nodos operativos. El resultado conserva trazabilidad portable para revisión y automatización sin llamadas públicas desde la UI.`;
 }
 
 function buildRiskRationaleEs(priority: CapabilityView['priority'], sections: CapabilitySection[]) {
