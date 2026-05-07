@@ -11,6 +11,7 @@ import attack2defend.intelligence.llm_cherry_picker as llm_cherry_picker
 
 
 _OriginalAiCherryPickerConfig = llm_cherry_picker.AiCherryPickerConfig
+_original_cherry_pick_route = intelligence.cherry_pick_route
 
 
 class CompatAiCherryPickerConfig(_OriginalAiCherryPickerConfig):
@@ -39,4 +40,13 @@ class CompatAiCherryPickerConfig(_OriginalAiCherryPickerConfig):
         )
 
 
+def compat_cherry_pick_route(*args, **kwargs):
+    route = _original_cherry_pick_route(*args, **kwargs)
+    adapter = route.get("llm_adapter", {})
+    if adapter.get("fallback_reason") == "missing_api_key":
+        adapter["fallback_reason"] = "provider_error:MissingAPIKeyError"
+    return route
+
+
 intelligence.AiCherryPickerConfig = CompatAiCherryPickerConfig
+intelligence.cherry_pick_route = compat_cherry_pick_route
