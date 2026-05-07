@@ -36,7 +36,7 @@ from .curated_route import CURATED_ROUTE_LIMITS, build_curated_route, validate_c
 
 DEFAULT_MODELS = {
     "gemini": "gemini-2.5-flash-lite",
-    "openai": "gpt-5-nano",
+    "openai": "gpt-4o-mini",
     "anthropic": "claude-3-5-haiku-latest",
 }
 # Ordered by cost-efficiency for auto mode
@@ -429,7 +429,7 @@ You must select only IDs present in the provided official context pack.
 You must not invent IDs, facts, relationships, affected products, impact, or coverage.
 You must not use external knowledge.
 You must return only JSON matching the curated route schema.
-Validator wins.
+Your response must be valid JSON.
 """.strip()
 
 
