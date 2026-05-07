@@ -62,6 +62,28 @@ BRIDGE_RELATIONSHIPS = {
 
 MAX_GRAPH_NODES = 160
 MAX_EXPANSION_PER_NODE = 16
+LOGICAL_SOURCE_REFS = (
+    "baseline:",
+    "coverage:",
+    "curated:",
+    "generated:",
+    "bundle_derived",
+    "bundle_edge",
+    "missing_source_ref",
+    "galeax_",
+    "nvd_api",
+    "cisa_kev",
+    "mitre_",
+)
+LOCAL_PATH_PATTERNS = (
+    "/home/",
+    "/users/",
+    "/private/",
+    "/var/folders/",
+    "\\users\\",
+)
+SOURCE_REF_KEYS = {"source_ref", "mapping_file", "source"}
+URL_KEYS = {"url", "official_link"}
 
 
 def resolve_defense_route(
@@ -136,7 +158,7 @@ class CapabilityResolver:
         source_refs = self._source_refs(used_edges, threat_ids, defense_ids)
         recommended_actions = self._recommended_actions(actions, gaps, priority)
 
-        return {
+        response = {
             "capability": CAPABILITY_NAME,
             "input": raw_input,
             "normalized_input": normalized_input,
@@ -181,6 +203,7 @@ class CapabilityResolver:
             "bundle_metadata": self._bundle_metadata(),
             "generated_from": self.generated_from,
         }
+        return sanitize_capability_output(response)
 
     def _walk(self, start: str, input_type: str) -> tuple[set[str], list[dict[str, Any]]]:
         allow_reverse = input_type != "cve"
@@ -346,7 +369,7 @@ class CapabilityResolver:
             "url": node.get("url", ""),
             "official_link": official_link(node),
             "source_ref": source_ref,
-            "metadata": node.get("metadata", {}),
+            "metadata": sanitize_provenance_values(node.get("metadata", {})),
         }
         if node_type in DEFENSE_TYPES and source_ref == "missing_source_ref":
             record["metadata"] = {**record["metadata"], "source_gap": "missing_source_ref"}
@@ -381,7 +404,7 @@ class CapabilityResolver:
             "target": normalize_identifier(edge.get("target", "")),
             "relationship": edge.get("relationship", ""),
             "confidence": edge.get("confidence", "unknown"),
-            "source_ref": edge.get("source_ref", ""),
+            "source_ref": sanitize_source_ref(edge.get("source_ref", "")),
         }
 
     def _bridge_record(
@@ -396,7 +419,7 @@ class CapabilityResolver:
             "target": target,
             "relationship": relationship,
             "confidence": edge.get("confidence", "derived_from_bundle") if edge else "derived_from_bundle",
-            "source_ref": (edge.get("source_ref") or "bundle_edge") if edge else "bundle_derived",
+            "source_ref": sanitize_source_ref((edge.get("source_ref") or "bundle_edge") if edge else "bundle_derived"),
         }
 
     def _official_links(self, threat_ids: list[str]) -> list[dict[str, str]]:
@@ -412,7 +435,7 @@ class CapabilityResolver:
         ]
 
     def _source_refs(self, edges: list[dict[str, Any]], threat_ids: list[str], defense_ids: list[str]) -> list[str]:
-        refs = {edge.get("source_ref", "") for edge in edges if edge.get("source_ref")}
+        refs = {sanitize_source_ref(edge.get("source_ref", "")) for edge in edges if edge.get("source_ref")}
         for node_id in set(threat_ids) | set(defense_ids):
             node = self.nodes.get(node_id) or self._synthetic_node(node_id)
             source = self._node_source_ref(node)
@@ -539,7 +562,7 @@ class CapabilityResolver:
 
     def _node_source_ref(self, node: dict[str, Any]) -> str:
         metadata = node.get("metadata", {})
-        return metadata.get("source_ref") or metadata.get("mapping_file") or metadata.get("source") or "missing_source_ref"
+        return sanitize_source_ref(metadata.get("source_ref") or metadata.get("mapping_file") or metadata.get("source") or "missing_source_ref")
 
     def _edge_sort_key(self, edge: dict[str, Any]) -> tuple[int, int, str, str]:
         confidence = edge.get("confidence", "")
@@ -564,7 +587,7 @@ class CapabilityResolver:
                     "description_es": action.get("description")
                     or "Ejecutar la accion de remediacion registrada en el bundle.",
                     "owner_guidance_es": "Asignar al owner operativo indicado en coverage y validar evidencia de cierre.",
-                    "source_ref": action.get("source_ref", "bundle_derived"),
+                    "source_ref": sanitize_source_ref(action.get("source_ref", "bundle_derived")),
                     "related_gap_id": gaps[0]["id"] if gaps else "",
                 }
                 for action in actions
@@ -654,7 +677,7 @@ class CapabilityResolver:
             "rationale": "Priority derived from bundle coverage only. GTI enrichment not applied.",
             "rationale_es": "No hay prioridad calculable porque el input no existe en el bundle local.",
         }
-        return {
+        response = {
             "capability": CAPABILITY_NAME,
             "input": raw_input,
             "normalized_input": normalized_input,
@@ -699,6 +722,7 @@ class CapabilityResolver:
             "bundle_metadata": self._bundle_metadata(),
             "generated_from": self.generated_from,
         }
+        return sanitize_capability_output(response)
 
     def _bundle_metadata(self) -> dict[str, Any]:
         metadata = self.bundle.get("metadata", {})
@@ -707,6 +731,74 @@ class CapabilityResolver:
             for key in ("builder_version", "contract_version", "counts", "generated_at", "mode", "warnings")
             if key in metadata
         }
+
+
+def sanitize_capability_output(value: Any) -> Any:
+    """Recursively remove local filesystem provenance from capability output."""
+
+    return sanitize_provenance_values(value)
+
+
+def sanitize_provenance_values(value: Any, *, key: str = "") -> Any:
+    if isinstance(value, dict):
+        return {item_key: sanitize_provenance_values(item_value, key=item_key) for item_key, item_value in value.items()}
+    if isinstance(value, list):
+        return [sanitize_provenance_values(item) for item in value]
+    if not isinstance(value, str):
+        return value
+    if key in URL_KEYS:
+        return value
+    if key in SOURCE_REF_KEYS or contains_local_path_leak(value):
+        return sanitize_source_ref(value)
+    return value
+
+
+def sanitize_source_ref(value: Any) -> Any:
+    """Normalize source/provenance values without leaking local machine paths."""
+
+    if isinstance(value, dict):
+        return sanitize_provenance_values(value)
+    if isinstance(value, list):
+        return [sanitize_source_ref(item) for item in value]
+    if value in (None, ""):
+        return "missing_source_ref"
+    if not isinstance(value, str):
+        return value
+
+    text = value.strip()
+    if not text:
+        return "missing_source_ref"
+    if text.startswith(("http://", "https://")):
+        return text
+    if text == "missing_source_ref" or any(text.startswith(prefix) for prefix in LOGICAL_SOURCE_REFS):
+        return text
+
+    normalized = text.replace("\\", "/")
+    normalized_lower = normalized.lower()
+
+    mapping_match = re.search(r"(data/mappings/[^\s:;,'\"\)]+\.json)", normalized, flags=re.IGNORECASE)
+    if mapping_match:
+        return mapping_match.group(1)
+
+    repo_match = re.search(r"(?:^|/)attack2defend/(.+)$", normalized, flags=re.IGNORECASE)
+    if repo_match and not contains_local_path_leak(repo_match.group(1)):
+        return repo_match.group(1)
+
+    if contains_local_path_leak(normalized):
+        return "sanitized:unknown_source_ref"
+
+    if normalized_lower.startswith("data/mappings/"):
+        return normalized
+    return text
+
+
+def contains_local_path_leak(value: str) -> bool:
+    lowered = value.replace("\\", "/").lower()
+    return (
+        any(pattern in lowered for pattern in LOCAL_PATH_PATTERNS)
+        or bool(re.search(r"\b[a-z]:/", lowered))
+        or "\\users\\" in value.lower()
+    )
 
 
 def normalize_identifier(value: str) -> str:
