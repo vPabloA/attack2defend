@@ -61,23 +61,20 @@ def _ai_status(route: dict) -> str:
     return "fallback_deterministic"
 
 
-def build_artifact(route: dict, *, input_id: str, pretty: bool) -> dict:
-    """Build a portable, secret-free artifact from a curated route result."""
+def build_ai_artifact(route: dict, *, input_id: str) -> dict:
+    """Build AI-curated route artifact for UI consumption."""
     adapter = route.get("llm_adapter", {})
     return {
-        "schema_version": "1.0",
-        "artifact_type": "a2d_curated_route_artifact",
-        "generated_at": datetime.now(timezone.utc).isoformat(),
-        "input": input_id,
         "ai_status": _ai_status(route),
-        "selection_method": route.get("selection_method", "deterministic_prefilter"),
-        "provider": adapter.get("provider", "none"),
-        "model": adapter.get("model", "none"),
-        "providers_attempted": adapter.get("providers_attempted", []),
-        "fallback_reason": adapter.get("fallback_reason", ""),
-        "provider_errors": adapter.get("provider_errors", []),
-        "validation_status": route.get("validation", {}).get("status", "unknown"),
-        "validation_errors": route.get("validation", {}).get("errors", []),
+        "selection_method": route.get("selection_method", "deterministic"),
+        "llm_adapter": {
+            "used": adapter.get("used", False),
+            "reason": adapter.get("fallback_reason", "") if not adapter.get("used") else "",
+        },
+        "provider": adapter.get("provider", ""),
+        "model": adapter.get("model", ""),
+        "validator_status": route.get("validation", {}).get("status", "unknown"),
+        "generated_at": datetime.now(timezone.utc).isoformat(),
         "curated_route": route,
     }
 
@@ -113,6 +110,7 @@ def main() -> int:
     parser.add_argument("--output", help="Optional curated route output path.")
     parser.add_argument("--context-output", help="Optional official context pack output path.")
     parser.add_argument("--artifact-output", help="Write a portable AI artifact JSON to this path.")
+    parser.add_argument("--ai-artifact-output", help="Write AI-curated route JSON for UI to this path.")
     parser.add_argument("--pretty", action="store_true", help="Pretty-print JSON.")
     parser.add_argument("--llm", action="store_true", help="Attempt validator-gated LLM mode. Falls back deterministically if no provider is configured.")
     parser.add_argument("--debug-provider", action="store_true", help="Print provider diagnostics to stderr.")
@@ -143,6 +141,10 @@ def main() -> int:
     if args.artifact_output:
         artifact = build_artifact(curated_route, input_id=args.input, pretty=args.pretty)
         write_json(args.artifact_output, artifact, pretty=args.pretty)
+
+    if args.ai_artifact_output:
+        ai_artifact = build_ai_artifact(curated_route, input_id=args.input)
+        write_json(args.ai_artifact_output, ai_artifact, pretty=args.pretty)
 
     # Exit code logic
     validation_ok = curated_route.get("validation", {}).get("status") == "pass"

@@ -90,3 +90,45 @@ def test_curate_route_cli_outputs_valid_json():
     assert payload["mode"] == "official_rag_grounded"
     assert payload["runtime_public_api_calls"] is False
     assert payload["validation"]["status"] == "pass"
+
+
+def test_curate_route_ai_artifact_output(tmp_path):
+    """Test that --ai-artifact-output generates the expected JSON structure for UI."""
+    output_path = tmp_path / "ai-artifact.json"
+    
+    completed = subprocess.run(
+        [
+            sys.executable,
+            "scripts/intelligence/curate_route.py",
+            "--input",
+            "CVE-2024-37079",
+            "--ai-artifact-output",
+            str(output_path),
+        ],
+        cwd=Path(__file__).parent.parent,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    
+    assert output_path.exists()
+    payload = json.loads(output_path.read_text())
+    
+    # Check required fields
+    assert "ai_status" in payload
+    assert "selection_method" in payload
+    assert "llm_adapter" in payload
+    assert "provider" in payload
+    assert "model" in payload
+    assert "validator_status" in payload
+    assert "generated_at" in payload
+    assert "curated_route" in payload
+    
+    # Check llm_adapter structure
+    adapter = payload["llm_adapter"]
+    assert "used" in adapter
+    assert isinstance(adapter["used"], bool)
+    
+    # Check generated_at is ISO format
+    from datetime import datetime
+    datetime.fromisoformat(payload["generated_at"])

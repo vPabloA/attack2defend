@@ -117,6 +117,30 @@ python scripts/intelligence/curate_route.py \
 
 If no provider key is available, the CLI falls back to the deterministic route.
 
+### Generate AI-curated route artifact for UI
+
+To enable the AI-assisted panel in the UI, generate the artifact file:
+
+```bash
+A2D_CHERRY_PICKER_MODE=llm \
+A2D_AI_PROVIDER=gemini \
+GEMINI_API_KEY="<your-key>" \
+python scripts/intelligence/curate_route.py \
+  --bundle data/knowledge-bundle.json \
+  --input CVE-2024-37079 \
+  --llm \
+  --ai-artifact-output app/navigator-ui/public/data/ai-curated-route.json \
+  --pretty
+```
+
+Then run the UI:
+
+```bash
+make ui
+```
+
+The UI will display an "AI-assisted candidate" panel above the summary if the artifact exists, showing provider/model/status/timestamp. If LLM validation succeeded, it shows a green "LLM validated" badge; otherwise, an orange "Fallback deterministic" badge with reason.
+
 ---
 
 ## Use Cases

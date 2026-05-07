@@ -90,6 +90,17 @@ type CapabilityNode = RouteNode & { sourceRef: string; officialLink: string };
 type CapabilitySection = { type: NodeType; label: string; nodes: CapabilityNode[]; emptyMessage: string };
 type CapabilityBridge = { source: string; target: string; relationship: string; confidence: string; source_ref: string };
 type CuratedRoute = { stages: Array<{ type: NodeType; label: string; nodes: CapabilityNode[] }>; counts: Partial<Record<NodeType, number>>; isPending: boolean };
+type AiCuratedRouteArtifact = {
+  ai_status: string;
+  selection_method: string;
+  llm_adapter: { used: boolean; reason?: string };
+  provider: string;
+  model: string;
+  validator_status: string;
+  generated_at: string;
+  curated_route: Record<string, unknown>;
+};
+
 type RecommendedAction = { id: string; type: 'action'; description_es: string; owner_guidance_es: string; source_ref: string; related_gap_id: string };
 type CapabilityView = {
   capability: 'attack2defend.resolve_defense_route';
@@ -203,6 +214,7 @@ const allowedForwardTypeTransitions: Partial<Record<NodeType, NodeType[]>> = {
 function App() {
   const [bundle, setBundle] = useState<KnowledgeBundle>(fallbackBundle);
   const [bundleSource, setBundleSource] = useState<BundleSource>('fallback');
+  const [aiArtifact, setAiArtifact] = useState<AiCuratedRouteArtifact | null>(null);
   const [query, setQuery] = useState<string>('');
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [activeTab, setActiveTab] = useState<TabId>('route');
@@ -227,6 +239,20 @@ function App() {
         setBundleSource('fallback');
         setQuery('');
         setSelectedIds([]);
+      });
+  }, []);
+
+  useEffect(() => {
+    fetch('/data/ai-curated-route.json')
+      .then((response) => {
+        if (!response.ok) return null;
+        return response.json() as Promise<AiCuratedRouteArtifact>;
+      })
+      .then((artifact) => {
+        setAiArtifact(artifact);
+      })
+      .catch(() => {
+        setAiArtifact(null);
       });
   }, []);
 
@@ -327,7 +353,7 @@ function App() {
       ) : (
         <>
           {activeTab === 'route' && (
-            capabilityView && curatedRoute ? <AnalysisTab view={capabilityView} curatedRoute={curatedRoute} bundle={bundle} bundleSource={bundleSource} onSelect={selectNode} /> : null
+            capabilityView && curatedRoute ? <AnalysisTab view={capabilityView} curatedRoute={curatedRoute} bundle={bundle} bundleSource={bundleSource} onSelect={selectNode} aiArtifact={aiArtifact} /> : null
           )}
 
           {activeTab === 'attack' && <AttackNavigatorTab bundle={bundle} activeRoute={activeRoute} navigatorLayer={navigatorLayer} />}
@@ -385,11 +411,29 @@ function EmptyState({ bundleSource }: { bundleSource: BundleSource }) {
 }
 
 
-function AnalysisTab({ view, curatedRoute, bundle, bundleSource, onSelect }: { view: CapabilityView; curatedRoute: CuratedRoute; bundle: KnowledgeBundle; bundleSource: BundleSource; onSelect: (id: string) => void }) {
+function PreliminarySummary({ view }: { view: CapabilityView }) {
+  return (
+    <section className="panel summary-panel">
+      <PanelTitle title="Resumen defensivo preliminar" subtitle="Lectura consultiva derivada solo del bundle local." />
+      <div className="summary-grid">
+        <SummaryItem label="ID consultado" value={view.normalized_input} />
+        <SummaryItem label="Tipo" value={typeLabels[view.input_type as NodeType] ?? 'Desconocido'} />
+        <SummaryItem label="Lectura defensiva preliminar" value={preliminaryReading(view)} />
+        <SummaryItem label="Prioridad preliminar" value={preliminaryPriority(view.priority.final_priority)} />
+        <SummaryItem label="Confianza del mapeo" value={mappingConfidence(view.confidence)} />
+      </div>
+      <p className="summary-disclaimer">Esta vista no confirma afectación ni cobertura real del entorno. Indica qué debe validarse para considerar el riesgo cubierto.</p>
+    </section>
+  );
+}
+
+
+function AnalysisTab({ view, curatedRoute, bundle, bundleSource, onSelect, aiArtifact }: { view: CapabilityView; curatedRoute: CuratedRoute; bundle: KnowledgeBundle; bundleSource: BundleSource; onSelect: (id: string) => void; aiArtifact: AiCuratedRouteArtifact | null }) {
   const counts = fullTraceabilityCounts(view);
   const exportPayload = buildCapabilityExportPackage(view, curatedRoute);
   return (
     <section className="analysis-stack">
+      {aiArtifact && <AiPanel artifact={aiArtifact} />}
       <PreliminarySummary view={view} />
       <CuratedRoutePanel curatedRoute={curatedRoute} onSelect={onSelect} />
       <ConclusionPanel view={view} curatedRoute={curatedRoute} />
@@ -408,18 +452,24 @@ function AnalysisTab({ view, curatedRoute, bundle, bundleSource, onSelect }: { v
   );
 }
 
-function PreliminarySummary({ view }: { view: CapabilityView }) {
+function AiPanel({ artifact }: { artifact: AiCuratedRouteArtifact }) {
+  const badge = artifact.llm_adapter.used ? "LLM validated" : "Fallback deterministic";
+  const badgeClass = artifact.llm_adapter.used ? "ai-badge-llm" : "ai-badge-fallback";
+  const fallbackReason = artifact.llm_adapter.reason ? ` (${artifact.llm_adapter.reason})` : "";
+  const timestamp = new Date(artifact.generated_at).toLocaleString();
+
   return (
-    <section className="panel summary-panel">
-      <PanelTitle title="Resumen defensivo preliminar" subtitle="Lectura consultiva derivada solo del bundle local." />
-      <div className="summary-grid">
-        <SummaryItem label="ID consultado" value={view.normalized_input} />
-        <SummaryItem label="Tipo" value={typeLabels[view.input_type as NodeType] ?? 'Desconocido'} />
-        <SummaryItem label="Lectura defensiva preliminar" value={preliminaryReading(view)} />
-        <SummaryItem label="Prioridad preliminar" value={preliminaryPriority(view.priority.final_priority)} />
-        <SummaryItem label="Confianza del mapeo" value={mappingConfidence(view.confidence)} />
+    <section className="panel ai-panel">
+      <div className="ai-header">
+        <h3>Candidato asistido por IA</h3>
+        <span className={`ai-badge ${badgeClass}`}>{badge}{fallbackReason}</span>
       </div>
-      <p className="summary-disclaimer">Esta vista no confirma afectación ni cobertura real del entorno. Indica qué debe validarse para considerar el riesgo cubierto.</p>
+      <div className="ai-details">
+        <div className="ai-detail"><strong>Provider:</strong> {artifact.provider || 'N/A'}</div>
+        <div className="ai-detail"><strong>Model:</strong> {artifact.model || 'N/A'}</div>
+        <div className="ai-detail"><strong>Status:</strong> {artifact.validator_status}</div>
+        <div className="ai-detail"><strong>Generated:</strong> {timestamp}</div>
+      </div>
     </section>
   );
 }
