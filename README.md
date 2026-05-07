@@ -1,91 +1,192 @@
-# Attack2Defend Navigator
+# Attack2Defend
 
-**Attack2Defend** is a deterministic, static-first vulnerability-to-defense navigator. It is the operational, end-to-end union of the [frncscrlnd/nsfw](https://github.com/frncscrlnd/nsfw) bidirectional framework navigator and the [Galeax/CVE2CAPEC](https://github.com/Galeax/CVE2CAPEC) CVE→CWE→CAPEC→ATT&CK→D3FEND mapping pipeline, extended with the SOC/CTEM defensive layer (artifacts, controls, detections, evidence, gaps, actions).
+> **Full traceability. Curated decision.**
 
----
+**Attack2Defend** is a static-first cyber defense navigator that maps vulnerabilities and adversary techniques into defensive actions. It preserves the full traceability chain from `CVE → CWE → CAPEC → ATT&CK → D3FEND`, then turns that graph into a curated, auditable, SOC-ready decision path with evidence, owners, gaps and closure criteria.
 
-## Attack2Defend North Star
+It is designed for security teams that need to answer one question fast:
 
-**Full traceability, curated decision.**
-
-Attack2Defend preserves the full technical traceability from `CVE → CWE → CAPEC → ATT&CK → D3FEND`, but it must not force the user to reason from the complete graph dump.
-
-The product must:
-
-- show the full graph as evidence and traceability;
-- present a curated route ranked by defensive relevance;
-- use official sources as the grounding context;
-- allow AI cherry-picking only under strict validation;
-- never invent IDs, relationships, impact, or coverage;
-- speak in consultative, actionable language;
-- deliver defensive decisions, not technical dumps.
-
-Core rule:
-
-```text
-Full graph is deterministic.
-Curated route is AI-assisted.
-Context is official-RAG grounded.
-Final output is schema-validated.
-Validator wins.
-```
+> **“Given this CVE, weakness, technique or defense concept, what should we validate, detect, prove and close?”**
 
 ---
 
-```text
-CVE → CWE → CAPEC → MITRE ATT&CK → Artifact → MITRE D3FEND → Control → Detection → Evidence → Gap → Action
-```
+## Key Features
 
-The browser UI does **not** call public APIs. Public sources are fetched by the builder, merged with local curated mappings, validated, and published as a local `knowledge-bundle.json` consumed by React/Vite. The same bundle is reshaped into the canonical NSFW and CVE2CAPEC file layouts so existing tooling that expects those structures keeps working.
-
----
-
-## Current operating model
-
-| Layer | Responsibility |
+| Capability | What it does |
 |---|---|
-| Public collectors | ATT&CK, CWE, CAPEC, CISA KEV, optional NVD, best-effort D3FEND at build time only. |
-| Mapping backbone | NSFW/CVE2CAPEC-compatible mapping file under `data/mappings/`. |
-| Curated defense mappings | Artifact, control, detection, evidence, gap and action relationships. |
-| Semantic resolver | Phase-constrained routes with coverage status, confidence and missing segments. |
-| Canonical exporter | Reshapes the bundle into NSFW (`data/canonical/nsfw/`) and CVE2CAPEC (`data/canonical/cve2capec/`) file layouts. |
-| Static UI | React/Vite Defense Navigator at `/` and NSFW-style bidirectional navigator at `/nsfw/`. No public runtime APIs. |
+| **Deterministic knowledge graph** | Builds a local `knowledge-bundle.json` from curated mappings and optional public-source collectors. The browser consumes only this local bundle. |
+| **End-to-end threat route** | Resolves `CVE → CWE → CAPEC → ATT&CK → D3FEND` with full traceability counts and stage-aware route selection. |
+| **Defense readiness map** | Bridges technical exposure into `Control → Detection → Evidence → Gap → Action`, including owner-oriented operational guidance. |
+| **Product Trust Layer** | Adds evidence badges, source inspection, detection disclaimers, potential gap cards and closure criteria directly in the UI. |
+| **Validator-gated AI cherry-picking** | Supports optional offline/build-time Gemini, OpenAI or Anthropic route curation. LLM output is candidate-only; schema and no-invention validators decide. |
 
 ---
 
-## Quick start: full local bootstrap
+## Architecture
+
+Attack2Defend is intentionally **static-first**. The UI does not call NVD, MITRE, CISA, LLM providers or any public API at runtime.
+
+```mermaid
+flowchart LR
+    A[Curated mappings] --> D[Knowledge Builder]
+    B[Optional public collectors] --> D
+    C[Official source cache] --> D
+    D --> E[knowledge-bundle.json]
+    E --> F[Canonical exporters]
+    F --> G[NSFW-compatible exports]
+    F --> H[CVE2CAPEC-compatible exports]
+    E --> I[React/Vite Navigator UI]
+    E --> J[Offline curated-route CLI]
+    J --> K[Optional LLM cherry-picker]
+    K --> L[Schema + no-invention validator]
+    L --> M[Curated route JSON]
+```
+
+### Design Decisions
+
+| Decision | Rationale |
+|---|---|
+| **Static browser runtime** | The UI is fast, portable and auditable. It only reads `/data/knowledge-bundle.json`. |
+| **Builder-time enrichment** | Public data ingestion happens before runtime, where it can be cached, validated and reviewed. |
+| **Full graph + curated route** | Analysts keep complete traceability, while decision-makers see a defensible route that is not a graph dump. |
+| **Validator wins** | AI can rank/select candidates, but it cannot invent IDs, relationships, impact, affected assets or environment coverage. |
+| **No coverage claims** | The tool suggests what to validate. It does not claim your environment is affected, protected or monitored unless you provide that evidence. |
+
+---
+
+## Prerequisites
+
+| Requirement | Version / Notes |
+|---|---|
+| **Python** | `3.11+` |
+| **Node.js** | `20+` recommended for the Vite UI |
+| **npm** | Installed with Node.js |
+| **make** | Used for build/test shortcuts |
+| **Git** | Required to clone and version the repository |
+| **Optional API keys** | NVD/Gemini/OpenAI/Anthropic only if you explicitly enable enrichment or offline LLM curation |
+
+---
+
+## Quick Start
+
+### Run the full local product flow
 
 ```bash
+git clone https://github.com/vPabloA/attack2defend.git
+cd attack2defend
 python3.11 -m venv .venv
 source .venv/bin/activate
 pip install -e ".[dev]"
 make bootstrap-local-full
-make test
 make ui
 ```
 
-Open the Vite URL, usually `http://localhost:5173`.
-
-The generated UI bundle is mirrored to:
+Open the Vite URL, usually:
 
 ```text
-app/navigator-ui/public/data/knowledge-bundle.json
+http://localhost:5173
 ```
+
+### Validate before trusting the build
+
+```bash
+make test
+```
+
+### Generate a curated route from the CLI
+
+```bash
+python scripts/intelligence/curate_route.py \
+  --bundle data/knowledge-bundle.json \
+  --input CVE-2024-37079 \
+  --pretty
+```
+
+### Run optional offline LLM cherry-picking
+
+```bash
+A2D_CHERRY_PICKER_MODE=llm \
+A2D_AI_PROVIDER=gemini \
+GEMINI_API_KEY="<your-key>" \
+python scripts/intelligence/curate_route.py \
+  --bundle data/knowledge-bundle.json \
+  --input CVE-2024-37079 \
+  --llm \
+  --pretty
+```
+
+If no provider key is available, the CLI falls back to the deterministic route.
 
 ---
 
-## What you can search after bootstrap
+## Use Cases
 
-| Input | Expected behavior |
-|---|---|
-| `CVE-2021-44228` | CVE→CWE→CAPEC/ATT&CK→artifact/control/detection/evidence/gap/action where mapped. |
-| `CVE-2023-34362` | MOVEit-style vulnerable app route with product context and exploit-public-app path. |
-| `CWE-79` | XSS route into CAPEC/ATT&CK and AppSec defensive controls. |
-| `T1190` | Exploit public-facing application route into WAF/AppSec/SOC evidence and gaps. |
-| `T1567` | Exfiltration route into egress monitoring evidence and actions. |
-| `D3-MFA` | D3FEND-first/reverse navigation if present in bundle or curated seeds. |
+### 1. Vulnerability-to-defense triage
 
-New/arbitrary CVEs still require NVD/public-source enrichment or a curated mapping record. The UI must not invent missing mappings.
+A SOC or vulnerability manager receives a new high-impact CVE and needs an operational path.
+
+```bash
+python scripts/intelligence/curate_route.py \
+  --bundle data/knowledge-bundle.json \
+  --input CVE-2021-44228 \
+  --pretty
+```
+
+Expected result: a route from CVE to weaknesses, attack patterns, ATT&CK techniques, D3FEND concepts, suggested detections, evidence requirements, gaps and closure actions.
+
+### 2. ATT&CK-driven defensive readiness
+
+A threat hunter starts from an adversary technique and needs defensive validation points.
+
+```bash
+python scripts/intelligence/curate_route.py \
+  --bundle data/knowledge-bundle.json \
+  --input T1190 \
+  --pretty
+```
+
+Expected result: public-facing application exploitation mapped into applicable weaknesses, attack patterns, defensive concepts, evidence requirements and owner actions.
+
+### 3. Executive-ready CTEM evidence pack
+
+A security lead needs to show what is known, what is suggested and what still requires validation.
+
+```bash
+make bootstrap-local-full
+make ui
+```
+
+Use the UI to inspect the curated route, open evidence badges, review potential gaps and export the Product Trust Layer JSON.
+
+---
+
+## Environment Variables
+
+### Core build and public-source enrichment
+
+| Variable | Required | Default | Purpose |
+|---|---:|---|---|
+| `A2D_REFRESH_PUBLIC_SOURCES` | No | unset | Refresh public-source cache during local bootstrap. |
+| `NVD_API_KEY` | No | unset | Optional NVD enrichment key. The product can run without it. |
+
+### AI cherry-picker
+
+| Variable | Required | Default | Purpose |
+|---|---:|---|---|
+| `A2D_CHERRY_PICKER_MODE` | No | `deterministic` | Use `deterministic` or `llm`. LLM requires explicit `--llm`. |
+| `A2D_AI_PROVIDER` | No | `gemini` | One of `gemini`, `openai`, `anthropic`. |
+| `A2D_GEMINI_MODEL` | No | `gemini-2.5-flash-lite` | Gemini model for offline curation. |
+| `GEMINI_API_KEY` / `GOOGLE_API_KEY` | Only for Gemini LLM | unset | Gemini provider credential. |
+| `A2D_OPENAI_MODEL` | No | `gpt-5-nano` | OpenAI model for offline curation. |
+| `OPENAI_API_KEY` | Only for OpenAI LLM | unset | OpenAI provider credential. |
+| `A2D_ANTHROPIC_MODEL` | No | `claude-3-5-haiku-latest` | Anthropic model for offline curation. |
+| `ANTHROPIC_API_KEY` | Only for Anthropic LLM | unset | Anthropic provider credential. |
+| `A2D_CHERRY_PICKER_TEMPERATURE` | No | `0` | Keeps output deterministic and validation-friendly. |
+| `A2D_CHERRY_PICKER_MAX_OUTPUT_TOKENS` | No | `4000` | Max provider output tokens. |
+| `A2D_CHERRY_PICKER_TIMEOUT_SECONDS` | No | `60` | Provider call timeout for offline curation. |
+| `A2D_CHERRY_PICKER_REQUIRE_VALIDATION` | No | `true` | Must remain true for production use. |
+| `A2D_CHERRY_PICKER_ALLOW_EXTERNAL_KNOWLEDGE` | No | `false` | Must remain false. Provider may only use the context pack. |
+| `A2D_CHERRY_PICKER_RUNTIME_PUBLIC_API_CALLS` | No | `false` | Must remain false. Browser/runtime calls are not allowed. |
 
 ---
 
@@ -93,93 +194,105 @@ New/arbitrary CVEs still require NVD/public-source enrichment or a curated mappi
 
 | Command | Purpose |
 |---|---|
-| `make bootstrap-local-full` | Build base bundle, apply mapping backbone, generate NSFW + CVE2CAPEC canonical exports, validate, mirror to UI. |
-| `make build-curated` | Build from curated sample routes only. |
-| `make build-public` | Build with public sources. |
+| `make bootstrap-local-full` | Build the local knowledge bundle, apply mapping backbone, generate canonical exports and mirror data to the UI. |
+| `make build-curated` | Build from curated sample routes. |
+| `make build-public` | Build with public-source collectors. |
 | `make build-backbone` | Apply local mapping backbone and curated defense mappings. |
-| `make build-canonical` | Generate NSFW + CVE2CAPEC canonical mapping files from the bundle. |
+| `make build-canonical` | Generate NSFW and CVE2CAPEC canonical exports from the bundle. |
 | `make validate` | Validate bundle contract, mapping backbone, semantic routes and canonical exports. |
 | `make test` | Run Python tests and Vite build. |
-| `make ui` | Start React/Vite dev server. The Defense Navigator is at `/`, the NSFW-compatible navigator at `/nsfw/`. |
+| `make ui` | Start the React/Vite dev server. |
 | `make preprod` | Public-source pre-prod bootstrap with mapping backbone and canonical exports. |
 
-Optional public-source refresh:
-
-```bash
-A2D_REFRESH_PUBLIC_SOURCES=1 make bootstrap-local-full
-```
-
-Optional NVD enrichment:
-
-```bash
-export NVD_API_KEY="<optional-api-key>"
-make bootstrap-local-full
-```
-
 ---
 
-## Repository layout
+## Validation Gates
 
-```text
-attack2defend/
-├── app/navigator-ui/                 # React/Vite static UI
-│   └── public/
-│       ├── data/                     # mirrored knowledge-bundle.json
-│       ├── nsfw/                     # NSFW-style static page (index.html, nsfw.js, nsfw.css, data/)
-│       └── cve2capec/                # CVE2CAPEC-style database/, resources/, results/, lastUpdate.txt
-├── contracts/                        # Mapping contract
-├── data/
-│   ├── mappings/                     # Mapping backbone and curated defense mappings
-│   ├── samples/                      # curated route seeds
-│   ├── raw/                          # public-source cache
-│   ├── canonical/
-│   │   ├── nsfw/                     # cve_cwe.json, cwe_capec.json, capec_attack.json, attack_defend.json, cve_cpe.json, cve_cvss.json, kevs.txt, tactics_techniques.json, d3fend_tactics.json
-│   │   └── cve2capec/                # database/CVE-YYYY.jsonl, resources/{cwe_db,capec_db,techniques_db,techniques_association}.json, resources/defend_db.jsonl, results/new_cves.jsonl, lastUpdate.txt
-│   ├── knowledge-bundle.json         # generated static bundle
-│   └── knowledge-bundle.last-good.json
-├── docs/
-│   ├── LOCALHOST_DEPLOYMENT.md
-│   └── PREPROD_DEPLOYMENT_DEBIAN.md
-├── scripts/
-│   ├── bootstrap_local_full.sh
-│   ├── bootstrap_preprod.sh
-│   ├── knowledge_builder/            # build_knowledge_base.py, public_collectors.py, validate_bundle.py
-│   ├── mapping_builder/              # apply_mapping_backbone.py
-│   ├── canonical_exports/            # build_canonical.py, validate_canonical.py (NSFW + CVE2CAPEC parity)
-│   └── cve2capec/                    # retrieve_cve.py, cve2cwe.py, cwe2capec.py, capec2technique.py, technique2defend.py, update_*_db.py
-└── tests/
+Run all core checks:
+
+```bash
+make test
 ```
 
----
-
-## Validation gates
+Validate the generated bundle directly:
 
 ```bash
 python scripts/knowledge_builder/validate_bundle.py \
   data/knowledge-bundle.json \
   --require-mapping-backbone \
   --require-semantic-routes \
+  --require-framework-chain \
+  --require-cpe-index \
+  --require-kev-index \
+  --require-bidirectional-indexes \
+  --require-source-confidence \
+  --require-search-index \
   --min-mapping-files 1
 ```
 
-A route is not considered complete just because it reaches ATT&CK or D3FEND. Complete means it reaches defensive context through controls, detections, evidence, gaps and actions.
-
-For NSFW + CVE2CAPEC parity, also run:
+Validate canonical export parity:
 
 ```bash
 python scripts/canonical_exports/validate_canonical.py
 ```
 
-This checks that the canonical mapping files exist, parse as JSON/JSONL, and that ID keys match the expected framework regexes (CVE-YYYY-NNNN+, CWE-N+, CAPEC-N+, T####[.###]).
+---
+
+## Repository Layout
+
+```text
+attack2defend/
+├── app/navigator-ui/                 # React/Vite static UI
+│   └── public/
+│       ├── data/                     # mirrored knowledge-bundle.json
+│       └── trust-layer.js            # Product Trust Layer UI enhancer
+├── contracts/                        # mapping and bundle contracts
+├── data/
+│   ├── mappings/                     # mapping backbone and curated defense mappings
+│   ├── raw/                          # public-source cache
+│   ├── canonical/                    # NSFW + CVE2CAPEC compatible exports
+│   ├── knowledge-bundle.json         # generated local static bundle
+│   └── knowledge-bundle.last-good.json
+├── schemas/                          # curated route and official context pack schemas
+├── scripts/
+│   ├── intelligence/                 # curated route CLI + optional LLM cherry-picker
+│   ├── knowledge_builder/            # bundle builder and validators
+│   ├── mapping_builder/              # mapping backbone applicator
+│   └── canonical_exports/            # canonical export builder/validator
+├── src/attack2defend/                # Python package
+└── tests/                            # regression, schema and GA gates
+```
 
 ---
 
-## Design principles
+## Production Rules
 
-1. Full traceability, curated decision.
-2. Mappings are the product; the UI is the renderer.
-3. Public API calls happen only in builder/cron, never in browser runtime.
-4. Curated mappings must carry source, confidence and ownership.
-5. Route resolution is semantic and phase-constrained, not free-form graph wandering.
-6. Missing evidence becomes an explicit gap, not a silent failure.
-7. The project must be useful immediately after clone, build and localhost startup.
+```text
+Full graph is deterministic.
+Curated route is validator-gated.
+LLM output is candidate-only.
+The UI is static-first.
+No browser public API calls.
+No source, no selection.
+No evidence, no promotion.
+Validator wins.
+```
+
+---
+
+## Release
+
+Current GA target:
+
+```text
+v1.0.0-ga
+```
+
+Recommended post-merge tag:
+
+```bash
+git checkout main
+git pull origin main
+git tag -a v1.0.0-ga -m "Attack2Defend GA: static-first defense navigator with trust layer and validator-gated AI curation"
+git push origin v1.0.0-ga
+```
