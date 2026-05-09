@@ -3884,7 +3884,7 @@
       "semantic_routes": 8,
       "warnings": 0
     },
-    "generated_at": "2026-05-09T19:13:18Z",
+    "generated_at": "2026-05-09T19:27:48Z",
     "mapping_backbone": {
       "mapping_files": [
         "data/mappings/backbone_core.json",
@@ -3892,7 +3892,7 @@
       ],
       "mappings_dir": "data/mappings"
     },
-    "mapping_backbone_applied_at": "2026-05-09T19:13:18Z",
+    "mapping_backbone_applied_at": "2026-05-09T19:27:48Z",
     "mapping_backbone_version": "0.2.1",
     "mode": "mapping_backbone_bundle",
     "public_collection": {
