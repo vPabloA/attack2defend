@@ -23,6 +23,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+REPO_ROOT = Path(__file__).resolve().parents[2]
 SECRET_PATTERNS = [
     re.compile(r"OPENAI_API_KEY|ANTHROPIC_API_KEY|GEMINI_API_KEY", re.I),
     re.compile(r"Bearer\s+[A-Za-z0-9._\-]{12,}", re.I),
@@ -30,8 +31,15 @@ SECRET_PATTERNS = [
 ]
 
 
+def relpath(path: Path) -> str:
+    try:
+        return path.resolve().relative_to(REPO_ROOT).as_posix()
+    except Exception:
+        return path.as_posix()
+
+
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
-    root = Path(__file__).resolve().parents[2]
+    root = REPO_ROOT
     p = argparse.ArgumentParser(description="Policy-driven Attack2Defend candidate promotion")
     p.add_argument("--candidates-dir", type=Path, default=root / "data" / "candidates")
     p.add_argument("--output-dir", type=Path, default=root / "data" / "mappings" / "ai_promoted")
@@ -104,7 +112,7 @@ def normalize_evidence_ref(candidate: dict[str, Any]) -> str:
 def build_mapping_record(candidate: dict[str, Any], candidate_path: Path) -> dict[str, Any]:
     edge = candidate["proposed_edge"]
     now = datetime.now(timezone.utc).isoformat()
-    source_ref = str(candidate_path.as_posix())
+    source_ref = relpath(candidate_path)
     return {
         "source": edge["source"],
         "target": edge["target"],
@@ -144,7 +152,6 @@ def main(argv: list[str] | None = None) -> int:
         from attack2defend.intelligence.scoring import score_candidate
         from scripts.intelligence.validate_candidates import validate_candidate  # type: ignore
     except Exception:
-        # Running as script: import validator from sibling path without package assumptions.
         from attack2defend.intelligence.promotion_policy import PromotionPolicy, evaluate_candidate_policy
         from attack2defend.intelligence.scoring import score_candidate
         sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -173,7 +180,7 @@ def main(argv: list[str] | None = None) -> int:
     promoted_records: list[dict[str, Any]] = []
     decisions: list[dict[str, Any]] = []
 
-    for idx, (path, raw_candidate) in enumerate(candidates[: policy.max_candidates_per_run], 1):
+    for path, raw_candidate in candidates[: policy.max_candidates_per_run]:
         candidate = score_candidate(raw_candidate)
         validation_errors = validate_candidate(candidate)
         secret_detected = contains_secret(candidate)
@@ -210,8 +217,8 @@ def main(argv: list[str] | None = None) -> int:
             "score": candidate.get("score", {}),
             "operator_mode": "policy_engine",
             "automation_context": "cli_soar_mcp_api_safe",
-            "source_candidate_path": path.as_posix(),
-            "output_mapping_path": mapping_path.as_posix() if mapping_path else "",
+            "source_candidate_path": relpath(path),
+            "output_mapping_path": relpath(mapping_path) if mapping_path else "",
             "pre_bundle_hash": pre_hash,
             "last_good_hash": last_good_hash,
             "post_bundle_hash": None,
@@ -279,9 +286,9 @@ def main(argv: list[str] | None = None) -> int:
         "top_queued_candidates": [d for d in decisions if d["decision"] == "queued_for_review"][:10],
         "top_rejection_reasons": _top_reasons(decisions),
         "artifact_paths": {
-            "report": args.report.as_posix(),
-            "promoted_mapping": output_mapping.as_posix() if output_mapping else "",
-            "audit_log": args.audit_log.as_posix(),
+            "report": relpath(args.report),
+            "promoted_mapping": relpath(output_mapping) if output_mapping else "",
+            "audit_log": relpath(args.audit_log),
         },
         "deferred_taxonomy_signals": ["ai_defense", "ui_navigation"],
         "errors": [],
