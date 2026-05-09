@@ -90,6 +90,14 @@ def render_markdown(report: dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
+def _relpath(path: Path) -> str:
+    root = Path(__file__).resolve().parents[2]
+    try:
+        return path.resolve().relative_to(root).as_posix()
+    except ValueError:
+        return path.as_posix()
+
+
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
     if not args.golden.exists():
@@ -112,8 +120,8 @@ def main(argv: list[str] | None = None) -> int:
     overall = round(sum(c["score"] for c in results) / len(results), 3) if results else 0.0
     report = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
-        "bundle": args.bundle.as_posix(),
-        "golden": args.golden.as_posix(),
+        "bundle": _relpath(args.bundle),
+        "golden": _relpath(args.golden),
         "overall_score": overall,
         "cases_evaluated": len(results),
         "cases": results,

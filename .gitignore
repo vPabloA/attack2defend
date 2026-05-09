@@ -15,6 +15,10 @@ node_modules/
 *.tsbuildinfo
 data/raw/
 data/snapshots/
+data/reports/
+data/candidates/audit_log.jsonl
+data/intelligence/intelligence-factory-report.json
+data/mappings/ai_promoted/
 data/edges.json
 data/indexes.json
 data/knowledge-bundle.json

@@ -16,7 +16,6 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-import os
 import re
 import sys
 from datetime import datetime, timezone
@@ -147,21 +146,19 @@ def append_audit(path: Path, record: dict[str, Any]) -> None:
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
 
-    try:
-        from attack2defend.intelligence.promotion_policy import PromotionPolicy, evaluate_candidate_policy
-        from attack2defend.intelligence.scoring import score_candidate
-        from scripts.intelligence.validate_candidates import validate_candidate  # type: ignore
-    except Exception:
-        from attack2defend.intelligence.promotion_policy import PromotionPolicy, evaluate_candidate_policy
-        from attack2defend.intelligence.scoring import score_candidate
-        sys.path.insert(0, str(Path(__file__).resolve().parent))
-        from validate_candidates import validate_candidate  # type: ignore
+    from attack2defend.intelligence.promotion_policy import PromotionPolicy, evaluate_candidate_policy
+    from attack2defend.intelligence.scoring import score_candidate
 
+    try:
+        from scripts.intelligence.validate_candidates import validate_candidate  # type: ignore[import]
+    except ImportError:
+        sys.path.insert(0, str(Path(__file__).resolve().parent))
+        from validate_candidates import validate_candidate  # type: ignore[import]
+
+    # Priority: CLI arg > env var (already applied via from_file) > policy file
     policy = PromotionPolicy.from_file(args.policy)
     if args.promotion_mode:
         policy = PromotionPolicy(**{**policy.to_dict(), "promotion_mode": args.promotion_mode})
-    if os.getenv("A2D_PROMOTION_MODE"):
-        policy = PromotionPolicy(**{**policy.to_dict(), "promotion_mode": os.getenv("A2D_PROMOTION_MODE")})
 
     run_id = args.run_id or datetime.now(timezone.utc).strftime("run-%Y%m%d-%H%M%S")
     known_node_ids = load_bundle_node_ids(args.bundle)
