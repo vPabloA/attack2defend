@@ -1,438 +1,307 @@
 #!/usr/bin/env python3
-"""Promote reviewed AI candidates to the mapping backbone.
+"""Policy-driven, non-blocking candidate promotion.
 
-Workflow:
-  1. Reads all pending/approved candidates from data/candidates/
-  2. Shows each promotable candidate for human review
-  3. On explicit approval, writes a backbone-compatible mapping file
-     to data/mappings/ai_promoted/{candidate_id}.json
-  4. Marks the candidate as promoted in its source file
-
-The mapping files written here are automatically picked up by
-`apply_mapping_backbone.py` on the next `make build-backbone` run.
+Designed for CLI, CI, SOAR, MCP and future API use.
 
 Invariants:
-  - A candidate with no source_ref is NEVER promoted (no source = no edge)
-  - A candidate with no evidence is NEVER promoted (no evidence = no promotion)
-  - Promotion is always explicit: --auto flag must be used consciously
-  - Every promoted file is fully auditable (candidate_id, run_id, model, evidence)
-
-Usage:
-  # Interactive review (default)
-  python scripts/intelligence/promote_candidates.py \\
-      --candidates-dir data/candidates \\
-      --output-dir data/mappings/ai_promoted
-
-  # List candidates without promoting
-  python scripts/intelligence/promote_candidates.py \\
-      --candidates-dir data/candidates \\
-      --list-only
-
-  # Auto-promote all currently approved candidates (CI-safe)
-  python scripts/intelligence/promote_candidates.py \\
-      --candidates-dir data/candidates \\
-      --output-dir data/mappings/ai_promoted \\
-      --auto-approve-status approved
+- no input()
+- no human wait
+- no polling
+- no direct writes to data/knowledge-bundle.json
+- policy decides auto_promoted | queued_for_review | rejected_by_policy | blocked | dry_run
 """
 
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
+import os
+import re
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
+from typing import Any
+
+SECRET_PATTERNS = [
+    re.compile(r"OPENAI_API_KEY|ANTHROPIC_API_KEY|GEMINI_API_KEY", re.I),
+    re.compile(r"Bearer\s+[A-Za-z0-9._\-]{12,}", re.I),
+    re.compile(r"sk-[A-Za-z0-9]{10,}"),
+]
 
 
-def _parse_args(argv: list[str] | None) -> argparse.Namespace:
+def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     root = Path(__file__).resolve().parents[2]
-    p = argparse.ArgumentParser(
-        description="Promote AI candidates to the Attack2Defend mapping backbone",
-        formatter_class=argparse.RawDescriptionHelpFormatter,
-        epilog=__doc__,
-    )
-    p.add_argument(
-        "--candidates-dir",
-        type=Path,
-        default=root / "data" / "candidates",
-        help="Directory containing candidate JSON files (default: data/candidates)",
-    )
-    p.add_argument(
-        "--output-dir",
-        type=Path,
-        default=root / "data" / "mappings" / "ai_promoted",
-        help="Output directory for promoted mapping files (default: data/mappings/ai_promoted)",
-    )
-    p.add_argument(
-        "--list-only",
-        action="store_true",
-        help="List candidates without interactive review or promotion",
-    )
-    p.add_argument(
-        "--status-filter",
-        choices=["pending", "approved", "rejected", "needs_evidence", "all"],
-        default="pending",
-        help="Which candidate status to show/process (default: pending)",
-    )
-    p.add_argument(
-        "--auto-approve-status",
-        choices=["approved"],
-        default=None,
-        help="Auto-promote candidates with this status (no interactive prompt)",
-    )
-    p.add_argument(
-        "--promoted-by",
-        default="operator",
-        help="Identifier for the promoter (recorded in mapping metadata)",
-    )
-    p.add_argument(
-        "--dry-run",
-        action="store_true",
-        help="Show what would be promoted without writing files",
-    )
+    p = argparse.ArgumentParser(description="Policy-driven Attack2Defend candidate promotion")
+    p.add_argument("--candidates-dir", type=Path, default=root / "data" / "candidates")
+    p.add_argument("--output-dir", type=Path, default=root / "data" / "mappings" / "ai_promoted")
+    p.add_argument("--policy", type=Path, default=root / "data" / "intelligence" / "promotion_policy.json")
+    p.add_argument("--report", type=Path, default=root / "data" / "intelligence" / "intelligence-factory-report.json")
+    p.add_argument("--audit-log", type=Path, default=root / "data" / "candidates" / "audit_log.jsonl")
+    p.add_argument("--bundle", type=Path, default=root / "data" / "knowledge-bundle.json")
+    p.add_argument("--last-good", type=Path, default=root / "data" / "knowledge-bundle.last-good.json")
+    p.add_argument("--run-id", default=None)
+    p.add_argument("--promotion-mode", choices=["dry_run", "policy_auto", "review_queue", "emergency_block"], default=None)
+    p.add_argument("--json-report", action="store_true")
     return p.parse_args(argv)
 
 
-# ---------------------------------------------------------------------------
-# Mapping file writer
-# ---------------------------------------------------------------------------
-
-def _write_promoted_mapping(
-    candidate_dict: dict,
-    output_dir: Path,
-    promoted_by: str,
-    dry_run: bool,
-) -> Path | None:
-    """Write a backbone-compatible mapping JSON for an approved candidate.
-
-    Returns the path written, or None on failure / dry-run.
-    """
-    from attack2defend.intelligence.candidates import CandidateProposal
-
-    candidate = CandidateProposal.from_dict(candidate_dict)
-    errors = candidate.promotion_errors()
-    if errors:
-        print(f"  ✗ Cannot promote {candidate.candidate_id}: {'; '.join(errors)}")
+def sha256_file(path: Path) -> str | None:
+    if not path.exists():
         return None
+    h = hashlib.sha256()
+    with path.open("rb") as fh:
+        for chunk in iter(lambda: fh.read(65536), b""):
+            h.update(chunk)
+    return h.hexdigest()
 
-    assert candidate.proposed_edge is not None  # guaranteed by promotion_errors check
+
+def load_bundle_node_ids(bundle_path: Path) -> set[str]:
+    if not bundle_path.exists():
+        return set()
+    try:
+        bundle = json.loads(bundle_path.read_text(encoding="utf-8"))
+    except Exception:
+        return set()
+    ids: set[str] = set()
+    for node in bundle.get("nodes", []):
+        if isinstance(node, dict):
+            node_id = str(node.get("id") or "").strip()
+            if node_id:
+                ids.add(node_id)
+    return ids
+
+
+def iter_candidate_files(path: Path) -> list[Path]:
+    if path.is_file():
+        return [path]
+    if not path.exists():
+        return []
+    return [p for p in sorted(path.rglob("*.json")) if not p.name.startswith("_")]
+
+
+def contains_secret(obj: Any) -> bool:
+    text = json.dumps(obj, ensure_ascii=False, sort_keys=True)
+    return any(pattern.search(text) for pattern in SECRET_PATTERNS)
+
+
+def normalize_evidence_ref(candidate: dict[str, Any]) -> str:
+    edge = candidate.get("proposed_edge") or {}
+    if isinstance(edge, dict):
+        for key in ("source_ref", "source_url", "evidence_url"):
+            value = str(edge.get(key) or "").strip()
+            if value:
+                return value
+    for ev in candidate.get("evidence") or []:
+        if isinstance(ev, dict):
+            for key in ("source_ref", "source_url", "url", "evidence_url"):
+                value = str(ev.get(key) or "").strip()
+                if value:
+                    return value
+    return ""
+
+
+def build_mapping_record(candidate: dict[str, Any], candidate_path: Path) -> dict[str, Any]:
+    edge = candidate["proposed_edge"]
     now = datetime.now(timezone.utc).isoformat()
-
-    mapping_payload = {
-        "version": "1.0",
-        "description": (
-            f"AI-promoted mapping — reviewed and approved by {promoted_by}. "
-            f"Source candidate: {candidate.candidate_id}"
-        ),
-        "source": "attack2defend-intelligence-curator",
-        "license": "attack2defend-ai-promoted",
-        "generated_at": now,
-        "promoted_by": promoted_by,
-        "promoted_at": now,
-        "candidate_id": candidate.candidate_id,
-        "run_id": candidate.run_id,
-        "model": candidate.model,
-        "gap_explanation": candidate.gap_explanation,
-        "justification": candidate.justification,
-        "evidence": [e.to_dict() for e in candidate.evidence],
-        "mappings": [candidate.proposed_edge.to_mapping_record()],
+    source_ref = str(candidate_path.as_posix())
+    return {
+        "source": edge["source"],
+        "target": edge["target"],
+        "relationship": edge["relationship"],
+        "confidence": edge.get("confidence", candidate.get("confidence", "medium")),
+        "source_feed": "ai_promoted",
+        "source_ref": source_ref,
+        "source_url": normalize_evidence_ref(candidate),
+        "source_kind": "ai_promoted",
+        "retrieved_at": now,
+        "transform_version": "intelligence_factory:0.1.0",
+        "deterministic": False,
+        "inferred": True,
+        "candidate_id": candidate.get("candidate_id"),
+        "run_id": candidate.get("run_id"),
+        "model": candidate.get("model"),
+        "provider": candidate.get("provider", candidate.get("llm_provider", "unknown")),
     }
 
-    if dry_run:
-        print(f"  [DRY-RUN] would write: {output_dir / candidate.candidate_id}.json")
-        print(f"    edge: {candidate.proposed_edge.source} → {candidate.proposed_edge.target}")
-        print(f"    rel:  {candidate.proposed_edge.relationship}")
-        print(f"    conf: {candidate.proposed_edge.confidence}")
-        print(f"    ref:  {candidate.proposed_edge.source_ref}")
-        return None
 
-    output_dir.mkdir(parents=True, exist_ok=True)
-    out_path = output_dir / f"{candidate.candidate_id}.json"
-    out_path.write_text(
-        json.dumps(mapping_payload, indent=2, ensure_ascii=False),
-        encoding="utf-8",
-    )
-    return out_path
+def write_json(path: Path, payload: Any) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
 
 
-def _mark_candidate_promoted(
-    candidate_path: Path,
-    candidate_dict: dict,
-    promoted_by: str,
-    promotion_notes: str = "",
-) -> None:
-    """Update the candidate file to reflect promotion."""
-    now = datetime.now(timezone.utc).isoformat()
-    candidate_dict["status"] = "approved"
-    candidate_dict["promoted_by"] = promoted_by
-    candidate_dict["promoted_at"] = now
-    if promotion_notes:
-        candidate_dict["promotion_notes"] = promotion_notes
-    candidate_path.write_text(
-        json.dumps(candidate_dict, indent=2, ensure_ascii=False),
-        encoding="utf-8",
-    )
+def append_audit(path: Path, record: dict[str, Any]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("a", encoding="utf-8") as fh:
+        fh.write(json.dumps(record, ensure_ascii=False, sort_keys=True) + "\n")
 
-
-def _mark_candidate_rejected(
-    candidate_path: Path,
-    candidate_dict: dict,
-    reason: str = "",
-) -> None:
-    candidate_dict["status"] = "rejected"
-    if reason:
-        candidate_dict["promotion_notes"] = reason
-    candidate_path.write_text(
-        json.dumps(candidate_dict, indent=2, ensure_ascii=False),
-        encoding="utf-8",
-    )
-
-
-# ---------------------------------------------------------------------------
-# Display helpers
-# ---------------------------------------------------------------------------
-
-def _print_candidate_summary(c: dict, index: int, total: int) -> None:
-    cid = c.get("candidate_id", "?")
-    ctype = c.get("candidate_type", "?")
-    status = c.get("status", "?")
-    input_id = c.get("input_id", "?")
-    model = c.get("model", "?")
-    generated_at = c.get("generated_at", "?")[:19]
-
-    print(f"\n{'─'*66}")
-    print(f"  Candidate {index}/{total}: {cid}")
-    print(f"  Type    : {ctype}  |  Status : {status}")
-    print(f"  Input   : {input_id}  |  Model  : {model}")
-    print(f"  Created : {generated_at}")
-    print()
-
-    edge = c.get("proposed_edge")
-    if edge:
-        print(f"  Proposed edge:")
-        print(f"    {edge.get('source','?')} ──[{edge.get('relationship','?')}]──▶ {edge.get('target','?')}")
-        print(f"    confidence : {edge.get('confidence','?')}")
-        print(f"    source_ref : {edge.get('source_ref','(MISSING)')}")
-        print()
-
-    evidence = c.get("evidence", [])
-    if evidence:
-        print(f"  Evidence ({len(evidence)} item(s)):")
-        for ev in evidence[:3]:
-            print(f"    • {ev.get('url', 'no-url')}")
-            excerpt = ev.get("excerpt", "")
-            if excerpt:
-                print(f"      \"{excerpt[:120]}{'…' if len(excerpt)>120 else ''}\"")
-
-    gap_expl = c.get("gap_explanation", "")
-    if gap_expl:
-        print(f"\n  Gap:  {gap_expl[:200]}")
-    justif = c.get("justification", "")
-    if justif:
-        print(f"  Why:  {justif[:200]}")
-
-    backlog = c.get("backlog_items", [])
-    if backlog:
-        print(f"\n  Backlog items ({len(backlog)}):")
-        for item in backlog[:2]:
-            print(f"    [{item.get('priority','?').upper()}][{item.get('owner','?')}] {item.get('title','')}")
-
-    # Show promotion errors if any
-    from attack2defend.intelligence.candidates import CandidateProposal
-    try:
-        obj = CandidateProposal.from_dict(c)
-        errors = obj.promotion_errors()
-        if errors:
-            print(f"\n  ⚠ Promotion blockers: {'; '.join(errors)}")
-    except Exception:
-        pass
-
-
-def _list_candidates(candidates: list[tuple[Path, dict]]) -> None:
-    print(f"\n{'═'*66}")
-    print(f"  Candidates  ({len(candidates)} total)")
-    print(f"{'─'*66}")
-    print(f"  {'ID':<30} {'TYPE':<16} {'STATUS':<16} {'INPUT'}")
-    print(f"  {'-'*30} {'-'*16} {'-'*16} {'-'*15}")
-    for _, c in candidates:
-        print(
-            f"  {c.get('candidate_id','?'):<30} "
-            f"{c.get('candidate_type','?'):<16} "
-            f"{c.get('status','?'):<16} "
-            f"{c.get('input_id','?')}"
-        )
-    print(f"{'═'*66}\n")
-
-
-# ---------------------------------------------------------------------------
-# Main
-# ---------------------------------------------------------------------------
 
 def main(argv: list[str] | None = None) -> int:
-    args = _parse_args(argv)
+    args = parse_args(argv)
 
-    # --- Load intelligence package ------------------------------------------
     try:
-        from attack2defend.intelligence.candidates import (
-            CandidateProposal,
-            CandidateStatus,
-            load_candidates_from_dir,
-        )
-    except ImportError as exc:
-        print(f"ERROR: {exc}", file=sys.stderr)
-        print("Install with: pip install -e '.'", file=sys.stderr)
+        from attack2defend.intelligence.promotion_policy import PromotionPolicy, evaluate_candidate_policy
+        from attack2defend.intelligence.scoring import score_candidate
+        from scripts.intelligence.validate_candidates import validate_candidate  # type: ignore
+    except Exception:
+        # Running as script: import validator from sibling path without package assumptions.
+        from attack2defend.intelligence.promotion_policy import PromotionPolicy, evaluate_candidate_policy
+        from attack2defend.intelligence.scoring import score_candidate
+        sys.path.insert(0, str(Path(__file__).resolve().parent))
+        from validate_candidates import validate_candidate  # type: ignore
+
+    policy = PromotionPolicy.from_file(args.policy)
+    if args.promotion_mode:
+        policy = PromotionPolicy(**{**policy.to_dict(), "promotion_mode": args.promotion_mode})
+    if os.getenv("A2D_PROMOTION_MODE"):
+        policy = PromotionPolicy(**{**policy.to_dict(), "promotion_mode": os.getenv("A2D_PROMOTION_MODE")})
+
+    run_id = args.run_id or datetime.now(timezone.utc).strftime("run-%Y%m%d-%H%M%S")
+    known_node_ids = load_bundle_node_ids(args.bundle)
+    pre_hash = sha256_file(args.bundle)
+    last_good_hash = sha256_file(args.last_good)
+
+    candidates: list[tuple[Path, dict[str, Any]]] = []
+    for path in iter_candidate_files(args.candidates_dir):
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        if "candidate_id" in data:
+            candidates.append((path, data))
+
+    promoted_records: list[dict[str, Any]] = []
+    decisions: list[dict[str, Any]] = []
+
+    for idx, (path, raw_candidate) in enumerate(candidates[: policy.max_candidates_per_run], 1):
+        candidate = score_candidate(raw_candidate)
+        validation_errors = validate_candidate(candidate)
+        secret_detected = contains_secret(candidate)
+        if validation_errors:
+            decision = {
+                "decision": "queued_for_review",
+                "policy_version": policy.policy_version,
+                "policy_reason": validation_errors,
+                "blocking": False,
+                "timeout_waited_for_human": False,
+                "promotion_mode": policy.promotion_mode,
+            }
+        else:
+            decision = evaluate_candidate_policy(
+                candidate,
+                policy,
+                known_node_ids=known_node_ids or None,
+                secret_detected=secret_detected,
+            )
+
+        mapping_path = None
+        if decision["decision"] == "auto_promoted":
+            mapping = build_mapping_record(candidate, path)
+            promoted_records.append(mapping)
+            mapping_path = args.output_dir / f"{run_id}.json"
+
+        audit_record = {
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "run_id": run_id,
+            "candidate_id": candidate.get("candidate_id"),
+            "decision": decision["decision"],
+            "policy_version": decision.get("policy_version"),
+            "policy_reason": decision.get("policy_reason", []),
+            "score": candidate.get("score", {}),
+            "operator_mode": "policy_engine",
+            "automation_context": "cli_soar_mcp_api_safe",
+            "source_candidate_path": path.as_posix(),
+            "output_mapping_path": mapping_path.as_posix() if mapping_path else "",
+            "pre_bundle_hash": pre_hash,
+            "last_good_hash": last_good_hash,
+            "post_bundle_hash": None,
+            "dry_run": policy.promotion_mode == "dry_run",
+            "promotion_mode": policy.promotion_mode,
+            "blocking": False,
+        }
+        append_audit(args.audit_log, audit_record)
+        decisions.append({**audit_record, "validation_errors": validation_errors})
+
+    output_mapping = None
+    if promoted_records:
+        payload = {
+            "version": "1.0",
+            "source": "attack2defend-intelligence-factory",
+            "source_feed": "ai_promoted",
+            "generated_at": datetime.now(timezone.utc).isoformat(),
+            "run_id": run_id,
+            "policy_version": policy.policy_version,
+            "mappings": promoted_records,
+        }
+        output_mapping = args.output_dir / f"{run_id}.json"
+        write_json(output_mapping, payload)
+
+    post_hash = sha256_file(args.bundle)
+    if pre_hash != post_hash:
+        blocked = {
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "run_id": run_id,
+            "candidate_id": "__bundle_guard__",
+            "decision": "blocked",
+            "policy_version": policy.policy_version,
+            "policy_reason": ["bundle_mutation_detected"],
+            "pre_bundle_hash": pre_hash,
+            "post_bundle_hash": post_hash,
+            "promotion_mode": policy.promotion_mode,
+            "blocking": False,
+        }
+        append_audit(args.audit_log, blocked)
+        print(json.dumps({"status": "failed", "error": "bundle_mutation_detected"}, indent=2))
         return 1
 
-    # --- Load candidates from disk ------------------------------------------
-    if not args.candidates_dir.exists():
-        print(f"No candidates directory found: {args.candidates_dir}")
-        print("Run `make curate` first to generate candidates.")
-        return 0
+    counts = {name: sum(1 for d in decisions if d["decision"] == name) for name in [
+        "auto_promoted", "queued_for_review", "rejected_by_policy", "blocked", "dry_run"
+    ]}
+    report = {
+        "status": "completed",
+        "run_id": run_id,
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "promotion_mode": policy.promotion_mode,
+        "policy_summary": policy.to_dict(),
+        "candidates_seen": len(candidates),
+        "candidates_generated": len(candidates),
+        "candidates_validated": sum(1 for d in decisions if not d.get("validation_errors")),
+        "candidates_scored": len(decisions),
+        "candidates_promoted": counts["auto_promoted"],
+        "candidates_rejected": counts["rejected_by_policy"],
+        "candidates_queued_for_review": counts["queued_for_review"],
+        "needs_evidence_count": sum(1 for d in decisions if "missing_evidence" in d.get("policy_reason", [])),
+        "deferred_count": 0,
+        "pending_review_count": counts["queued_for_review"],
+        "blocking": False,
+        "timeout_waited_for_human": False,
+        "top_candidates": decisions[:10],
+        "top_queued_candidates": [d for d in decisions if d["decision"] == "queued_for_review"][:10],
+        "top_rejection_reasons": _top_reasons(decisions),
+        "artifact_paths": {
+            "report": args.report.as_posix(),
+            "promoted_mapping": output_mapping.as_posix() if output_mapping else "",
+            "audit_log": args.audit_log.as_posix(),
+        },
+        "deferred_taxonomy_signals": ["ai_defense", "ui_navigation"],
+        "errors": [],
+    }
+    write_json(args.report, report)
 
-    # Load with file paths for in-place updates
-    all_pairs: list[tuple[Path, dict]] = []
-    for f in sorted(args.candidates_dir.rglob("*.json")):
-        if f.name.startswith("_"):
-            continue  # skip manifests
-        try:
-            data = json.loads(f.read_text(encoding="utf-8"))
-            if "candidate_id" in data:
-                all_pairs.append((f, data))
-        except Exception:
-            pass
-
-    if not all_pairs:
-        print("No candidate files found in", args.candidates_dir)
-        return 0
-
-    # --- Filter by status ---------------------------------------------------
-    if args.status_filter == "all":
-        pairs = all_pairs
+    if args.json_report:
+        print(json.dumps(report, indent=2, ensure_ascii=False))
     else:
-        pairs = [(p, c) for p, c in all_pairs if c.get("status") == args.status_filter]
-
-    # Only promote mapping_edge candidates (backlog items don't need promotion)
-    promotable_pairs = [
-        (p, c) for p, c in pairs
-        if c.get("candidate_type") == "mapping_edge"
-    ]
-
-    print(f"\nAttack2Defend — Candidate Promotion Tool")
-    print(f"  candidates dir : {args.candidates_dir}")
-    print(f"  output dir     : {args.output_dir}")
-    print(f"  total loaded   : {len(all_pairs)}")
-    print(f"  status filter  : {args.status_filter}")
-    print(f"  promotable     : {len(promotable_pairs)}")
-
-    if args.list_only:
-        _list_candidates(promotable_pairs)
-        return 0
-
-    if not promotable_pairs:
-        print(f"\nNo '{args.status_filter}' mapping_edge candidates to process.")
-        print("Use --status-filter all to see all candidates.")
-        return 0
-
-    # --- Auto-approve mode --------------------------------------------------
-    if args.auto_approve_status:
-        auto_pairs = [
-            (p, c) for p, c in promotable_pairs
-            if c.get("status") == args.auto_approve_status
-        ]
-        promoted = 0
-        skipped = 0
-        for path, candidate in auto_pairs:
-            out = _write_promoted_mapping(candidate, args.output_dir, args.promoted_by, args.dry_run)
-            if out or args.dry_run:
-                if not args.dry_run:
-                    _mark_candidate_promoted(path, candidate, args.promoted_by)
-                    print(f"  ✓ Promoted: {candidate.get('candidate_id')} → {out}")
-                promoted += 1
-            else:
-                skipped += 1
-        print(f"\nAuto-promotion complete: {promoted} promoted, {skipped} skipped.")
-        return 0
-
-    # --- Interactive review mode --------------------------------------------
-    print(f"\nInteractive review — {len(promotable_pairs)} candidate(s)\n")
-    print("  Commands:  [a]pprove  [r]eject  [s]kip  [q]uit")
-
-    promoted_count = 0
-    rejected_count = 0
-    skipped_count = 0
-
-    for i, (path, candidate) in enumerate(promotable_pairs, 1):
-        _print_candidate_summary(candidate, i, len(promotable_pairs))
-
-        # Check if promotable
-        try:
-            obj = CandidateProposal.from_dict(candidate)
-            blocking = obj.promotion_errors()
-        except Exception as exc:
-            print(f"  ✗ Cannot parse candidate: {exc}")
-            skipped_count += 1
-            continue
-
-        if blocking:
-            print(f"\n  This candidate cannot be promoted: {'; '.join(blocking)}")
-            print("  [s]kip  [r]eject  [q]uit  > ", end="", flush=True)
-            prompt_choices = {"s", "r", "q"}
-        else:
-            print("\n  [a]pprove  [r]eject  [s]kip  [q]uit  > ", end="", flush=True)
-            prompt_choices = {"a", "r", "s", "q"}
-
-        try:
-            choice = input().strip().lower()
-        except (EOFError, KeyboardInterrupt):
-            print("\nInterrupted.")
-            break
-
-        if choice not in prompt_choices:
-            choice = "s"
-
-        if choice == "q":
-            print("Exiting review.")
-            break
-        elif choice == "a" and "a" in prompt_choices:
-            print("  Notes (optional, press Enter to skip): ", end="", flush=True)
-            try:
-                notes = input().strip()
-            except (EOFError, KeyboardInterrupt):
-                notes = ""
-            out = _write_promoted_mapping(candidate, args.output_dir, args.promoted_by, args.dry_run)
-            if out:
-                _mark_candidate_promoted(path, candidate, args.promoted_by, notes)
-                print(f"  ✓ Promoted to: {out}")
-                promoted_count += 1
-            elif args.dry_run:
-                promoted_count += 1
-            else:
-                print(f"  ✗ Promotion failed — check errors above.")
-                skipped_count += 1
-        elif choice == "r":
-            print("  Reason (optional): ", end="", flush=True)
-            try:
-                reason = input().strip()
-            except (EOFError, KeyboardInterrupt):
-                reason = ""
-            if not args.dry_run:
-                _mark_candidate_rejected(path, candidate, reason)
-            print(f"  ✗ Rejected: {candidate.get('candidate_id')}")
-            rejected_count += 1
-        else:
-            print(f"  → Skipped")
-            skipped_count += 1
-
-    print(f"\n{'─'*66}")
-    print(f"  Review complete:")
-    print(f"    ✓ Promoted : {promoted_count}")
-    print(f"    ✗ Rejected : {rejected_count}")
-    print(f"    → Skipped  : {skipped_count}")
-    if promoted_count and not args.dry_run:
-        print(f"\n  Next step: run `make build-backbone` to merge promoted mappings.")
-    print(f"{'─'*66}\n")
-
+        print(f"promotion: completed mode={policy.promotion_mode} seen={len(candidates)} promoted={counts['auto_promoted']} queued={counts['queued_for_review']} rejected={counts['rejected_by_policy']}")
+        print(f"report: {args.report}")
     return 0
+
+
+def _top_reasons(decisions: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    counts: dict[str, int] = {}
+    for decision in decisions:
+        for reason in decision.get("policy_reason", []):
+            counts[str(reason)] = counts.get(str(reason), 0) + 1
+    return [{"reason": reason, "count": count} for reason, count in sorted(counts.items(), key=lambda kv: (-kv[1], kv[0]))[:10]]
 
 
 if __name__ == "__main__":
