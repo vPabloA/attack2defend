@@ -17,6 +17,16 @@ CONTRACT_VERSION = "attack2defend.knowledge_bundle.v2"
 BACKBONE_VERSION = "0.2.1"
 VALID_NODE_TYPES = {"cve", "cwe", "capec", "attack", "d3fend", "artifact", "control", "detection", "evidence", "gap", "action"}
 TYPE_ORDER = ["cve", "cwe", "capec", "attack", "artifact", "d3fend", "control", "detection", "evidence", "gap", "action"]
+
+_REPO_ROOT = Path(__file__).resolve().parents[2]
+
+
+def _relpath(p: Path) -> str:
+    """Return a repo-relative POSIX path. Falls back to as_posix() if p is outside the repo."""
+    try:
+        return p.relative_to(_REPO_ROOT).as_posix()
+    except ValueError:
+        return p.as_posix()
 PAIR_REL = {
     ("cve", "cwe"): "vulnerability_has_weakness",
     ("cve", "artifact"): "affects_product_or_platform",
@@ -198,7 +208,7 @@ def merge_lists(existing: dict[str, Any], incoming: dict[str, Any]) -> dict[str,
 def ingest_mapping_file(path: Path, nodes: dict[str, dict[str, Any]], edges: dict[tuple[str, str, str], dict[str, Any]], coverage: dict[str, dict[str, Any]]) -> int:
     payload = load(path)
     source_kind = "curated" if "/curated/" in path.as_posix() else "public-compatible"
-    source_ref = path.as_posix()
+    source_ref = _relpath(path)
     license_name = payload.get("license", "attack2defend-curated") if isinstance(payload, dict) else "attack2defend-curated"
     for node in payload.get("nodes", []) if isinstance(payload, dict) else []:
         if isinstance(node, dict):
@@ -393,7 +403,7 @@ def apply_mapping_backbone(bundle_path: Path, mappings_dir: Path, ui_public_dir:
     metadata = dict(bundle.get("metadata", {}))
     counts = dict(metadata.get("counts", {})) if isinstance(metadata.get("counts"), dict) else {}
     counts.update({"nodes": len(node_list), "edges": len(edge_list), "coverage_records": len(bundle["coverage"]), "semantic_routes": len(bundle["semantic_routes"]), "mapping_files": len(files), "mapping_records": mapping_records})
-    metadata.update({"contract_version": CONTRACT_VERSION, "schema_version": CONTRACT_VERSION, "mapping_backbone_version": BACKBONE_VERSION, "mapping_backbone_applied_at": now(), "mode": "mapping_backbone_bundle", "counts": counts, "mapping_backbone": {"mappings_dir": str(mappings_dir), "mapping_files": [str(path) for path in files]}})
+    metadata.update({"contract_version": CONTRACT_VERSION, "schema_version": CONTRACT_VERSION, "mapping_backbone_version": BACKBONE_VERSION, "mapping_backbone_applied_at": now(), "mode": "mapping_backbone_bundle", "counts": counts, "mapping_backbone": {"mappings_dir": _relpath(mappings_dir), "mapping_files": [_relpath(path) for path in files]}})
     bundle["metadata"] = metadata
     target = output_path or bundle_path
     dump(target, bundle)
