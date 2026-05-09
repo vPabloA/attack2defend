@@ -1,4 +1,4 @@
-.PHONY: install install-ai build-curated build-public build-backbone build-canonical build-bundle validate validate-parity validate-canonical test ui preview bootstrap-local-full preprod sync-cve2capec clean curate curate-dry-run promote
+.PHONY: install install-ai build-curated build-public build-backbone enforce-provenance build-canonical build-bundle validate validate-parity validate-canonical validate-provenance test ui preview bootstrap-local-full preprod sync-cve2capec clean curate curate-dry-run promote
 
 PYTHON ?= python3
 UI_DIR := app/navigator-ui
@@ -19,17 +19,23 @@ build-public:
 build-backbone:
 	$(PYTHON) scripts/mapping_builder/apply_mapping_backbone.py --last-good
 
+enforce-provenance:
+	$(PYTHON) scripts/knowledge_builder/enforce_edge_provenance.py --last-good
+
 build-canonical:
 	$(PYTHON) scripts/canonical_exports/build_canonical.py
 
-build-bundle: build-curated build-backbone build-canonical
+build-bundle: build-curated build-backbone enforce-provenance build-canonical
 
 validate: validate-parity validate-canonical
 
 validate-canonical:
 	$(PYTHON) scripts/canonical_exports/validate_canonical.py
 
-validate-parity:
+validate-provenance:
+	$(PYTHON) scripts/knowledge_builder/validate_edge_provenance.py data/knowledge-bundle.json
+
+validate-parity: validate-provenance
 	$(PYTHON) scripts/knowledge_builder/validate_bundle.py data/knowledge-bundle.json \
 		--require-mapping-backbone \
 		--require-semantic-routes \
