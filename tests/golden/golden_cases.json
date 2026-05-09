@@ -1,0 +1,24 @@
+{
+  "golden_cases_version": "attack2defend.golden_cases.v1",
+  "purpose": "P0 regression seeds for canonical route validation.",
+  "cases": [
+    {
+      "id": "CVE-2021-44228",
+      "name": "Log4Shell",
+      "required_chain": ["cve", "cwe", "capec", "attack", "d3fend"],
+      "minimum_expectation": "A defensible route or explicit missing-segment gaps."
+    },
+    {
+      "id": "CVE-2017-0144",
+      "name": "SMB route seed",
+      "required_chain": ["cve", "cwe", "capec", "attack", "d3fend"],
+      "minimum_expectation": "A defensible route or explicit missing-segment gaps."
+    },
+    {
+      "id": "CVE-2023-34362",
+      "name": "MOVEit route seed",
+      "required_chain": ["cve", "cwe", "capec", "attack", "d3fend"],
+      "minimum_expectation": "A defensible route or explicit missing-segment gaps."
+    }
+  ]
+}

@@ -61,6 +61,24 @@ def _ai_status(route: dict) -> str:
     return "fallback_deterministic"
 
 
+def build_artifact(route: dict, *, input_id: str) -> dict:
+    """Build a portable, secret-free artifact for auditing and CI gating."""
+    adapter = route.get("llm_adapter", {})
+    return {
+        "artifact_type": "a2d_curated_route_artifact",
+        "schema_version": "1.0",
+        "input_id": input_id,
+        "ai_status": _ai_status(route),
+        "selection_method": route.get("selection_method", "deterministic"),
+        "provider": adapter.get("provider", ""),
+        "model": adapter.get("model", ""),
+        "validation_status": route.get("validation", {}).get("status", "unknown"),
+        "llm_used": adapter.get("used", False),
+        "fallback_reason": adapter.get("fallback_reason", "") if not adapter.get("used") else "",
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+    }
+
+
 def build_ai_artifact(route: dict, *, input_id: str) -> dict:
     """Build AI-curated route artifact for UI consumption."""
     adapter = route.get("llm_adapter", {})
@@ -139,7 +157,7 @@ def main() -> int:
     write_json(args.output, curated_route, pretty=args.pretty)
 
     if args.artifact_output:
-        artifact = build_artifact(curated_route, input_id=args.input, pretty=args.pretty)
+        artifact = build_artifact(curated_route, input_id=args.input)
         write_json(args.artifact_output, artifact, pretty=args.pretty)
 
     if args.ai_artifact_output:

@@ -141,1399 +141,1974 @@
     {
       "confidence": "curated",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "technique_mitigated_by_countermeasure",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "ART-DNS-LOOKUP",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "artifact",
       "target": "D3-DNSAL",
-      "target_type": "d3fend"
+      "target_type": "d3fend",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "curated",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "technique_mitigated_by_countermeasure",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "ART-DNS-LOOKUP",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "artifact",
       "target": "D3-DNSDL",
-      "target_type": "d3fend"
+      "target_type": "d3fend",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "high",
       "curation_status": "public-compatible",
+      "deterministic": true,
+      "inferred": false,
       "license": "attack2defend-curated-baseline",
-      "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+      "mapping_file": "data/mappings/backbone_core.json",
       "owner": "Infra",
       "relationship": "protected_by_control",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "ART-EGRESS-NETWORK",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "curated:control",
       "source_type": "artifact",
       "target": "CTRL-EGRESS-MONITORING",
-      "target_type": "control"
+      "target_type": "control",
+      "transform_version": "mapping_backbone:0.2.1"
     },
     {
       "confidence": "high",
       "curation_status": "public-compatible",
+      "deterministic": true,
+      "inferred": false,
       "license": "attack2defend-curated-baseline",
-      "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+      "mapping_file": "data/mappings/backbone_core.json",
       "owner": "SOC",
       "relationship": "protected_by_control",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "ART-ENDPOINT-PROCESS",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "curated:control",
       "source_type": "artifact",
       "target": "CTRL-EDR-PROCESS",
-      "target_type": "control"
+      "target_type": "control",
+      "transform_version": "mapping_backbone:0.2.1"
     },
     {
       "confidence": "high",
       "curation_status": "public-compatible",
+      "deterministic": true,
+      "inferred": false,
       "license": "attack2defend-curated-baseline",
-      "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+      "mapping_file": "data/mappings/backbone_core.json",
       "owner": "AppSec",
       "relationship": "protected_by_control",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "ART-INTERNET-FACING-APP",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "curated:control",
       "source_type": "artifact",
       "target": "CTRL-WAF-VIRTUAL-PATCH",
-      "target_type": "control"
+      "target_type": "control",
+      "transform_version": "mapping_backbone:0.2.1"
     },
     {
       "confidence": "curated",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "technique_mitigated_by_countermeasure",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "ART-NETWORK-TRAFFIC",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "artifact",
       "target": "D3-OTF",
-      "target_type": "d3fend"
+      "target_type": "d3fend",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "curated",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "validated_by_detection",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "ART-NETWORK-TRAFFIC",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "artifact",
       "target": "D3-NTA",
-      "target_type": "d3fend"
+      "target_type": "d3fend",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "curated",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "validated_by_detection",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "ART-RPC-NETWORK-TRAFFIC",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "artifact",
       "target": "D3-NTA",
-      "target_type": "d3fend"
+      "target_type": "d3fend",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "curated",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "validated_by_detection",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "ART-SENSITIVE-FILE",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "artifact",
       "target": "D3-FA",
-      "target_type": "d3fend"
+      "target_type": "d3fend",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "curated",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "validated_by_detection",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "ART-URL",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "artifact",
       "target": "D3-UA",
-      "target_type": "d3fend"
+      "target_type": "d3fend",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "high",
       "curation_status": "public-compatible",
+      "deterministic": true,
+      "inferred": false,
       "license": "attack2defend-curated-baseline",
-      "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+      "mapping_file": "data/mappings/backbone_core.json",
       "owner": "SOC",
       "relationship": "protected_by_control",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "ART-WAF-LOG",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "curated:control",
       "source_type": "artifact",
       "target": "CTRL-WAF-LOGGING",
-      "target_type": "control"
+      "target_type": "control",
+      "transform_version": "mapping_backbone:0.2.1"
     },
     {
       "confidence": "curated",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "technique_mitigated_by_countermeasure",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "ART-WEB-INPUT",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "artifact",
       "target": "D3-ACH",
-      "target_type": "d3fend"
+      "target_type": "d3fend",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "curated",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "validated_by_detection",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "ART-WEB-SCRIPT",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "artifact",
       "target": "D3-UA",
-      "target_type": "d3fend"
+      "target_type": "d3fend",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "high",
       "curation_status": "public-compatible",
+      "deterministic": true,
+      "inferred": false,
       "license": "attack2defend-curated-baseline",
-      "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+      "mapping_file": "data/mappings/backbone_core.json",
       "relationship": "attack_pattern_maps_to_technique",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "CAPEC-100",
+      "source_feed": "public-compatible",
       "source_kind": "public-compatible",
       "source_ref": "baseline:capec-attack",
       "source_type": "capec",
       "target": "T1190",
-      "target_type": "attack"
+      "target_type": "attack",
+      "transform_version": "mapping_backbone:0.2.1"
     },
     {
       "confidence": "high",
       "curation_status": "public-compatible",
+      "deterministic": true,
+      "inferred": false,
       "license": "attack2defend-curated-baseline",
-      "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+      "mapping_file": "data/mappings/backbone_core.json",
       "relationship": "attack_pattern_maps_to_technique",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "CAPEC-126",
+      "source_feed": "public-compatible",
       "source_kind": "public-compatible",
       "source_ref": "baseline:capec-attack",
       "source_type": "capec",
       "target": "T1190",
-      "target_type": "attack"
+      "target_type": "attack",
+      "transform_version": "mapping_backbone:0.2.1"
     },
     {
       "confidence": "medium",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "child_of",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "CAPEC-136",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "capec",
       "target": "CAPEC-248",
-      "target_type": "capec"
+      "target_type": "capec",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "high",
       "curation_status": "public-compatible",
+      "deterministic": true,
+      "inferred": false,
       "license": "attack2defend-curated-baseline",
-      "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+      "mapping_file": "data/mappings/backbone_core.json",
       "relationship": "attack_pattern_maps_to_technique",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "CAPEC-242",
+      "source_feed": "public-compatible",
       "source_kind": "public-compatible",
       "source_ref": "baseline:capec-attack",
       "source_type": "capec",
       "target": "T1059",
-      "target_type": "attack"
+      "target_type": "attack",
+      "transform_version": "mapping_backbone:0.2.1"
     },
     {
       "confidence": "medium",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "attack_pattern_maps_to_technique",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "CAPEC-248",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "capec",
       "target": "T1190",
-      "target_type": "attack"
+      "target_type": "attack",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "curated",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "affects_or_requires_artifact",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "CAPEC-63",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "capec",
       "target": "ART-WEB-SCRIPT",
-      "target_type": "artifact"
+      "target_type": "artifact",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "curated",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "attack_pattern_maps_to_technique",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "CAPEC-63",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "capec",
       "target": "T1059.007",
-      "target_type": "attack"
+      "target_type": "attack",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "medium",
       "curation_status": "public-compatible",
+      "deterministic": true,
+      "inferred": false,
       "license": "attack2defend-curated-baseline",
-      "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+      "mapping_file": "data/mappings/backbone_core.json",
       "relationship": "attack_pattern_maps_to_technique",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "CAPEC-63",
+      "source_feed": "public-compatible",
       "source_kind": "public-compatible",
       "source_ref": "baseline:capec-attack",
       "source_type": "capec",
       "target": "T1189",
-      "target_type": "attack"
+      "target_type": "attack",
+      "transform_version": "mapping_backbone:0.2.1"
     },
     {
       "confidence": "high",
       "curation_status": "public-compatible",
+      "deterministic": true,
+      "inferred": false,
       "license": "attack2defend-curated-baseline",
-      "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+      "mapping_file": "data/mappings/backbone_core.json",
       "relationship": "attack_pattern_maps_to_technique",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "CAPEC-66",
+      "source_feed": "public-compatible",
       "source_kind": "public-compatible",
       "source_ref": "baseline:capec-attack",
       "source_type": "capec",
       "target": "T1190",
-      "target_type": "attack"
+      "target_type": "attack",
+      "transform_version": "mapping_backbone:0.2.1"
     },
     {
       "confidence": "medium",
       "curation_status": "public-compatible",
+      "deterministic": true,
+      "inferred": false,
       "license": "attack2defend-curated-baseline",
-      "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+      "mapping_file": "data/mappings/backbone_core.json",
       "relationship": "attack_pattern_maps_to_technique",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "CAPEC-664",
+      "source_feed": "public-compatible",
       "source_kind": "public-compatible",
       "source_ref": "baseline:capec-attack",
       "source_type": "capec",
       "target": "T1190",
-      "target_type": "attack"
+      "target_type": "attack",
+      "transform_version": "mapping_backbone:0.2.1"
     },
     {
       "confidence": "internal_detection_mapping",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "validated_by_detection",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "CTRL-CONDITIONAL-ACCESS",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "control",
       "target": "DET-IMPOSSIBLE-TRAVEL",
-      "target_type": "detection"
+      "target_type": "detection",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "high",
       "curation_status": "public-compatible",
+      "deterministic": true,
+      "inferred": false,
       "license": "attack2defend-curated-baseline",
-      "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+      "mapping_file": "data/mappings/backbone_core.json",
       "owner": "SOC",
       "priority": "P0",
       "relationship": "validated_by_detection",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "CTRL-EDR-PROCESS",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "curated:detection",
       "source_type": "control",
       "target": "DET-WEB-TO-SHELL-PROCESS",
-      "target_type": "detection"
+      "target_type": "detection",
+      "transform_version": "mapping_backbone:0.2.1"
     },
     {
       "confidence": "medium",
       "curation_status": "public-compatible",
+      "deterministic": true,
+      "inferred": false,
       "license": "attack2defend-curated-baseline",
-      "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+      "mapping_file": "data/mappings/backbone_core.json",
       "owner": "SOC",
       "priority": "P1",
       "relationship": "validated_by_detection",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "CTRL-EGRESS-MONITORING",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "curated:detection",
       "source_type": "control",
       "target": "DET-UNUSUAL-WEB-UPLOAD",
-      "target_type": "detection"
+      "target_type": "detection",
+      "transform_version": "mapping_backbone:0.2.1"
     },
     {
       "confidence": "internal_detection_mapping",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "validated_by_detection",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "CTRL-MFA-ENFORCEMENT",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "control",
       "target": "DET-MFA-BYPASS-SIGNAL",
-      "target_type": "detection"
+      "target_type": "detection",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "internal_detection_mapping",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "validated_by_detection",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "CTRL-SWG-PROXY",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "control",
       "target": "DET-CLOUD-UPLOAD-ANOMALY",
-      "target_type": "detection"
+      "target_type": "detection",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "internal_detection_mapping",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "validated_by_detection",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "CTRL-SWG-PROXY",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "control",
       "target": "DET-NON-BROWSER-UPLOAD",
-      "target_type": "detection"
+      "target_type": "detection",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "internal_detection_mapping",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "validated_by_detection",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "CTRL-VIRTUAL-PATCH",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "control",
       "target": "DET-RPC-EXPLOIT-ATTEMPT",
-      "target_type": "detection"
+      "target_type": "detection",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "high",
       "curation_status": "public-compatible",
+      "deterministic": true,
+      "inferred": false,
       "license": "attack2defend-curated-baseline",
-      "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+      "mapping_file": "data/mappings/backbone_core.json",
       "owner": "SOC",
       "priority": "P0",
       "relationship": "validated_by_detection",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "CTRL-WAF-LOGGING",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "curated:detection",
       "source_type": "control",
       "target": "DET-WAF-SUSPICIOUS-PAYLOAD",
-      "target_type": "detection"
+      "target_type": "detection",
+      "transform_version": "mapping_backbone:0.2.1"
     },
     {
       "confidence": "high",
       "curation_status": "public-compatible",
+      "deterministic": true,
+      "inferred": false,
       "license": "attack2defend-curated-baseline",
-      "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+      "mapping_file": "data/mappings/backbone_core.json",
       "owner": "SOC",
       "priority": "P0",
       "relationship": "validated_by_detection",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "CTRL-WAF-VIRTUAL-PATCH",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "curated:detection",
       "source_type": "control",
       "target": "DET-PUBLIC-APP-EXPLOIT-ATTEMPT",
-      "target_type": "detection"
+      "target_type": "detection",
+      "transform_version": "mapping_backbone:0.2.1"
     },
     {
       "confidence": "high",
       "curation_status": "public-compatible",
+      "deterministic": true,
+      "inferred": false,
       "license": "attack2defend-curated-baseline",
-      "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+      "mapping_file": "data/mappings/backbone_core.json",
       "relationship": "vulnerability_has_weakness",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "CVE-2021-26855",
+      "source_feed": "public-compatible",
       "source_kind": "public-compatible",
       "source_ref": "baseline:exchange-ssrf",
       "source_type": "cve",
       "target": "CWE-918",
-      "target_type": "cwe"
+      "target_type": "cwe",
+      "transform_version": "mapping_backbone:0.2.1"
     },
     {
       "confidence": "high",
       "curation_status": "public-compatible",
+      "deterministic": true,
+      "inferred": false,
       "license": "attack2defend-curated-baseline",
-      "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+      "mapping_file": "data/mappings/backbone_core.json",
       "relationship": "affects_product_or_platform",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "CVE-2021-44228",
+      "source_feed": "public-compatible",
       "source_kind": "public-compatible",
       "source_ref": "baseline:cpe",
       "source_type": "cve",
       "target": "ART-LOG4J-JAVA-APP",
-      "target_type": "artifact"
+      "target_type": "artifact",
+      "transform_version": "mapping_backbone:0.2.1"
     },
     {
       "confidence": "high",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "license": "attack2defend-curated-public-compatible-baseline",
-      "mapping_file": "/home/user/attack2defend/data/mappings/curated/cpe_kev_core.json",
+      "mapping_file": "data/mappings/curated/cpe_kev_core.json",
       "relationship": "affects_product_or_platform",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "CVE-2021-44228",
+      "source_feed": "public-compatible",
       "source_kind": "public-compatible",
       "source_ref": "nvd_cpe:cve-2021-44228",
       "source_type": "cve",
       "target": "CPE:2.3:A:APACHE:LOG4J:*:*:*:*:*:*:*:*",
-      "target_type": "artifact"
+      "target_type": "artifact",
+      "transform_version": "mapping_backbone:0.2.1"
     },
     {
       "confidence": "high",
       "curation_status": "public-compatible",
+      "deterministic": true,
+      "inferred": false,
       "license": "attack2defend-curated-baseline",
-      "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+      "mapping_file": "data/mappings/backbone_core.json",
       "relationship": "vulnerability_has_weakness",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "CVE-2021-44228",
+      "source_feed": "public-compatible",
       "source_kind": "public-compatible",
       "source_ref": "baseline:log4shell",
       "source_type": "cve",
       "target": "CWE-20",
-      "target_type": "cwe"
+      "target_type": "cwe",
+      "transform_version": "mapping_backbone:0.2.1"
     },
     {
       "confidence": "medium",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "vulnerability_has_weakness",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "CVE-2021-44228",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "cve",
       "target": "CWE-502",
-      "target_type": "cwe"
+      "target_type": "cwe",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "medium",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "vulnerability_has_weakness",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "CVE-2021-44228",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "cve",
       "target": "CWE-917",
-      "target_type": "cwe"
+      "target_type": "cwe",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "medium",
       "curation_status": "public-compatible",
+      "deterministic": true,
+      "inferred": false,
       "license": "attack2defend-curated-baseline",
-      "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+      "mapping_file": "data/mappings/backbone_core.json",
       "relationship": "vulnerability_has_weakness",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "CVE-2022-22965",
+      "source_feed": "public-compatible",
       "source_kind": "public-compatible",
       "source_ref": "baseline:spring4shell",
       "source_type": "cve",
       "target": "CWE-94",
-      "target_type": "cwe"
+      "target_type": "cwe",
+      "transform_version": "mapping_backbone:0.2.1"
     },
     {
       "confidence": "high",
       "curation_status": "public-compatible",
+      "deterministic": true,
+      "inferred": false,
       "license": "attack2defend-curated-baseline",
-      "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+      "mapping_file": "data/mappings/backbone_core.json",
       "relationship": "vulnerability_has_weakness",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "CVE-2023-27997",
+      "source_feed": "public-compatible",
       "source_kind": "public-compatible",
       "source_ref": "baseline:fortinet",
       "source_type": "cve",
       "target": "CWE-122",
-      "target_type": "cwe"
+      "target_type": "cwe",
+      "transform_version": "mapping_backbone:0.2.1"
     },
     {
       "confidence": "high",
       "curation_status": "public-compatible",
+      "deterministic": true,
+      "inferred": false,
       "license": "attack2defend-curated-baseline",
-      "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+      "mapping_file": "data/mappings/backbone_core.json",
       "relationship": "affects_product_or_platform",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "CVE-2023-34362",
+      "source_feed": "public-compatible",
       "source_kind": "public-compatible",
       "source_ref": "baseline:cpe",
       "source_type": "cve",
       "target": "ART-MOVEIT-TRANSFER",
-      "target_type": "artifact"
+      "target_type": "artifact",
+      "transform_version": "mapping_backbone:0.2.1"
     },
     {
       "confidence": "high",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "license": "attack2defend-curated-public-compatible-baseline",
-      "mapping_file": "/home/user/attack2defend/data/mappings/curated/cpe_kev_core.json",
+      "mapping_file": "data/mappings/curated/cpe_kev_core.json",
       "relationship": "affects_product_or_platform",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "CVE-2023-34362",
+      "source_feed": "public-compatible",
       "source_kind": "public-compatible",
       "source_ref": "nvd_cpe:cve-2023-34362",
       "source_type": "cve",
       "target": "CPE:2.3:A:PROGRESS:MOVEIT_TRANSFER:*:*:*:*:*:*:*:*",
-      "target_type": "artifact"
+      "target_type": "artifact",
+      "transform_version": "mapping_backbone:0.2.1"
     },
     {
       "confidence": "high",
       "curation_status": "public-compatible",
+      "deterministic": true,
+      "inferred": false,
       "license": "attack2defend-curated-baseline",
-      "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+      "mapping_file": "data/mappings/backbone_core.json",
       "relationship": "vulnerability_has_weakness",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "CVE-2023-34362",
+      "source_feed": "public-compatible",
       "source_kind": "public-compatible",
       "source_ref": "baseline:moveit",
       "source_type": "cve",
       "target": "CWE-89",
-      "target_type": "cwe"
+      "target_type": "cwe",
+      "transform_version": "mapping_backbone:0.2.1"
     },
     {
       "confidence": "medium",
       "curation_status": "public-compatible",
+      "deterministic": true,
+      "inferred": false,
       "license": "attack2defend-curated-baseline",
-      "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+      "mapping_file": "data/mappings/backbone_core.json",
       "relationship": "vulnerability_has_weakness",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "CVE-2024-37079",
+      "source_feed": "public-compatible",
       "source_kind": "public-compatible",
       "source_ref": "baseline:cve-2024-37079",
       "source_type": "cve",
       "target": "CWE-22",
-      "target_type": "cwe"
+      "target_type": "cwe",
+      "transform_version": "mapping_backbone:0.2.1"
     },
     {
       "confidence": "curated",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "vulnerability_has_weakness",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "CVE-2024-37079",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "cve",
       "target": "CWE-787",
-      "target_type": "cwe"
+      "target_type": "cwe",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "high",
       "curation_status": "public-compatible",
+      "deterministic": true,
+      "inferred": false,
       "license": "attack2defend-curated-baseline",
-      "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+      "mapping_file": "data/mappings/backbone_core.json",
       "relationship": "weakness_enables_attack_pattern",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "CWE-122",
+      "source_feed": "public-compatible",
       "source_kind": "public-compatible",
       "source_ref": "baseline:cwe-capec",
       "source_type": "cwe",
       "target": "CAPEC-100",
-      "target_type": "capec"
+      "target_type": "capec",
+      "transform_version": "mapping_backbone:0.2.1"
     },
     {
       "confidence": "medium",
       "curation_status": "public-compatible",
+      "deterministic": true,
+      "inferred": false,
       "license": "attack2defend-curated-baseline",
-      "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+      "mapping_file": "data/mappings/backbone_core.json",
       "relationship": "weakness_enables_attack_pattern",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "CWE-20",
+      "source_feed": "public-compatible",
       "source_kind": "public-compatible",
       "source_ref": "baseline:cwe-capec",
       "source_type": "cwe",
       "target": "CAPEC-100",
-      "target_type": "capec"
+      "target_type": "capec",
+      "transform_version": "mapping_backbone:0.2.1"
     },
     {
       "confidence": "high",
       "curation_status": "public-compatible",
+      "deterministic": true,
+      "inferred": false,
       "license": "attack2defend-curated-baseline",
-      "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+      "mapping_file": "data/mappings/backbone_core.json",
       "relationship": "weakness_enables_attack_pattern",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "CWE-22",
+      "source_feed": "public-compatible",
       "source_kind": "public-compatible",
       "source_ref": "baseline:cwe-capec",
       "source_type": "cwe",
       "target": "CAPEC-126",
-      "target_type": "capec"
+      "target_type": "capec",
+      "transform_version": "mapping_backbone:0.2.1"
     },
     {
       "confidence": "curated",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "weakness_enables_attack_pattern",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "CWE-787",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "cwe",
       "target": "CAPEC-100",
-      "target_type": "capec"
+      "target_type": "capec",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "curated",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "affects_or_requires_artifact",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "CWE-79",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "cwe",
       "target": "ART-WEB-INPUT",
-      "target_type": "artifact"
+      "target_type": "artifact",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "high",
       "curation_status": "public-compatible",
+      "deterministic": true,
+      "inferred": false,
       "license": "attack2defend-curated-baseline",
-      "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+      "mapping_file": "data/mappings/backbone_core.json",
       "relationship": "weakness_enables_attack_pattern",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "CWE-79",
+      "source_feed": "public-compatible",
       "source_kind": "public-compatible",
       "source_ref": "baseline:cwe-capec",
       "source_type": "cwe",
       "target": "CAPEC-63",
-      "target_type": "capec"
+      "target_type": "capec",
+      "transform_version": "mapping_backbone:0.2.1"
     },
     {
       "confidence": "high",
       "curation_status": "public-compatible",
+      "deterministic": true,
+      "inferred": false,
       "license": "attack2defend-curated-baseline",
-      "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+      "mapping_file": "data/mappings/backbone_core.json",
       "relationship": "weakness_enables_attack_pattern",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "CWE-89",
+      "source_feed": "public-compatible",
       "source_kind": "public-compatible",
       "source_ref": "baseline:cwe-capec",
       "source_type": "cwe",
       "target": "CAPEC-66",
-      "target_type": "capec"
+      "target_type": "capec",
+      "transform_version": "mapping_backbone:0.2.1"
     },
     {
       "confidence": "medium",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "weakness_enables_attack_pattern",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "CWE-917",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "cwe",
       "target": "CAPEC-136",
-      "target_type": "capec"
+      "target_type": "capec",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "medium",
       "curation_status": "public-compatible",
+      "deterministic": true,
+      "inferred": false,
       "license": "attack2defend-curated-baseline",
-      "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+      "mapping_file": "data/mappings/backbone_core.json",
       "relationship": "weakness_enables_attack_pattern",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "CWE-918",
+      "source_feed": "public-compatible",
       "source_kind": "public-compatible",
       "source_ref": "baseline:cwe-capec",
       "source_type": "cwe",
       "target": "CAPEC-664",
-      "target_type": "capec"
+      "target_type": "capec",
+      "transform_version": "mapping_backbone:0.2.1"
     },
     {
       "confidence": "high",
       "curation_status": "public-compatible",
+      "deterministic": true,
+      "inferred": false,
       "license": "attack2defend-curated-baseline",
-      "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+      "mapping_file": "data/mappings/backbone_core.json",
       "relationship": "weakness_enables_attack_pattern",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "CWE-94",
+      "source_feed": "public-compatible",
       "source_kind": "public-compatible",
       "source_ref": "baseline:cwe-capec",
       "source_type": "cwe",
       "target": "CAPEC-242",
-      "target_type": "capec"
+      "target_type": "capec",
+      "transform_version": "mapping_backbone:0.2.1"
     },
     {
       "confidence": "internal_control_mapping",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "protected_by_control",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "D3-ACH",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "d3fend",
       "target": "CTRL-CSP",
-      "target_type": "control"
+      "target_type": "control",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "internal_control_mapping",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "protected_by_control",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "D3-ACH",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "d3fend",
       "target": "CTRL-INPUT-OUTPUT-ENCODING",
-      "target_type": "control"
+      "target_type": "control",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "internal_control_mapping",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "protected_by_control",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "D3-DNSAL",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "d3fend",
       "target": "CTRL-DNS-FILTERING",
-      "target_type": "control"
+      "target_type": "control",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "internal_control_mapping",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "protected_by_control",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "D3-DNSDL",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "d3fend",
       "target": "CTRL-DNS-FILTERING",
-      "target_type": "control"
+      "target_type": "control",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "internal_control_mapping",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "protected_by_control",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "D3-FA",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "d3fend",
       "target": "CTRL-DLP-CASB",
-      "target_type": "control"
+      "target_type": "control",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "curated",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "protected_by_control",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "D3-MFA",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "d3fend",
       "target": "ART-CREDENTIAL",
-      "target_type": "artifact"
+      "target_type": "artifact",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "curated",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "protected_by_control",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "D3-MFA",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "d3fend",
       "target": "ART-USER-ACCOUNT",
-      "target_type": "artifact"
+      "target_type": "artifact",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "internal_control_mapping",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "protected_by_control",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "D3-MFA",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "d3fend",
       "target": "CTRL-CONDITIONAL-ACCESS",
-      "target_type": "control"
+      "target_type": "control",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "internal_control_mapping",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "protected_by_control",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "D3-MFA",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "d3fend",
       "target": "CTRL-MFA-ENFORCEMENT",
-      "target_type": "control"
+      "target_type": "control",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "internal_control_mapping",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "protected_by_control",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "D3-NTA",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "d3fend",
       "target": "CTRL-SWG-PROXY",
-      "target_type": "control"
+      "target_type": "control",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "internal_control_mapping",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "protected_by_control",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "D3-NTA",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "d3fend",
       "target": "CTRL-VIRTUAL-PATCH",
-      "target_type": "control"
+      "target_type": "control",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "internal_control_mapping",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "protected_by_control",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "D3-OTF",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "d3fend",
       "target": "CTRL-EGRESS-FIREWALL",
-      "target_type": "control"
+      "target_type": "control",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "internal_control_mapping",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "protected_by_control",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "D3-SU",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "d3fend",
       "target": "CTRL-PATCH-MANAGEMENT",
-      "target_type": "control"
+      "target_type": "control",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "internal_detection_mapping",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "validated_by_detection",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "D3-UA",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "d3fend",
       "target": "DET-XSS-PAYLOAD",
-      "target_type": "detection"
+      "target_type": "detection",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "internal_evidence_mapping",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "requires_evidence",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "DET-CLOUD-UPLOAD-ANOMALY",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "detection",
       "target": "EV-DNS-LOGS",
-      "target_type": "evidence"
+      "target_type": "evidence",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "internal_evidence_mapping",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "requires_evidence",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "DET-CLOUD-UPLOAD-ANOMALY",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "detection",
       "target": "EV-PROXY-LOGS",
-      "target_type": "evidence"
+      "target_type": "evidence",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "internal_evidence_mapping",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "requires_evidence",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "DET-IMPOSSIBLE-TRAVEL",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "detection",
       "target": "EV-IAM-LOGS",
-      "target_type": "evidence"
+      "target_type": "evidence",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "internal_evidence_mapping",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "requires_evidence",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "DET-MFA-BYPASS-SIGNAL",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "detection",
       "target": "EV-IAM-LOGS",
-      "target_type": "evidence"
+      "target_type": "evidence",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "internal_evidence_mapping",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "requires_evidence",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "DET-NON-BROWSER-UPLOAD",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "detection",
       "target": "EV-EDR-NETWORK",
-      "target_type": "evidence"
+      "target_type": "evidence",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "high",
       "curation_status": "public-compatible",
+      "deterministic": true,
+      "inferred": false,
       "license": "attack2defend-curated-baseline",
-      "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+      "mapping_file": "data/mappings/backbone_core.json",
       "owner": "SOC",
       "relationship": "requires_evidence",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "DET-PUBLIC-APP-EXPLOIT-ATTEMPT",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "curated:evidence",
       "source_type": "detection",
       "target": "EV-HTTP-REQUEST-CONTEXT",
-      "target_type": "evidence"
+      "target_type": "evidence",
+      "transform_version": "mapping_backbone:0.2.1"
     },
     {
       "confidence": "internal_evidence_mapping",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "requires_evidence",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "DET-RPC-EXPLOIT-ATTEMPT",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "detection",
       "target": "EV-FIREWALL-LOGS",
-      "target_type": "evidence"
+      "target_type": "evidence",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "medium",
       "curation_status": "public-compatible",
+      "deterministic": true,
+      "inferred": false,
       "license": "attack2defend-curated-baseline",
-      "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+      "mapping_file": "data/mappings/backbone_core.json",
       "owner": "SOC",
       "relationship": "requires_evidence",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "DET-UNUSUAL-WEB-UPLOAD",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "curated:evidence",
       "source_type": "detection",
       "target": "EV-EGRESS-DESTINATION-VOLUME",
-      "target_type": "evidence"
+      "target_type": "evidence",
+      "transform_version": "mapping_backbone:0.2.1"
     },
     {
       "confidence": "high",
       "curation_status": "public-compatible",
+      "deterministic": true,
+      "inferred": false,
       "license": "attack2defend-curated-baseline",
-      "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+      "mapping_file": "data/mappings/backbone_core.json",
       "owner": "SOC",
       "relationship": "requires_evidence",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "DET-WAF-SUSPICIOUS-PAYLOAD",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "curated:evidence",
       "source_type": "detection",
       "target": "EV-WAF-RULE-ACTION",
-      "target_type": "evidence"
+      "target_type": "evidence",
+      "transform_version": "mapping_backbone:0.2.1"
     },
     {
       "confidence": "high",
       "curation_status": "public-compatible",
+      "deterministic": true,
+      "inferred": false,
       "license": "attack2defend-curated-baseline",
-      "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+      "mapping_file": "data/mappings/backbone_core.json",
       "owner": "SOC",
       "relationship": "requires_evidence",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "DET-WEB-TO-SHELL-PROCESS",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "curated:evidence",
       "source_type": "detection",
       "target": "EV-PROCESS-COMMAND-LINE",
-      "target_type": "evidence"
+      "target_type": "evidence",
+      "transform_version": "mapping_backbone:0.2.1"
     },
     {
       "confidence": "internal_evidence_mapping",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "requires_evidence",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "DET-XSS-PAYLOAD",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "detection",
       "target": "EV-WEB-APP-LOGS",
-      "target_type": "evidence"
+      "target_type": "evidence",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "medium",
       "curation_status": "public-compatible",
+      "deterministic": true,
+      "inferred": false,
       "license": "attack2defend-curated-baseline",
-      "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+      "mapping_file": "data/mappings/backbone_core.json",
       "owner": "Infra",
       "relationship": "missing_evidence_creates_gap",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "EV-EGRESS-DESTINATION-VOLUME",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "curated:gap",
       "source_type": "evidence",
       "target": "GAP-EGRESS-BASELINE",
-      "target_type": "gap"
+      "target_type": "gap",
+      "transform_version": "mapping_backbone:0.2.1"
     },
     {
       "confidence": "high",
       "curation_status": "public-compatible",
+      "deterministic": true,
+      "inferred": false,
       "license": "attack2defend-curated-baseline",
-      "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+      "mapping_file": "data/mappings/backbone_core.json",
       "owner": "AppSec",
       "relationship": "missing_evidence_creates_gap",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "EV-HTTP-REQUEST-CONTEXT",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "curated:gap",
       "source_type": "evidence",
       "target": "GAP-MISSING-APP-HTTP-LOGS",
-      "target_type": "gap"
+      "target_type": "gap",
+      "transform_version": "mapping_backbone:0.2.1"
     },
     {
       "confidence": "high",
       "curation_status": "public-compatible",
+      "deterministic": true,
+      "inferred": false,
       "license": "attack2defend-curated-baseline",
-      "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+      "mapping_file": "data/mappings/backbone_core.json",
       "owner": "SOC",
       "relationship": "missing_evidence_creates_gap",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "EV-PROCESS-COMMAND-LINE",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "curated:gap",
       "source_type": "evidence",
       "target": "GAP-ENDPOINT-PROCESS-TELEMETRY",
-      "target_type": "gap"
+      "target_type": "gap",
+      "transform_version": "mapping_backbone:0.2.1"
     },
     {
       "confidence": "high",
       "curation_status": "public-compatible",
+      "deterministic": true,
+      "inferred": false,
       "license": "attack2defend-curated-baseline",
-      "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+      "mapping_file": "data/mappings/backbone_core.json",
       "owner": "SOC",
       "relationship": "missing_evidence_creates_gap",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "EV-WAF-RULE-ACTION",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "curated:gap",
       "source_type": "evidence",
       "target": "GAP-WAF-NOT-INGESTED",
-      "target_type": "gap"
+      "target_type": "gap",
+      "transform_version": "mapping_backbone:0.2.1"
     },
     {
       "confidence": "medium",
       "curation_status": "public-compatible",
+      "deterministic": true,
+      "inferred": false,
       "license": "attack2defend-curated-baseline",
-      "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+      "mapping_file": "data/mappings/backbone_core.json",
       "owner": "Infra",
       "priority": "P1",
       "relationship": "closed_by_action",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "GAP-EGRESS-BASELINE",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "curated:action",
       "source_type": "gap",
       "target": "ACT-INFRA-BUILD-EGRESS-BASELINE",
-      "target_type": "action"
+      "target_type": "action",
+      "transform_version": "mapping_backbone:0.2.1"
     },
     {
       "confidence": "high",
       "curation_status": "public-compatible",
+      "deterministic": true,
+      "inferred": false,
       "license": "attack2defend-curated-baseline",
-      "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+      "mapping_file": "data/mappings/backbone_core.json",
       "owner": "SOC",
       "priority": "P0",
       "relationship": "closed_by_action",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "GAP-ENDPOINT-PROCESS-TELEMETRY",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "curated:action",
       "source_type": "gap",
       "target": "ACT-SOC-ENABLE-PROCESS-TELEMETRY",
-      "target_type": "action"
+      "target_type": "action",
+      "transform_version": "mapping_backbone:0.2.1"
     },
     {
       "confidence": "high",
       "curation_status": "public-compatible",
+      "deterministic": true,
+      "inferred": false,
       "license": "attack2defend-curated-baseline",
-      "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+      "mapping_file": "data/mappings/backbone_core.json",
       "owner": "AppSec",
       "priority": "P0",
       "relationship": "closed_by_action",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "GAP-MISSING-APP-HTTP-LOGS",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "curated:action",
       "source_type": "gap",
       "target": "ACT-APPSEC-ENABLE-HTTP-TELEMETRY",
-      "target_type": "action"
+      "target_type": "action",
+      "transform_version": "mapping_backbone:0.2.1"
     },
     {
       "confidence": "high",
       "curation_status": "public-compatible",
+      "deterministic": true,
+      "inferred": false,
       "license": "attack2defend-curated-baseline",
-      "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+      "mapping_file": "data/mappings/backbone_core.json",
       "owner": "SOC",
       "priority": "P0",
       "relationship": "closed_by_action",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "GAP-WAF-NOT-INGESTED",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "curated:action",
       "source_type": "gap",
       "target": "ACT-SOC-INGEST-WAF-LOGS",
-      "target_type": "action"
+      "target_type": "action",
+      "transform_version": "mapping_backbone:0.2.1"
     },
     {
       "confidence": "high",
       "curation_status": "public-compatible",
+      "deterministic": true,
+      "inferred": false,
       "license": "attack2defend-curated-baseline",
-      "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+      "mapping_file": "data/mappings/backbone_core.json",
       "owner": "SOC",
       "relationship": "affects_or_requires_artifact",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "T1059",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "curated:soc-ctem",
       "source_type": "attack",
       "target": "ART-ENDPOINT-PROCESS",
-      "target_type": "artifact"
+      "target_type": "artifact",
+      "transform_version": "mapping_backbone:0.2.1"
     },
     {
       "confidence": "medium",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "may_lead_to_post_exploitation",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "T1059",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "attack",
       "target": "T1105",
-      "target_type": "attack"
+      "target_type": "attack",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "medium",
       "curation_status": "public-compatible",
+      "deterministic": true,
+      "inferred": false,
       "license": "attack2defend-curated-baseline",
-      "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+      "mapping_file": "data/mappings/backbone_core.json",
       "relationship": "technique_mitigated_by_countermeasure",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "T1059",
+      "source_feed": "public-compatible",
       "source_kind": "public-compatible",
       "source_ref": "baseline:attack-d3fend",
       "source_type": "attack",
       "target": "D3-PSEP",
-      "target_type": "d3fend"
+      "target_type": "d3fend",
+      "transform_version": "mapping_backbone:0.2.1"
     },
     {
       "confidence": "medium",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "validated_by_detection",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "T1059",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "attack",
       "target": "D3-PA",
-      "target_type": "d3fend"
+      "target_type": "d3fend",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "medium",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "validated_by_detection",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "T1059",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "attack",
       "target": "D3-PSA",
-      "target_type": "d3fend"
+      "target_type": "d3fend",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "curated",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "affects_or_requires_artifact",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "T1078",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "attack",
       "target": "ART-CREDENTIAL",
-      "target_type": "artifact"
+      "target_type": "artifact",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "curated",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "affects_or_requires_artifact",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "T1078",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "attack",
       "target": "ART-REMOTE-SESSION",
-      "target_type": "artifact"
+      "target_type": "artifact",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "curated",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "affects_or_requires_artifact",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "T1078",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "attack",
       "target": "ART-USER-ACCOUNT",
-      "target_type": "artifact"
+      "target_type": "artifact",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "medium",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "may_lead_to_post_exploitation",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "T1105",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "attack",
       "target": "T1071",
-      "target_type": "attack"
+      "target_type": "attack",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "curated",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "affects_or_requires_artifact",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "T1110",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "attack",
       "target": "ART-CREDENTIAL",
-      "target_type": "artifact"
+      "target_type": "artifact",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "high",
       "curation_status": "public-compatible",
+      "deterministic": true,
+      "inferred": false,
       "license": "attack2defend-curated-baseline",
-      "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+      "mapping_file": "data/mappings/backbone_core.json",
       "owner": "AppSec",
       "relationship": "affects_or_requires_artifact",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "T1190",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "curated:soc-ctem",
       "source_type": "attack",
       "target": "ART-INTERNET-FACING-APP",
-      "target_type": "artifact"
+      "target_type": "artifact",
+      "transform_version": "mapping_backbone:0.2.1"
     },
     {
       "confidence": "curated",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "affects_or_requires_artifact",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "T1190",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "attack",
       "target": "ART-RPC-NETWORK-TRAFFIC",
-      "target_type": "artifact"
+      "target_type": "artifact",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "curated",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "affects_or_requires_artifact",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "T1190",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "attack",
       "target": "ART-VCENTER-SERVICE",
-      "target_type": "artifact"
+      "target_type": "artifact",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "high",
       "curation_status": "public-compatible",
+      "deterministic": true,
+      "inferred": false,
       "license": "attack2defend-curated-baseline",
-      "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+      "mapping_file": "data/mappings/backbone_core.json",
       "owner": "SOC",
       "relationship": "affects_or_requires_artifact",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "T1190",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "curated:soc-ctem",
       "source_type": "attack",
       "target": "ART-WAF-LOG",
-      "target_type": "artifact"
+      "target_type": "artifact",
+      "transform_version": "mapping_backbone:0.2.1"
     },
     {
       "confidence": "medium",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "may_lead_to_post_exploitation",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "T1190",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "attack",
       "target": "T1059",
-      "target_type": "attack"
+      "target_type": "attack",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "medium",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "technique_mitigated_by_countermeasure",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "T1190",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "attack",
       "target": "D3-AI",
-      "target_type": "d3fend"
+      "target_type": "d3fend",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "medium",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "technique_mitigated_by_countermeasure",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "T1190",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "attack",
       "target": "D3-AVE",
-      "target_type": "d3fend"
+      "target_type": "d3fend",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "medium",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "technique_mitigated_by_countermeasure",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "T1190",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "attack",
       "target": "D3-SU",
-      "target_type": "d3fend"
+      "target_type": "d3fend",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "medium",
       "curation_status": "public-compatible",
+      "deterministic": true,
+      "inferred": false,
       "license": "attack2defend-curated-baseline",
-      "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+      "mapping_file": "data/mappings/backbone_core.json",
       "relationship": "technique_mitigated_by_countermeasure",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "T1190",
+      "source_feed": "public-compatible",
       "source_kind": "public-compatible",
       "source_ref": "baseline:attack-d3fend",
       "source_type": "attack",
       "target": "D3-WAF",
-      "target_type": "d3fend"
+      "target_type": "d3fend",
+      "transform_version": "mapping_backbone:0.2.1"
     },
     {
       "confidence": "medium",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "validated_by_detection",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "T1190",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "attack",
       "target": "D3-NTA",
-      "target_type": "d3fend"
+      "target_type": "d3fend",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "curated",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "affects_or_requires_artifact",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "T1567",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "attack",
       "target": "ART-DNS-LOOKUP",
-      "target_type": "artifact"
+      "target_type": "artifact",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "curated",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "affects_or_requires_artifact",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "T1567",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "attack",
       "target": "ART-DOMAIN",
-      "target_type": "artifact"
+      "target_type": "artifact",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "high",
       "curation_status": "public-compatible",
+      "deterministic": true,
+      "inferred": false,
       "license": "attack2defend-curated-baseline",
-      "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+      "mapping_file": "data/mappings/backbone_core.json",
       "owner": "SOC",
       "relationship": "affects_or_requires_artifact",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "T1567",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "curated:soc-ctem",
       "source_type": "attack",
       "target": "ART-EGRESS-NETWORK",
-      "target_type": "artifact"
+      "target_type": "artifact",
+      "transform_version": "mapping_backbone:0.2.1"
     },
     {
       "confidence": "curated",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "affects_or_requires_artifact",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "T1567",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "attack",
       "target": "ART-NETWORK-TRAFFIC",
-      "target_type": "artifact"
+      "target_type": "artifact",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "curated",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "affects_or_requires_artifact",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "T1567",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "attack",
       "target": "ART-SENSITIVE-FILE",
-      "target_type": "artifact"
+      "target_type": "artifact",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "curated",
       "curation_status": "curated",
+      "deterministic": true,
+      "inferred": false,
       "relationship": "affects_or_requires_artifact",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "T1567",
+      "source_feed": "curated",
       "source_kind": "curated",
       "source_ref": "generated:knowledge_builder:sample_bundle",
       "source_type": "attack",
       "target": "ART-URL",
-      "target_type": "artifact"
+      "target_type": "artifact",
+      "transform_version": "knowledge_builder:0.3.0"
     },
     {
       "confidence": "medium",
       "curation_status": "public-compatible",
+      "deterministic": true,
+      "inferred": false,
       "license": "attack2defend-curated-baseline",
-      "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+      "mapping_file": "data/mappings/backbone_core.json",
       "relationship": "technique_mitigated_by_countermeasure",
+      "retrieved_at": "2026-05-09T19:27:48Z",
       "source": "T1567",
+      "source_feed": "public-compatible",
       "source_kind": "public-compatible",
       "source_ref": "baseline:attack-d3fend",
       "source_type": "attack",
       "target": "D3-DLP",
-      "target_type": "d3fend"
+      "target_type": "d3fend",
+      "transform_version": "mapping_backbone:0.2.1"
     }
   ],
   "indexes": {
@@ -3876,6 +4451,7 @@
     "counts": {
       "coverage_records": 7,
       "edges": 115,
+      "edges_with_provenance": 115,
       "mapping_files": 2,
       "mapping_records": 50,
       "nodes": 111,
@@ -3884,21 +4460,26 @@
       "semantic_routes": 8,
       "warnings": 0
     },
-    "generated_at": "2026-05-03T04:12:16Z",
+    "edge_provenance_enforced_at": "2026-05-09T19:27:48Z",
+    "edge_provenance_version": "0.1.0",
+    "generated_at": "2026-05-09T19:27:48Z",
     "mapping_backbone": {
       "mapping_files": [
-        "/home/user/attack2defend/data/mappings/backbone_core.json",
-        "/home/user/attack2defend/data/mappings/curated/cpe_kev_core.json"
+        "data/mappings/backbone_core.json",
+        "data/mappings/curated/cpe_kev_core.json"
       ],
-      "mappings_dir": "/home/user/attack2defend/data/mappings"
+      "mappings_dir": "data/mappings"
     },
-    "mapping_backbone_applied_at": "2026-05-03T04:12:19Z",
+    "mapping_backbone_applied_at": "2026-05-09T19:27:48Z",
     "mapping_backbone_version": "0.2.1",
     "mode": "mapping_backbone_bundle",
     "public_collection": {
-      "cache_dir": "/home/user/attack2defend/data/raw",
+      "cache_dir": "data/raw",
+      "cve2capec_enabled": false,
+      "cve2capec_years": [],
       "enabled": false,
       "failed_collectors": [],
+      "max_cve2capec_cves_per_year": null,
       "nvd_cves": [],
       "nvd_enabled": false,
       "nvd_recent_days": 0,
@@ -3923,11 +4504,11 @@
       ]
     },
     "source_files": [
-      "/home/user/attack2defend/data/samples/cve-2024-37079-vcenter.route.json",
-      "/home/user/attack2defend/data/samples/cwe-79-xss.route.json",
-      "/home/user/attack2defend/data/samples/d3-mfa-identity.route.json",
-      "/home/user/attack2defend/data/samples/log4shell.route.json",
-      "/home/user/attack2defend/data/samples/t1567-exfiltration-web-service.route.json"
+      "data/samples/cve-2024-37079-vcenter.route.json",
+      "data/samples/cwe-79-xss.route.json",
+      "data/samples/d3-mfa-identity.route.json",
+      "data/samples/log4shell.route.json",
+      "data/samples/t1567-exfiltration-web-service.route.json"
     ],
     "warnings": []
   },
@@ -3936,7 +4517,7 @@
       "id": "CVE-2021-26855",
       "metadata": {
         "source_kind": "public-compatible",
-        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        "source_ref": "data/mappings/backbone_core.json"
       },
       "name": "Microsoft Exchange Server-Side Request Forgery",
       "type": "cve"
@@ -3950,7 +4531,7 @@
         "product": "Log4j",
         "required_action": "Apply vendor updates or mitigations and validate exposed Java applications.",
         "source_kind": "curated",
-        "source_ref": "/home/user/attack2defend/data/mappings/curated/cpe_kev_core.json",
+        "source_ref": "data/mappings/curated/cpe_kev_core.json",
         "vendor": "Apache"
       },
       "name": "Apache Log4j2 JNDI RCE / Log4Shell",
@@ -3961,7 +4542,7 @@
       "id": "CVE-2022-22965",
       "metadata": {
         "source_kind": "public-compatible",
-        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        "source_ref": "data/mappings/backbone_core.json"
       },
       "name": "Spring4Shell Remote Code Execution",
       "type": "cve"
@@ -3970,7 +4551,7 @@
       "id": "CVE-2023-27997",
       "metadata": {
         "source_kind": "public-compatible",
-        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        "source_ref": "data/mappings/backbone_core.json"
       },
       "name": "Fortinet FortiOS heap-based buffer overflow",
       "type": "cve"
@@ -3984,7 +4565,7 @@
         "product": "MOVEit Transfer",
         "required_action": "Apply vendor guidance, hunt for exploitation indicators and review exposed transfer services.",
         "source_kind": "curated",
-        "source_ref": "/home/user/attack2defend/data/mappings/curated/cpe_kev_core.json",
+        "source_ref": "data/mappings/curated/cpe_kev_core.json",
         "vendor": "Progress"
       },
       "name": "MOVEit Transfer SQL Injection",
@@ -3995,7 +4576,7 @@
       "metadata": {
         "product_family": "VMware vCenter Server",
         "source_kind": "public-compatible",
-        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        "source_ref": "data/mappings/backbone_core.json"
       },
       "name": "VMware vCenter Server DCERPC heap-overflow RCE",
       "type": "cve",
@@ -4005,7 +4586,7 @@
       "id": "CWE-122",
       "metadata": {
         "source_kind": "public-compatible",
-        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        "source_ref": "data/mappings/backbone_core.json"
       },
       "name": "Heap-based Buffer Overflow",
       "type": "cwe"
@@ -4014,7 +4595,7 @@
       "id": "CWE-20",
       "metadata": {
         "source_kind": "public-compatible",
-        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        "source_ref": "data/mappings/backbone_core.json"
       },
       "name": "Improper Input Validation",
       "type": "cwe",
@@ -4024,7 +4605,7 @@
       "id": "CWE-22",
       "metadata": {
         "source_kind": "public-compatible",
-        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        "source_ref": "data/mappings/backbone_core.json"
       },
       "name": "Path Traversal",
       "type": "cwe"
@@ -4045,7 +4626,7 @@
       "id": "CWE-79",
       "metadata": {
         "source_kind": "public-compatible",
-        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        "source_ref": "data/mappings/backbone_core.json"
       },
       "name": "Improper Neutralization of Input During Web Page Generation / Cross-site Scripting",
       "type": "cwe",
@@ -4055,7 +4636,7 @@
       "id": "CWE-89",
       "metadata": {
         "source_kind": "public-compatible",
-        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        "source_ref": "data/mappings/backbone_core.json"
       },
       "name": "SQL Injection",
       "type": "cwe"
@@ -4070,7 +4651,7 @@
       "id": "CWE-918",
       "metadata": {
         "source_kind": "public-compatible",
-        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        "source_ref": "data/mappings/backbone_core.json"
       },
       "name": "Server-Side Request Forgery",
       "type": "cwe"
@@ -4079,7 +4660,7 @@
       "id": "CWE-94",
       "metadata": {
         "source_kind": "public-compatible",
-        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        "source_ref": "data/mappings/backbone_core.json"
       },
       "name": "Code Injection",
       "type": "cwe"
@@ -4088,7 +4669,7 @@
       "id": "CAPEC-100",
       "metadata": {
         "source_kind": "public-compatible",
-        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        "source_ref": "data/mappings/backbone_core.json"
       },
       "name": "Overflow Buffers",
       "type": "capec",
@@ -4098,7 +4679,7 @@
       "id": "CAPEC-126",
       "metadata": {
         "source_kind": "public-compatible",
-        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        "source_ref": "data/mappings/backbone_core.json"
       },
       "name": "Path Traversal",
       "type": "capec"
@@ -4113,7 +4694,7 @@
       "id": "CAPEC-242",
       "metadata": {
         "source_kind": "public-compatible",
-        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        "source_ref": "data/mappings/backbone_core.json"
       },
       "name": "Code Injection",
       "type": "capec"
@@ -4128,7 +4709,7 @@
       "id": "CAPEC-63",
       "metadata": {
         "source_kind": "public-compatible",
-        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        "source_ref": "data/mappings/backbone_core.json"
       },
       "name": "Cross-Site Scripting (XSS)",
       "type": "capec",
@@ -4138,7 +4719,7 @@
       "id": "CAPEC-66",
       "metadata": {
         "source_kind": "public-compatible",
-        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        "source_ref": "data/mappings/backbone_core.json"
       },
       "name": "SQL Injection",
       "type": "capec"
@@ -4147,7 +4728,7 @@
       "id": "CAPEC-664",
       "metadata": {
         "source_kind": "public-compatible",
-        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        "source_ref": "data/mappings/backbone_core.json"
       },
       "name": "Server-Side Request Forgery",
       "type": "capec"
@@ -4156,7 +4737,7 @@
       "id": "T1059",
       "metadata": {
         "source_kind": "public-compatible",
-        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        "source_ref": "data/mappings/backbone_core.json"
       },
       "name": "Command and Scripting Interpreter",
       "type": "attack",
@@ -4196,7 +4777,7 @@
       "id": "T1189",
       "metadata": {
         "source_kind": "public-compatible",
-        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        "source_ref": "data/mappings/backbone_core.json"
       },
       "name": "Drive-by Compromise",
       "type": "attack",
@@ -4206,7 +4787,7 @@
       "id": "T1190",
       "metadata": {
         "source_kind": "public-compatible",
-        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        "source_ref": "data/mappings/backbone_core.json"
       },
       "name": "Exploit Public-Facing Application",
       "type": "attack",
@@ -4216,7 +4797,7 @@
       "id": "T1567",
       "metadata": {
         "source_kind": "public-compatible",
-        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        "source_ref": "data/mappings/backbone_core.json"
       },
       "name": "Exfiltration Over Web Service",
       "type": "attack",
@@ -4241,7 +4822,7 @@
       "id": "ART-EGRESS-NETWORK",
       "metadata": {
         "source_kind": "public-compatible",
-        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        "source_ref": "data/mappings/backbone_core.json"
       },
       "name": "Outbound egress network telemetry",
       "type": "artifact"
@@ -4250,7 +4831,7 @@
       "id": "ART-ENDPOINT-PROCESS",
       "metadata": {
         "source_kind": "public-compatible",
-        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        "source_ref": "data/mappings/backbone_core.json"
       },
       "name": "Endpoint process execution telemetry",
       "type": "artifact"
@@ -4259,7 +4840,7 @@
       "id": "ART-INTERNET-FACING-APP",
       "metadata": {
         "source_kind": "public-compatible",
-        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        "source_ref": "data/mappings/backbone_core.json"
       },
       "name": "Internet-facing application",
       "type": "artifact"
@@ -4268,7 +4849,7 @@
       "id": "ART-LOG4J-JAVA-APP",
       "metadata": {
         "source_kind": "public-compatible",
-        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        "source_ref": "data/mappings/backbone_core.json"
       },
       "name": "Java application using vulnerable Log4j",
       "type": "artifact"
@@ -4277,7 +4858,7 @@
       "id": "ART-MOVEIT-TRANSFER",
       "metadata": {
         "source_kind": "public-compatible",
-        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        "source_ref": "data/mappings/backbone_core.json"
       },
       "name": "MOVEit Transfer exposed application",
       "type": "artifact"
@@ -4321,7 +4902,7 @@
       "id": "ART-WAF-LOG",
       "metadata": {
         "source_kind": "public-compatible",
-        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        "source_ref": "data/mappings/backbone_core.json"
       },
       "name": "WAF or reverse proxy log",
       "type": "artifact"
@@ -4342,7 +4923,7 @@
         "framework": "cpe",
         "product": "log4j",
         "source_kind": "curated",
-        "source_ref": "/home/user/attack2defend/data/mappings/curated/cpe_kev_core.json",
+        "source_ref": "data/mappings/curated/cpe_kev_core.json",
         "vendor": "apache",
         "version": "*"
       },
@@ -4355,7 +4936,7 @@
         "framework": "cpe",
         "product": "moveit_transfer",
         "source_kind": "curated",
-        "source_ref": "/home/user/attack2defend/data/mappings/curated/cpe_kev_core.json",
+        "source_ref": "data/mappings/curated/cpe_kev_core.json",
         "vendor": "progress",
         "version": "*"
       },
@@ -4384,7 +4965,7 @@
       "id": "D3-DLP",
       "metadata": {
         "source_kind": "public-compatible",
-        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        "source_ref": "data/mappings/backbone_core.json"
       },
       "name": "Data Loss Prevention",
       "type": "d3fend"
@@ -4441,7 +5022,7 @@
       "id": "D3-PSEP",
       "metadata": {
         "source_kind": "public-compatible",
-        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        "source_ref": "data/mappings/backbone_core.json"
       },
       "name": "Process Spawn Analysis",
       "type": "d3fend"
@@ -4462,7 +5043,7 @@
       "id": "D3-WAF",
       "metadata": {
         "source_kind": "public-compatible",
-        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        "source_ref": "data/mappings/backbone_core.json"
       },
       "name": "Web Application Firewall",
       "type": "d3fend"
@@ -4491,7 +5072,7 @@
       "id": "CTRL-EDR-PROCESS",
       "metadata": {
         "source_kind": "public-compatible",
-        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        "source_ref": "data/mappings/backbone_core.json"
       },
       "name": "EDR process telemetry and command-line capture",
       "type": "control"
@@ -4505,7 +5086,7 @@
       "id": "CTRL-EGRESS-MONITORING",
       "metadata": {
         "source_kind": "public-compatible",
-        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        "source_ref": "data/mappings/backbone_core.json"
       },
       "name": "Egress monitoring and anomaly detection",
       "type": "control"
@@ -4539,7 +5120,7 @@
       "id": "CTRL-WAF-LOGGING",
       "metadata": {
         "source_kind": "public-compatible",
-        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        "source_ref": "data/mappings/backbone_core.json"
       },
       "name": "WAF logging and normalized HTTP telemetry",
       "type": "control"
@@ -4548,7 +5129,7 @@
       "id": "CTRL-WAF-VIRTUAL-PATCH",
       "metadata": {
         "source_kind": "public-compatible",
-        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        "source_ref": "data/mappings/backbone_core.json"
       },
       "name": "WAF virtual patching and exploit blocking",
       "type": "control"
@@ -4577,7 +5158,7 @@
       "id": "DET-PUBLIC-APP-EXPLOIT-ATTEMPT",
       "metadata": {
         "source_kind": "public-compatible",
-        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        "source_ref": "data/mappings/backbone_core.json"
       },
       "name": "Public-facing application exploit attempt",
       "type": "detection"
@@ -4591,7 +5172,7 @@
       "id": "DET-UNUSUAL-WEB-UPLOAD",
       "metadata": {
         "source_kind": "public-compatible",
-        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        "source_ref": "data/mappings/backbone_core.json"
       },
       "name": "Unusual upload to web service",
       "type": "detection"
@@ -4600,7 +5181,7 @@
       "id": "DET-WAF-SUSPICIOUS-PAYLOAD",
       "metadata": {
         "source_kind": "public-compatible",
-        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        "source_ref": "data/mappings/backbone_core.json"
       },
       "name": "Suspicious HTTP payload blocked or challenged",
       "type": "detection"
@@ -4609,7 +5190,7 @@
       "id": "DET-WEB-TO-SHELL-PROCESS",
       "metadata": {
         "source_kind": "public-compatible",
-        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        "source_ref": "data/mappings/backbone_core.json"
       },
       "name": "Web process spawned shell or scripting interpreter",
       "type": "detection"
@@ -4633,7 +5214,7 @@
       "id": "EV-EGRESS-DESTINATION-VOLUME",
       "metadata": {
         "source_kind": "public-compatible",
-        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        "source_ref": "data/mappings/backbone_core.json"
       },
       "name": "Destination bytes uploaded user session reputation and baseline deviation",
       "type": "evidence"
@@ -4647,7 +5228,7 @@
       "id": "EV-HTTP-REQUEST-CONTEXT",
       "metadata": {
         "source_kind": "public-compatible",
-        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        "source_ref": "data/mappings/backbone_core.json"
       },
       "name": "HTTP method URL parameters headers source IP response code",
       "type": "evidence"
@@ -4661,7 +5242,7 @@
       "id": "EV-PROCESS-COMMAND-LINE",
       "metadata": {
         "source_kind": "public-compatible",
-        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        "source_ref": "data/mappings/backbone_core.json"
       },
       "name": "Parent process command line user host and timestamp",
       "type": "evidence"
@@ -4675,7 +5256,7 @@
       "id": "EV-WAF-RULE-ACTION",
       "metadata": {
         "source_kind": "public-compatible",
-        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        "source_ref": "data/mappings/backbone_core.json"
       },
       "name": "WAF rule ID action payload signature and request metadata",
       "type": "evidence"
@@ -4689,7 +5270,7 @@
       "id": "GAP-EGRESS-BASELINE",
       "metadata": {
         "source_kind": "public-compatible",
-        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        "source_ref": "data/mappings/backbone_core.json"
       },
       "name": "No outbound baseline or destination reputation context",
       "type": "gap"
@@ -4698,7 +5279,7 @@
       "id": "GAP-ENDPOINT-PROCESS-TELEMETRY",
       "metadata": {
         "source_kind": "public-compatible",
-        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        "source_ref": "data/mappings/backbone_core.json"
       },
       "name": "Endpoint command-line telemetry missing or incomplete",
       "type": "gap"
@@ -4707,7 +5288,7 @@
       "id": "GAP-MISSING-APP-HTTP-LOGS",
       "metadata": {
         "source_kind": "public-compatible",
-        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        "source_ref": "data/mappings/backbone_core.json"
       },
       "name": "Missing normalized application or reverse proxy HTTP logs",
       "type": "gap"
@@ -4716,7 +5297,7 @@
       "id": "GAP-WAF-NOT-INGESTED",
       "metadata": {
         "source_kind": "public-compatible",
-        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        "source_ref": "data/mappings/backbone_core.json"
       },
       "name": "WAF logs not ingested or action semantics not normalized",
       "type": "gap"
@@ -4725,7 +5306,7 @@
       "id": "ACT-APPSEC-ENABLE-HTTP-TELEMETRY",
       "metadata": {
         "source_kind": "public-compatible",
-        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        "source_ref": "data/mappings/backbone_core.json"
       },
       "name": "Enable normalized application and reverse proxy HTTP telemetry",
       "type": "action"
@@ -4734,7 +5315,7 @@
       "id": "ACT-INFRA-BUILD-EGRESS-BASELINE",
       "metadata": {
         "source_kind": "public-compatible",
-        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        "source_ref": "data/mappings/backbone_core.json"
       },
       "name": "Build egress baseline and high-risk destination watchlist",
       "type": "action"
@@ -4743,7 +5324,7 @@
       "id": "ACT-SOC-ENABLE-PROCESS-TELEMETRY",
       "metadata": {
         "source_kind": "public-compatible",
-        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        "source_ref": "data/mappings/backbone_core.json"
       },
       "name": "Enable EDR process command-line telemetry and web-to-shell correlation",
       "type": "action"
@@ -4752,7 +5333,7 @@
       "id": "ACT-SOC-INGEST-WAF-LOGS",
       "metadata": {
         "source_kind": "public-compatible",
-        "source_ref": "/home/user/attack2defend/data/mappings/backbone_core.json"
+        "source_ref": "data/mappings/backbone_core.json"
       },
       "name": "Ingest and normalize WAF logs including action rule ID and request context",
       "type": "action"
@@ -4761,7 +5342,7 @@
   "routes": [
     {
       "curation_status": "curated_mvp",
-      "file": "/home/user/attack2defend/data/samples/cve-2024-37079-vcenter.route.json",
+      "file": "data/samples/cve-2024-37079-vcenter.route.json",
       "id": "route-cve-2024-37079-vcenter",
       "input": "CVE-2024-37079",
       "name": "VMware vCenter DCERPC heap-overflow route",
@@ -4769,7 +5350,7 @@
     },
     {
       "curation_status": "curated_mvp",
-      "file": "/home/user/attack2defend/data/samples/cwe-79-xss.route.json",
+      "file": "data/samples/cwe-79-xss.route.json",
       "id": "route-cwe-79-xss",
       "input": "CWE-79",
       "name": "Cross-site scripting route",
@@ -4777,7 +5358,7 @@
     },
     {
       "curation_status": "curated_mvp",
-      "file": "/home/user/attack2defend/data/samples/d3-mfa-identity.route.json",
+      "file": "data/samples/d3-mfa-identity.route.json",
       "id": "route-d3-mfa-identity",
       "input": "D3-MFA",
       "name": "Multi-factor authentication reverse route",
@@ -4785,7 +5366,7 @@
     },
     {
       "curation_status": "sample_curated",
-      "file": "/home/user/attack2defend/data/samples/log4shell.route.json",
+      "file": "data/samples/log4shell.route.json",
       "id": "sample-log4shell-route",
       "input": "CVE-2021-44228",
       "name": "Log4Shell Attack2Defend sample route",
@@ -4793,7 +5374,7 @@
     },
     {
       "curation_status": "curated_mvp",
-      "file": "/home/user/attack2defend/data/samples/t1567-exfiltration-web-service.route.json",
+      "file": "data/samples/t1567-exfiltration-web-service.route.json",
       "id": "route-t1567-exfiltration-web-service",
       "input": "T1567",
       "name": "Exfiltration Over Web Service defense route",
@@ -4842,7 +5423,7 @@
           "confidence": "medium",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "relationship": "attack_pattern_maps_to_technique",
           "source": "CAPEC-63",
           "source_kind": "public-compatible",
@@ -4855,7 +5436,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "relationship": "weakness_enables_attack_pattern",
           "source": "CWE-79",
           "source_kind": "public-compatible",
@@ -4915,7 +5496,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "owner": "AppSec",
           "relationship": "protected_by_control",
           "source": "ART-INTERNET-FACING-APP",
@@ -4940,7 +5521,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "owner": "SOC",
           "relationship": "protected_by_control",
           "source": "ART-WAF-LOG",
@@ -4954,7 +5535,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "relationship": "attack_pattern_maps_to_technique",
           "source": "CAPEC-100",
           "source_kind": "public-compatible",
@@ -5000,7 +5581,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "owner": "SOC",
           "priority": "P0",
           "relationship": "validated_by_detection",
@@ -5015,7 +5596,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "owner": "SOC",
           "priority": "P0",
           "relationship": "validated_by_detection",
@@ -5030,7 +5611,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "relationship": "affects_product_or_platform",
           "source": "CVE-2021-44228",
           "source_kind": "public-compatible",
@@ -5043,7 +5624,7 @@
           "confidence": "high",
           "curation_status": "curated",
           "license": "attack2defend-curated-public-compatible-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/curated/cpe_kev_core.json",
+          "mapping_file": "data/mappings/curated/cpe_kev_core.json",
           "relationship": "affects_product_or_platform",
           "source": "CVE-2021-44228",
           "source_kind": "public-compatible",
@@ -5056,7 +5637,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "relationship": "vulnerability_has_weakness",
           "source": "CVE-2021-44228",
           "source_kind": "public-compatible",
@@ -5091,7 +5672,7 @@
           "confidence": "medium",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "relationship": "weakness_enables_attack_pattern",
           "source": "CWE-20",
           "source_kind": "public-compatible",
@@ -5181,7 +5762,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "owner": "SOC",
           "relationship": "requires_evidence",
           "source": "DET-PUBLIC-APP-EXPLOIT-ATTEMPT",
@@ -5206,7 +5787,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "owner": "SOC",
           "relationship": "requires_evidence",
           "source": "DET-WAF-SUSPICIOUS-PAYLOAD",
@@ -5220,7 +5801,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "owner": "AppSec",
           "relationship": "missing_evidence_creates_gap",
           "source": "EV-HTTP-REQUEST-CONTEXT",
@@ -5234,7 +5815,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "owner": "SOC",
           "relationship": "missing_evidence_creates_gap",
           "source": "EV-WAF-RULE-ACTION",
@@ -5248,7 +5829,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "owner": "AppSec",
           "priority": "P0",
           "relationship": "closed_by_action",
@@ -5263,7 +5844,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "owner": "SOC",
           "priority": "P0",
           "relationship": "closed_by_action",
@@ -5278,7 +5859,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "owner": "AppSec",
           "relationship": "affects_or_requires_artifact",
           "source": "T1190",
@@ -5314,7 +5895,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "owner": "SOC",
           "relationship": "affects_or_requires_artifact",
           "source": "T1190",
@@ -5361,7 +5942,7 @@
           "confidence": "medium",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "relationship": "technique_mitigated_by_countermeasure",
           "source": "T1190",
           "source_kind": "public-compatible",
@@ -5435,7 +6016,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "owner": "AppSec",
           "relationship": "protected_by_control",
           "source": "ART-INTERNET-FACING-APP",
@@ -5460,7 +6041,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "owner": "SOC",
           "relationship": "protected_by_control",
           "source": "ART-WAF-LOG",
@@ -5474,7 +6055,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "relationship": "attack_pattern_maps_to_technique",
           "source": "CAPEC-66",
           "source_kind": "public-compatible",
@@ -5520,7 +6101,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "owner": "SOC",
           "priority": "P0",
           "relationship": "validated_by_detection",
@@ -5535,7 +6116,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "owner": "SOC",
           "priority": "P0",
           "relationship": "validated_by_detection",
@@ -5550,7 +6131,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "relationship": "affects_product_or_platform",
           "source": "CVE-2023-34362",
           "source_kind": "public-compatible",
@@ -5563,7 +6144,7 @@
           "confidence": "high",
           "curation_status": "curated",
           "license": "attack2defend-curated-public-compatible-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/curated/cpe_kev_core.json",
+          "mapping_file": "data/mappings/curated/cpe_kev_core.json",
           "relationship": "affects_product_or_platform",
           "source": "CVE-2023-34362",
           "source_kind": "public-compatible",
@@ -5576,7 +6157,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "relationship": "vulnerability_has_weakness",
           "source": "CVE-2023-34362",
           "source_kind": "public-compatible",
@@ -5589,7 +6170,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "relationship": "weakness_enables_attack_pattern",
           "source": "CWE-89",
           "source_kind": "public-compatible",
@@ -5668,7 +6249,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "owner": "SOC",
           "relationship": "requires_evidence",
           "source": "DET-PUBLIC-APP-EXPLOIT-ATTEMPT",
@@ -5693,7 +6274,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "owner": "SOC",
           "relationship": "requires_evidence",
           "source": "DET-WAF-SUSPICIOUS-PAYLOAD",
@@ -5707,7 +6288,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "owner": "AppSec",
           "relationship": "missing_evidence_creates_gap",
           "source": "EV-HTTP-REQUEST-CONTEXT",
@@ -5721,7 +6302,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "owner": "SOC",
           "relationship": "missing_evidence_creates_gap",
           "source": "EV-WAF-RULE-ACTION",
@@ -5735,7 +6316,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "owner": "AppSec",
           "priority": "P0",
           "relationship": "closed_by_action",
@@ -5750,7 +6331,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "owner": "SOC",
           "priority": "P0",
           "relationship": "closed_by_action",
@@ -5765,7 +6346,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "owner": "AppSec",
           "relationship": "affects_or_requires_artifact",
           "source": "T1190",
@@ -5801,7 +6382,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "owner": "SOC",
           "relationship": "affects_or_requires_artifact",
           "source": "T1190",
@@ -5848,7 +6429,7 @@
           "confidence": "medium",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "relationship": "technique_mitigated_by_countermeasure",
           "source": "T1190",
           "source_kind": "public-compatible",
@@ -5919,7 +6500,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "owner": "AppSec",
           "relationship": "protected_by_control",
           "source": "ART-INTERNET-FACING-APP",
@@ -5944,7 +6525,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "owner": "SOC",
           "relationship": "protected_by_control",
           "source": "ART-WAF-LOG",
@@ -5958,7 +6539,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "relationship": "attack_pattern_maps_to_technique",
           "source": "CAPEC-100",
           "source_kind": "public-compatible",
@@ -5971,7 +6552,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "relationship": "attack_pattern_maps_to_technique",
           "source": "CAPEC-126",
           "source_kind": "public-compatible",
@@ -6017,7 +6598,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "owner": "SOC",
           "priority": "P0",
           "relationship": "validated_by_detection",
@@ -6032,7 +6613,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "owner": "SOC",
           "priority": "P0",
           "relationship": "validated_by_detection",
@@ -6047,7 +6628,7 @@
           "confidence": "medium",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "relationship": "vulnerability_has_weakness",
           "source": "CVE-2024-37079",
           "source_kind": "public-compatible",
@@ -6071,7 +6652,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "relationship": "weakness_enables_attack_pattern",
           "source": "CWE-22",
           "source_kind": "public-compatible",
@@ -6161,7 +6742,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "owner": "SOC",
           "relationship": "requires_evidence",
           "source": "DET-PUBLIC-APP-EXPLOIT-ATTEMPT",
@@ -6186,7 +6767,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "owner": "SOC",
           "relationship": "requires_evidence",
           "source": "DET-WAF-SUSPICIOUS-PAYLOAD",
@@ -6200,7 +6781,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "owner": "AppSec",
           "relationship": "missing_evidence_creates_gap",
           "source": "EV-HTTP-REQUEST-CONTEXT",
@@ -6214,7 +6795,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "owner": "SOC",
           "relationship": "missing_evidence_creates_gap",
           "source": "EV-WAF-RULE-ACTION",
@@ -6228,7 +6809,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "owner": "AppSec",
           "priority": "P0",
           "relationship": "closed_by_action",
@@ -6243,7 +6824,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "owner": "SOC",
           "priority": "P0",
           "relationship": "closed_by_action",
@@ -6258,7 +6839,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "owner": "AppSec",
           "relationship": "affects_or_requires_artifact",
           "source": "T1190",
@@ -6294,7 +6875,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "owner": "SOC",
           "relationship": "affects_or_requires_artifact",
           "source": "T1190",
@@ -6341,7 +6922,7 @@
           "confidence": "medium",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "relationship": "technique_mitigated_by_countermeasure",
           "source": "T1190",
           "source_kind": "public-compatible",
@@ -6456,7 +7037,7 @@
           "confidence": "medium",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "relationship": "attack_pattern_maps_to_technique",
           "source": "CAPEC-63",
           "source_kind": "public-compatible",
@@ -6480,7 +7061,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "relationship": "weakness_enables_attack_pattern",
           "source": "CWE-79",
           "source_kind": "public-compatible",
@@ -6680,7 +7261,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "owner": "AppSec",
           "relationship": "protected_by_control",
           "source": "ART-INTERNET-FACING-APP",
@@ -6705,7 +7286,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "owner": "SOC",
           "relationship": "protected_by_control",
           "source": "ART-WAF-LOG",
@@ -6719,7 +7300,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "relationship": "attack_pattern_maps_to_technique",
           "source": "CAPEC-100",
           "source_kind": "public-compatible",
@@ -6732,7 +7313,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "relationship": "attack_pattern_maps_to_technique",
           "source": "CAPEC-126",
           "source_kind": "public-compatible",
@@ -6756,7 +7337,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "relationship": "attack_pattern_maps_to_technique",
           "source": "CAPEC-66",
           "source_kind": "public-compatible",
@@ -6769,7 +7350,7 @@
           "confidence": "medium",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "relationship": "attack_pattern_maps_to_technique",
           "source": "CAPEC-664",
           "source_kind": "public-compatible",
@@ -6815,7 +7396,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "owner": "SOC",
           "priority": "P0",
           "relationship": "validated_by_detection",
@@ -6830,7 +7411,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "owner": "SOC",
           "priority": "P0",
           "relationship": "validated_by_detection",
@@ -6845,7 +7426,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "relationship": "vulnerability_has_weakness",
           "source": "CVE-2021-26855",
           "source_kind": "public-compatible",
@@ -6858,7 +7439,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "relationship": "vulnerability_has_weakness",
           "source": "CVE-2021-44228",
           "source_kind": "public-compatible",
@@ -6871,7 +7452,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "relationship": "vulnerability_has_weakness",
           "source": "CVE-2023-27997",
           "source_kind": "public-compatible",
@@ -6884,7 +7465,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "relationship": "vulnerability_has_weakness",
           "source": "CVE-2023-34362",
           "source_kind": "public-compatible",
@@ -6897,7 +7478,7 @@
           "confidence": "medium",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "relationship": "vulnerability_has_weakness",
           "source": "CVE-2024-37079",
           "source_kind": "public-compatible",
@@ -6921,7 +7502,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "relationship": "weakness_enables_attack_pattern",
           "source": "CWE-122",
           "source_kind": "public-compatible",
@@ -6934,7 +7515,7 @@
           "confidence": "medium",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "relationship": "weakness_enables_attack_pattern",
           "source": "CWE-20",
           "source_kind": "public-compatible",
@@ -6947,7 +7528,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "relationship": "weakness_enables_attack_pattern",
           "source": "CWE-22",
           "source_kind": "public-compatible",
@@ -6971,7 +7552,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "relationship": "weakness_enables_attack_pattern",
           "source": "CWE-89",
           "source_kind": "public-compatible",
@@ -6984,7 +7565,7 @@
           "confidence": "medium",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "relationship": "weakness_enables_attack_pattern",
           "source": "CWE-918",
           "source_kind": "public-compatible",
@@ -7063,7 +7644,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "owner": "SOC",
           "relationship": "requires_evidence",
           "source": "DET-PUBLIC-APP-EXPLOIT-ATTEMPT",
@@ -7088,7 +7669,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "owner": "SOC",
           "relationship": "requires_evidence",
           "source": "DET-WAF-SUSPICIOUS-PAYLOAD",
@@ -7102,7 +7683,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "owner": "AppSec",
           "relationship": "missing_evidence_creates_gap",
           "source": "EV-HTTP-REQUEST-CONTEXT",
@@ -7116,7 +7697,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "owner": "SOC",
           "relationship": "missing_evidence_creates_gap",
           "source": "EV-WAF-RULE-ACTION",
@@ -7130,7 +7711,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "owner": "AppSec",
           "priority": "P0",
           "relationship": "closed_by_action",
@@ -7145,7 +7726,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "owner": "SOC",
           "priority": "P0",
           "relationship": "closed_by_action",
@@ -7160,7 +7741,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "owner": "AppSec",
           "relationship": "affects_or_requires_artifact",
           "source": "T1190",
@@ -7196,7 +7777,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "owner": "SOC",
           "relationship": "affects_or_requires_artifact",
           "source": "T1190",
@@ -7243,7 +7824,7 @@
           "confidence": "medium",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "relationship": "technique_mitigated_by_countermeasure",
           "source": "T1190",
           "source_kind": "public-compatible",
@@ -7347,7 +7928,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "owner": "Infra",
           "relationship": "protected_by_control",
           "source": "ART-EGRESS-NETWORK",
@@ -7405,7 +7986,7 @@
           "confidence": "medium",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "owner": "SOC",
           "priority": "P1",
           "relationship": "validated_by_detection",
@@ -7574,7 +8155,7 @@
           "confidence": "medium",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "owner": "SOC",
           "relationship": "requires_evidence",
           "source": "DET-UNUSUAL-WEB-UPLOAD",
@@ -7599,7 +8180,7 @@
           "confidence": "medium",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "owner": "Infra",
           "relationship": "missing_evidence_creates_gap",
           "source": "EV-EGRESS-DESTINATION-VOLUME",
@@ -7613,7 +8194,7 @@
           "confidence": "medium",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "owner": "Infra",
           "priority": "P1",
           "relationship": "closed_by_action",
@@ -7650,7 +8231,7 @@
           "confidence": "high",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "owner": "SOC",
           "relationship": "affects_or_requires_artifact",
           "source": "T1567",
@@ -7697,7 +8278,7 @@
           "confidence": "medium",
           "curation_status": "public-compatible",
           "license": "attack2defend-curated-baseline",
-          "mapping_file": "/home/user/attack2defend/data/mappings/backbone_core.json",
+          "mapping_file": "data/mappings/backbone_core.json",
           "relationship": "technique_mitigated_by_countermeasure",
           "source": "T1567",
           "source_kind": "public-compatible",

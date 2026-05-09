@@ -36,11 +36,11 @@ from .curated_route import CURATED_ROUTE_LIMITS, build_curated_route, validate_c
 
 DEFAULT_MODELS = {
     "gemini": "gemini-2.5-flash-lite",
-    "openai": "gpt-4o-mini",
+    "openai": "gpt-5-nano",
     "anthropic": "claude-3-5-haiku-latest",
 }
-# Ordered by cost-efficiency for auto mode
-AUTO_PROVIDER_ORDER: tuple[str, ...] = ("gemini", "openai", "anthropic")
+# Ordered by preference: OpenAI is the default, Gemini and Anthropic are alternatives
+AUTO_PROVIDER_ORDER: tuple[str, ...] = ("openai", "gemini", "anthropic")
 ALLOWED_PROVIDERS = tuple(DEFAULT_MODELS)
 JsonTransport = Callable[[str, dict[str, str], dict[str, Any], float], dict[str, Any]]
 
@@ -168,17 +168,17 @@ class AiCherryPickerConfig:
 
     @classmethod
     def from_env(cls) -> "AiCherryPickerConfig":
-        provider = os.getenv("A2D_AI_PROVIDER", "gemini").strip().lower() or "gemini"
+        provider = os.getenv("A2D_AI_PROVIDER", "openai").strip().lower() or "openai"
         if provider not in (*DEFAULT_MODELS, "auto"):
-            provider = "gemini"
+            provider = "openai"
 
-        # model is resolved per-provider; for auto mode use gemini's default as a placeholder
+        # model is resolved per-provider; for auto mode use openai's default as a placeholder
         model_env_key = {
             "gemini": "A2D_GEMINI_MODEL",
             "openai": "A2D_OPENAI_MODEL",
             "anthropic": "A2D_ANTHROPIC_MODEL",
-        }.get(provider, "A2D_GEMINI_MODEL")
-        default_model = DEFAULT_MODELS.get(provider, DEFAULT_MODELS["gemini"])
+        }.get(provider, "A2D_OPENAI_MODEL")
+        default_model = DEFAULT_MODELS.get(provider, DEFAULT_MODELS["openai"])
 
         raw_order = os.getenv("A2D_PROVIDER_ORDER", "").strip()
         if raw_order:
