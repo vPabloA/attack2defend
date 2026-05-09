@@ -28,6 +28,15 @@ from pathlib import Path
 from typing import Any
 
 SCRIPT_DIR = Path(__file__).resolve().parent
+_REPO_ROOT = Path(__file__).resolve().parents[2]
+
+
+def _relpath(p: Path) -> str:
+    """Return a repo-relative POSIX path. Falls back to as_posix() if p is outside the repo."""
+    try:
+        return p.relative_to(_REPO_ROOT).as_posix()
+    except ValueError:
+        return p.as_posix()
 if str(SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPT_DIR))
 
@@ -219,13 +228,13 @@ def upsert_edge(state: BuildState, edge: dict[str, Any], source: Path | str) -> 
 
 def ingest_route_file(path: Path, state: BuildState) -> None:
     payload = load_json(path)
-    state.source_files.append(str(path))
+    state.source_files.append(_relpath(path))
 
     metadata = payload.get("metadata") if isinstance(payload.get("metadata"), dict) else {}
     route_input = normalize_id(metadata.get("input"))
     if route_input:
         state.route_inputs.append(route_input)
-    state.routes.append({"file": str(path), **metadata})
+    state.routes.append({"file": _relpath(path), **metadata})
 
     raw_nodes = payload.get("nodes")
     raw_edges = payload.get("edges")
@@ -460,7 +469,7 @@ def build_bundle(
             "cve2capec_enabled": cve2capec_enabled,
             "cve2capec_years": sorted(set(effective_cve2capec_years)) if cve2capec_enabled else [],
             "max_cve2capec_cves_per_year": max_cve2capec_cves_per_year,
-            "cache_dir": str(cache_dir),
+            "cache_dir": _relpath(cache_dir),
         },
         "warnings": [asdict(issue) for issue in state.issues if issue.severity == "warning"],
     }
@@ -477,7 +486,8 @@ def build_bundle(
         target = snapshot_dir / stamp
         copy_bundle_files(output_dir, target)
 
-    print("Attack2Defend knowledge bundle generated: " f"nodes={len(nodes)} edges={len(edges)} routes={len(state.routes)} output={output_dir}")
+    print("Attack2Defend knowledge bundle generated: "
+          f"nodes={len(nodes)} edges={len(edges)} routes={len(state.routes)} output={output_dir}")
     if with_public_sources:
         print(f"Public source mode enabled: sources={len(set(state.public_sources))} cache={cache_dir}")
     if ui_public_dir is not None:
