@@ -106,8 +106,8 @@ python scripts/intelligence/curate_route.py \
 
 ```bash
 A2D_CHERRY_PICKER_MODE=llm \
-A2D_AI_PROVIDER=gemini \
-GEMINI_API_KEY="<your-key>" \
+A2D_AI_PROVIDER=openai \
+OPENAI_API_KEY="<your-key>" \
 python scripts/intelligence/curate_route.py \
   --bundle data/knowledge-bundle.json \
   --input CVE-2024-37079 \
@@ -116,6 +116,7 @@ python scripts/intelligence/curate_route.py \
 ```
 
 If no provider key is available, the CLI falls back to the deterministic route.
+Alternative providers: `A2D_AI_PROVIDER=gemini` with `GEMINI_API_KEY`, or `A2D_AI_PROVIDER=anthropic` with `ANTHROPIC_API_KEY`.
 
 ### Generate AI-curated route artifact for UI
 
@@ -123,8 +124,8 @@ To enable the AI-assisted panel in the UI, generate the artifact file:
 
 ```bash
 A2D_CHERRY_PICKER_MODE=llm \
-A2D_AI_PROVIDER=gemini \
-GEMINI_API_KEY="<your-key>" \
+A2D_AI_PROVIDER=openai \
+OPENAI_API_KEY="<your-key>" \
 python scripts/intelligence/curate_route.py \
   --bundle data/knowledge-bundle.json \
   --input CVE-2024-37079 \
@@ -198,12 +199,12 @@ Use the UI to inspect the curated route, open evidence badges, review potential 
 | Variable | Required | Default | Purpose |
 |---|---:|---|---|
 | `A2D_CHERRY_PICKER_MODE` | No | `deterministic` | Use `deterministic` or `llm`. LLM requires explicit `--llm`. |
-| `A2D_AI_PROVIDER` | No | `gemini` | One of `gemini`, `openai`, `anthropic`. |
-| `A2D_GEMINI_MODEL` | No | `gemini-2.5-flash-lite` | Gemini model for offline curation. |
+| `A2D_AI_PROVIDER` | No | `openai` | Preferred offline/build-time provider. One of `openai`, `gemini`, `anthropic`. |
+| `A2D_OPENAI_MODEL` | No | `gpt-5-nano` | OpenAI model for offline curation. Configurable; do not hardcode. |
+| `OPENAI_API_KEY` | Only for OpenAI LLM | unset | Primary credential for offline AI curation. |
+| `A2D_GEMINI_MODEL` | No | `gemini-2.5-flash-lite` | Gemini model for offline curation (alternative provider). |
 | `GEMINI_API_KEY` / `GOOGLE_API_KEY` | Only for Gemini LLM | unset | Gemini provider credential. |
-| `A2D_OPENAI_MODEL` | No | `gpt-5-nano` | OpenAI model for offline curation. |
-| `OPENAI_API_KEY` | Only for OpenAI LLM | unset | OpenAI provider credential. |
-| `A2D_ANTHROPIC_MODEL` | No | `claude-3-5-haiku-latest` | Anthropic model for offline curation. |
+| `A2D_ANTHROPIC_MODEL` | No | `claude-3-5-haiku-latest` | Anthropic model for offline curation (alternative provider). |
 | `ANTHROPIC_API_KEY` | Only for Anthropic LLM | unset | Anthropic provider credential. |
 | `A2D_CHERRY_PICKER_TEMPERATURE` | No | `0` | Keeps output deterministic and validation-friendly. |
 | `A2D_CHERRY_PICKER_MAX_OUTPUT_TOKENS` | No | `4000` | Max provider output tokens. |

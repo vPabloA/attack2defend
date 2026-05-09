@@ -12,11 +12,15 @@ Static-first guarantee:
   - Promotion is a separate, explicit step (promote_candidates.py)
 
 Usage:
-  # Full run (requires ANTHROPIC_API_KEY and pip install 'attack2defend[ai]')
+  # Full run (requires ANTHROPIC_API_KEY for the LangGraph curator graph,
+  # pip install 'attack2defend[ai]', and langchain-anthropic)
   python scripts/intelligence/run_curator.py \\
       --bundle data/knowledge-bundle.json \\
       --cache-dir data/raw \\
       --output-dir data/candidates
+
+  # For the cherry-picker offline flow (curate_route.py), the preferred
+  # credential is OPENAI_API_KEY with A2D_AI_PROVIDER=openai.
 
   # Gap scan only — no LLM calls, no API key needed
   python scripts/intelligence/run_curator.py \\
@@ -73,7 +77,8 @@ def _parse_args(argv: list[str] | None) -> argparse.Namespace:
     p.add_argument(
         "--model",
         default=None,
-        help="Claude model ID override (default: from config or claude-sonnet-4-6)",
+        help="LangGraph curator model ID override (default: from config or claude-sonnet-4-6). "
+             "Note: this is the LangGraph graph model, separate from A2D_AI_PROVIDER.",
     )
     p.add_argument(
         "--max-gaps",

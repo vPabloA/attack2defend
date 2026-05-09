@@ -3884,7 +3884,7 @@
       "semantic_routes": 8,
       "warnings": 0
     },
-    "generated_at": "2026-05-03T04:12:16Z",
+    "generated_at": "2026-05-09T10:11:55Z",
     "mapping_backbone": {
       "mapping_files": [
         "/home/user/attack2defend/data/mappings/backbone_core.json",
@@ -3892,13 +3892,16 @@
       ],
       "mappings_dir": "/home/user/attack2defend/data/mappings"
     },
-    "mapping_backbone_applied_at": "2026-05-03T04:12:19Z",
+    "mapping_backbone_applied_at": "2026-05-09T10:11:58Z",
     "mapping_backbone_version": "0.2.1",
     "mode": "mapping_backbone_bundle",
     "public_collection": {
       "cache_dir": "/home/user/attack2defend/data/raw",
+      "cve2capec_enabled": false,
+      "cve2capec_years": [],
       "enabled": false,
       "failed_collectors": [],
+      "max_cve2capec_cves_per_year": null,
       "nvd_cves": [],
       "nvd_enabled": false,
       "nvd_recent_days": 0,
