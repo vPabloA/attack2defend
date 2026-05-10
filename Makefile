@@ -1,6 +1,8 @@
 .PHONY: install install-ai build build-product build-curated build-public build-backbone enforce-provenance build-canonical build-bundle mirror-intelligence graph-export validate-graph graph-sidecar api-server mcp-server soc-pack validate-api validate-mcp ga-check validate validate-parity validate-canonical validate-provenance validate-static-first validate-product validate-candidates test ui preview bootstrap-local-full preprod sync-cve2capec clean curate curate-dry-run curate-advanced promote promote-list promote-candidates evaluate-golden clean-candidates
 
 PYTHON ?= python3
+PYTHONPATH := src$(if $(PYTHONPATH),:$(PYTHONPATH))
+export PYTHONPATH
 UI_DIR := app/navigator-ui
 INPUT ?= CVE-2021-44228
 
@@ -50,7 +52,7 @@ mcp-server:
 	$(PYTHON) -m attack2defend.mcp.server
 
 soc-pack:
-	$(PYTHON) scripts/intelligence/export_soc_pack.py --input $(INPUT) --bundle data/knowledge-bundle.json --pretty
+	@$(PYTHON) scripts/intelligence/export_soc_pack.py --input $(INPUT) --bundle data/knowledge-bundle.json --pretty
 
 validate-api:
 	$(PYTHON) scripts/api/validate_api_contracts.py
