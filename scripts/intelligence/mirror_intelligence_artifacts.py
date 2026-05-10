@@ -67,6 +67,24 @@ def default_golden_report() -> dict[str, Any]:
     }
 
 
+def default_graph_quality_report() -> dict[str, Any]:
+    return {
+        "status": "not_generated",
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "node_count": 0,
+        "edge_count": 0,
+        "orphan_node_count": 0,
+        "weak_edge_count": 0,
+        "missing_source_ref_count": 0,
+        "broken_edge_count": 0,
+        "routes_with_defense_path": 0,
+        "routes_missing_defense_path": 0,
+        "routes_missing_evidence": 0,
+        "ai_promoted_edge_count": 0,
+        "top_structural_gaps": [],
+    }
+
+
 def mirror_audit_log(src: Path, dst: Path) -> int:
     rows: list[Any] = []
     if src.exists():
@@ -112,14 +130,17 @@ def main(argv: list[str] | None = None) -> int:
     reports = public / "reports"
     candidates = public / "candidates"
     mappings = public / "mappings" / "ai_promoted"
+    graph = public / "graph"
 
     factory = read_json(data / "intelligence" / "intelligence-factory-report.json", default_factory_report())
     policy = read_json(data / "intelligence" / "promotion_policy.json", {"status": "not_generated", "promotion_mode": "not_available"})
     golden = read_json(data / "reports" / "golden-route-evaluation.json", default_golden_report())
+    graph_quality = read_json(data / "graph" / "graph-quality-report.json", default_graph_quality_report())
 
     write_json(intelligence / "intelligence-factory-report.json", factory)
     write_json(intelligence / "promotion_policy.json", policy)
     write_json(reports / "golden-route-evaluation.json", golden)
+    write_json(graph / "graph-quality-report.json", graph_quality)
     audit_count = mirror_audit_log(data / "candidates" / "audit_log.jsonl", candidates / "audit_log.json")
     promoted_count = mirror_promoted(data / "mappings" / "ai_promoted", mappings)
 
@@ -131,13 +152,17 @@ def main(argv: list[str] | None = None) -> int:
             "factory_report": "/data/intelligence/intelligence-factory-report.json",
             "promotion_policy": "/data/intelligence/promotion_policy.json",
             "golden_report": "/data/reports/golden-route-evaluation.json",
+            "graph_quality_report": "/data/graph/graph-quality-report.json",
             "audit_log": "/data/candidates/audit_log.json",
             "promoted_mappings_index": "/data/mappings/ai_promoted/index.json",
         },
         "counts": {"audit_entries": audit_count, "promoted_mapping_files": promoted_count},
     }
     write_json(intelligence / "manifest.json", manifest)
-    print(f"mirror-intelligence: target={rel(public)} audit_entries={audit_count} promoted_files={promoted_count}")
+    print(
+        f"mirror-intelligence: target={rel(public)} audit_entries={audit_count} "
+        f"promoted_files={promoted_count} graph_nodes={graph_quality.get('node_count', 0)}"
+    )
     return 0
 
 
