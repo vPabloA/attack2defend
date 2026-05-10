@@ -1,4 +1,4 @@
-.PHONY: install install-ai build-curated build-public build-backbone enforce-provenance build-canonical build-bundle validate validate-parity validate-canonical validate-provenance test ui preview bootstrap-local-full preprod sync-cve2capec clean curate curate-dry-run promote
+.PHONY: install install-ai build-curated build-public build-backbone enforce-provenance build-canonical build-bundle validate validate-parity validate-canonical validate-provenance validate-static-first validate-product validate-candidates test ui preview bootstrap-local-full preprod sync-cve2capec clean curate curate-dry-run curate-advanced promote promote-list promote-candidates evaluate-golden clean-candidates
 
 PYTHON ?= python3
 UI_DIR := app/navigator-ui
@@ -7,7 +7,7 @@ install:
 	$(PYTHON) -m pip install -e ".[dev]"
 	cd $(UI_DIR) && npm install
 
-install-ai: ## Install AI curation dependencies (requires ANTHROPIC_API_KEY to run)
+install-ai: ## Install AI curation dependencies
 	$(PYTHON) -m pip install -e ".[ai]"
 
 build-curated:
@@ -47,6 +47,17 @@ validate-parity: validate-provenance
 		--require-search-index \
 		--min-mapping-files 1
 
+validate-static-first:
+	bash scripts/validate_static_first.sh
+
+validate-candidates:
+	$(PYTHON) scripts/intelligence/validate_candidates.py data/candidates
+
+evaluate-golden:
+	$(PYTHON) scripts/intelligence/evaluate_golden_routes.py
+
+validate-product: validate validate-static-first evaluate-golden
+
 test:
 	pytest -q
 	cd $(UI_DIR) && npm run build
@@ -69,30 +80,37 @@ sync-cve2capec:
 clean:
 	rm -rf data/snapshots $(UI_DIR)/dist
 
-# ── Defense Intelligence Navigator (optional, behind flag) ─────────────────
-# Requires: pip install -e ".[ai]"  +  ANTHROPIC_API_KEY env var
-# Never modifies data/knowledge-bundle.json or data/mappings/ directly.
-# All output goes to data/candidates/{run_id}/ for human review first.
+# ── Defense Intelligence Navigator / Intelligence Factory ─────────────────
+# Offline/build-time only. Browser runtime remains static-first.
 
-curate: ## Run offline AI curation — scans gaps + proposes candidates via LLM
+curate: curate-advanced
+
+curate-advanced: ## Run offline AI curation — scans gaps + proposes candidates via LLM
 	$(PYTHON) scripts/intelligence/run_curator.py \
 		--bundle data/knowledge-bundle.json \
 		--cache-dir data/raw \
 		--output-dir data/candidates
 
-curate-dry-run: ## Scan gaps only — no LLM calls, no ANTHROPIC_API_KEY needed
+curate-dry-run: ## Scan gaps only — no LLM calls, no provider API key needed
 	$(PYTHON) scripts/intelligence/run_curator.py \
 		--bundle data/knowledge-bundle.json \
 		--cache-dir data/raw \
 		--output-dir data/candidates \
 		--dry-run
 
-promote: ## Interactive candidate review + promotion to data/mappings/ai_promoted/
-	$(PYTHON) scripts/intelligence/promote_candidates.py \
-		--candidates-dir data/candidates \
-		--output-dir data/mappings/ai_promoted
+promote: promote-candidates
 
-promote-list: ## List all pending candidates without interactive review
+promote-candidates: ## Non-blocking policy promotion to data/mappings/ai_promoted/
 	$(PYTHON) scripts/intelligence/promote_candidates.py \
 		--candidates-dir data/candidates \
-		--list-only
+		--output-dir data/mappings/ai_promoted \
+		--json-report
+
+promote-list: ## Dry-run candidate processing with policy report
+	$(PYTHON) scripts/intelligence/promote_candidates.py \
+		--candidates-dir data/candidates \
+		--promotion-mode dry_run \
+		--json-report
+
+clean-candidates:
+	$(PYTHON) scripts/intelligence/clean_candidates.py
