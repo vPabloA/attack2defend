@@ -1,4 +1,4 @@
-.PHONY: install install-ai build build-curated build-public build-backbone enforce-provenance build-canonical build-bundle mirror-intelligence validate validate-parity validate-canonical validate-provenance validate-static-first validate-product validate-candidates test ui preview bootstrap-local-full preprod sync-cve2capec clean curate curate-dry-run curate-advanced promote promote-list promote-candidates evaluate-golden clean-candidates
+.PHONY: install install-ai build build-product build-curated build-public build-backbone enforce-provenance build-canonical build-bundle mirror-intelligence graph-export validate-graph graph-sidecar validate validate-parity validate-canonical validate-provenance validate-static-first validate-product validate-candidates test ui preview bootstrap-local-full preprod sync-cve2capec clean curate curate-dry-run curate-advanced promote promote-list promote-candidates evaluate-golden clean-candidates
 
 PYTHON ?= python3
 UI_DIR := app/navigator-ui
@@ -11,6 +11,8 @@ install-ai: ## Install AI curation dependencies
 	$(PYTHON) -m pip install -e ".[ai]"
 
 build: build-bundle mirror-intelligence
+
+build-product: build graph-sidecar
 
 build-curated:
 	$(PYTHON) scripts/knowledge_builder/build_knowledge_base.py
@@ -31,6 +33,14 @@ build-bundle: build-curated build-backbone enforce-provenance build-canonical
 
 mirror-intelligence:
 	$(PYTHON) scripts/intelligence/mirror_intelligence_artifacts.py
+
+graph-export:
+	$(PYTHON) scripts/graph/export_graph_sidecar.py
+
+validate-graph:
+	$(PYTHON) scripts/graph/validate_graph_sidecar.py
+
+graph-sidecar: graph-export validate-graph
 
 validate: validate-parity validate-canonical
 
@@ -61,7 +71,7 @@ validate-candidates:
 evaluate-golden:
 	$(PYTHON) scripts/intelligence/evaluate_golden_routes.py
 
-validate-product: validate mirror-intelligence validate-static-first evaluate-golden
+validate-product: validate evaluate-golden graph-sidecar mirror-intelligence validate-static-first
 
 test:
 	pytest -q
