@@ -1,0 +1,23 @@
+{
+  "request": "GET /api/v1/soc-pack/CVE-2021-44228",
+  "description": "Generate SOC-actionable controls, detection candidates, evidence requirements, gaps and recommended actions.",
+  "expected_response_shape": {
+    "status": "completed|completed_with_gaps",
+    "blocking": false,
+    "timeout_waited_for_human": false,
+    "soc_pack": {
+      "executive_summary": "",
+      "defensive_objective": "",
+      "threat_chain": {},
+      "defense_readiness": {},
+      "top_3_recommendations": [],
+      "integration_hints": {},
+      "operational_metadata": {}
+    },
+    "audit": {
+      "source_of_truth": "knowledge-bundle.json",
+      "external_calls": false,
+      "source_refs": []
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "method": "tools/call",
+  "params": {
+    "name": "export_soc_pack",
+    "arguments": {
+      "id": "CVE-2021-44228"
+    }
+  }
+}

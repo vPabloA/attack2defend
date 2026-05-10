@@ -1,0 +1,7 @@
+{
+  "request": "POST /api/v1/route/batch",
+  "body": {
+    "ids": ["CVE-2021-44228", "T1190"]
+  },
+  "description": "SOAR-safe batch route enrichment. The endpoint never waits for human approval."
+}
