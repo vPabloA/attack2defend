@@ -1,0 +1,16 @@
+{
+  "request": "GET /api/v1/route/CVE-2021-44228",
+  "description": "Resolve a deterministic defense route from the local knowledge bundle.",
+  "expected_response_shape": {
+    "status": "completed|completed_with_gaps",
+    "blocking": false,
+    "timeout_waited_for_human": false,
+    "route": {
+      "nodes": [],
+      "edges": [],
+      "by_type": {}
+    },
+    "coverage_gaps": [],
+    "source_refs": []
+  }
+}
