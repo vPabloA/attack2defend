@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Attack2Defend Intelligence Factory</title>
+  <style>
+    :root { color-scheme: dark; --bg:#07111f; --panel:#0c1a2e; --panel2:#10233d; --line:#213a5f; --text:#e8f1ff; --muted:#92a8c4; --ok:#62d394; --warn:#ffd166; --bad:#ff6b6b; --accent:#78a6ff; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: radial-gradient(circle at top left, #12325b 0, var(--bg) 42%); color:var(--text); }
+    main { max-width: 1220px; margin: 0 auto; padding: 32px 20px 56px; }
+    header { display:flex; justify-content:space-between; gap:24px; align-items:flex-start; margin-bottom:26px; }
+    .eyebrow { color:var(--accent); text-transform:uppercase; letter-spacing:.18em; font-size:12px; font-weight:800; margin:0 0 8px; }
+    h1 { font-size: clamp(32px, 5vw, 58px); line-height:1; margin:0; }
+    h2 { margin:0 0 12px; font-size:20px; }
+    h3 { margin:0 0 8px; font-size:15px; }
+    p { color:var(--muted); }
+    .hero-copy { max-width:760px; font-size:17px; line-height:1.55; }
+    .status-pill { border:1px solid var(--line); background:rgba(12,26,46,.8); padding:10px 14px; border-radius:999px; color:var(--muted); white-space:nowrap; }
+    .grid { display:grid; gap:16px; }
+    .cards { grid-template-columns: repeat(6, minmax(0, 1fr)); margin:22px 0; }
+    .card, .panel { background: linear-gradient(180deg, rgba(16,35,61,.96), rgba(12,26,46,.96)); border:1px solid var(--line); border-radius:22px; box-shadow: 0 18px 50px rgba(0,0,0,.24); }
+    .card { padding:16px; min-height:104px; }
+    .card span { display:block; color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:.09em; }
+    .card strong { display:block; font-size:30px; margin-top:12px; }
+    .panel { padding:20px; margin-bottom:16px; }
+    .two { grid-template-columns: 1fr 1fr; }
+    .three { grid-template-columns: 1fr 1fr 1fr; }
+    .tabs { display:flex; gap:8px; flex-wrap:wrap; margin: 20px 0; }
+    .tabs button { border:1px solid var(--line); background:var(--panel); color:var(--muted); padding:10px 14px; border-radius:999px; cursor:pointer; }
+    .tabs button.active { color:var(--text); border-color:var(--accent); background:#17345a; }
+    table { width:100%; border-collapse: collapse; overflow:hidden; border-radius:16px; }
+    th, td { text-align:left; border-bottom:1px solid var(--line); padding:12px 10px; vertical-align:top; }
+    th { color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:.08em; }
+    code, pre { background:#071322; border:1px solid var(--line); border-radius:12px; color:#cfe1ff; }
+    code { padding:2px 6px; }
+    pre { padding:14px; overflow:auto; max-height:360px; }
+    .badge { display:inline-flex; align-items:center; border-radius:999px; padding:4px 9px; font-size:12px; font-weight:800; border:1px solid var(--line); }
+    .ok { color:var(--ok); } .warn { color:var(--warn); } .bad { color:var(--bad); } .muted { color:var(--muted); }
+    .badge.auto_promoted, .badge.completed, .badge.pass { color:var(--ok); border-color:rgba(98,211,148,.5); }
+    .badge.queued_for_review, .badge.partial, .badge.dry_run { color:var(--warn); border-color:rgba(255,209,102,.55); }
+    .badge.rejected_by_policy, .badge.blocked, .badge.failed { color:var(--bad); border-color:rgba(255,107,107,.5); }
+    .kv { display:grid; grid-template-columns: 210px 1fr; gap:10px; border-bottom:1px solid var(--line); padding:10px 0; }
+    .kv span:first-child { color:var(--muted); }
+    .empty { padding:24px; border:1px dashed var(--line); border-radius:18px; color:var(--muted); }
+    .footer { margin-top:28px; color:var(--muted); font-size:13px; }
+    a { color:#a9c7ff; }
+    @media (max-width: 950px) { header, .two, .three { grid-template-columns:1fr; display:block; } .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } header { display:block; } .status-pill { display:inline-flex; margin-top:12px; } }
+    @media (max-width: 620px) { .cards { grid-template-columns:1fr; } .kv { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <div>
+        <p class="eyebrow">Attack2Defend · Product Visibility Layer</p>
+        <h1>Intelligence Factory</h1>
+        <p class="hero-copy">Read-only cockpit for policy-driven candidate promotion, golden-route quality, audit trail, and promoted mappings. Static-first: all data is loaded from local <code>/data/...</code> artifacts.</p>
+      </div>
+      <div class="status-pill" id="loadedAt">Loading artifacts…</div>
+    </header>
+
+    <section class="grid cards" id="summaryCards"></section>
+
+    <nav class="tabs" aria-label="Intelligence Factory tabs">
+      <button class="active" data-tab="overview">Overview</button>
+      <button data-tab="candidates">Candidates</button>
+      <button data-tab="golden">Golden Routes</button>
+      <button data-tab="promotions">Promotions</button>
+      <button data-tab="audit">Audit</button>
+      <button data-tab="raw">Raw Artifacts</button>
+    </nav>
+
+    <section id="tab-overview" class="tab-panel"></section>
+    <section id="tab-candidates" class="tab-panel" hidden></section>
+    <section id="tab-golden" class="tab-panel" hidden></section>
+    <section id="tab-promotions" class="tab-panel" hidden></section>
+    <section id="tab-audit" class="tab-panel" hidden></section>
+    <section id="tab-raw" class="tab-panel" hidden></section>
+
+    <p class="footer">This page is intentionally read-only. It never promotes candidates, edits policy, mutates the bundle, or calls external APIs.</p>
+  </main>
+
+<script>
+const artifacts = {
+  factory: '/data/intelligence/intelligence-factory-report.json',
+  policy: '/data/intelligence/promotion_policy.json',
+  golden: '/data/reports/golden-route-evaluation.json',
+  audit: '/data/candidates/audit_log.json',
+  promoted: '/data/mappings/ai_promoted/index.json',
+  manifest: '/data/intelligence/manifest.json'
+};
+const state = {};
+const $ = (id) => document.getElementById(id);
+function esc(v){ return String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+async function loadJson(path, fallback){ try { const r = await fetch(path, {cache:'no-store'}); if(!r.ok) return fallback; return await r.json(); } catch { return fallback; } }
+function badge(v){ const c = String(v || 'unknown').replace(/[^a-zA-Z0-9_-]/g,'_'); return `<span class="badge ${c}">${esc(v || 'unknown')}</span>`; }
+function card(label, value, hint=''){ return `<article class="card"><span>${esc(label)}</span><strong>${esc(value)}</strong>${hint?`<p>${esc(hint)}</p>`:''}</article>`; }
+function panel(title, body){ return `<article class="panel"><h2>${esc(title)}</h2>${body}</article>`; }
+function kv(label, value){ return `<div class="kv"><span>${esc(label)}</span><strong>${value}</strong></div>`; }
+function empty(msg){ return `<div class="empty">${esc(msg)}</div>`; }
+function table(rows, cols){ if(!rows.length) return empty('No records available. Generate and mirror artifacts first.'); return `<table><thead><tr>${cols.map(c=>`<th>${esc(c.label)}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr>${cols.map(c=>`<td>${c.render?c.render(r):esc(r[c.key])}</td>`).join('')}</tr>`).join('')}</tbody></table>`; }
+function topReasons(report){ const rows = report.top_rejection_reasons || []; return table(rows, [{label:'Reason',key:'reason'},{label:'Count',key:'count'}]); }
+function candidateRows(report){ return [...(report.top_candidates||[]), ...(report.top_queued_candidates||[])]; }
+function renderSummary(){ const r = state.factory || {}; $('summaryCards').innerHTML = [
+  card('Status', r.status || 'not_generated'),
+  card('Mode', r.promotion_mode || 'n/a'),
+  card('Seen', r.candidates_seen ?? 0),
+  card('Promoted', r.candidates_promoted ?? 0),
+  card('Queued', r.candidates_queued_for_review ?? r.pending_review_count ?? 0),
+  card('Golden score', state.golden?.overall_score ?? 0),
+].join(''); }
+function renderOverview(){ const r=state.factory||{}, p=state.policy||{}, m=state.manifest||{}; $('tab-overview').innerHTML = `<div class="grid two">${panel('Factory status', [
+  kv('Run ID', esc(r.run_id || 'not-generated')),
+  kv('Generated at', esc(r.generated_at || 'n/a')),
+  kv('Status', badge(r.status || 'not_generated')),
+  kv('Blocking', esc(String(r.blocking ?? false))),
+  kv('Timeout waited for human', esc(String(r.timeout_waited_for_human ?? false))),
+].join(''))}${panel('Policy summary', [
+  kv('Policy version', esc(p.policy_version || 'n/a')),
+  kv('Promotion mode', badge(p.promotion_mode || r.promotion_mode || 'n/a')),
+  kv('Min score', esc(p.min_score ?? 'n/a')),
+  kv('Allowed confidence', esc((p.allowed_confidence||[]).join(', ') || 'n/a')),
+  kv('Timeout policy', esc(p.timeout_policy || 'n/a')),
+].join(''))}</div>${panel('Artifact manifest', Object.keys(m.artifacts||{}).length ? table(Object.entries(m.artifacts).map(([k,v])=>({k,v})), [{label:'Artifact',key:'k'},{label:'Path',key:'v',render:r=>`<code>${esc(r.v)}</code>`}]) : empty('Manifest not available. Run make mirror-intelligence.'))}${panel('Top rejection reasons', topReasons(r))}`; }
+function renderCandidates(){ const rows=candidateRows(state.factory||{}); $('tab-candidates').innerHTML = panel('Candidate decisions', table(rows, [
+  {label:'Candidate', key:'candidate_id'},
+  {label:'Decision', key:'decision', render:r=>badge(r.decision)},
+  {label:'Mode', key:'promotion_mode'},
+  {label:'Score', key:'score', render:r=>esc(r.score?.final_score ?? r.score?.final ?? 'n/a')},
+  {label:'Reason', key:'policy_reason', render:r=>esc((r.policy_reason||[]).join(', ') || '-')},
+  {label:'Output', key:'output_mapping_path', render:r=>r.output_mapping_path?`<code>${esc(r.output_mapping_path)}</code>`:'-'}
+])); }
+function renderGolden(){ const g=state.golden||{}; $('tab-golden').innerHTML = `<div class="grid three">${card('Overall score', g.overall_score ?? 0)}${card('Cases evaluated', g.cases_evaluated ?? 0)}${card('Generated', g.generated_at || 'n/a')}</div>${panel('Golden route cases', table(g.cases||[], [
+  {label:'Case',key:'case_id'}, {label:'Status',key:'status',render:r=>badge(r.status)}, {label:'Score',key:'score'}, {label:'Missing IDs',key:'missing_expected_ids',render:r=>esc((r.missing_expected_ids||[]).join(', ') || '-')}
+]))}`; }
+function renderPromotions(){ const p=state.promoted||{}; $('tab-promotions').innerHTML = panel('Promoted mapping files', table(p.entries||[], [
+  {label:'File',key:'file'}, {label:'Run ID',key:'run_id'}, {label:'Mappings',key:'mappings'}, {label:'Generated',key:'generated_at'}, {label:'Path',key:'path',render:r=>`<code>${esc(r.path)}</code>`}
+])); }
+function renderAudit(){ const a=state.audit||{}; $('tab-audit').innerHTML = panel(`Audit trail (${a.count||0})`, table(a.entries||[], [
+  {label:'Timestamp',key:'timestamp'}, {label:'Candidate',key:'candidate_id'}, {label:'Decision',key:'decision',render:r=>badge(r.decision)}, {label:'Reason',key:'policy_reason',render:r=>esc((r.policy_reason||[]).join(', ') || '-')}, {label:'Mode',key:'promotion_mode'}
+])); }
+function renderRaw(){ $('tab-raw').innerHTML = panel('Raw artifacts', `<pre>${esc(JSON.stringify(state, null, 2))}</pre>`); }
+function renderAll(){ renderSummary(); renderOverview(); renderCandidates(); renderGolden(); renderPromotions(); renderAudit(); renderRaw(); $('loadedAt').textContent = `Artifacts loaded · ${new Date().toLocaleString()}`; }
+async function init(){
+  state.factory = await loadJson(artifacts.factory, {status:'not_generated', candidates_seen:0, top_candidates:[], top_queued_candidates:[], top_rejection_reasons:[], blocking:false, timeout_waited_for_human:false});
+  state.policy = await loadJson(artifacts.policy, {});
+  state.golden = await loadJson(artifacts.golden, {overall_score:0,cases_evaluated:0,cases:[]});
+  state.audit = await loadJson(artifacts.audit, {count:0,entries:[]});
+  state.promoted = await loadJson(artifacts.promoted, {count:0,entries:[]});
+  state.manifest = await loadJson(artifacts.manifest, {});
+  renderAll();
+}
+document.querySelectorAll('.tabs button').forEach(btn=>btn.addEventListener('click',()=>{
+  document.querySelectorAll('.tabs button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.tab-panel').forEach(p=>p.hidden=true);
+  $('tab-'+btn.dataset.tab).hidden=false;
+}));
+init();
+</script>
+</body>
+</html>
