@@ -9,6 +9,7 @@ Covers:
 
 from __future__ import annotations
 
+import importlib.util
 import json
 import tempfile
 from pathlib import Path
@@ -20,8 +21,28 @@ from attack2defend.intelligence.candidates import (
     EvidenceRef,
     ProposedEdge,
 )
-from scripts.intelligence.validate_candidates import validate_candidate
-from scripts.intelligence.promote_candidates import main as promote_main
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+
+
+def _load_script_module(name: str, relative_path: str):
+    """Load a script module by file path without requiring scripts/ as a package."""
+    path = REPO_ROOT / relative_path
+    spec = importlib.util.spec_from_file_location(name, path)
+    assert spec is not None and spec.loader is not None
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+validate_candidate = _load_script_module(
+    "a2d_validate_candidates_test_module",
+    "scripts/intelligence/validate_candidates.py",
+).validate_candidate
+promote_main = _load_script_module(
+    "a2d_promote_candidates_test_module",
+    "scripts/intelligence/promote_candidates.py",
+).main
 
 
 # ── Helpers ──────────────────────────────────────────────────────────────
