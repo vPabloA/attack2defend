@@ -1,74 +1,64 @@
-# Attack2Defend v1.0.0-ga Release Notes
+# Attack2Defend v1.0.0-GA Release Notes
 
-## Release Statement
+## Product story
 
-**Attack2Defend v1.0.0-ga** is the first production-grade release of the static-first cyber defense navigator.
+Attack2Defend combines deterministic CVE/CWE/CAPEC/ATT&CK/D3FEND routing with provenance, intelligence governance, graph exploration, static-first product visibility and optional automation surfaces.
 
-This release turns Attack2Defend into a usable security product: deterministic graph, curated defensive route, trust/evidence layer, canonical exports and optional validator-gated AI curation.
+## Milestones
 
----
-
-## Highlights
-
-| Area | Result |
+| PR | Capability |
 |---|---|
-| Static-first UI | Browser runtime reads only local `knowledge-bundle.json`. No public API or LLM calls from UI. |
-| Full traceability | Preserves `CVE → CWE → CAPEC → ATT&CK → D3FEND` graph evidence. |
-| Curated decision | Presents a focused route for defensive validation instead of forcing graph-dump analysis. |
-| Product Trust Layer | Adds evidence badges, source inspection, detection disclaimers, potential gaps and closure criteria. |
-| AI curation | Optional offline Gemini/OpenAI/Anthropic cherry-picking, always candidate-only and validator-gated. |
-| Canonical exports | Maintains NSFW-compatible and CVE2CAPEC-compatible export layouts. |
+| #26 | Provenance hardening and OpenAI-default offline cherry-picker |
+| #28 | Intelligence Factory and policy-driven promotion |
+| #29 | Static Product Visibility Layer |
+| #30 | Optional Graph Sidecar and knowledge exploration |
+| Final | MCP/API Automation Layer and SOC-actionable D3FEND output |
 
----
+## GA capability set
 
-## Production Rules
+- Static-first navigator.
+- Canonical `knowledge-bundle.json` source of truth.
+- Edge provenance validation.
+- Intelligence Factory artifacts.
+- Policy-driven non-blocking candidate promotion.
+- Optional graph sidecar with CSV/Cypher/query pack.
+- Optional REST API.
+- Optional MCP-style stdio tool server.
+- SOC Action Pack generation.
+- GA readiness gate through `make ga-check`.
+
+## Production rules
 
 ```text
 Full graph is deterministic.
-Curated route is validator-gated.
+SOC output is evidence/gap aware.
 LLM output is candidate-only.
 The UI is static-first.
+API/MCP are optional and read-only.
 No browser public API calls.
-No source, no selection.
-No evidence, no promotion.
+No runtime external API calls.
+No evidence, no confirmed coverage.
 Validator wins.
 ```
 
----
-
-## Validation
-
-Before tagging this release, run:
+## Recommended release gate
 
 ```bash
-make test
+make ga-check
 ```
 
-Optional deeper validation:
-
-```bash
-make bootstrap-local-full
-python scripts/knowledge_builder/validate_bundle.py \
-  data/knowledge-bundle.json \
-  --require-mapping-backbone \
-  --require-semantic-routes \
-  --require-framework-chain \
-  --require-cpe-index \
-  --require-kev-index \
-  --require-bidirectional-indexes \
-  --require-source-confidence \
-  --require-search-index \
-  --min-mapping-files 1
-python scripts/canonical_exports/validate_canonical.py
-```
-
----
-
-## Recommended Tag
+## Recommended tag after merge
 
 ```bash
 git checkout main
 git pull origin main
-git tag -a v1.0.0-ga -m "Attack2Defend GA: static-first defense navigator with trust layer and validator-gated AI curation"
+git tag -a v1.0.0-ga -m "Attack2Defend GA: static-first defense navigator with SOC-actionable automation layer"
 git push origin v1.0.0-ga
 ```
+
+## Deferred beyond GA
+
+- GitHub Pages polish.
+- Runtime integrations with SIEM/EDR/SOAR products.
+- D3FEND XML ingestion refresh.
+- Infrastructure validation using real enterprise inventory.
