@@ -12,6 +12,7 @@ from pathlib import Path
 
 import pytest
 
+from attack2defend.intelligence import CuratorConfig
 from attack2defend.intelligence.candidates import (
     BacklogItem,
     CandidateProposal,
@@ -94,7 +95,7 @@ def test_proposed_edge_ignores_unknown_fields():
 def _make_full_candidate(run_id: str = "run-test-001") -> CandidateProposal:
     return CandidateProposal.create(
         run_id=run_id,
-        model="claude-sonnet-4-6",
+        model="gpt-4o-mini",
         candidate_type=CandidateType.MAPPING_EDGE,
         input_id="T1190",
         gap_explanation="T1190 has no D3FEND countermeasures in bundle",
@@ -238,6 +239,11 @@ def test_write_and_load_candidates_roundtrip():
         loaded_ids = {c.candidate_id for c in loaded}
         assert c1.candidate_id in loaded_ids
         assert c2.candidate_id in loaded_ids
+
+
+def test_curator_config_defaults_to_openai_mini():
+    cfg = CuratorConfig()
+    assert cfg.model == "gpt-4o-mini"
 
 
 def test_load_candidates_from_missing_dir_returns_empty():

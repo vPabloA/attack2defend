@@ -7,8 +7,8 @@
 # It never affects the deterministic build pipeline or the UI bundle.
 
 # ── LLM settings ──────────────────────────────────────────────────────────────
-# Claude model to use for curation (requires ANTHROPIC_API_KEY)
-model: "claude-sonnet-4-6"
+# OpenAI model to use for curation (requires OPENAI_API_KEY)
+model: "gpt-4o-mini"
 
 # Temperature (0.0 = fully deterministic, recommended for evidence-based work)
 temperature: 0.0

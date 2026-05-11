@@ -270,9 +270,55 @@ flowchart LR
 | **Top deterministic mitigations** | Produces local top mitigation recommendations from D3FEND/control/detection/evidence/provenance coverage. |
 | **Product Trust Layer** | Adds evidence, disclaimers, gap visibility and closure criteria to product outputs. |
 | **Intelligence Factory** | Handles candidate validation, policy scoring, promotion/queue/rejection and audit artifacts. |
+| **Validator-gated AI cherry-picking** | Supports optional offline/build-time Gemini, OpenAI or Anthropic route curation, with OpenAI as the default ChatGPT API path. LLM output is candidate-only; schema and no-invention validators decide. |
 | **Graph Sidecar** | Exports nodes/edges, Cypher schema/import scripts, query pack and graph quality report. |
 | **MCP/API Automation Layer** | Exposes read-only local automation for agents and SOAR without external runtime calls. |
 | **Static-first UI** | Browser consumes local data only. No runtime public API or LLM calls. |
+
+---
+
+## Architecture
+
+Attack2Defend is intentionally **static-first**. The UI does not call NVD, MITRE, CISA, LLM providers or any public API at runtime.
+
+```mermaid
+flowchart LR
+    A[Curated mappings] --> D[Knowledge Builder]
+    B[Optional public collectors] --> D
+    C[Official source cache] --> D
+    D --> E[knowledge-bundle.json]
+    E --> F[Canonical exporters]
+    F --> G[NSFW-compatible exports]
+    F --> H[CVE2CAPEC-compatible exports]
+    E --> I[React/Vite Navigator UI]
+    E --> J[Offline curated-route CLI]
+    J --> K[Optional LLM cherry-picker]
+    K --> L[Schema + no-invention validator]
+    L --> M[Curated route JSON]
+```
+
+### Design Decisions
+
+| Decision | Rationale |
+|---|---|
+| **Static browser runtime** | The UI is fast, portable and auditable. It only reads `/data/knowledge-bundle.json`. |
+| **Builder-time enrichment** | Public data ingestion happens before runtime, where it can be cached, validated and reviewed. |
+| **Full graph + curated route** | Analysts keep complete traceability, while decision-makers see a defensible route that is not a graph dump. |
+| **Validator wins** | AI can rank/select candidates, but it cannot invent IDs, relationships, impact, affected assets or environment coverage. |
+| **No coverage claims** | The tool suggests what to validate. It does not claim your environment is affected, protected or monitored unless you provide that evidence. |
+
+---
+
+## Prerequisites
+
+| Requirement | Version / Notes |
+|---|---|
+| **Python** | `3.11+` |
+| **Node.js** | `20+` recommended for the Vite UI |
+| **npm** | Installed with Node.js |
+| **make** | Used for build/test shortcuts |
+| **Git** | Required to clone and version the repository |
+| **Optional API keys** | NVD/Gemini/OpenAI/Anthropic only if you explicitly enable enrichment or offline LLM curation |
 
 ---
 
@@ -346,7 +392,7 @@ Then run the UI:
 make ui
 ```
 
-The UI will display an "AI-assisted candidate" panel above the summary if the artifact exists, showing provider/model/status/timestamp. If LLM validation succeeded, it shows a green "LLM validated" badge; otherwise, an orange "Fallback deterministic" badge with reason.
+The UI will display an "AI-assisted candidate" panel above the summary when the artifact matches the selected input, showing provider/model/status/timestamp. If LLM validation succeeded, it shows a green "LLM validated" badge; otherwise, an orange "Fallback deterministic" badge with reason. The artifact is input-specific, so regenerate it for the CVE/CWE/CAPEC/ATT&CK node you want to inspect.
 
 ---
 
@@ -645,11 +691,11 @@ bash scripts/validate_static_first.sh
 |---|---:|---|---|
 | `A2D_CHERRY_PICKER_MODE` | No | `deterministic` | Use `deterministic` or `llm`. LLM requires explicit `--llm`. |
 | `A2D_AI_PROVIDER` | No | `openai` | Offline/build-time provider. One of `openai`, `gemini`, `anthropic`. |
-| `A2D_OPENAI_MODEL` | No | `gpt-5-nano` | OpenAI model for offline curation. |
+| `A2D_OPENAI_MODEL` | No | `gpt-4o-mini` | OpenAI model for offline curation. |
 | `OPENAI_API_KEY` | Only for OpenAI LLM | unset | Credential for offline AI curation. |
 | `A2D_GEMINI_MODEL` | No | `gemini-2.5-flash-lite` | Gemini model for offline curation. |
 | `GEMINI_API_KEY` / `GOOGLE_API_KEY` | Only for Gemini LLM | unset | Gemini provider credential. |
-| `A2D_ANTHROPIC_MODEL` | No | `claude-3-5-haiku-latest` | Anthropic model for offline curation. |
+| `A2D_ANTHROPIC_MODEL` | No | `claude-haiku-4-5-20251001` | Anthropic model for offline curation; optional, not default. |
 | `ANTHROPIC_API_KEY` | Only for Anthropic LLM | unset | Anthropic provider credential. |
 | `A2D_CHERRY_PICKER_TEMPERATURE` | No | `0` | Keeps output deterministic and validation-friendly. |
 | `A2D_CHERRY_PICKER_MAX_OUTPUT_TOKENS` | No | `4000` | Max provider output tokens. |

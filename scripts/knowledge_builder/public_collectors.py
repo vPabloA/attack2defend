@@ -29,10 +29,12 @@ from xml.etree import ElementTree as ET
 
 ATTACK_ENTERPRISE_STIX_URL = "https://raw.githubusercontent.com/mitre/cti/master/enterprise-attack/enterprise-attack.json"
 CWE_LATEST_XML_ZIP_URL = "https://cwe.mitre.org/data/xml/cwec_latest.xml.zip"
-CAPEC_LATEST_XML_ZIP_URL = "https://capec.mitre.org/data/xml/capec_latest.xml.zip"
+CAPEC_LATEST_XML_ZIP_URL = "https://capec.mitre.org/data/xml/views/2000.xml.zip"
 CISA_KEV_URL = "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json"
 NVD_CVE_API_URL = "https://services.nvd.nist.gov/rest/json/cves/2.0"
 D3FEND_ATTACK_API_URL = "https://d3fend.mitre.org/api/offensive-technique/attack/{attack_id}.json"
+D3FEND_ONTOLOGY_JSON_URL = "https://next.d3fend.mitre.org/ontologies/d3fend.json"
+D3FEND_FULL_MAPPINGS_JSON_URL = "https://next.d3fend.mitre.org/api/ontology/inference/d3fend-full-mappings.json"
 CVE2CAPEC_RAW_BASE_URL = "https://raw.githubusercontent.com/Galeax/CVE2CAPEC/main"
 CVE2CAPEC_LAST_UPDATE_URL = f"{CVE2CAPEC_RAW_BASE_URL}/lastUpdate.txt"
 CVE2CAPEC_DATABASE_URL = f"{CVE2CAPEC_RAW_BASE_URL}/database/CVE-{{year}}.jsonl"
@@ -180,10 +182,10 @@ def fetch_bytes(url: str, cache_path: Path, *, timeout: int = 45, refresh: bool 
         with urllib.request.urlopen(request, timeout=timeout) as response:
             data = response.read()
     except urllib.error.URLError as exc:
-        if "raw.githubusercontent.com" not in url:
-            raise
-        data = fetch_bytes_via_curl(url, cache_path, timeout=timeout)
-        return data
+        try:
+            return fetch_bytes_via_curl(url, cache_path, timeout=timeout)
+        except Exception:
+            raise exc
     cache_path.write_bytes(data)
     return data
 
@@ -239,6 +241,22 @@ def first_text(element: ET.Element, child_name: str) -> str:
     return ""
 
 
+def all_texts(element: ET.Element, child_name: str) -> list[str]:
+    values: list[str] = []
+    for child in children_by_local_name(element, child_name):
+        text = " ".join("".join(child.itertext()).split())
+        if text:
+            values.append(text)
+    return values
+
+
+def binding_value(row: dict[str, Any], key: str) -> str:
+    value = row.get(key)
+    if isinstance(value, dict):
+        return str(value.get("value") or "")
+    return ""
+
+
 def collect_attack(cache_dir: Path, *, refresh: bool = False, timeout: int = 45) -> CollectorResult:
     result = CollectorResult()
     payload = fetch_json(ATTACK_ENTERPRISE_STIX_URL, cache_dir / "attack" / "enterprise-attack.json", refresh=refresh, timeout=timeout)
@@ -263,6 +281,7 @@ def collect_attack(cache_dir: Path, *, refresh: bool = False, timeout: int = 45)
             "name": obj.get("name") or external_id,
             "description": obj.get("description") or "",
             "url": f"https://attack.mitre.org/techniques/{external_id.replace('.', '/')}/",
+            "source_ref": "mitre_attack_stix",
             "metadata": {
                 "source": "mitre_attack_stix",
                 "kill_chain_phases": obj.get("kill_chain_phases", []),
@@ -301,6 +320,7 @@ def collect_cwe(cache_dir: Path, *, refresh: bool = False, timeout: int = 45) ->
             "name": weakness.get("Name") or weakness_id,
             "description": first_text(weakness, "Description"),
             "url": f"https://cwe.mitre.org/data/definitions/{weakness_id.split('-')[1]}.html",
+            "source_ref": "cwe_xml",
             "metadata": {"source": "cwe_xml", "abstraction": weakness.get("Abstraction"), "status": weakness.get("Status")},
         })
 
@@ -322,16 +342,24 @@ def collect_capec(cache_dir: Path, *, refresh: bool = False, timeout: int = 45) 
             "id": pattern_id,
             "type": "capec",
             "name": attack_pattern.get("Name") or pattern_id,
-            "description": first_text(attack_pattern, "Description"),
+            "description": first_text(attack_pattern, "Description") or first_text(attack_pattern, "Extended_Description"),
             "url": f"https://capec.mitre.org/data/definitions/{pattern_id.split('-')[1]}.html",
-            "metadata": {"source": "capec_xml", "status": attack_pattern.get("Status")},
+            "source_ref": "capec_xml",
+            "metadata": {
+                "source": "capec_xml",
+                "status": attack_pattern.get("Status"),
+                "abstraction": attack_pattern.get("Abstraction"),
+                "likelihood_of_attack": first_text(attack_pattern, "Likelihood_Of_Attack"),
+                "typical_severity": first_text(attack_pattern, "Typical_Severity"),
+                "prerequisites": all_texts(attack_pattern, "Attack_Prerequisite")[:12],
+            },
         })
 
         for related_weaknesses in children_by_local_name(attack_pattern, "Related_Weaknesses"):
             for related in children_by_local_name(related_weaknesses, "Related_Weakness"):
                 weakness_id = cwe_id(related.get("CWE_ID"))
                 if weakness_id:
-                    result.add_node({"id": weakness_id, "type": "cwe", "name": weakness_id, "url": f"https://cwe.mitre.org/data/definitions/{weakness_id.split('-')[1]}.html", "metadata": {"source": "capec_related_weakness"}})
+                    result.add_node({"id": weakness_id, "type": "cwe", "name": weakness_id, "url": f"https://cwe.mitre.org/data/definitions/{weakness_id.split('-')[1]}.html", "source_ref": "capec_xml", "metadata": {"source": "capec_related_weakness"}})
                     result.add_edge(weakness_id, pattern_id, "may_enable_attack_pattern", confidence="public_source", source_ref="capec_xml")
 
         for taxonomy_mappings in children_by_local_name(attack_pattern, "Taxonomy_Mappings"):
@@ -341,7 +369,7 @@ def collect_capec(cache_dir: Path, *, refresh: bool = False, timeout: int = 45) 
                     continue
                 entry_id = attack_id(mapping.get("Entry_ID") or first_text(mapping, "Entry_ID"))
                 if entry_id:
-                    result.add_node({"id": entry_id, "type": "attack", "name": entry_id, "url": f"https://attack.mitre.org/techniques/{entry_id.replace('.', '/')}/", "metadata": {"source": "capec_attack_mapping"}})
+                    result.add_node({"id": entry_id, "type": "attack", "name": entry_id, "url": f"https://attack.mitre.org/techniques/{entry_id.replace('.', '/')}/", "source_ref": "capec_xml", "metadata": {"source": "capec_attack_mapping"}})
                     result.add_edge(pattern_id, entry_id, "may_map_to_attack_technique", confidence="public_source", source_ref="capec_xml")
 
     return result
@@ -366,6 +394,7 @@ def collect_kev(cache_dir: Path, *, refresh: bool = False, timeout: int = 45, ma
             "type": "cve",
             "name": item.get("vulnerabilityName") or vid,
             "url": f"https://nvd.nist.gov/vuln/detail/{vid}",
+            "source_ref": "cisa_kev",
             "metadata": {
                 "source": "cisa_kev",
                 "vendor_project": item.get("vendorProject"),
@@ -441,10 +470,11 @@ def ingest_nvd_payload(payload: dict[str, Any], result: CollectorResult) -> None
         result.add_node({
             "id": vid,
             "type": "cve",
-            "name": vid,
+            "name": derive_cve_name(vid, description),
             "description": description,
             "url": f"https://nvd.nist.gov/vuln/detail/{vid}",
-            "metadata": {"source": "nvd_api", "published": cve.get("published"), "last_modified": cve.get("lastModified")},
+            "source_ref": "nvd_api",
+            "metadata": {"source": "nvd_api", "published": cve.get("published"), "last_modified": cve.get("lastModified"), **extract_nvd_cvss(cve)},
         })
         result.route_inputs.add(vid)
         result.routes.append({"id": f"route-nvd-{vid.lower()}", "input": vid, "name": vid, "curation_status": "public_nvd", "source": "nvd_api"})
@@ -452,8 +482,36 @@ def ingest_nvd_payload(payload: dict[str, Any], result: CollectorResult) -> None
             for desc in weakness.get("description", []) if isinstance(weakness, dict) else []:
                 weakness_id = cwe_id(desc.get("value") if isinstance(desc, dict) else "")
                 if weakness_id:
-                    result.add_node({"id": weakness_id, "type": "cwe", "name": weakness_id, "url": f"https://cwe.mitre.org/data/definitions/{weakness_id.split('-')[1]}.html", "metadata": {"source": "nvd_weakness"}})
+                    result.add_node({"id": weakness_id, "type": "cwe", "name": weakness_id, "url": f"https://cwe.mitre.org/data/definitions/{weakness_id.split('-')[1]}.html", "source_ref": "nvd_api", "metadata": {"source": "nvd_weakness"}})
                     result.add_edge(vid, weakness_id, "has_weakness", confidence="public_source", source_ref="nvd_api")
+
+
+def derive_cve_name(cve_identifier: str, description: str) -> str:
+    sentence = " ".join(str(description or "").split()).split(". ", 1)[0].strip(". ")
+    if not sentence:
+        return cve_identifier
+    sentence = re.sub(r"^In\s+", "", sentence, flags=re.IGNORECASE)
+    if len(sentence) > 120:
+        sentence = sentence[:117].rstrip() + "..."
+    return f"{cve_identifier}: {sentence}"
+
+
+def extract_nvd_cvss(cve: dict[str, Any]) -> dict[str, Any]:
+    metrics = cve.get("metrics", {}) if isinstance(cve.get("metrics"), dict) else {}
+    for key in ("cvssMetricV40", "cvssMetricV31", "cvssMetricV30", "cvssMetricV2"):
+        values = metrics.get(key)
+        if not isinstance(values, list) or not values:
+            continue
+        cvss_data = values[0].get("cvssData", {}) if isinstance(values[0], dict) else {}
+        if not isinstance(cvss_data, dict):
+            continue
+        return {
+            "cvss_version": cvss_data.get("version"),
+            "cvss_vector": cvss_data.get("vectorString"),
+            "cvss_base_score": cvss_data.get("baseScore"),
+            "cvss_base_severity": cvss_data.get("baseSeverity") or values[0].get("baseSeverity"),
+        }
+    return {}
 
 
 def extract_attack_ids_from_capec_techniques(raw_value: Any) -> list[str]:
@@ -471,6 +529,7 @@ def add_cve2capec_d3fend_node(result: CollectorResult, record: dict[str, Any], *
         "type": "d3fend",
         "name": record.get("technique") or did,
         "url": f"https://d3fend.mitre.org/technique/{did}/",
+        "source_ref": source_ref,
         "metadata": {
             "source": source_ref,
             "d3fend_tactic": tactic,
@@ -498,6 +557,7 @@ def ingest_cve2capec_resources(
             "type": "cwe",
             "name": weakness_id,
             "url": f"https://cwe.mitre.org/data/definitions/{weakness_id.split('-')[1]}.html",
+            "source_ref": "galeax_cve2capec_cwe_db",
             "metadata": {"source": "galeax_cve2capec_cwe_db"},
         })
         for raw_parent in record.get("ChildOf", []) or []:
@@ -508,6 +568,7 @@ def ingest_cve2capec_resources(
                     "type": "cwe",
                     "name": parent_id,
                     "url": f"https://cwe.mitre.org/data/definitions/{parent_id.split('-')[1]}.html",
+                    "source_ref": "galeax_cve2capec_cwe_db",
                     "metadata": {"source": "galeax_cve2capec_cwe_db"},
                 })
                 result.add_edge(weakness_id, parent_id, "child_of", confidence="public_source", source_ref="galeax_cve2capec_cwe_db")
@@ -519,6 +580,7 @@ def ingest_cve2capec_resources(
                     "type": "capec",
                     "name": pattern_id,
                     "url": f"https://capec.mitre.org/data/definitions/{pattern_id.split('-')[1]}.html",
+                    "source_ref": "galeax_cve2capec_cwe_db",
                     "metadata": {"source": "galeax_cve2capec_cwe_db"},
                 })
                 result.add_edge(weakness_id, pattern_id, "may_enable_attack_pattern", confidence="public_source", source_ref="galeax_cve2capec_cwe_db")
@@ -532,6 +594,7 @@ def ingest_cve2capec_resources(
             "type": "capec",
             "name": record.get("name") or pattern_id,
             "url": f"https://capec.mitre.org/data/definitions/{pattern_id.split('-')[1]}.html",
+            "source_ref": "galeax_cve2capec_capec_db",
             "metadata": {"source": "galeax_cve2capec_capec_db"},
         })
         for technique_id in extract_attack_ids_from_capec_techniques(record.get("techniques")):
@@ -540,6 +603,7 @@ def ingest_cve2capec_resources(
                 "type": "attack",
                 "name": technique_id,
                 "url": f"https://attack.mitre.org/techniques/{technique_id.replace('.', '/')}/",
+                "source_ref": "galeax_cve2capec_capec_db",
                 "metadata": {"source": "galeax_cve2capec_capec_db"},
             })
             result.add_edge(pattern_id, technique_id, "may_map_to_attack_technique", confidence="public_source", source_ref="galeax_cve2capec_capec_db")
@@ -553,6 +617,7 @@ def ingest_cve2capec_resources(
             "type": "attack",
             "name": technique_id,
             "url": f"https://attack.mitre.org/techniques/{technique_id.replace('.', '/')}/",
+            "source_ref": "galeax_cve2capec_techniques_db",
             "metadata": {"source": "galeax_cve2capec_techniques_db", "tactics": tactics if isinstance(tactics, list) else []},
         })
 
@@ -566,6 +631,7 @@ def ingest_cve2capec_resources(
                 "type": "attack",
                 "name": technique_id,
                 "url": f"https://attack.mitre.org/techniques/{technique_id.replace('.', '/')}/",
+                "source_ref": "galeax_cve2capec_defend_db",
                 "metadata": {"source": "galeax_cve2capec_defend_db"},
             })
             for record in records:
@@ -596,6 +662,7 @@ def ingest_cve2capec_database_row(result: CollectorResult, row: dict[str, Any], 
             "type": "cve",
             "name": vid,
             "url": f"https://nvd.nist.gov/vuln/detail/{vid}",
+            "source_ref": source_ref,
             "metadata": {
                 "source": source_ref,
                 "cwe": cwes,
@@ -613,6 +680,7 @@ def ingest_cve2capec_database_row(result: CollectorResult, row: dict[str, Any], 
                 "type": "cwe",
                 "name": weakness_id,
                 "url": f"https://cwe.mitre.org/data/definitions/{weakness_id.split('-')[1]}.html",
+                "source_ref": source_ref,
                 "metadata": {"source": source_ref},
             })
             result.add_edge(vid, weakness_id, "has_weakness", confidence="public_source", source_ref=source_ref)
@@ -622,6 +690,7 @@ def ingest_cve2capec_database_row(result: CollectorResult, row: dict[str, Any], 
                 "type": "capec",
                 "name": pattern_id,
                 "url": f"https://capec.mitre.org/data/definitions/{pattern_id.split('-')[1]}.html",
+                "source_ref": source_ref,
                 "metadata": {"source": source_ref},
             })
         for technique_id in techniques:
@@ -630,6 +699,7 @@ def ingest_cve2capec_database_row(result: CollectorResult, row: dict[str, Any], 
                 "type": "attack",
                 "name": technique_id,
                 "url": f"https://attack.mitre.org/techniques/{technique_id.replace('.', '/')}/",
+                "source_ref": source_ref,
                 "metadata": {"source": source_ref},
             })
 
@@ -704,9 +774,79 @@ def collect_d3fend_for_attack_ids(
                 "type": "d3fend",
                 "name": item.get("name") or did,
                 "url": item.get("url") or f"https://d3fend.mitre.org/technique/{did}/",
+                "source_ref": "d3fend_api",
                 "metadata": {"source": "d3fend_api"},
             })
             result.add_edge(attack, did, "may_be_defended_by", confidence="public_source", source_ref="d3fend_api")
+    return result
+
+
+def collect_d3fend_ontology(cache_dir: Path, *, refresh: bool = False, timeout: int = 45) -> CollectorResult:
+    """Collect MITRE D3FEND technique definitions from the official JSON-LD ontology."""
+
+    result = CollectorResult()
+    payload = fetch_json(D3FEND_ONTOLOGY_JSON_URL, cache_dir / "d3fend" / "d3fend.json", refresh=refresh, timeout=timeout)
+    result.sources.append(D3FEND_ONTOLOGY_JSON_URL)
+    for item in payload.get("@graph", []) or []:
+        if not isinstance(item, dict):
+            continue
+        did = d3fend_id(item.get("d3f:d3fend-id"))
+        if not did:
+            continue
+        label = str(item.get("rdfs:label") or did)
+        definition = str(item.get("d3f:definition") or item.get("d3f:kb-abstract") or "")
+        article = str(item.get("d3f:kb-article") or "")
+        description = definition or article.replace("##", "").strip().split("\n\n", 1)[0]
+        result.add_node({
+            "id": did,
+            "type": "d3fend",
+            "name": label,
+            "description": description,
+            "url": f"https://d3fend.mitre.org/technique/{did}/",
+            "source_ref": "mitre_d3fend_ontology",
+            "metadata": {
+                "source": "mitre_d3fend_ontology",
+                "ontology_id": item.get("@id"),
+                "article": article[:2000],
+            },
+        })
+    return result
+
+
+def collect_d3fend_full_mappings(cache_dir: Path, *, refresh: bool = False, timeout: int = 45) -> CollectorResult:
+    """Collect official D3FEND inferred ATT&CK-to-D3FEND mappings.
+
+    The full mapping file is large, so callers should filter the returned patch
+    to route-relevant nodes before merging into a product bundle.
+    """
+
+    result = collect_d3fend_ontology(cache_dir, refresh=refresh, timeout=timeout)
+    labels_to_ids = {
+        str(node.get("name", "")).lower(): node_id
+        for node_id, node in result.nodes.items()
+        if node.get("type") == "d3fend"
+    }
+    payload = fetch_json(D3FEND_FULL_MAPPINGS_JSON_URL, cache_dir / "d3fend" / "d3fend-full-mappings.json", refresh=refresh, timeout=timeout)
+    result.sources.append(D3FEND_FULL_MAPPINGS_JSON_URL)
+    for row in payload.get("results", {}).get("bindings", []) or []:
+        if not isinstance(row, dict):
+            continue
+        attack = attack_id(binding_value(row, "off_tech_id"))
+        defense_label = binding_value(row, "def_tech_label")
+        did = labels_to_ids.get(defense_label.lower())
+        if not attack or not did:
+            continue
+        node = result.nodes.get(did, {})
+        metadata = dict(node.get("metadata") or {})
+        tactic = binding_value(row, "def_tactic_label")
+        artifact = binding_value(row, "def_artifact_label")
+        if tactic:
+            metadata["d3fend_tactic"] = tactic
+            metadata["tactic"] = tactic
+        if artifact:
+            metadata.setdefault("artifact", artifact)
+        result.add_node({**node, "metadata": metadata, "source_ref": "mitre_d3fend_ontology"})
+        result.add_edge(attack, did, "may_be_defended_by", confidence="official", source_ref="mitre_d3fend_full_mappings")
     return result
 
 
@@ -791,5 +931,6 @@ def collect_public_sources(
     if include_d3fend:
         attack_ids = [node_id for node_id, node in aggregate.nodes.items() if node.get("type") == "attack"]
         run("d3fend", lambda: collect_d3fend_for_attack_ids(attack_ids, cache_dir, refresh=refresh, timeout=timeout, max_attack_ids=max_d3fend_attack_ids))
+        run("d3fend_ontology", lambda: collect_d3fend_ontology(cache_dir, refresh=refresh, timeout=timeout))
 
     return aggregate

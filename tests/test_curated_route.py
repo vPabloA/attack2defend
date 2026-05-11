@@ -117,13 +117,20 @@ def test_curate_route_ai_artifact_output(tmp_path):
     # Check required fields
     assert "ai_status" in payload
     assert "selection_method" in payload
+    assert payload["input"] == "CVE-2024-37079"
+    assert payload["normalized_input"] == "CVE-2024-37079"
+    assert "input_type" in payload
     assert "llm_adapter" in payload
     assert "provider" in payload
     assert "model" in payload
     assert "validator_status" in payload
     assert "generated_at" in payload
+    assert "narrative_status" in payload
+    assert "narrative" in payload
     assert "curated_route" in payload
-    
+    assert payload["narrative"]["summary_es"]
+    assert payload["narrative"]["node_reason_by_id"]
+
     # Check llm_adapter structure
     adapter = payload["llm_adapter"]
     assert "used" in adapter

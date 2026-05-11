@@ -228,13 +228,13 @@ def _propose_candidates(state: CuratorState) -> dict:
     )
 
     try:
-        from langchain_anthropic import ChatAnthropic
+        from langchain_openai import ChatOpenAI
         from langchain_core.messages import HumanMessage, SystemMessage
     except ImportError as exc:
         return {
             "candidates": [],
             "errors": [
-                f"langchain-anthropic not installed: {exc}. "
+                f"langchain-openai not installed: {exc}. "
                 "Run: pip install 'attack2defend[ai]'"
             ],
         }
@@ -242,9 +242,9 @@ def _propose_candidates(state: CuratorState) -> dict:
     gaps = state.get("gaps", [])
     evidence_by_gap = state.get("evidence_by_gap", {})
     run_id = state["run_id"]
-    model_name = state.get("model", "claude-sonnet-4-6")
+    model_name = state.get("model", "gpt-4o-mini")
 
-    llm = ChatAnthropic(
+    llm = ChatOpenAI(
         model=model_name,
         temperature=0.0,
         max_tokens=4096,
@@ -344,20 +344,20 @@ def _generate_backlog(state: CuratorState) -> dict:
     )
 
     try:
-        from langchain_anthropic import ChatAnthropic
+        from langchain_openai import ChatOpenAI
         from langchain_core.messages import HumanMessage, SystemMessage
     except ImportError as exc:
         return {
             "candidates": [],
-            "errors": [f"langchain-anthropic not installed: {exc}"],
+            "errors": [f"langchain-openai not installed: {exc}"],
         }
 
     gaps = state.get("gaps", [])
     prior_candidates = state.get("candidates", [])
     run_id = state["run_id"]
-    model_name = state.get("model", "claude-sonnet-4-6")
+    model_name = state.get("model", "gpt-4o-mini")
 
-    llm = ChatAnthropic(
+    llm = ChatOpenAI(
         model=model_name,
         temperature=0.0,
         max_tokens=4096,
@@ -547,7 +547,7 @@ def make_initial_state(
     bundle_path: str,
     cache_dir: str,
     output_dir: str,
-    model: str = "claude-sonnet-4-6",
+    model: str = "gpt-4o-mini",
     max_gaps: int = 50,
     gap_types: list[str] | None = None,
     dry_run: bool = False,

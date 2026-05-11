@@ -36,11 +36,11 @@ from .curated_route import CURATED_ROUTE_LIMITS, build_curated_route, validate_c
 
 DEFAULT_MODELS = {
     "gemini": "gemini-2.5-flash-lite",
-    "openai": "gpt-5-nano",
-    "anthropic": "claude-3-5-haiku-latest",
+    "openai": "gpt-4o-mini",
+    "anthropic": "claude-haiku-4-5-20251001",
 }
-# Ordered by preference: OpenAI is the default, Gemini and Anthropic are alternatives
-AUTO_PROVIDER_ORDER: tuple[str, ...] = ("openai", "gemini", "anthropic")
+# Default auto mode stays on the ChatGPT API path first.
+AUTO_PROVIDER_ORDER: tuple[str, ...] = ("openai",)
 ALLOWED_PROVIDERS = tuple(DEFAULT_MODELS)
 JsonTransport = Callable[[str, dict[str, str], dict[str, Any], float], dict[str, Any]]
 _CERTIFI_CAFILE: str | None = None
@@ -173,7 +173,7 @@ class AiCherryPickerConfig:
         if provider not in (*DEFAULT_MODELS, "auto"):
             provider = "openai"
 
-        # model is resolved per-provider; for auto mode use openai's default as a placeholder
+        # model is resolved per-provider; for auto mode use OpenAI's default as a placeholder
         model_env_key = {
             "gemini": "A2D_GEMINI_MODEL",
             "openai": "A2D_OPENAI_MODEL",
@@ -429,14 +429,15 @@ You are Attack2Defend's constrained cherry-picker.
 You must select only IDs present in the provided official context pack.
 You must not invent IDs, facts, relationships, affected products, impact, or coverage.
 You must not use external knowledge.
-You must return only JSON matching the curated route schema.
-Your response must be valid JSON.
+You must return only json matching the curated route schema.
+Your response must be valid json.
 """.strip()
 
 
 def build_llm_user_prompt(official_context_pack: dict[str, Any]) -> str:
     payload = {
         "task": "Select a defensive curated route from the official context pack only.",
+        "output_format": "json",
         "limits": CURATED_ROUTE_LIMITS,
         "rules": [
             "Allowed IDs only.",

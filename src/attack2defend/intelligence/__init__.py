@@ -27,6 +27,12 @@ from .curated_route import (
     build_official_context_pack,
     validate_curated_route,
 )
+from .route_narrative import (
+    apply_route_narrative,
+    build_deterministic_route_narrative,
+    build_route_narrative,
+    validate_route_narrative,
+)
 from .llm_cherry_picker import (
     ALLOWED_PROVIDERS,
     AUTO_PROVIDER_ORDER,
@@ -67,6 +73,7 @@ __all__ = [
     "ProposedEdge",
     "AiCherryPickerConfig",
     "AnthropicMessagesJsonClient",
+    "apply_route_narrative",
     "GeminiJsonClient",
     "MissingAPIKeyClient",
     "MissingAPIKeyError",
@@ -74,10 +81,12 @@ __all__ = [
     "ProviderCallError",
     "ProviderTransportError",
     "build_curated_route",
+    "build_deterministic_route_narrative",
     "build_llm_client_from_env",
     "build_llm_system_prompt",
     "build_llm_user_prompt",
     "build_official_context_pack",
+    "build_route_narrative",
     "build_provider_client",
     "cherry_pick_route",
     "extract_anthropic_text",
@@ -87,5 +96,6 @@ __all__ = [
     "sanitize_body",
     "sanitize_url",
     "validate_curated_route",
+    "validate_route_narrative",
     "write_candidate_batch",
 ]

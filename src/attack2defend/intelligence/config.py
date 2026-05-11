@@ -16,7 +16,7 @@ class CuratorConfig:
     """Configuration for the Defense Intelligence Curator."""
 
     # LLM settings
-    model: str = "claude-sonnet-4-6"
+    model: str = "gpt-4o-mini"
     temperature: float = 0.0
     max_tokens: int = 4096
 

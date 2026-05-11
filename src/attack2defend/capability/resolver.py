@@ -268,6 +268,16 @@ class CapabilityResolver:
                         "metadata": {"source_ref": f"node:{node_id}:metadata.required_action", "related_id": node_id},
                     }
                 )
+            elif coverage.get("gaps"):
+                actions.append(
+                    {
+                        "id": f"ACTION-{node_id}-VALIDATE-GAP",
+                        "type": "action",
+                        "name": "Validate and close declared coverage gap",
+                        "description": "Validate the declared coverage gap, assign an owner, and attach evidence of remediation or accepted residual risk.",
+                        "metadata": {"source_ref": f"coverage:{node_id}", "related_id": node_id},
+                    }
+                )
         return gaps, actions
 
     def _coverage_defense_ids(self, related_ids: set[str]) -> set[str]:
@@ -395,6 +405,15 @@ class CapabilityResolver:
                 "name": "Apply required remediation",
                 "description": node.get("metadata", {}).get("required_action", ""),
                 "metadata": {"source_ref": f"node:{related_id}:metadata.required_action", "related_id": related_id},
+            }
+        if node_id.startswith("ACTION-") and node_id.endswith("-VALIDATE-GAP"):
+            related_id = node_id.removeprefix("ACTION-").removesuffix("-VALIDATE-GAP")
+            return {
+                "id": node_id,
+                "type": "action",
+                "name": "Validate and close declared coverage gap",
+                "description": "Validate the declared coverage gap, assign an owner, and attach evidence of remediation or accepted residual risk.",
+                "metadata": {"source_ref": f"coverage:{related_id}", "related_id": related_id},
             }
         return {"id": node_id, "type": "unknown", "name": node_id, "metadata": {}}
 
@@ -562,7 +581,7 @@ class CapabilityResolver:
 
     def _node_source_ref(self, node: dict[str, Any]) -> str:
         metadata = node.get("metadata", {})
-        return sanitize_source_ref(metadata.get("source_ref") or metadata.get("mapping_file") or metadata.get("source") or "missing_source_ref")
+        return sanitize_source_ref(node.get("source_ref") or metadata.get("source_ref") or metadata.get("mapping_file") or metadata.get("source") or "missing_source_ref")
 
     def _edge_sort_key(self, edge: dict[str, Any]) -> tuple[int, int, str, str]:
         confidence = edge.get("confidence", "")

@@ -13,6 +13,13 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+ROOT = Path(__file__).resolve().parents[2]
+SRC = ROOT / "src"
+if str(SRC) not in sys.path:
+    sys.path.insert(0, str(SRC))
+
+from attack2defend.runtime_bundle import write_runtime_bundle
+
 CONTRACT_VERSION = "attack2defend.knowledge_bundle.v2"
 BACKBONE_VERSION = "0.2.1"
 VALID_NODE_TYPES = {"cve", "cwe", "capec", "attack", "d3fend", "artifact", "control", "detection", "evidence", "gap", "action"}
@@ -332,17 +339,24 @@ def route_status(types: set[str]) -> str:
     return "partial"
 
 
-def resolve_route(root: str, nodes: dict[str, dict[str, Any]], edges: list[dict[str, Any]]) -> dict[str, Any]:
+def resolve_route(
+    root: str,
+    nodes: dict[str, dict[str, Any]],
+    edges: list[dict[str, Any]],
+    by_source: dict[str, list[dict[str, Any]]] | None = None,
+    by_target: dict[str, list[dict[str, Any]]] | None = None,
+) -> dict[str, Any]:
     root_id = nid(root)
     if root_id not in nodes:
         return {"root": root_id, "coverage_status": "unresolved", "confidence_score": 0.0, "nodes": [], "edges": [], "missing_segments": TYPE_ORDER}
     selected = {root_id}
     selected_edges: dict[tuple[str, str, str], dict[str, Any]] = {}
-    by_source: dict[str, list[dict[str, Any]]] = {}
-    by_target: dict[str, list[dict[str, Any]]] = {}
-    for edge in edges:
-        by_source.setdefault(nid(edge.get("source")), []).append(edge)
-        by_target.setdefault(nid(edge.get("target")), []).append(edge)
+    if by_source is None or by_target is None:
+        by_source = {}
+        by_target = {}
+        for edge in edges:
+            by_source.setdefault(nid(edge.get("source")), []).append(edge)
+            by_target.setdefault(nid(edge.get("target")), []).append(edge)
     for direction, index in (("down", by_source), ("up", by_target)):
         queue = [root_id]
         for _ in range(len(TYPE_ORDER) + 2):
@@ -395,7 +409,12 @@ def apply_mapping_backbone(bundle_path: Path, mappings_dir: Path, ui_public_dir:
     bundle["coverage"] = {nid(k): v for k, v in sorted(coverage.items())}
     bundle["indexes"] = build_indexes(node_list, edge_list, route_inputs)
     node_map = {nid(node.get("id")): node for node in node_list}
-    bundle["semantic_routes"] = [resolve_route(root, node_map, edge_list) for root in sorted(bundle["indexes"]["route_inputs"]) if root in node_map]
+    route_by_source: dict[str, list[dict[str, Any]]] = {}
+    route_by_target: dict[str, list[dict[str, Any]]] = {}
+    for edge in edge_list:
+        route_by_source.setdefault(nid(edge.get("source")), []).append(edge)
+        route_by_target.setdefault(nid(edge.get("target")), []).append(edge)
+    bundle["semantic_routes"] = [resolve_route(root, node_map, edge_list, route_by_source, route_by_target) for root in sorted(bundle["indexes"]["route_inputs"]) if root in node_map]
     by_status: dict[str, int] = {}
     for route in bundle["semantic_routes"]:
         by_status[route["coverage_status"]] = by_status.get(route["coverage_status"], 0) + 1
@@ -411,11 +430,11 @@ def apply_mapping_backbone(bundle_path: Path, mappings_dir: Path, ui_public_dir:
         shutil.copy2(target, bundle_path)
     if ui_public_dir is not None:
         ui_public_dir.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(bundle_path, ui_public_dir / "knowledge-bundle.json")
+        write_runtime_bundle(ui_public_dir / "knowledge-bundle.json", bundle, pretty=False)
     if last_good:
-        shutil.copy2(bundle_path, bundle_path.with_name("knowledge-bundle.last-good.json"))
+        write_runtime_bundle(bundle_path.with_name("knowledge-bundle.last-good.json"), bundle, pretty=False)
         if ui_public_dir is not None:
-            shutil.copy2(bundle_path, ui_public_dir / "knowledge-bundle.last-good.json")
+            write_runtime_bundle(ui_public_dir / "knowledge-bundle.last-good.json", bundle, pretty=False)
     print(f"Attack2Defend mapping backbone applied: files={len(files)} records={mapping_records} nodes={len(node_list)} edges={len(edge_list)} semantic_routes={len(bundle['semantic_routes'])}")
     return 0
 

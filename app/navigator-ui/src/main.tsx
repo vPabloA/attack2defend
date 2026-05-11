@@ -93,11 +93,30 @@ type CuratedRoute = { stages: Array<{ type: NodeType; label: string; nodes: Capa
 type AiCuratedRouteArtifact = {
   ai_status: string;
   selection_method: string;
+  input?: string;
+  normalized_input?: string;
+  input_type?: NodeType | string;
+  narrative_status?: string;
   llm_adapter: { used: boolean; reason?: string };
   provider: string;
   model: string;
   validator_status: string;
   generated_at: string;
+  narrative?: {
+    schema_version?: string;
+    generated_at?: string;
+    status?: string;
+    summary_es?: string;
+    executive_summary_es?: string;
+    decision_context_es?: string;
+    risk_rationale_es?: string;
+    consultative_conclusion_es?: string[];
+    recommended_validations?: Array<{ owner: string; text: string; evidence_expected?: string[]; source_ids?: string[] }>;
+    suggested_detections?: Array<{ text: string; source_ids?: string[] } | string>;
+    stage_summaries?: Array<{ type: NodeType | string; text: string }>;
+    node_reasons?: Array<{ id: string; reason_es: string }>;
+    node_reason_by_id?: Record<string, string>;
+  };
   curated_route: Record<string, unknown>;
 };
 
@@ -112,6 +131,7 @@ type CapabilityView = {
   executive_summary_es: string;
   decision_context_es: string;
   risk_rationale_es: string;
+  consultative_conclusion_es: string[];
   threatStatus: string;
   defenseStatus: string;
   priority: {
@@ -126,6 +146,9 @@ type CapabilityView = {
   defenseSections: CapabilitySection[];
   bridges: CapabilityBridge[];
   recommended_actions: RecommendedAction[];
+  recommended_validations: Array<{ owner: string; text: string; evidence_expected?: string[]; source_ids?: string[] }>;
+  suggested_detections: string[];
+  node_reason_by_id: Record<string, string>;
   owners: string[];
   source_refs: string[];
   official_links: Array<{ node_id: string; node_type: string; url: string; source: string }>;
@@ -263,7 +286,15 @@ function App() {
   const coverageRows = useMemo(() => (activeRoute ? buildCoverageRows(bundle, activeRoute) : []), [bundle, activeRoute]);
   const navigatorLayer = useMemo(() => (activeRoute ? buildAttackNavigatorLayer(bundle, activeRoute) : buildAttackNavigatorLayer(bundle, { root: 'EMPTY', nodes: [], edges: [] })), [bundle, activeRoute]);
   const d3fendCadGraph = useMemo(() => (activeRoute ? buildD3fendCadGraph(bundle, activeRoute) : buildD3fendCadGraph(bundle, { root: 'EMPTY', nodes: [], edges: [] })), [bundle, activeRoute]);
-  const capabilityView = useMemo(() => (activeRoute && selectedNode ? buildCapabilityView(bundle, activeRoute, selectedNode) : null), [bundle, activeRoute, selectedNode]);
+  const activeAiArtifact = useMemo(() => {
+    if (!aiArtifact || !selectedNode) return null;
+    const curatedRouteInput = aiArtifact.curated_route && typeof aiArtifact.curated_route === 'object'
+      ? String((aiArtifact.curated_route as Record<string, unknown>).input ?? '')
+      : '';
+    const artifactInput = String(aiArtifact.input || curatedRouteInput).toUpperCase();
+    return artifactInput && artifactInput === selectedNode.id.toUpperCase() ? aiArtifact : null;
+  }, [aiArtifact, selectedNode]);
+  const capabilityView = useMemo(() => (activeRoute && selectedNode ? buildCapabilityView(bundle, activeRoute, selectedNode, activeAiArtifact) : null), [bundle, activeRoute, selectedNode, activeAiArtifact]);
   const curatedRoute = useMemo(() => (capabilityView ? buildCuratedRoute(capabilityView) : null), [capabilityView]);
   const markdownExport = useMemo(() => {
     if (!activeRoute || !selectedNode) return '';
@@ -353,7 +384,7 @@ function App() {
       ) : (
         <>
           {activeTab === 'route' && (
-            capabilityView && curatedRoute ? <AnalysisTab view={capabilityView} curatedRoute={curatedRoute} bundle={bundle} bundleSource={bundleSource} onSelect={selectNode} aiArtifact={aiArtifact} /> : null
+            capabilityView && curatedRoute ? <AnalysisTab view={capabilityView} curatedRoute={curatedRoute} bundle={bundle} bundleSource={bundleSource} onSelect={selectNode} aiArtifact={activeAiArtifact} /> : null
           )}
 
           {activeTab === 'attack' && <AttackNavigatorTab bundle={bundle} activeRoute={activeRoute} navigatorLayer={navigatorLayer} />}
@@ -435,10 +466,10 @@ function AnalysisTab({ view, curatedRoute, bundle, bundleSource, onSelect, aiArt
     <section className="analysis-stack">
       {aiArtifact && <AiPanel artifact={aiArtifact} />}
       <PreliminarySummary view={view} />
-      <CuratedRoutePanel curatedRoute={curatedRoute} onSelect={onSelect} />
+      <CuratedRoutePanel curatedRoute={curatedRoute} onSelect={onSelect} nodeReasonById={view.node_reason_by_id} />
       <ConclusionPanel view={view} curatedRoute={curatedRoute} />
       <ValidationPanel view={view} />
-      <SuggestedDetectionsPanel curatedRoute={curatedRoute} />
+      <SuggestedDetectionsPanel curatedRoute={curatedRoute} detections={view.suggested_detections} />
       <PotentialGapsPanel />
       <OwnerActionsPanel />
       <FullTraceabilityPanel view={view} counts={counts} onSelect={onSelect} />
@@ -457,6 +488,8 @@ function AiPanel({ artifact }: { artifact: AiCuratedRouteArtifact }) {
   const badgeClass = artifact.llm_adapter.used ? "ai-badge-llm" : "ai-badge-fallback";
   const fallbackReason = artifact.llm_adapter.reason ? ` (${artifact.llm_adapter.reason})` : "";
   const timestamp = new Date(artifact.generated_at).toLocaleString();
+  const narrative = artifact.narrative ?? null;
+  const narrativeSummary = narrative?.executive_summary_es || narrative?.summary_es || "Narrativa no disponible; se muestra el artefacto mínimo.";
 
   return (
     <section className="panel ai-panel">
@@ -465,11 +498,14 @@ function AiPanel({ artifact }: { artifact: AiCuratedRouteArtifact }) {
         <span className={`ai-badge ${badgeClass}`}>{badge}{fallbackReason}</span>
       </div>
       <div className="ai-details">
+        <div className="ai-detail"><strong>Input:</strong> {artifact.input || artifact.normalized_input || 'N/A'}</div>
         <div className="ai-detail"><strong>Provider:</strong> {artifact.provider || 'N/A'}</div>
         <div className="ai-detail"><strong>Model:</strong> {artifact.model || 'N/A'}</div>
         <div className="ai-detail"><strong>Status:</strong> {artifact.validator_status}</div>
+        <div className="ai-detail"><strong>Narrative:</strong> {artifact.narrative_status || narrative?.status || 'n/a'}</div>
         <div className="ai-detail"><strong>Generated:</strong> {timestamp}</div>
       </div>
+      <p className="ai-summary">{narrativeSummary}</p>
     </section>
   );
 }
@@ -478,7 +514,7 @@ function SummaryItem({ label, value }: { label: string; value: string }) {
   return <article className="summary-item"><span>{label}</span><strong>{value}</strong></article>;
 }
 
-function CuratedRoutePanel({ curatedRoute, onSelect }: { curatedRoute: CuratedRoute; onSelect: (id: string) => void }) {
+function CuratedRoutePanel({ curatedRoute, onSelect, nodeReasonById }: { curatedRoute: CuratedRoute; onSelect: (id: string) => void; nodeReasonById: Record<string, string> }) {
   return (
     <section className="panel curated-route-panel">
       <PanelTitle title="Ruta curada de mayor relevancia" subtitle="CVE → CWE → CAPEC → ATT&CK → D3FEND" />
@@ -488,7 +524,7 @@ function CuratedRoutePanel({ curatedRoute, onSelect }: { curatedRoute: CuratedRo
             <article key={stage.type} className={`curated-stage ${stage.type}`}>
               <header><span>{stage.label}</span><strong>{stage.nodes.length}</strong></header>
               <div className="curated-node-list">
-                {stage.nodes.map((node) => <TraceabilityNode key={node.id} node={node} onSelect={onSelect} compact />)}
+                {stage.nodes.map((node) => <TraceabilityNode key={node.id} node={node} reason={nodeReasonById[node.id.toUpperCase()] ?? ''} onSelect={onSelect} compact />)}
                 {!stage.nodes.length && <p>Sin nodo disponible en el bundle.</p>}
               </div>
             </article>
@@ -504,7 +540,7 @@ function ConclusionPanel({ view, curatedRoute }: { view: CapabilityView; curated
     <section className="panel consultative-panel">
       <PanelTitle title="Conclusión" subtitle="Síntesis consultiva para priorizar validaciones, no para declarar cobertura." />
       <ul className="consultative-list">
-        {buildConsultativeConclusion(view, curatedRoute).map((item) => <li key={item}>{item}</li>)}
+        {view.consultative_conclusion_es.length ? view.consultative_conclusion_es.map((item) => <li key={item}>{item}</li>) : buildConsultativeConclusion(view, curatedRoute).map((item) => <li key={item}>{item}</li>)}
       </ul>
     </section>
   );
@@ -515,20 +551,24 @@ function ValidationPanel({ view }: { view: CapabilityView }) {
     <section className="panel consultative-panel">
       <PanelTitle title="Validaciones recomendadas" subtitle="Owners sugeridos para confirmar afectación, exposición y evidencia operacional." />
       <div className="validation-list">
-        {buildRecommendedValidations(view).map((item) => (
-          <article key={`${item.owner}-${item.text}`} className="validation-card"><strong>{item.text}</strong><span>{item.owner}</span></article>
+        {(view.recommended_validations.length ? view.recommended_validations : buildRecommendedValidations(view)).map((item) => (
+          <article key={`${item.owner}-${item.text}`} className="validation-card">
+            <strong>{item.text}</strong>
+            <span>{item.owner}</span>
+            {item.evidence_expected?.length ? <small>{item.evidence_expected.join(' · ')}</small> : null}
+          </article>
         ))}
       </div>
     </section>
   );
 }
 
-function SuggestedDetectionsPanel({ curatedRoute }: { curatedRoute: CuratedRoute }) {
-  const detections = buildSuggestedDetections(curatedRoute);
+function SuggestedDetectionsPanel({ curatedRoute, detections }: { curatedRoute: CuratedRoute; detections: string[] }) {
+  const panelDetections = detections.length ? detections : buildSuggestedDetections(curatedRoute);
   return (
     <section className="panel consultative-panel">
       <PanelTitle title="Detecciones sugeridas" subtitle="Ideas de detección a validar o convertir en hunting; no representan detecciones existentes." />
-      <ul className="consultative-list">{detections.map((item) => <li key={item}>{item}</li>)}</ul>
+      <ul className="consultative-list">{panelDetections.map((item) => <li key={item}>{item}</li>)}</ul>
     </section>
   );
 }
@@ -564,30 +604,31 @@ function FullTraceabilityPanel({ view, counts, onSelect }: { view: CapabilityVie
     <details className="panel details-panel">
       <summary><span>Trazabilidad completa</span><strong>{formatTraceabilityCounts(counts)}</strong><em>Ver detalle técnico</em></summary>
       <div className="traceability-groups">
-        {view.threatSections.map((section) => <TraceabilityGroup key={section.type} section={section} onSelect={onSelect} />)}
+        {view.threatSections.map((section) => <TraceabilityGroup key={section.type} section={section} onSelect={onSelect} nodeReasonById={view.node_reason_by_id} />)}
       </div>
     </details>
   );
 }
 
-function TraceabilityGroup({ section, onSelect }: { section: CapabilitySection; onSelect: (id: string) => void }) {
+function TraceabilityGroup({ section, onSelect, nodeReasonById }: { section: CapabilitySection; onSelect: (id: string) => void; nodeReasonById: Record<string, string> }) {
   return (
     <article className={`traceability-group ${section.type}`}>
       <header><h3>{section.label}</h3><span>{section.nodes.length}</span></header>
       <div className="traceability-node-grid">
-        {section.nodes.map((node) => <TraceabilityNode key={node.id} node={node} onSelect={onSelect} />)}
+        {section.nodes.map((node) => <TraceabilityNode key={node.id} node={node} reason={nodeReasonById[node.id.toUpperCase()] ?? ''} onSelect={onSelect} />)}
         {!section.nodes.length && <p className="operational-gap">{section.emptyMessage}</p>}
       </div>
     </article>
   );
 }
 
-function TraceabilityNode({ node, onSelect, compact = false }: { node: CapabilityNode; onSelect: (id: string) => void; compact?: boolean }) {
+function TraceabilityNode({ node, onSelect, compact = false, reason = '' }: { node: CapabilityNode; onSelect: (id: string) => void; compact?: boolean; reason?: string }) {
   return (
     <article className={`traceability-node ${node.type} ${compact ? 'compact' : ''}`}>
       <button onClick={() => onSelect(node.id)}>{node.id}</button>
       <strong>{node.name}</strong>
       {node.officialLink && <a href={node.officialLink} target="_blank" rel="noreferrer">Official link</a>}
+      {reason ? <p className="traceability-reason">{reason}</p> : null}
       <small>source_ref: {node.sourceRef && node.sourceRef !== 'missing_source_ref' ? node.sourceRef : 'missing_source_ref'}</small>
     </article>
   );
@@ -930,17 +971,17 @@ function buildConsultativeConclusion(view: CapabilityView, curatedRoute: Curated
   ];
 }
 
-function buildRecommendedValidations(view: CapabilityView) {
-  const items = [
-    { text: 'Confirmar activos afectados', owner: 'Vulnerability Manager / Infra' },
-    { text: 'Confirmar versión o condición vulnerable', owner: 'Vulnerability Manager' },
-    { text: 'Validar exposición', owner: 'Infra' },
-    { text: 'Revisar logs/evidencia asociada', owner: 'SOC' },
-    { text: 'Validar detecciones o hunting', owner: 'Detection Engineering / SOC' },
-    { text: 'Revisar persistencia si hay señales', owner: 'SOC / DFIR' },
+function buildRecommendedValidations(view: CapabilityView): Array<{ text: string; owner: string; evidence_expected?: string[] }> {
+  const items: Array<{ text: string; owner: string; evidence_expected?: string[] }> = [
+    { text: 'Confirmar activos afectados', owner: 'Vulnerability Manager / Infra', evidence_expected: ['Inventario/CMDB', 'alcance del activo'] },
+    { text: 'Confirmar versión o condición vulnerable', owner: 'Vulnerability Manager', evidence_expected: ['versión instalada', 'advisory o parche'] },
+    { text: 'Validar exposición', owner: 'Infra', evidence_expected: ['diagrama de exposición', 'reglas de red o WAF'] },
+    { text: 'Revisar logs/evidencia asociada', owner: 'SOC', evidence_expected: ['query o export de logs', 'ventana temporal definida'] },
+    { text: 'Validar detecciones o hunting', owner: 'Detection Engineering / SOC', evidence_expected: ['regla o query', 'test case ejecutado'] },
+    { text: 'Revisar persistencia si hay señales', owner: 'SOC / DFIR', evidence_expected: ['eventos de persistencia', 'línea temporal de actividad'] },
   ];
   if (view.normalized_input === 'CVE-2026-41940') {
-    return [{ text: 'Validar producto afectado, versión, exposición administrativa, logs y evidencia de explotación', owner: 'Vulnerability Manager / Infra / SOC' }, ...items];
+    return [{ text: 'Validar producto afectado, versión, exposición administrativa, logs y evidencia de explotación', owner: 'Vulnerability Manager / Infra / SOC', evidence_expected: ['inventario del producto', 'evidencia de explotación'] }, ...items];
   }
   return items;
 }
@@ -954,7 +995,7 @@ function buildSuggestedDetections(curatedRoute: CuratedRoute) {
   return [...detections];
 }
 
-function buildCapabilityView(bundle: KnowledgeBundle, route: ResolvedRoute, selectedNode: RouteNode): CapabilityView {
+function buildCapabilityView(bundle: KnowledgeBundle, route: ResolvedRoute, selectedNode: RouteNode, aiArtifact: AiCuratedRouteArtifact | null = null): CapabilityView {
   const nodeMap = new Map(bundle.nodes.map((node) => [node.id, node]));
   const routeNodeIds = new Set(route.nodes);
   const threatIds = new Set(route.nodes.filter((id) => threatMapTypes.includes(nodeMap.get(id)?.type as NodeType)));
@@ -994,6 +1035,31 @@ function buildCapabilityView(bundle: KnowledgeBundle, route: ResolvedRoute, sele
   const confidence = resolveCapabilityConfidence(route.edges, threatStatus, defenseStatus);
   const officialLinks = threatNodes.map(toCapabilityNode).filter((node) => node.officialLink).map((node) => ({ node_id: node.id, node_type: node.type, url: node.officialLink, source: 'official_framework' }));
   const sourceRefs = collectCapabilitySourceRefs([...threatNodes, ...defenseNodes], route.edges, bridges);
+  const curatedRouteView: CuratedRoute = {
+    stages: threatMapTypes.map((type) => ({
+      type,
+      label: typeLabels[type],
+      nodes: threatSections.find((section) => section.type === type)?.nodes ?? [],
+    })),
+    counts: Object.fromEntries(threatMapTypes.map((type) => [type, threatSections.find((section) => section.type === type)?.nodes.length ?? 0])) as Partial<Record<NodeType, number>>,
+    isPending: threatNodes.length === 0,
+  };
+  const narrative = aiArtifact?.narrative ?? null;
+  const aiSummary = String(narrative?.executive_summary_es || narrative?.summary_es || buildExecutiveSummaryEs(threatStatus, defenseStatus, priority.final_priority));
+  const aiDecisionContext = String(narrative?.decision_context_es || buildDecisionContextEs(threatSections, defenseSections));
+  const aiRiskRationale = String(narrative?.risk_rationale_es || buildRiskRationaleEs(priority, defenseSections));
+  const aiConclusion = (narrative?.consultative_conclusion_es?.length ? narrative.consultative_conclusion_es : buildConsultativeConclusion({ source_refs: sourceRefs, normalized_input: selectedNode.id, priority } as CapabilityView, curatedRouteView)).map((item) => String(item));
+  const aiValidations = narrative?.recommended_validations?.length
+    ? narrative.recommended_validations.map((item) => ({
+        owner: String(item.owner || 'SOC'),
+        text: String(item.text || ''),
+        evidence_expected: Array.isArray(item.evidence_expected) ? item.evidence_expected.map((value) => String(value)) : [],
+      }))
+    : buildRecommendedValidations({ source_refs: sourceRefs, normalized_input: selectedNode.id, priority } as CapabilityView);
+  const aiDetections = narrative?.suggested_detections?.length
+    ? narrative.suggested_detections.map((item) => (typeof item === 'string' ? item : String(item.text || ''))).filter((item) => item.length > 0)
+    : buildSuggestedDetections(curatedRouteView);
+  const nodeReasonById = narrative?.node_reason_by_id ?? Object.fromEntries((narrative?.node_reasons ?? []).map((item) => [String(item.id || '').toUpperCase(), String(item.reason_es || '')]).filter(([id, reason]) => id && reason));
   const recommendations = buildRecommendedActionsEs(defenseSections, priority);
   const gapExplanation = buildGapExplanationEs(defenseSections);
   const coverageStatus = defenseStatus !== 'unresolved' ? defenseStatus : threatStatus;
@@ -1005,9 +1071,9 @@ function buildCapabilityView(bundle: KnowledgeBundle, route: ResolvedRoute, sele
     input_type: selectedNode.type,
     coverage_status: coverageStatus,
     confidence,
-    executive_summary_es: buildExecutiveSummaryEs(threatStatus, defenseStatus, priority.final_priority),
-    decision_context_es: buildDecisionContextEs(threatSections, defenseSections),
-    risk_rationale_es: buildRiskRationaleEs(priority, defenseSections),
+    executive_summary_es: aiSummary,
+    decision_context_es: aiDecisionContext,
+    risk_rationale_es: aiRiskRationale,
     threat_route_map: {
       status: threatStatus,
       nodes: threatSections.flatMap((section) => section.nodes).map(toCapabilityNodeExport),
@@ -1029,8 +1095,12 @@ function buildCapabilityView(bundle: KnowledgeBundle, route: ResolvedRoute, sele
       source_refs: sourceRefs,
     },
     bridges,
-    priority,
+    priority: { ...priority, rationale_es: aiRiskRationale },
     recommended_actions: recommendations,
+    consultative_conclusion_es: aiConclusion,
+    recommended_validations: aiValidations,
+    suggested_detections: aiDetections,
+    node_reason_by_id: nodeReasonById,
     owners: [...owners].sort(),
     official_links: officialLinks,
     source_refs: sourceRefs,
@@ -1062,11 +1132,15 @@ function buildCapabilityView(bundle: KnowledgeBundle, route: ResolvedRoute, sele
     risk_rationale_es: String(exportPayload.risk_rationale_es),
     threatStatus,
     defenseStatus,
-    priority,
+    priority: { ...priority, rationale_es: aiRiskRationale },
     threatSections,
     defenseSections,
     bridges,
     recommended_actions: recommendations,
+    recommended_validations: aiValidations,
+    suggested_detections: aiDetections,
+    consultative_conclusion_es: aiConclusion,
+    node_reason_by_id: nodeReasonById,
     owners: [...owners].sort(),
     source_refs: sourceRefs,
     official_links: officialLinks,

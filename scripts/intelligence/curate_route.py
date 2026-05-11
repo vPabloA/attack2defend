@@ -37,6 +37,7 @@ from attack2defend.intelligence import (
     build_official_context_pack,
     cherry_pick_route,
 )
+from attack2defend.intelligence.route_narrative import apply_route_narrative, build_route_narrative
 
 
 def write_json(path: str | None, payload: dict, *, pretty: bool) -> None:
@@ -79,12 +80,18 @@ def build_artifact(route: dict, *, input_id: str) -> dict:
     }
 
 
-def build_ai_artifact(route: dict, *, input_id: str) -> dict:
+def build_ai_artifact(route: dict, *, input_id: str, capability: dict, context_pack: dict, config: AiCherryPickerConfig) -> dict:
     """Build AI-curated route artifact for UI consumption."""
     adapter = route.get("llm_adapter", {})
+    narrative = build_route_narrative(capability, context_pack, route, config=config)
+    polished_route = apply_route_narrative(route, narrative)
     return {
         "ai_status": _ai_status(route),
         "selection_method": route.get("selection_method", "deterministic"),
+        "input": input_id,
+        "normalized_input": capability.get("normalized_input", input_id),
+        "input_type": capability.get("input_type", route.get("input_type", "")),
+        "narrative_status": narrative.get("status", "deterministic_fallback"),
         "llm_adapter": {
             "used": adapter.get("used", False),
             "reason": adapter.get("fallback_reason", "") if not adapter.get("used") else "",
@@ -93,25 +100,8 @@ def build_ai_artifact(route: dict, *, input_id: str) -> dict:
         "model": adapter.get("model", ""),
         "validator_status": route.get("validation", {}).get("status", "unknown"),
         "generated_at": datetime.now(timezone.utc).isoformat(),
-        "curated_route": route,
-    }
-
-
-def build_artifact(route: dict, *, input_id: str, pretty: bool) -> dict:
-    """Build a portable, secret-free curated-route artifact."""
-    adapter = route.get("llm_adapter", {})
-    return {
-        "artifact_type": "a2d_curated_route_artifact",
-        "schema_version": route.get("schema_version", "1.0"),
-        "input": input_id,
-        "generated_at": datetime.now(timezone.utc).isoformat(),
-        "ai_status": _ai_status(route),
-        "selection_method": route.get("selection_method", "deterministic"),
-        "provider": adapter.get("provider", ""),
-        "model": adapter.get("model", ""),
-        "validation_status": route.get("validation", {}).get("status", "unknown"),
-        "pretty": pretty,
-        "curated_route": route,
+        "narrative": narrative,
+        "curated_route": polished_route,
     }
 
 
@@ -150,7 +140,7 @@ def main() -> int:
     parser.add_argument("--pretty", action="store_true", help="Pretty-print JSON.")
     parser.add_argument("--llm", action="store_true", help="Attempt validator-gated LLM mode. Falls back deterministically if no provider is configured.")
     parser.add_argument("--debug-provider", action="store_true", help="Print provider diagnostics to stderr.")
-    parser.add_argument("--provider-order", help="Comma-separated provider order for auto mode, e.g. gemini,openai,anthropic.")
+    parser.add_argument("--provider-order", help="Comma-separated provider order for auto mode, e.g. openai,gemini,anthropic.")
     parser.add_argument("--fail-on-provider-error", action="store_true", help="Exit with code 3 when LLM was requested but all providers failed (vs. falling back silently).")
     args = parser.parse_args()
 
@@ -159,10 +149,12 @@ def main() -> int:
 
     capability = resolve_defense_route({"input": args.input}, bundle_path=args.bundle)
     context_pack = build_official_context_pack(capability)
+    config = AiCherryPickerConfig.from_env()
 
     if args.llm:
         os.environ["A2D_CHERRY_PICKER_MODE"] = "llm"
-        curated_route = cherry_pick_route(capability, context_pack, config=AiCherryPickerConfig.from_env())
+        config = AiCherryPickerConfig.from_env()
+        curated_route = cherry_pick_route(capability, context_pack, config=config)
     else:
         curated_route = build_curated_route(capability, context_pack)
 
@@ -179,7 +171,7 @@ def main() -> int:
         write_json(args.artifact_output, artifact, pretty=args.pretty)
 
     if args.ai_artifact_output:
-        ai_artifact = build_ai_artifact(curated_route, input_id=args.input)
+        ai_artifact = build_ai_artifact(curated_route, input_id=args.input, capability=capability, context_pack=context_pack, config=config)
         write_json(args.ai_artifact_output, ai_artifact, pretty=args.pretty)
 
     # Exit code logic

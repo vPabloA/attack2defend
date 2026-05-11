@@ -1,123 +1,177 @@
 {
   "ai_status": "llm_validated",
   "selection_method": "llm_cherry_picker",
+  "input": "CVE-2026-20841",
+  "normalized_input": "CVE-2026-20841",
+  "input_type": "cve",
+  "narrative_status": "llm_polished",
   "llm_adapter": {
     "used": true,
     "reason": ""
   },
-  "provider": "anthropic",
-  "model": "claude-haiku-4-5-20251001",
+  "provider": "openai",
+  "model": "gpt-4o-mini",
   "validator_status": "pass",
-  "generated_at": "2026-05-07T21:16:26.228558+00:00",
-  "curated_route": {
-    "task": "Select a defensive curated route from the official context pack only.",
-    "selection_method": "llm_cherry_picker",
-    "runtime_public_api_calls": false,
+  "generated_at": "2026-05-11T15:38:57.918706+00:00",
+  "narrative": {
     "schema_version": "1.0",
-    "input": "CVE-2024-37079",
-    "normalized_input": "CVE-2024-37079",
-    "built_at": "2026-05-07T21:16:17.301723+00:00",
-    "full_traceability_counts": {
-      "cve": 1,
-      "cwe": 1,
-      "capec": 1,
-      "attack": 1,
-      "d3fend": 6
+    "generated_at": "2026-05-11T15:38:45.167390+00:00",
+    "status": "llm_polished",
+    "summary_es": "Esta narrativa aborda la vulnerabilidad CVE-2026-20841, que permite la inyección de comandos en la aplicación Notepad de Windows. Se destaca la importancia de mecanismos defensivos adecuados para mitigar el riesgo crítico asociado.",
+    "executive_summary_es": "La vulnerabilidad CVE-2026-20841 pone en riesgo la seguridad al permitir la ejecución de comandos no autorizados. Es fundamental implementar medidas adecuadas para prevenir su explotación.",
+    "decision_context_es": "La identificación de esta vulnerabilidad y sus implicaciones sugiere que se deben establecer controles preventivos a través de filtrado de contenido y análisis del protocolo de la aplicación.",
+    "risk_rationale_es": "La inadecuada neutralización de elementos especiales puede llevar a la ejecución de comandos maliciosos, lo que se ve reflejado en las clasificaciones CWE y CAPEC seleccionadas.",
+    "consultative_conclusion_es": [
+      "Se recomienda que se implementen técnicas de análisis de tráfico de red y análisis dinámico para detectar y mitigar las amenazas surgidas de la inyección de comandos."
+    ],
+    "recommended_validations": [
+      {
+        "owner": "AppSec",
+        "text": "Validar mecanismos de filtrado de contenido para entradas de usuario.",
+        "evidence_expected": [
+          "Informes de pruebas de penetración",
+          "Resultados de análisis de vulnerabilidades"
+        ],
+        "source_ids": [
+          "D3-CF",
+          "D3-FA"
+        ]
+      }
+    ],
+    "suggested_detections": [
+      {
+        "text": "Implementar monitoreo de tráfico de red para detectar intentos de explotación relacionados con inyección de comandos.",
+        "source_ids": [
+          "D3-NTA"
+        ]
+      }
+    ],
+    "stage_summaries": [
+      {
+        "type": "cve",
+        "text": "CVE-2026-20841 presenta un riesgo crítico al permitir la ejecución de código localmente."
+      }
+    ],
+    "node_reasons": [
+      {
+        "id": "CVE-2026-20841",
+        "reason_es": "Esta CVE aborda un problema crítico de inyección de comandos en la aplicación Notepad de Windows."
+      },
+      {
+        "id": "CWE-707",
+        "reason_es": "This CWE highlights issues with improper neutralization which could lead to malicious commands being executed."
+      },
+      {
+        "id": "CWE-74",
+        "reason_es": "This CWE discusses the risks of improper neutralization of special elements that can be exploited via injection, relevant to the context of this CVE."
+      },
+      {
+        "id": "CWE-77",
+        "reason_es": "This CWE defines the challenge of improper neutralization of command elements, important for understanding the risks associated with command injection vulnerabilities."
+      },
+      {
+        "id": "CAPEC-248",
+        "reason_es": "This attack pattern relates directly to command injection techniques which can be used to exploit vulnerabilities similar to CVE-2026-20841."
+      },
+      {
+        "id": "CAPEC-14",
+        "reason_es": "This attack pattern describes how adversaries can execute commands through manipulation, which is applicable to the vulnerabilities present in the CVE."
+      },
+      {
+        "id": "CAPEC-76",
+        "reason_es": "Manipulating inputs to target software is echoed in this CAPEC entry and ties closely to the command injection nature of the CVE."
+      },
+      {
+        "id": "CAPEC-13",
+        "reason_es": "This attack pattern focuses on subverting the expected operations of software via environment variables, which is relevant to command injection."
+      },
+      {
+        "id": "CAPEC-83",
+        "reason_es": "XPath injection techniques can provide insight into command injection methodologies, relevant to the CVE's context."
+      },
+      {
+        "id": "CAPEC-7",
+        "reason_es": "Blind SQL injection methods can provide perspective on command injection scenarios similar to this CVE."
+      },
+      {
+        "id": "T1190",
+        "reason_es": "Exploiting a public-facing application is central to understanding the vulnerability detailed in CVE-2026-20841."
+      },
+      {
+        "id": "T1574",
+        "reason_es": "This technique involves hijacking execution flow, closely related to command injection vulnerabilities outlined in the CVE."
+      },
+      {
+        "id": "T1574.006",
+        "reason_es": "Dynamic Linker Hijacking is a specific method for executing malicious payloads which corresponds to the command injection risks in the CVE."
+      },
+      {
+        "id": "T1027",
+        "reason_es": "Obfuscating files or information can create conditions where command injection exploits are harder to detect, relevant to this CVE."
+      },
+      {
+        "id": "T1562.003",
+        "reason_es": "Understanding how to manipulate execution flow is crucial for addressing vulnerabilities such as those presented in the CVE."
+      },
+      {
+        "id": "T1562.007",
+        "reason_es": "The path interception can lead to command execution vulnerabilities as described in the CVE."
+      },
+      {
+        "id": "D3-APCA",
+        "reason_es": "Application Protocol Command Analysis pertains to detecting unauthorized activity relevant to command injection vulnerabilities."
+      },
+      {
+        "id": "D3-CF",
+        "reason_es": "Content Filtering techniques are critical for sanitizing input and mitigating risks similar to those described in the CVE."
+      },
+      {
+        "id": "D3-RC",
+        "reason_es": "Restoring configuration can help revert unauthorized changes made through command injection vulnerabilities."
+      },
+      {
+        "id": "D3-FA",
+        "reason_es": "File Analysis can be key in monitoring and mitigating risks from command execution enabled by vulnerabilities like those in the CVE."
+      },
+      {
+        "id": "D3-DA",
+        "reason_es": "Dynamic Analysis helps detect potential malicious behavior attributable to command injection vulnerabilities."
+      },
+      {
+        "id": "D3-NTA",
+        "reason_es": "Network Traffic Analysis can provide insights into detecting attacks based on command injection vulnerabilities."
+      }
+    ],
+    "node_reason_by_id": {
+      "CVE-2026-20841": "Esta CVE aborda un problema crítico de inyección de comandos en la aplicación Notepad de Windows.",
+      "CWE-707": "This CWE highlights issues with improper neutralization which could lead to malicious commands being executed.",
+      "CWE-74": "This CWE discusses the risks of improper neutralization of special elements that can be exploited via injection, relevant to the context of this CVE.",
+      "CWE-77": "This CWE defines the challenge of improper neutralization of command elements, important for understanding the risks associated with command injection vulnerabilities.",
+      "CAPEC-248": "This attack pattern relates directly to command injection techniques which can be used to exploit vulnerabilities similar to CVE-2026-20841.",
+      "CAPEC-14": "This attack pattern describes how adversaries can execute commands through manipulation, which is applicable to the vulnerabilities present in the CVE.",
+      "CAPEC-76": "Manipulating inputs to target software is echoed in this CAPEC entry and ties closely to the command injection nature of the CVE.",
+      "CAPEC-13": "This attack pattern focuses on subverting the expected operations of software via environment variables, which is relevant to command injection.",
+      "CAPEC-83": "XPath injection techniques can provide insight into command injection methodologies, relevant to the CVE's context.",
+      "CAPEC-7": "Blind SQL injection methods can provide perspective on command injection scenarios similar to this CVE.",
+      "T1190": "Exploiting a public-facing application is central to understanding the vulnerability detailed in CVE-2026-20841.",
+      "T1574": "This technique involves hijacking execution flow, closely related to command injection vulnerabilities outlined in the CVE.",
+      "T1574.006": "Dynamic Linker Hijacking is a specific method for executing malicious payloads which corresponds to the command injection risks in the CVE.",
+      "T1027": "Obfuscating files or information can create conditions where command injection exploits are harder to detect, relevant to this CVE.",
+      "T1562.003": "Understanding how to manipulate execution flow is crucial for addressing vulnerabilities such as those presented in the CVE.",
+      "T1562.007": "The path interception can lead to command execution vulnerabilities as described in the CVE.",
+      "D3-APCA": "Application Protocol Command Analysis pertains to detecting unauthorized activity relevant to command injection vulnerabilities.",
+      "D3-CF": "Content Filtering techniques are critical for sanitizing input and mitigating risks similar to those described in the CVE.",
+      "D3-RC": "Restoring configuration can help revert unauthorized changes made through command injection vulnerabilities.",
+      "D3-FA": "File Analysis can be key in monitoring and mitigating risks from command execution enabled by vulnerabilities like those in the CVE.",
+      "D3-DA": "Dynamic Analysis helps detect potential malicious behavior attributable to command injection vulnerabilities.",
+      "D3-NTA": "Network Traffic Analysis can provide insights into detecting attacks based on command injection vulnerabilities."
     },
-    "selected_route": {
-      "cve": [
-        {
-          "id": "CVE-2024-37079",
-          "type": "cve",
-          "name": "VMware vCenter Server DCERPC heap-overflow RCE",
-          "official_url": "https://nvd.nist.gov/vuln/detail/CVE-2024-37079",
-          "source_type": "nvd",
-          "reason_es": "Vulnerabilidad objetivo que requiere defensa contra explotación de aplicación pública en VMware vCenter Server"
-        }
-      ],
-      "cwe": [
-        {
-          "id": "CWE-787",
-          "type": "cwe",
-          "name": "Out-of-bounds Write",
-          "official_url": "https://cwe.mitre.org/data/definitions/787.html",
-          "source_type": "mitre_cwe",
-          "reason_es": "Debilidad raíz del desbordamiento de búfer de montón en DCERPC que causa la vulnerabilidad"
-        }
-      ],
-      "capec": [
-        {
-          "id": "CAPEC-100",
-          "type": "capec",
-          "name": "Overflow Buffers",
-          "official_url": "https://capec.mitre.org/data/definitions/100.html",
-          "source_type": "mitre_capec",
-          "reason_es": "Patrón de ataque de desbordamiento de búfer que describe el mecanismo de explotación de la vulnerabilidad"
-        }
-      ],
-      "attack": [
-        {
-          "id": "T1190",
-          "type": "attack",
-          "name": "Exploit Public-Facing Application",
-          "official_url": "https://attack.mitre.org/techniques/T1190/",
-          "source_type": "mitre_attack",
-          "reason_es": "Técnica de acceso inicial que describe la explotación de VMware vCenter Server expuesto en Internet"
-        }
-      ],
-      "d3fend": [
-        {
-          "id": "D3-ITF",
-          "type": "d3fend",
-          "name": "Inbound Traffic Filtering",
-          "official_url": "https://d3fend.mitre.org/technique/D3-ITF/",
-          "source_type": "mitre_d3fend",
-          "reason_es": "Defensa de filtrado de tráfico entrante para restringir acceso a DCERPC y servicios de vCenter"
-        },
-        {
-          "id": "D3-NTA",
-          "type": "d3fend",
-          "name": "Network Traffic Analysis",
-          "official_url": "https://d3fend.mitre.org/technique/D3-NTA/",
-          "source_type": "mitre_d3fend",
-          "reason_es": "Análisis de tráfico de red para detectar patrones anómalos de explotación de desbordamiento"
-        },
-        {
-          "id": "D3-NTSA",
-          "type": "d3fend",
-          "name": "Network Traffic Signature Analysis",
-          "official_url": "https://d3fend.mitre.org/technique/D3-NTSA/",
-          "source_type": "mitre_d3fend",
-          "reason_es": "Análisis de firmas de tráfico para identificar intentos de explotación de heap-overflow en DCERPC"
-        },
-        {
-          "id": "D3-AVE",
-          "type": "d3fend",
-          "name": "Asset Vulnerability Enumeration",
-          "official_url": "https://d3fend.mitre.org/technique/D3-AVE/",
-          "source_type": "mitre_d3fend",
-          "reason_es": "Enumeración de vulnerabilidades de activos para identificar instancias de vCenter Server susceptibles"
-        },
-        {
-          "id": "D3-PSEP",
-          "type": "d3fend",
-          "name": "Process Segment Execution Prevention",
-          "official_url": "https://d3fend.mitre.org/technique/D3-PSEP/",
-          "source_type": "mitre_d3fend",
-          "reason_es": "Prevención de ejecución de segmentos de proceso para mitigar ejecución de código remoto post-explotación"
-        }
-      ]
-    },
-    "validation": {
-      "status": "pass",
-      "errors": [],
-      "validator": "a2d_curated_route_validator"
-    },
+    "node_reason_source": "llm_polished",
     "llm_adapter": {
       "used": true,
       "mode": "llm",
-      "provider": "anthropic",
-      "model": "claude-haiku-4-5-20251001",
+      "provider": "openai",
+      "model": "gpt-4o-mini",
       "temperature": 0.0,
       "max_output_tokens": 4000,
       "require_validation": true,
@@ -127,7 +181,318 @@
       "errors": [],
       "provider_errors": [],
       "providers_attempted": [
-        "anthropic"
+        "openai"
+      ]
+    }
+  },
+  "curated_route": {
+    "schema_version": "1.0",
+    "input": "",
+    "normalized_input": "",
+    "mode": "official_rag_grounded",
+    "selection_method": "llm_cherry_picker",
+    "runtime_public_api_calls": false,
+    "stages": [
+      {
+        "type": "cve",
+        "label": "CVE",
+        "available_count": 1,
+        "selected": [
+          {
+            "id": "CVE-2026-20841",
+            "type": "cve",
+            "name": "CVE-2026-20841",
+            "description": "",
+            "official_link": "",
+            "source_ref": "missing_source_ref",
+            "rank": null,
+            "score": null,
+            "reason_es": "Esta CVE aborda un problema crítico de inyección de comandos en la aplicación Notepad de Windows."
+          }
+        ]
+      },
+      {
+        "type": "cwe",
+        "label": "CWE",
+        "available_count": 3,
+        "selected": [
+          {
+            "id": "CWE-707",
+            "type": "cwe",
+            "name": "CWE-707",
+            "description": "",
+            "official_link": "",
+            "source_ref": "missing_source_ref",
+            "rank": null,
+            "score": null,
+            "reason_es": "This CWE highlights issues with improper neutralization which could lead to malicious commands being executed."
+          },
+          {
+            "id": "CWE-74",
+            "type": "cwe",
+            "name": "CWE-74",
+            "description": "",
+            "official_link": "",
+            "source_ref": "missing_source_ref",
+            "rank": null,
+            "score": null,
+            "reason_es": "This CWE discusses the risks of improper neutralization of special elements that can be exploited via injection, relevant to the context of this CVE."
+          },
+          {
+            "id": "CWE-77",
+            "type": "cwe",
+            "name": "CWE-77",
+            "description": "",
+            "official_link": "",
+            "source_ref": "missing_source_ref",
+            "rank": null,
+            "score": null,
+            "reason_es": "This CWE defines the challenge of improper neutralization of command elements, important for understanding the risks associated with command injection vulnerabilities."
+          }
+        ]
+      },
+      {
+        "type": "capec",
+        "label": "CAPEC",
+        "available_count": 6,
+        "selected": [
+          {
+            "id": "CAPEC-248",
+            "type": "capec",
+            "name": "CAPEC-248",
+            "description": "",
+            "official_link": "",
+            "source_ref": "missing_source_ref",
+            "rank": null,
+            "score": null,
+            "reason_es": "This attack pattern relates directly to command injection techniques which can be used to exploit vulnerabilities similar to CVE-2026-20841."
+          },
+          {
+            "id": "CAPEC-14",
+            "type": "capec",
+            "name": "CAPEC-14",
+            "description": "",
+            "official_link": "",
+            "source_ref": "missing_source_ref",
+            "rank": null,
+            "score": null,
+            "reason_es": "This attack pattern describes how adversaries can execute commands through manipulation, which is applicable to the vulnerabilities present in the CVE."
+          },
+          {
+            "id": "CAPEC-76",
+            "type": "capec",
+            "name": "CAPEC-76",
+            "description": "",
+            "official_link": "",
+            "source_ref": "missing_source_ref",
+            "rank": null,
+            "score": null,
+            "reason_es": "Manipulating inputs to target software is echoed in this CAPEC entry and ties closely to the command injection nature of the CVE."
+          },
+          {
+            "id": "CAPEC-13",
+            "type": "capec",
+            "name": "CAPEC-13",
+            "description": "",
+            "official_link": "",
+            "source_ref": "missing_source_ref",
+            "rank": null,
+            "score": null,
+            "reason_es": "This attack pattern focuses on subverting the expected operations of software via environment variables, which is relevant to command injection."
+          },
+          {
+            "id": "CAPEC-83",
+            "type": "capec",
+            "name": "CAPEC-83",
+            "description": "",
+            "official_link": "",
+            "source_ref": "missing_source_ref",
+            "rank": null,
+            "score": null,
+            "reason_es": "XPath injection techniques can provide insight into command injection methodologies, relevant to the CVE's context."
+          },
+          {
+            "id": "CAPEC-7",
+            "type": "capec",
+            "name": "CAPEC-7",
+            "description": "",
+            "official_link": "",
+            "source_ref": "missing_source_ref",
+            "rank": null,
+            "score": null,
+            "reason_es": "Blind SQL injection methods can provide perspective on command injection scenarios similar to this CVE."
+          }
+        ]
+      },
+      {
+        "type": "attack",
+        "label": "ATT&CK",
+        "available_count": 6,
+        "selected": [
+          {
+            "id": "T1190",
+            "type": "attack",
+            "name": "T1190",
+            "description": "",
+            "official_link": "",
+            "source_ref": "missing_source_ref",
+            "rank": null,
+            "score": null,
+            "reason_es": "Exploiting a public-facing application is central to understanding the vulnerability detailed in CVE-2026-20841."
+          },
+          {
+            "id": "T1574",
+            "type": "attack",
+            "name": "T1574",
+            "description": "",
+            "official_link": "",
+            "source_ref": "missing_source_ref",
+            "rank": null,
+            "score": null,
+            "reason_es": "This technique involves hijacking execution flow, closely related to command injection vulnerabilities outlined in the CVE."
+          },
+          {
+            "id": "T1574.006",
+            "type": "attack",
+            "name": "T1574.006",
+            "description": "",
+            "official_link": "",
+            "source_ref": "missing_source_ref",
+            "rank": null,
+            "score": null,
+            "reason_es": "Dynamic Linker Hijacking is a specific method for executing malicious payloads which corresponds to the command injection risks in the CVE."
+          },
+          {
+            "id": "T1027",
+            "type": "attack",
+            "name": "T1027",
+            "description": "",
+            "official_link": "",
+            "source_ref": "missing_source_ref",
+            "rank": null,
+            "score": null,
+            "reason_es": "Obfuscating files or information can create conditions where command injection exploits are harder to detect, relevant to this CVE."
+          },
+          {
+            "id": "T1562.003",
+            "type": "attack",
+            "name": "T1562.003",
+            "description": "",
+            "official_link": "",
+            "source_ref": "missing_source_ref",
+            "rank": null,
+            "score": null,
+            "reason_es": "Understanding how to manipulate execution flow is crucial for addressing vulnerabilities such as those presented in the CVE."
+          },
+          {
+            "id": "T1562.007",
+            "type": "attack",
+            "name": "T1562.007",
+            "description": "",
+            "official_link": "",
+            "source_ref": "missing_source_ref",
+            "rank": null,
+            "score": null,
+            "reason_es": "The path interception can lead to command execution vulnerabilities as described in the CVE."
+          }
+        ]
+      },
+      {
+        "type": "d3fend",
+        "label": "D3FEND",
+        "available_count": 6,
+        "selected": [
+          {
+            "id": "D3-APCA",
+            "type": "d3fend",
+            "name": "D3-APCA",
+            "description": "",
+            "official_link": "",
+            "source_ref": "missing_source_ref",
+            "rank": null,
+            "score": null,
+            "reason_es": "Application Protocol Command Analysis pertains to detecting unauthorized activity relevant to command injection vulnerabilities."
+          },
+          {
+            "id": "D3-CF",
+            "type": "d3fend",
+            "name": "D3-CF",
+            "description": "",
+            "official_link": "",
+            "source_ref": "missing_source_ref",
+            "rank": null,
+            "score": null,
+            "reason_es": "Content Filtering techniques are critical for sanitizing input and mitigating risks similar to those described in the CVE."
+          },
+          {
+            "id": "D3-RC",
+            "type": "d3fend",
+            "name": "D3-RC",
+            "description": "",
+            "official_link": "",
+            "source_ref": "missing_source_ref",
+            "rank": null,
+            "score": null,
+            "reason_es": "Restoring configuration can help revert unauthorized changes made through command injection vulnerabilities."
+          },
+          {
+            "id": "D3-FA",
+            "type": "d3fend",
+            "name": "D3-FA",
+            "description": "",
+            "official_link": "",
+            "source_ref": "missing_source_ref",
+            "rank": null,
+            "score": null,
+            "reason_es": "File Analysis can be key in monitoring and mitigating risks from command execution enabled by vulnerabilities like those in the CVE."
+          },
+          {
+            "id": "D3-DA",
+            "type": "d3fend",
+            "name": "D3-DA",
+            "description": "",
+            "official_link": "",
+            "source_ref": "missing_source_ref",
+            "rank": null,
+            "score": null,
+            "reason_es": "Dynamic Analysis helps detect potential malicious behavior attributable to command injection vulnerabilities."
+          },
+          {
+            "id": "D3-NTA",
+            "type": "d3fend",
+            "name": "D3-NTA",
+            "description": "",
+            "official_link": "",
+            "source_ref": "missing_source_ref",
+            "rank": null,
+            "score": null,
+            "reason_es": "Network Traffic Analysis can provide insights into detecting attacks based on command injection vulnerabilities."
+          }
+        ]
+      }
+    ],
+    "full_traceability_counts": {},
+    "rationale_es": "Esta narrativa aborda la vulnerabilidad CVE-2026-20841, que permite la inyección de comandos en la aplicación Notepad de Windows. Se destaca la importancia de mecanismos defensivos adecuados para mitigar el riesgo crítico asociado.",
+    "validation": {
+      "status": "pass",
+      "errors": [],
+      "validator": "a2d_curated_route_validator"
+    },
+    "llm_adapter": {
+      "used": true,
+      "mode": "llm",
+      "provider": "openai",
+      "model": "gpt-4o-mini",
+      "temperature": 0.0,
+      "max_output_tokens": 4000,
+      "require_validation": true,
+      "allow_external_knowledge": false,
+      "runtime_public_api_calls": false,
+      "fallback_reason": "",
+      "errors": [],
+      "provider_errors": [],
+      "providers_attempted": [
+        "openai"
       ]
     }
   }

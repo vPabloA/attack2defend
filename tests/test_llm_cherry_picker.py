@@ -146,8 +146,8 @@ def _capability_and_context():
 def _llm_config(**overrides) -> AiCherryPickerConfig:
     defaults = dict(
         mode="llm",
-        provider="gemini",
-        model="gemini-2.5-flash-lite",
+        provider="openai",
+        model="gpt-4o-mini",
         temperature=0,
         max_output_tokens=4000,
         require_validation=True,
@@ -176,10 +176,12 @@ def test_config_defaults_to_cheap_functional_models(monkeypatch):
 
     assert cfg.mode == "deterministic"
     assert cfg.provider == "openai"
-    assert cfg.model == "gpt-5-nano"
+    assert cfg.model == "gpt-4o-mini"
     assert DEFAULT_MODELS["gemini"] == "gemini-2.5-flash-lite"
-    assert DEFAULT_MODELS["openai"] == "gpt-5-nano"
-    assert DEFAULT_MODELS["anthropic"] == "claude-3-5-haiku-latest"
+    assert DEFAULT_MODELS["openai"] == "gpt-4o-mini"
+    assert DEFAULT_MODELS["anthropic"] == "claude-haiku-4-5-20251001"
+    assert AUTO_PROVIDER_ORDER == ("openai",)
+    assert cfg.provider_order == AUTO_PROVIDER_ORDER
     assert cfg.allow_external_knowledge is False
     assert cfg.runtime_public_api_calls is False
 
