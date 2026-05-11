@@ -16,6 +16,9 @@ node_modules/
 data/raw/
 data/snapshots/
 data/reports/
+data/knowledge-store/
+data/public-cache/
+data/.tmp-enriched-knowledge-bundle.json
 data/candidates/audit_log.jsonl
 data/intelligence/intelligence-factory-report.json
 data/mappings/ai_promoted/
