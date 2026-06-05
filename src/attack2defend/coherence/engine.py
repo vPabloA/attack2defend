@@ -85,7 +85,7 @@ _NODE_STUBS: dict[str, dict[str, str]] = {
     "D3-SWI": {"name": "Software Inventory", "url": "https://d3fend.mitre.org/technique/D3-SWI/"},
     "D3-AVE": {"name": "Asset Vulnerability Enumeration", "url": "https://d3fend.mitre.org/technique/D3-AVE/"},
     "D3-NI":  {"name": "Network Isolation", "url": "https://d3fend.mitre.org/technique/D3-NI/"},
-    "D3-NTF": {"name": "Network Traffic Filtering", "url": "https://d3fend.mitre.org/technique/D3-NTA/"},
+    "D3-NTF": {"name": "Network Traffic Filtering", "url": "https://d3fend.mitre.org/technique/D3-NTF/"},
     "D3-NTA": {"name": "Network Traffic Analysis", "url": "https://d3fend.mitre.org/technique/D3-NTA/"},
     "D3-PA":  {"name": "Process Analysis", "url": "https://d3fend.mitre.org/technique/D3-PA/"},
     "D3-PSA": {"name": "Process Spawn Analysis", "url": "https://d3fend.mitre.org/technique/D3-PSA/"},
@@ -97,6 +97,18 @@ _NODE_STUBS: dict[str, dict[str, str]] = {
 }
 
 _LAYER_INDEX = {"cve": 0, "cwe": 1, "capec": 2, "attack": 3, "d3fend": 4}
+
+
+def _build_baseline_known_ids() -> frozenset[str]:
+    ids: set[str] = set(_NODE_STUBS.keys())
+    for mapping in (_BASELINE_CWE_CAPEC, _BASELINE_CAPEC_ATTACK, _BASELINE_ATTACK_D3FEND):
+        for k, vs in mapping.items():
+            ids.add(k)
+            ids.update(vs)
+    return frozenset(ids)
+
+
+BASELINE_KNOWN_IDS: frozenset[str] = _build_baseline_known_ids()
 
 
 def analyze(
@@ -127,6 +139,12 @@ def analyze(
     if bundle_nodes:
         for n in bundle_nodes:
             bundle_node_map[n["id"].upper()] = n
+
+    # IDs provably known from external sources (baselines + bundle input).
+    # The validator uses this to enforce no-invention without being tautological.
+    source_known_ids: set[str] = set(BASELINE_KNOWN_IDS)
+    source_known_ids.add(input_upper)
+    source_known_ids.update(bundle_node_map.keys())
 
     # --- Step 2: Walk chain starting from input_type ---
     all_nodes: list[CoherenceNode] = []
@@ -251,6 +269,10 @@ def analyze(
     # --- Determine status ---
     artifact.status = _determine_status(artifact)
 
+    # Expose the externally-derived known IDs so the validator can do a
+    # non-tautological node check (not against artifact.all_node_ids()).
+    artifact.source_known_ids = frozenset(source_known_ids)
+
     return artifact
 
 
@@ -313,11 +335,13 @@ def _resolve_capec_layer(
     for cwe_id in cwe_ids:
         cwe_upper = cwe_id.upper()
         capec_ids: list[str] = []
+        capec_ids_from_live = False
 
         if live:
             from ..source_resolvers import cwe as _cwe
             cwe_data = _cwe.resolve(cwe_upper, cache_dir=cache_dir)
             capec_ids = cwe_data.get("related_capec_ids", [])
+            capec_ids_from_live = bool(capec_ids)
 
         if not capec_ids:
             capec_ids = _BASELINE_CWE_CAPEC.get(cwe_upper, [])
@@ -347,9 +371,11 @@ def _resolve_capec_layer(
                 from ..source_resolvers import capec as _capec
                 capec_data = _capec.resolve(capec_upper, cache_dir=cache_dir)
 
-            # Basis: if from MITRE CWE data it's official_related; if from baseline, analytical_inferred
-            basis = "official_related" if live and capec_ids else "analytical_inferred"
-            src_refs = ["cwe_mitre"] if live else ["baseline:cwe_capec"]
+            # Only claim official_related when IDs actually came from the live MITRE resolver.
+            # If the live call returned nothing and we fell back to baseline/bundle, the provenance
+            # is analytical_inferred regardless of whether --live was passed.
+            basis = "official_related" if capec_ids_from_live else "analytical_inferred"
+            src_refs = ["cwe_mitre"] if capec_ids_from_live else ["baseline:cwe_capec"]
 
             node = _make_node(capec_upper, "capec",
                               description=capec_data.get("description", ""),
@@ -386,11 +412,13 @@ def _resolve_attack_layer(
     for capec_id in capec_ids:
         capec_upper = capec_id.upper()
         attack_ids: list[str] = []
+        attack_ids_from_live = False
 
         if live:
             from ..source_resolvers import capec as _capec
             capec_data = _capec.resolve(capec_upper, cache_dir=cache_dir)
             attack_ids = capec_data.get("attack_technique_ids", [])
+            attack_ids_from_live = bool(attack_ids)
 
         if not attack_ids:
             attack_ids = _BASELINE_CAPEC_ATTACK.get(capec_upper, [])
@@ -404,8 +432,9 @@ def _resolve_attack_layer(
                 continue
             seen.add(a_upper)
 
-            basis = "official_related" if live and attack_ids else "analytical_inferred"
-            src_refs = ["capec_mitre"] if live else ["baseline:capec_attack"]
+            # Only claim official_related when IDs actually came from the live CAPEC resolver.
+            basis = "official_related" if attack_ids_from_live else "analytical_inferred"
+            src_refs = ["capec_mitre"] if attack_ids_from_live else ["baseline:capec_attack"]
 
             attack_data: dict[str, Any] = {}
             if live:

@@ -164,6 +164,21 @@
           "requires_curation": {"type": "boolean"}
         }
       }
+    },
+    "validation_context": {
+      "type": "object",
+      "description": "Portable evidence set for offline no-invention checks",
+      "properties": {
+        "source_known_ids": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "All IDs confirmed by external sources at generation time"
+        },
+        "source_known_ids_origin": {
+          "type": "string",
+          "description": "Description of which sources contributed to source_known_ids"
+        }
+      }
     }
   },
   "$defs": {

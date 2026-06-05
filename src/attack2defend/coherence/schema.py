@@ -204,6 +204,10 @@ class RouteCoherenceArtifact:
     # Gaps
     gaps: list[dict[str, Any]] = field(default_factory=list)
 
+    # IDs confirmed by external sources (baselines + bundle + live APIs).
+    # Used by the validator for non-tautological node checks. Not serialized.
+    source_known_ids: frozenset[str] = field(default_factory=frozenset)
+
     @property
     def canonical_chain(self) -> list[str]:
         """Primary path: one node per framework layer."""
@@ -244,4 +248,8 @@ class RouteCoherenceArtifact:
             "provenance": self.provenance.to_dict(),
             "source_summary": self.source_summary,
             "gaps": self.gaps,
+            "validation_context": {
+                "source_known_ids": sorted(self.source_known_ids),
+                "source_known_ids_origin": "baseline + bundle + live resolvers",
+            },
         }
