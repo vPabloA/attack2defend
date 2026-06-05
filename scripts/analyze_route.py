@@ -156,7 +156,7 @@ def main(argv: list[str] | None = None) -> int:
     print(f"[1/9] Bundle loaded ({len(bundle_nodes)} nodes, {len(bundle_edges)} edges)")
 
     # Run coherence engine
-    cache_dir = _REPO_ROOT / "data" / "source-cache"
+    cache_dir = None if args.no_cache else (_REPO_ROOT / "data" / "source-cache")
     artifact = _engine.analyze(
         input_id=input_id,
         bundle_nodes=bundle_nodes,
