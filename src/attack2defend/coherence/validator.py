@@ -49,7 +49,9 @@ class ValidationReport:
 def validate(artifact: RouteCoherenceArtifact, known_ids: set[str] | None = None) -> ValidationReport:
     """Run all validation rules against the artifact. Returns a ValidationReport."""
     report = ValidationReport()
-    known = known_ids or artifact.all_node_ids()
+    # Use caller-supplied set first, then the engine-collected source_known_ids.
+    # Never fall back to artifact.all_node_ids() — that would be circular.
+    known: set[str] | frozenset[str] = known_ids or artifact.source_known_ids
 
     _check_node_ids(artifact.all_nodes, known, report)
     _check_edge_provenance(artifact.all_edges, report)

@@ -108,7 +108,9 @@ const LEGEND_ITEMS: Array<{ label: string; type: string }> = [
 // ── Graph builder from route/bundle data ───────────────────────────────────
 
 function confidenceToBasis(confidence?: string, sourceKind?: string): string {
-  if (sourceKind === 'curated' || sourceKind === 'official') return 'official_explicit';
+  if (sourceKind === 'official') return 'official_explicit';
+  // 'curated' means analytically reviewed — not an official MITRE explicit mapping
+  if (sourceKind === 'curated') return 'official_related';
   if (confidence === 'high') return 'official_related';
   if (confidence === 'medium') return 'analytical_inferred';
   if (confidence === 'low') return 'conditional';

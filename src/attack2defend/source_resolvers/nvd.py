@@ -28,7 +28,7 @@ def resolve(cve_id: str, use_cache: bool = True, cache_dir: Path | None = None) 
     if use_cache:
         cached = _cache.load(cve_upper, _SOURCE, cache_dir)
         if cached is not None:
-            return cached
+            return {**cached, "_cache_hit": True}
 
     data = _fetch(cve_upper)
     if data and use_cache:
