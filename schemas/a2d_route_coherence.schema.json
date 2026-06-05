@@ -1,0 +1,246 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "a2d_route_coherence.schema.json",
+  "title": "Attack2Defend Route Coherence Artifact",
+  "description": "Schema for the route coherence artifact produced by the Route Coherence Engine. Covers any input (CVE, CWE, CAPEC, ATT&CK, D3FEND) and traces the full chain to D3FEND countermeasures.",
+  "type": "object",
+  "required": ["artifact_type", "schema_version", "input", "status", "route", "graph", "provenance"],
+  "additionalProperties": false,
+  "properties": {
+    "artifact_type": {
+      "type": "string",
+      "const": "a2d_route_coherence"
+    },
+    "schema_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "input": {
+      "type": "string",
+      "description": "Normalized input identifier (e.g. CVE-2026-23479, CWE-416, T1190)"
+    },
+    "input_type": {
+      "type": "string",
+      "enum": ["cve", "cwe", "capec", "attack", "d3fend", "unknown"]
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["complete", "complete_with_inferred_edges", "partial", "degraded", "failed"]
+    },
+    "route": {
+      "type": "object",
+      "required": ["canonical_chain"],
+      "properties": {
+        "canonical_chain": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Ordered list of IDs forming the primary coherence path"
+        },
+        "primary_nodes": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/coherence_node"}
+        },
+        "secondary_nodes": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/coherence_node"}
+        },
+        "conditional_nodes": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/coherence_node"}
+        },
+        "defensive_nodes": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/coherence_node"}
+        },
+        "all_nodes": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/coherence_node"}
+        },
+        "all_edges": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/coherence_edge"}
+        }
+      }
+    },
+    "analysis_es": {
+      "type": "object",
+      "properties": {
+        "title": {"type": "string"},
+        "executive_summary": {"type": "string"},
+        "logical_sequence": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "level": {"type": "integer"},
+              "element": {"type": "string"},
+              "coherence_reading": {"type": "string"}
+            }
+          }
+        },
+        "technical_narrative": {"type": "string"},
+        "ascii_route": {"type": "string"},
+        "conclusion": {"type": "string"},
+        "narrative_source": {
+          "type": "string",
+          "enum": ["llm", "deterministic"],
+          "description": "Whether the narrative was LLM-generated or built deterministically"
+        }
+      }
+    },
+    "graph": {
+      "type": "object",
+      "required": ["nodes", "edges"],
+      "properties": {
+        "nodes": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/graph_node"}
+        },
+        "edges": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/graph_edge"}
+        },
+        "layout": {
+          "type": "string",
+          "default": "layered-lr"
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "properties": {
+        "official_explicit": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Edge IDs where NVD/MITRE explicitly documents the relationship"
+        },
+        "official_related": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Edge IDs derived from official MITRE mappings (CWE/CAPEC/ATT&CK/D3FEND)"
+        },
+        "analytical_inferred": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Edge IDs proposed analytically with existing node IDs as anchor"
+        },
+        "conditional": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Edge IDs that apply only in specific exploitation contexts"
+        },
+        "unverified": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Edge IDs with insufficient source support (score < 25)"
+        }
+      }
+    },
+    "source_summary": {
+      "type": "object",
+      "description": "Summary of which live sources were queried",
+      "properties": {
+        "nvd": {"type": "boolean"},
+        "cwe_mitre": {"type": "boolean"},
+        "capec_mitre": {"type": "boolean"},
+        "attack_stix": {"type": "boolean"},
+        "d3fend_api": {"type": "boolean"},
+        "vendor_advisory": {"type": "boolean"},
+        "bundle_local": {"type": "boolean"},
+        "cache_hit": {"type": "boolean"}
+      }
+    },
+    "gaps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "segment": {"type": "string"},
+          "description": {"type": "string"},
+          "requires_curation": {"type": "boolean"}
+        }
+      }
+    }
+  },
+  "$defs": {
+    "coherence_node": {
+      "type": "object",
+      "required": ["id", "type", "name"],
+      "properties": {
+        "id": {"type": "string"},
+        "type": {"type": "string", "enum": ["cve", "cwe", "capec", "attack", "d3fend"]},
+        "name": {"type": "string"},
+        "description": {"type": "string"},
+        "url": {"type": "string"},
+        "role": {
+          "type": "string",
+          "enum": ["root", "primary", "secondary", "conditional", "defensive"]
+        },
+        "confidence": {
+          "type": "string",
+          "enum": ["official", "related", "inferred", "conditional", "unverified"]
+        },
+        "source_refs": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "score": {"type": "number"}
+      }
+    },
+    "coherence_edge": {
+      "type": "object",
+      "required": ["source", "target", "relationship", "mapping_basis"],
+      "properties": {
+        "source": {"type": "string"},
+        "target": {"type": "string"},
+        "relationship": {"type": "string"},
+        "mapping_basis": {
+          "type": "string",
+          "enum": ["official_explicit", "official_related", "analytical_inferred", "conditional", "unverified"]
+        },
+        "confidence": {"type": "string"},
+        "score": {"type": "number"},
+        "source_refs": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "rationale_es": {"type": "string"},
+        "notes": {"type": "string"}
+      }
+    },
+    "graph_node": {
+      "type": "object",
+      "required": ["id", "type", "label", "xLayer"],
+      "properties": {
+        "id": {"type": "string"},
+        "type": {"type": "string", "enum": ["cve", "cwe", "capec", "attack", "d3fend"]},
+        "label": {"type": "string"},
+        "title": {"type": "string"},
+        "subtitle": {"type": "string"},
+        "role": {"type": "string"},
+        "confidence": {"type": "string"},
+        "source_refs": {"type": "array", "items": {"type": "string"}},
+        "xLayer": {"type": "integer", "minimum": 0, "maximum": 4}
+      }
+    },
+    "graph_edge": {
+      "type": "object",
+      "required": ["source", "target", "mapping_basis"],
+      "properties": {
+        "source": {"type": "string"},
+        "target": {"type": "string"},
+        "label": {"type": "string"},
+        "mapping_basis": {
+          "type": "string",
+          "enum": ["official_explicit", "official_related", "analytical_inferred", "conditional", "unverified"]
+        },
+        "rationale_es": {"type": "string"},
+        "source_refs": {"type": "array", "items": {"type": "string"}}
+      }
+    }
+  }
+}

@@ -2,10 +2,11 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import fallbackRoute from './data/log4shell.route.json';
 import './styles.css';
+import { RouteGraphTab } from './RouteGraph';
 
 type NodeType = 'cve' | 'cwe' | 'capec' | 'attack' | 'd3fend' | 'artifact' | 'control' | 'detection' | 'evidence' | 'gap' | 'action';
 type CoverageStatus = 'covered' | 'partial' | 'missing' | 'unknown' | 'not_applicable';
-type TabId = 'route' | 'attack' | 'd3fend' | 'coverage' | 'export';
+type TabId = 'route' | 'attack' | 'd3fend' | 'coverage' | 'export' | 'graph';
 type BundleSource = 'generated' | 'fallback';
 
 type RouteNode = {
@@ -370,6 +371,7 @@ function App() {
       <nav className="tabs" aria-label="Navigator tabs">
         {[
           ['route', 'Análisis'],
+          ['graph', 'Ruta Visual'],
           ['attack', 'ATT&CK Navigator'],
           ['d3fend', 'D3FEND CAD'],
           ['coverage', 'Coverage'],
@@ -387,6 +389,7 @@ function App() {
             capabilityView && curatedRoute ? <AnalysisTab view={capabilityView} curatedRoute={curatedRoute} bundle={bundle} bundleSource={bundleSource} onSelect={selectNode} aiArtifact={activeAiArtifact} /> : null
           )}
 
+          {activeTab === 'graph' && <RouteGraphTab bundle={bundle} activeRoute={activeRoute} selectedNode={selectedNode} />}
           {activeTab === 'attack' && <AttackNavigatorTab bundle={bundle} activeRoute={activeRoute} navigatorLayer={navigatorLayer} />}
           {activeTab === 'd3fend' && <D3fendCadTab bundle={bundle} activeRoute={activeRoute} cadGraph={d3fendCadGraph} />}
           {activeTab === 'coverage' && <CoverageTab rows={coverageRows} bundle={bundle} />}
