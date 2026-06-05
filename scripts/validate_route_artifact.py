@@ -1,0 +1,97 @@
+#!/usr/bin/env python3
+"""Validate a route coherence artifact against schema and provenance rules.
+
+Usage:
+  python scripts/validate_route_artifact.py --input CVE-2026-23479
+  python scripts/validate_route_artifact.py --artifact artifacts/routes/CVE-2026-23479/route-coherence.json
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import sys
+from pathlib import Path
+
+_REPO_ROOT = Path(__file__).parents[1]
+sys.path.insert(0, str(_REPO_ROOT / "src"))
+
+
+def _load_artifact(input_id: str | None, artifact_path: str | None) -> dict:
+    if artifact_path:
+        path = Path(artifact_path)
+    elif input_id:
+        path = _REPO_ROOT / "artifacts" / "routes" / input_id.upper() / "route-coherence.json"
+    else:
+        print("ERROR: provide --input or --artifact", file=sys.stderr)
+        sys.exit(1)
+
+    if not path.exists():
+        print(f"ERROR: artifact not found: {path}", file=sys.stderr)
+        sys.exit(1)
+
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def validate_dict(artifact: dict) -> list[str]:
+    errors: list[str] = []
+
+    if artifact.get("artifact_type") != "a2d_route_coherence":
+        errors.append("artifact_type must be 'a2d_route_coherence'")
+
+    route = artifact.get("route", {})
+    all_nodes = route.get("all_nodes", [])
+    all_edges = route.get("all_edges", [])
+    graph = artifact.get("graph", {})
+    analysis = artifact.get("analysis_es", {})
+
+    if not all_nodes:
+        errors.append("route.all_nodes is empty")
+    if not graph.get("nodes"):
+        errors.append("graph.nodes is empty")
+    if not graph.get("edges") and all_edges:
+        errors.append("graph.edges is empty but all_edges is not")
+    if not analysis.get("technical_narrative"):
+        errors.append("analysis_es.technical_narrative is empty")
+    if not analysis.get("logical_sequence"):
+        errors.append("analysis_es.logical_sequence is empty")
+
+    node_ids = {n["id"] for n in all_nodes}
+    for edge in all_edges:
+        if not edge.get("mapping_basis"):
+            errors.append(f"Edge {edge.get('source')}→{edge.get('target')} missing mapping_basis")
+        if not edge.get("source_refs"):
+            errors.append(f"Edge {edge.get('source')}→{edge.get('target')} has no source_refs")
+        if edge.get("mapping_basis") == "official_explicit" and edge.get("score", 100) < 50:
+            errors.append(f"Edge {edge.get('source')}→{edge.get('target')} falsely claims official_explicit")
+
+    if not artifact.get("provenance"):
+        errors.append("provenance section is missing")
+
+    return errors
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description="Validate a route coherence artifact")
+    parser.add_argument("--input", default=None, help="Input ID (e.g. CVE-2026-23479)")
+    parser.add_argument("--artifact", default=None, help="Direct path to route-coherence.json")
+    args = parser.parse_args(argv)
+
+    artifact = _load_artifact(args.input, args.artifact)
+    errors = validate_dict(artifact)
+
+    if errors:
+        print(f"FAILED — {len(errors)} error(s):")
+        for e in errors:
+            print(f"  ✗ {e}")
+        return 1
+
+    print(f"PASSED — artifact for {artifact.get('input', '?')} is valid")
+    print(f"  status: {artifact.get('status')}")
+    print(f"  nodes: {len(artifact.get('route', {}).get('all_nodes', []))}")
+    print(f"  edges: {len(artifact.get('route', {}).get('all_edges', []))}")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

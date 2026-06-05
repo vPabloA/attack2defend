@@ -1,4 +1,4 @@
-.PHONY: install install-ai build build-product build-curated build-public build-backbone enforce-provenance build-canonical build-bundle mirror-intelligence graph-export validate-graph graph-sidecar api-server mcp-server soc-pack validate-api validate-mcp ga-check validate validate-parity validate-canonical validate-provenance validate-static-first validate-product validate-candidates test ui preview bootstrap-local-full preprod sync-cve2capec clean curate curate-dry-run curate-advanced promote promote-list promote-candidates evaluate-golden clean-candidates
+.PHONY: install install-ai build build-product build-curated build-public build-backbone enforce-provenance build-canonical build-bundle mirror-intelligence graph-export validate-graph graph-sidecar api-server mcp-server soc-pack validate-api validate-mcp ga-check validate validate-parity validate-canonical validate-provenance validate-static-first validate-product validate-candidates test ui preview bootstrap-local-full preprod sync-cve2capec clean curate curate-dry-run curate-advanced promote promote-list promote-candidates evaluate-golden clean-candidates analyze-route analyze-route-official validate-route render-route-graph route-ga-check
 
 PYTHON ?= python3
 PYTHONPATH := src$(if $(PYTHONPATH),:$(PYTHONPATH))
@@ -149,3 +149,23 @@ promote-list: ## Dry-run candidate processing with policy report
 
 clean-candidates:
 	$(PYTHON) scripts/intelligence/clean_candidates.py
+
+# ── Route Coherence Engine ────────────────────────────────────────────────
+# Offline/build-time only. Browser runtime reads pre-generated artifacts.
+
+analyze-route: ## Full route analysis: live sources + LLM + graph exports
+	$(PYTHON) scripts/analyze_route.py --input $(INPUT) --live --llm --graph --all-exports
+
+analyze-route-official: ## Route analysis: live sources only, no LLM
+	$(PYTHON) scripts/analyze_route.py --input $(INPUT) --live --official-only --graph --all-exports
+
+validate-route: ## Validate a pre-generated route-coherence.json
+	$(PYTHON) scripts/validate_route_artifact.py --input $(INPUT)
+
+render-route-graph: ## Render graph only (no live fetch, no LLM) from bundle data
+	$(PYTHON) scripts/analyze_route.py --input $(INPUT) --graph --all-exports
+
+route-ga-check: ## GA gate: analyze CVE-2026-23479, validate artifact, build UI
+	$(MAKE) analyze-route INPUT=CVE-2026-23479
+	$(MAKE) validate-route INPUT=CVE-2026-23479
+	cd $(UI_DIR) && npm run build
