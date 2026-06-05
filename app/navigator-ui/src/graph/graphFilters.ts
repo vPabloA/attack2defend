@@ -50,7 +50,7 @@ function prioritizeCanonical(nodes: RouteNode[]): RouteNode[] {
     const leftCanonical = isCanonicalChainType(left.type);
     const rightCanonical = isCanonicalChainType(right.type);
     if (leftCanonical !== rightCanonical) return leftCanonical ? -1 : 1;
-    if (leftCanonical && rightCanonical) return CANONICAL_CHAIN.indexOf(left.type) - CANONICAL_CHAIN.indexOf(right.type) || left.id.localeCompare(right.id);
+    if (leftCanonical && rightCanonical) return CANONICAL_CHAIN.indexOf(left.type as typeof CANONICAL_CHAIN[number]) - CANONICAL_CHAIN.indexOf(right.type as typeof CANONICAL_CHAIN[number]) || left.id.localeCompare(right.id);
     return left.type.localeCompare(right.type) || left.id.localeCompare(right.id);
   });
 }

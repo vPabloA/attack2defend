@@ -77,8 +77,8 @@ function paintNode(node: ForceNode, ctx: CanvasRenderingContext2D, globalScale: 
 function normalizeLink(link: ForceLink): GraphLink {
   return {
     ...link,
-    source: typeof link.source === 'string' ? link.source : link.source.id,
-    target: typeof link.target === 'string' ? link.target : link.target.id,
+    source: typeof link.source === 'string' ? link.source : (link.source as { id: string }).id,
+    target: typeof link.target === 'string' ? link.target : (link.target as { id: string }).id,
   };
 }
 
