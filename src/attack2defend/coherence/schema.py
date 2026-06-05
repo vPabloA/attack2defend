@@ -248,4 +248,8 @@ class RouteCoherenceArtifact:
             "provenance": self.provenance.to_dict(),
             "source_summary": self.source_summary,
             "gaps": self.gaps,
+            "validation_context": {
+                "source_known_ids": sorted(self.source_known_ids),
+                "source_known_ids_origin": "baseline + bundle + live resolvers",
+            },
         }

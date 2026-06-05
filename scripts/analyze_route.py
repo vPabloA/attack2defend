@@ -189,6 +189,7 @@ def main(argv: list[str] | None = None) -> int:
         "input": input_id,
         "source_summary": artifact.source_summary,
         "node_ids": [n.id for n in artifact.all_nodes],
+        "known_ids": sorted(artifact.source_known_ids),
     }
     sp_path = output_dir / "source-pack.json"
     sp_path.write_text(json.dumps(source_pack, ensure_ascii=False, indent=2), encoding="utf-8")

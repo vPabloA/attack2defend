@@ -102,7 +102,19 @@ def validate_dict(artifact: dict) -> list[str]:
     if not analysis.get("logical_sequence"):
         errors.append("analysis_es.logical_sequence is empty")
 
-    node_ids = {n["id"] for n in all_nodes}
+    # Portable no-invention check: node IDs must be a subset of source_known_ids
+    # recorded at generation time (baseline + bundle + live resolvers).
+    validation_ctx = artifact.get("validation_context", {})
+    known_ids: set[str] = set(validation_ctx.get("source_known_ids", []))
+    if known_ids:
+        for node in all_nodes:
+            if node["id"] not in known_ids:
+                errors.append(
+                    f"Node '{node['id']}' not in validation_context.source_known_ids — possible invented ID"
+                )
+    else:
+        errors.append("validation_context.source_known_ids is missing — offline no-invention check cannot run")
+
     for edge in all_edges:
         if not edge.get("mapping_basis"):
             errors.append(f"Edge {edge.get('source')}→{edge.get('target')} missing mapping_basis")
