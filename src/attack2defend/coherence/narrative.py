@@ -28,6 +28,40 @@ _KNOWN_ID_RE = re.compile(
     re.IGNORECASE,
 )
 
+# Per-node coherence reading prompt — temperature=0.0, max_tokens=150.
+# Produces 2-4 sentences strictly from the supplied data, no external invention.
+COHERENCE_NODE_READING_PROMPT = """\
+Eres un analista de inteligencia de amenazas que explica mappings entre marcos de ciberseguridad \
+(CVE, CWE, CAPEC, ATT&CK, D3FEND) a un SOC Tier 1.
+Genera una «Lectura de coherencia» estrictamente factual, concisa (2 a 4 frases), \
+sin creatividad ni información externa a los DATOS suministrados.
+
+DATOS DE ENTRADA:
+- CVE: {CVE_ID}
+- Descripción oficial: {CVE_DESC}
+- Nodo actual: {NODE_ID} — {NODE_LABEL}
+- Tipo de nodo: {NODE_TYPE}
+- Relación con el CVE: {RELATION_TYPE}
+- Nodos previos en la cadena: {PREV_NODES}
+- Nodos siguientes en la cadena: {NEXT_NODES}
+- Señales de calidad: {QUALITY_FLAGS}
+- Contexto relevante del producto: {PRODUCT_INFO}
+- Fuentes: {SOURCES}
+
+REGLAS OBLIGATORIAS:
+1. NO inventes detalles técnicos, impacto, exploits, parches ni referencias no presentes en los DATOS DE ENTRADA.
+2. Para nodos 'cwe': explica qué implica la debilidad y por qué aplica a este CVE.
+3. Para nodos 'capec': explica por qué el patrón es coherente con la falla. \
+Advierte si la relación es 'analytical_inferred' con ajuste débil.
+4. Para nodos 'attack': condiciona la técnica al contexto operacional real.
+5. Para nodos 'd3fend': redacta una recomendación defensiva directa y accionable.
+6. Si la relación es 'official_explicit', empieza mencionando la autoridad que la asigna.
+7. No excedas 4 frases. No incluyas saludos, despedidas ni comentarios meta.
+
+Genera ahora la lectura de coherencia para {NODE_ID}. Responde solo con el texto, sin prefijos.\
+"""
+
+
 _COHERENCE_SYSTEM_PROMPT = """
 Eres el Route Coherence Analyst de Attack2Defend.
 
@@ -88,7 +122,30 @@ def _try_llm(artifact: RouteCoherenceArtifact) -> AnalysisEs | None:
     except Exception:
         return None
 
-    return _parse_llm_response(raw, artifact)
+    result = _parse_llm_response(raw, artifact)
+    if result is None:
+        return None
+
+    # Enhance each logical sequence item with a per-node coherence reading.
+    # Uses temperature=0.0 / max_tokens=150 as specified for Tier-1 readability.
+    chain = artifact.canonical_chain
+    enhanced_seq: list[LogicalSequenceItem] = []
+    for item in result.logical_sequence:
+        idx = chain.index(item.element) if item.element in chain else -1
+        node = next((n for n in artifact.all_nodes if n.id == item.element), None)
+        prev_ids = chain[:idx] if idx > 0 else []
+        next_ids = chain[idx + 1:] if idx >= 0 else []
+        per_node_reading = ""
+        if node:
+            per_node_reading = _generate_node_reading(node, artifact, prev_ids, next_ids, client)
+        enhanced_seq.append(LogicalSequenceItem(
+            level=item.level,
+            element=item.element,
+            coherence_reading=per_node_reading if per_node_reading else item.coherence_reading,
+        ))
+
+    result.logical_sequence = enhanced_seq
+    return result
 
 
 def _build_llm_context(artifact: RouteCoherenceArtifact) -> dict[str, Any]:
@@ -105,6 +162,48 @@ def _build_llm_context(artifact: RouteCoherenceArtifact) -> dict[str, Any]:
             for e in artifact.all_edges
         ],
     }
+
+
+def _generate_node_reading(
+    node: CoherenceNode,
+    artifact: RouteCoherenceArtifact,
+    prev_ids: list[str],
+    next_ids: list[str],
+    client: Any,
+) -> str:
+    """Call LLM to produce a 2–4 sentence coherence reading for one node."""
+    cve_node = next((n for n in artifact.all_nodes if n.type == "cve"), None)
+    cve_id = cve_node.id if cve_node else artifact.input
+    cve_desc = (cve_node.description if cve_node else "") or ""
+
+    incoming = next((e for e in artifact.all_edges if e.target == node.id), None)
+    relation_type = incoming.mapping_basis if incoming else "analytical_inferred"
+    quality_flags = ", ".join(incoming.source_refs) if incoming else "sin fuente verificada"
+    sources = sorted({r for e in artifact.all_edges if e.target == node.id for r in e.source_refs})
+
+    prompt = COHERENCE_NODE_READING_PROMPT.format(
+        CVE_ID=cve_id,
+        CVE_DESC=cve_desc[:300] if cve_desc else "No disponible",
+        NODE_ID=node.id,
+        NODE_LABEL=node.name,
+        NODE_TYPE=node.type,
+        RELATION_TYPE=relation_type,
+        PREV_NODES=", ".join(prev_ids) if prev_ids else "ninguno",
+        NEXT_NODES=", ".join(next_ids) if next_ids else "ninguno",
+        QUALITY_FLAGS=quality_flags,
+        PRODUCT_INFO=cve_desc[:200] if cve_desc else "No disponible",
+        SOURCES=json.dumps(sources, ensure_ascii=False),
+    )
+    try:
+        reading = client.complete(
+            system="Eres un analista de coherencia de ciberseguridad SOC. Responde solo con el texto solicitado.",
+            user=prompt,
+            temperature=0.0,
+            max_tokens=150,
+        )
+        return reading.strip() if reading else ""
+    except Exception:
+        return ""
 
 
 def _parse_llm_response(raw: str, artifact: RouteCoherenceArtifact) -> AnalysisEs | None:

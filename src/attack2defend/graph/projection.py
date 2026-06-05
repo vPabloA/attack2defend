@@ -25,6 +25,13 @@ def build_graph_json(artifact: RouteCoherenceArtifact) -> dict[str, Any]:
     nodes = artifact.graph_nodes
     edges = artifact.graph_edges
 
+    # Map coherence readings from the logical sequence so the UI side panel can display them
+    reading_map: dict[str, str] = {
+        item.element: item.coherence_reading
+        for item in artifact.analysis_es.logical_sequence
+        if item.element and item.coherence_reading
+    }
+
     # Group nodes by xLayer for y positioning
     by_layer: dict[int, list[GraphNode]] = {}
     for node in nodes:
@@ -46,11 +53,10 @@ def build_graph_json(artifact: RouteCoherenceArtifact) -> dict[str, Any]:
     nodes_out = []
     for node in nodes:
         pos = node_positions.get(node.id, {"x": 0.0, "y": 0.0})
-        nodes_out.append({
-            **node.to_dict(),
-            "x": pos["x"],
-            "y": pos["y"],
-        })
+        entry: dict[str, Any] = {**node.to_dict(), "x": pos["x"], "y": pos["y"]}
+        if node.id in reading_map:
+            entry["coherence_reading"] = reading_map[node.id]
+        nodes_out.append(entry)
 
     return {
         "canvas": {"width": canvas_width, "height": canvas_height},
