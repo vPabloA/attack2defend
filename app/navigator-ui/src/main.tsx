@@ -3,6 +3,8 @@ import { createRoot } from 'react-dom/client';
 import fallbackRoute from './data/log4shell.route.json';
 import './styles.css';
 import { RouteGraphTab } from './RouteGraph';
+import { buildRouteViewModel } from './lib/routeViewModel';
+import { A2DAppShell } from './components/A2DAppShell';
 
 type NodeType = 'cve' | 'cwe' | 'capec' | 'attack' | 'd3fend' | 'artifact' | 'control' | 'detection' | 'evidence' | 'gap' | 'action';
 type CoverageStatus = 'covered' | 'partial' | 'missing' | 'unknown' | 'not_applicable';
@@ -284,6 +286,10 @@ function App() {
   const selectedNode = selectedIds.length ? nodeMap.get(selectedIds[0]) ?? null : null;
   const activeRoute = useMemo(() => (selectedIds.length ? resolveRoute(bundle, selectedIds) : null), [bundle, selectedIds]);
   const suggestions = useMemo(() => buildSuggestions(bundle, query), [bundle, query]);
+  const routeViewModel = useMemo(
+    () => buildRouteViewModel({ bundle, query, selectedIds, aiTask: 'explain_visible_graph' }),
+    [bundle, query, selectedIds],
+  );
   const coverageRows = useMemo(() => (activeRoute ? buildCoverageRows(bundle, activeRoute) : []), [bundle, activeRoute]);
   const navigatorLayer = useMemo(() => (activeRoute ? buildAttackNavigatorLayer(bundle, activeRoute) : buildAttackNavigatorLayer(bundle, { root: 'EMPTY', nodes: [], edges: [] })), [bundle, activeRoute]);
   const d3fendCadGraph = useMemo(() => (activeRoute ? buildD3fendCadGraph(bundle, activeRoute) : buildD3fendCadGraph(bundle, { root: 'EMPTY', nodes: [], edges: [] })), [bundle, activeRoute]);
@@ -342,6 +348,15 @@ function App() {
 
   return (
     <main className="app-shell">
+      <A2DAppShell
+        query={query}
+        viewModel={routeViewModel}
+        onQueryChange={setQuery}
+        onAnalyze={submitSearch}
+      />
+
+      <details className="legacy-technical">
+        <summary>Legacy / Technical Details</summary>
       <header className="hero">
         <div>
           <p className="eyebrow">Attack2Defend</p>
@@ -396,6 +411,7 @@ function App() {
           {activeTab === 'export' && <ExportTab markdown={markdownExport} routeJson={JSON.stringify({ route: activeRoute, selected: selectedNode, coverage: coverageRows }, null, 2)} capabilityJson={capabilityJson} navigatorLayer={JSON.stringify(navigatorLayer, null, 2)} cadGraph={JSON.stringify(d3fendCadGraph, null, 2)} />}
         </>
       )}
+      </details>
     </main>
   );
 }
