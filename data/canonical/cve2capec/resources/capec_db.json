@@ -5,10 +5,22 @@
     "name": "Overflow Buffers",
     "url": "https://capec.mitre.org/data/definitions/100.html"
   },
+  "CAPEC-124": {
+    "description": "",
+    "id": "CAPEC-124",
+    "name": "Shared Resource Manipulation",
+    "url": ""
+  },
   "CAPEC-126": {
     "description": "",
     "id": "CAPEC-126",
     "name": "Path Traversal",
+    "url": ""
+  },
+  "CAPEC-129": {
+    "description": "",
+    "id": "CAPEC-129",
+    "name": "Pointer Manipulation",
     "url": ""
   },
   "CAPEC-136": {
@@ -28,6 +40,12 @@
     "id": "CAPEC-248",
     "name": "Command Injection",
     "url": "https://capec.mitre.org/data/definitions/248.html"
+  },
+  "CAPEC-26": {
+    "description": "",
+    "id": "CAPEC-26",
+    "name": "Leveraging Race Conditions",
+    "url": ""
   },
   "CAPEC-63": {
     "description": "",

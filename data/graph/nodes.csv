@@ -1,0 +1,125 @@
+id,type,label,name,description,url,source_ref,source_feed,metadata_json
+ACT-APPSEC-ENABLE-HTTP-TELEMETRY,action,Action,Enable normalized application and reverse proxy HTTP telemetry,,,,,"{""source_kind"": ""public-compatible"", ""source_ref"": ""data/mappings/backbone_core.json""}"
+ACT-INFRA-BUILD-EGRESS-BASELINE,action,Action,Build egress baseline and high-risk destination watchlist,,,,,"{""source_kind"": ""public-compatible"", ""source_ref"": ""data/mappings/backbone_core.json""}"
+ACT-SOC-ENABLE-PROCESS-TELEMETRY,action,Action,Enable EDR process command-line telemetry and web-to-shell correlation,,,,,"{""source_kind"": ""public-compatible"", ""source_ref"": ""data/mappings/backbone_core.json""}"
+ACT-SOC-INGEST-WAF-LOGS,action,Action,Ingest and normalize WAF logs including action rule ID and request context,,,,,"{""source_kind"": ""public-compatible"", ""source_ref"": ""data/mappings/backbone_core.json""}"
+ART-CREDENTIAL,artifact,Artifact,Credential,,,,,{}
+ART-DNS-LOOKUP,artifact,Artifact,DNS lookup,,,,,{}
+ART-DOMAIN,artifact,Artifact,Domain,,,,,{}
+ART-EGRESS-NETWORK,artifact,Artifact,Outbound egress network telemetry,,,,,"{""source_kind"": ""public-compatible"", ""source_ref"": ""data/mappings/backbone_core.json""}"
+ART-ENDPOINT-PROCESS,artifact,Artifact,Endpoint process execution telemetry,,,,,"{""source_kind"": ""public-compatible"", ""source_ref"": ""data/mappings/backbone_core.json""}"
+ART-INTERNET-FACING-APP,artifact,Artifact,Internet-facing application,,,,,"{""source_kind"": ""public-compatible"", ""source_ref"": ""data/mappings/backbone_core.json""}"
+ART-LOG4J-JAVA-APP,artifact,Artifact,Java application using vulnerable Log4j,,,,,"{""source_kind"": ""public-compatible"", ""source_ref"": ""data/mappings/backbone_core.json""}"
+ART-MOVEIT-TRANSFER,artifact,Artifact,MOVEit Transfer exposed application,,,,,"{""source_kind"": ""public-compatible"", ""source_ref"": ""data/mappings/backbone_core.json""}"
+ART-NETWORK-TRAFFIC,artifact,Artifact,Outbound network traffic,,,,,{}
+ART-REMOTE-SESSION,artifact,Artifact,Remote session,,,,,{}
+ART-RPC-NETWORK-TRAFFIC,artifact,Artifact,RPC network traffic,,,,,{}
+ART-SENSITIVE-FILE,artifact,Artifact,Sensitive file or payload,,,,,{}
+ART-URL,artifact,Artifact,URL,,,,,{}
+ART-USER-ACCOUNT,artifact,Artifact,User account,,,,,{}
+ART-VCENTER-SERVICE,artifact,Artifact,vCenter service endpoint,,,,,{}
+ART-WAF-LOG,artifact,Artifact,WAF or reverse proxy log,,,,,"{""source_kind"": ""public-compatible"", ""source_ref"": ""data/mappings/backbone_core.json""}"
+ART-WEB-INPUT,artifact,Artifact,Web input field or parameter,,,,,{}
+ART-WEB-SCRIPT,artifact,Artifact,Web script content,,,,,{}
+CAPEC-100,capec,CAPEC,Overflow Buffers,,https://capec.mitre.org/data/definitions/100.html,,,"{""source_kind"": ""public-compatible"", ""source_ref"": ""data/mappings/backbone_core.json""}"
+CAPEC-124,capec,CAPEC,Shared Resource Manipulation,,,,,"{""source_kind"": ""curated"", ""source_ref"": ""data/mappings/curated/cve_2026_23479_redis_uaf.json""}"
+CAPEC-126,capec,CAPEC,Path Traversal,,,,,"{""source_kind"": ""public-compatible"", ""source_ref"": ""data/mappings/backbone_core.json""}"
+CAPEC-129,capec,CAPEC,Pointer Manipulation,,,,,"{""source_kind"": ""curated"", ""source_ref"": ""data/mappings/curated/cve_2026_23479_redis_uaf.json""}"
+CAPEC-136,capec,CAPEC,LDAP Injection,,https://capec.mitre.org/data/definitions/136.html,,,{}
+CAPEC-242,capec,CAPEC,Code Injection,,,,,"{""source_kind"": ""public-compatible"", ""source_ref"": ""data/mappings/backbone_core.json""}"
+CAPEC-248,capec,CAPEC,Command Injection,,https://capec.mitre.org/data/definitions/248.html,,,{}
+CAPEC-26,capec,CAPEC,Leveraging Race Conditions,,,,,"{""source_kind"": ""curated"", ""source_ref"": ""data/mappings/curated/cve_2026_23479_redis_uaf.json""}"
+CAPEC-63,capec,CAPEC,Cross-Site Scripting (XSS),,https://capec.mitre.org/data/definitions/63.html,,,"{""source_kind"": ""public-compatible"", ""source_ref"": ""data/mappings/backbone_core.json""}"
+CAPEC-66,capec,CAPEC,SQL Injection,,,,,"{""source_kind"": ""public-compatible"", ""source_ref"": ""data/mappings/backbone_core.json""}"
+CAPEC-664,capec,CAPEC,Server-Side Request Forgery,,,,,"{""source_kind"": ""public-compatible"", ""source_ref"": ""data/mappings/backbone_core.json""}"
+CPE:2.3:A:APACHE:LOG4J:*:*:*:*:*:*:*:*,artifact,Artifact,Apache Log4j affected package family,,,,,"{""framework"": ""cpe"", ""product"": ""log4j"", ""source_kind"": ""curated"", ""source_ref"": ""data/mappings/curated/cpe_kev_core.json"", ""vendor"": ""apache"", ""version"": ""*""}"
+CPE:2.3:A:PROGRESS:MOVEIT_TRANSFER:*:*:*:*:*:*:*:*,artifact,Artifact,Progress MOVEit Transfer affected application family,,,,,"{""framework"": ""cpe"", ""product"": ""moveit_transfer"", ""source_kind"": ""curated"", ""source_ref"": ""data/mappings/curated/cpe_kev_core.json"", ""vendor"": ""progress"", ""version"": ""*""}"
+CTRL-CONDITIONAL-ACCESS,control,Control,Conditional access policy,,,,,{}
+CTRL-CSP,control,Control,Content Security Policy,,,,,{}
+CTRL-DLP-CASB,control,Control,DLP / CASB policy,,,,,{}
+CTRL-DNS-FILTERING,control,Control,DNS filtering,,,,,{}
+CTRL-EDR-PROCESS,control,Control,EDR process telemetry and command-line capture,,,,,"{""source_kind"": ""public-compatible"", ""source_ref"": ""data/mappings/backbone_core.json""}"
+CTRL-EGRESS-FIREWALL,control,Control,Egress firewall allow/deny policy,,,,,{}
+CTRL-EGRESS-MONITORING,control,Control,Egress monitoring and anomaly detection,,,,,"{""source_kind"": ""public-compatible"", ""source_ref"": ""data/mappings/backbone_core.json""}"
+CTRL-INPUT-OUTPUT-ENCODING,control,Control,Input validation and output encoding,,,,,{}
+CTRL-MFA-ENFORCEMENT,control,Control,MFA enforcement policy,,,,,{}
+CTRL-PATCH-MANAGEMENT,control,Control,Patch management evidence,,,,,{}
+CTRL-SWG-PROXY,control,Control,SWG / proxy logging,,,,,{}
+CTRL-VIRTUAL-PATCH,control,Control,Virtual patch / perimeter restriction,,,,,{}
+CTRL-WAF-LOGGING,control,Control,WAF logging and normalized HTTP telemetry,,,,,"{""source_kind"": ""public-compatible"", ""source_ref"": ""data/mappings/backbone_core.json""}"
+CTRL-WAF-VIRTUAL-PATCH,control,Control,WAF virtual patching and exploit blocking,,,,,"{""source_kind"": ""public-compatible"", ""source_ref"": ""data/mappings/backbone_core.json""}"
+CVE-2021-26855,cve,CVE,Microsoft Exchange Server-Side Request Forgery,,,,,"{""source_kind"": ""public-compatible"", ""source_ref"": ""data/mappings/backbone_core.json""}"
+CVE-2021-44228,cve,CVE,Apache Log4j2 JNDI RCE / Log4Shell,,https://nvd.nist.gov/vuln/detail/CVE-2021-44228,,,"{""kev"": true, ""kev_date_added"": ""2021-12-10"", ""kev_status"": ""known_exploited"", ""product"": ""Log4j"", ""required_action"": ""Apply vendor updates or mitigations and validate exposed Java applications."", ""source_kind"": ""curated"", ""source_ref"": ""data/mappings/curated/cpe_kev_core.json"", ""vendor"": ""Apache""}"
+CVE-2022-22965,cve,CVE,Spring4Shell Remote Code Execution,,,,,"{""source_kind"": ""public-compatible"", ""source_ref"": ""data/mappings/backbone_core.json""}"
+CVE-2023-27997,cve,CVE,Fortinet FortiOS heap-based buffer overflow,,,,,"{""source_kind"": ""public-compatible"", ""source_ref"": ""data/mappings/backbone_core.json""}"
+CVE-2023-34362,cve,CVE,MOVEit Transfer SQL Injection,,,,,"{""kev"": true, ""kev_date_added"": ""2023-06-02"", ""kev_status"": ""known_exploited"", ""product"": ""MOVEit Transfer"", ""required_action"": ""Apply vendor guidance, hunt for exploitation indicators and review exposed transfer services."", ""source_kind"": ""curated"", ""source_ref"": ""data/mappings/curated/cpe_kev_core.json"", ""vendor"": ""Progress""}"
+CVE-2024-37079,cve,CVE,VMware vCenter Server DCERPC heap-overflow RCE,,https://nvd.nist.gov/vuln/detail/CVE-2024-37079,,,"{""product_family"": ""VMware vCenter Server"", ""source_kind"": ""public-compatible"", ""source_ref"": ""data/mappings/backbone_core.json""}"
+CVE-2026-23479,cve,CVE,Redis Use-After-Free post-authentication RCE,,,,,"{""source_kind"": ""curated"", ""source_ref"": ""data/mappings/curated/cve_2026_23479_redis_uaf.json""}"
+CWE-122,cwe,CWE,Heap-based Buffer Overflow,,,,,"{""source_kind"": ""public-compatible"", ""source_ref"": ""data/mappings/backbone_core.json""}"
+CWE-20,cwe,CWE,Improper Input Validation,,https://cwe.mitre.org/data/definitions/20.html,,,"{""source_kind"": ""public-compatible"", ""source_ref"": ""data/mappings/backbone_core.json""}"
+CWE-22,cwe,CWE,Path Traversal,,,,,"{""source_kind"": ""public-compatible"", ""source_ref"": ""data/mappings/backbone_core.json""}"
+CWE-416,cwe,CWE,Use After Free,,,,,"{""source_kind"": ""curated"", ""source_ref"": ""data/mappings/curated/cve_2026_23479_redis_uaf.json""}"
+CWE-502,cwe,CWE,Deserialization of Untrusted Data,,https://cwe.mitre.org/data/definitions/502.html,,,{}
+CWE-787,cwe,CWE,Out-of-bounds Write,,https://cwe.mitre.org/data/definitions/787.html,,,{}
+CWE-79,cwe,CWE,Improper Neutralization of Input During Web Page Generation / Cross-site Scripting,,https://cwe.mitre.org/data/definitions/79.html,,,"{""source_kind"": ""public-compatible"", ""source_ref"": ""data/mappings/backbone_core.json""}"
+CWE-89,cwe,CWE,SQL Injection,,,,,"{""source_kind"": ""public-compatible"", ""source_ref"": ""data/mappings/backbone_core.json""}"
+CWE-917,cwe,CWE,Expression Language Injection,,https://cwe.mitre.org/data/definitions/917.html,,,{}
+CWE-918,cwe,CWE,Server-Side Request Forgery,,,,,"{""source_kind"": ""public-compatible"", ""source_ref"": ""data/mappings/backbone_core.json""}"
+CWE-94,cwe,CWE,Code Injection,,,,,"{""source_kind"": ""public-compatible"", ""source_ref"": ""data/mappings/backbone_core.json""}"
+D3-ACH,d3fend,D3FEND,Application Configuration Hardening,,https://d3fend.mitre.org/technique/d3f:ApplicationConfigurationHardening/,,,{}
+D3-AI,d3fend,D3FEND,Asset Inventory,,https://d3fend.mitre.org/technique/d3f:AssetInventory/,,,{}
+D3-AVE,d3fend,D3FEND,Asset Vulnerability Enumeration,,https://d3fend.mitre.org/technique/d3f:AssetVulnerabilityEnumeration/,,,"{""source_kind"": ""curated"", ""source_ref"": ""data/mappings/curated/cve_2026_23479_redis_uaf.json""}"
+D3-DLP,d3fend,D3FEND,Data Loss Prevention,,,,,"{""source_kind"": ""public-compatible"", ""source_ref"": ""data/mappings/backbone_core.json""}"
+D3-DNSAL,d3fend,D3FEND,DNS Allowlisting,,https://d3fend.mitre.org/technique/d3f:DNSAllowlisting/,,,{}
+D3-DNSDL,d3fend,D3FEND,DNS Denylisting,,https://d3fend.mitre.org/technique/d3f:DNSDenylisting/,,,{}
+D3-EI,d3fend,D3FEND,Execution Isolation,,,,,"{""source_kind"": ""curated"", ""source_ref"": ""data/mappings/curated/cve_2026_23479_redis_uaf.json""}"
+D3-FA,d3fend,D3FEND,File Analysis,,https://d3fend.mitre.org/technique/d3f:FileAnalysis/,,,{}
+D3-MFA,d3fend,D3FEND,Multi-factor Authentication,,https://d3fend.mitre.org/technique/d3f:MultiFactorAuthentication/,,,{}
+D3-NI,d3fend,D3FEND,Network Isolation,,,,,"{""source_kind"": ""curated"", ""source_ref"": ""data/mappings/curated/cve_2026_23479_redis_uaf.json""}"
+D3-NTA,d3fend,D3FEND,Network Traffic Analysis,,https://d3fend.mitre.org/technique/d3f:NetworkTrafficAnalysis/,,,"{""source_kind"": ""curated"", ""source_ref"": ""data/mappings/curated/cve_2026_23479_redis_uaf.json""}"
+D3-NTF,d3fend,D3FEND,Network Traffic Filtering,,,,,"{""source_kind"": ""curated"", ""source_ref"": ""data/mappings/curated/cve_2026_23479_redis_uaf.json""}"
+D3-OTF,d3fend,D3FEND,Outbound Traffic Filtering,,https://d3fend.mitre.org/technique/d3f:OutboundTrafficFiltering/,,,{}
+D3-PA,d3fend,D3FEND,Process Analysis,,https://d3fend.mitre.org/technique/d3f:ProcessAnalysis/,,,{}
+D3-PSA,d3fend,D3FEND,Process Spawn Analysis,,https://d3fend.mitre.org/technique/d3f:ProcessSpawnAnalysis/,,,{}
+D3-PSEP,d3fend,D3FEND,Process Spawn Analysis,,,,,"{""source_kind"": ""curated"", ""source_ref"": ""data/mappings/curated/cve_2026_23479_redis_uaf.json""}"
+D3-RN,d3fend,D3FEND,Reference Nullification,,,,,"{""source_kind"": ""curated"", ""source_ref"": ""data/mappings/curated/cve_2026_23479_redis_uaf.json""}"
+D3-SCH,d3fend,D3FEND,Source Code Hardening,,,,,"{""source_kind"": ""curated"", ""source_ref"": ""data/mappings/curated/cve_2026_23479_redis_uaf.json""}"
+D3-SU,d3fend,D3FEND,Software Update,,https://d3fend.mitre.org/technique/d3f:SoftwareUpdate/,,,{}
+D3-SWI,d3fend,D3FEND,Software Inventory,,,,,"{""source_kind"": ""curated"", ""source_ref"": ""data/mappings/curated/cve_2026_23479_redis_uaf.json""}"
+D3-UA,d3fend,D3FEND,URL Analysis,,https://d3fend.mitre.org/technique/d3f:URLAnalysis/,,,{}
+D3-WAF,d3fend,D3FEND,Web Application Firewall,,,,,"{""source_kind"": ""public-compatible"", ""source_ref"": ""data/mappings/backbone_core.json""}"
+DET-CLOUD-UPLOAD-ANOMALY,detection,Detection,Anomalous upload to external cloud service,,,,,{}
+DET-IMPOSSIBLE-TRAVEL,detection,Detection,Impossible travel / anomalous login,,,,,{}
+DET-MFA-BYPASS-SIGNAL,detection,Detection,Login without expected MFA assurance,,,,,{}
+DET-NON-BROWSER-UPLOAD,detection,Detection,Non-browser process uploading to external web service,,,,,{}
+DET-PUBLIC-APP-EXPLOIT-ATTEMPT,detection,Detection,Public-facing application exploit attempt,,,,,"{""source_kind"": ""public-compatible"", ""source_ref"": ""data/mappings/backbone_core.json""}"
+DET-RPC-EXPLOIT-ATTEMPT,detection,Detection,Suspicious RPC exploit attempt against vCenter,,,,,{}
+DET-UNUSUAL-WEB-UPLOAD,detection,Detection,Unusual upload to web service,,,,,"{""source_kind"": ""public-compatible"", ""source_ref"": ""data/mappings/backbone_core.json""}"
+DET-WAF-SUSPICIOUS-PAYLOAD,detection,Detection,Suspicious HTTP payload blocked or challenged,,,,,"{""source_kind"": ""public-compatible"", ""source_ref"": ""data/mappings/backbone_core.json""}"
+DET-WEB-TO-SHELL-PROCESS,detection,Detection,Web process spawned shell or scripting interpreter,,,,,"{""source_kind"": ""public-compatible"", ""source_ref"": ""data/mappings/backbone_core.json""}"
+DET-XSS-PAYLOAD,detection,Detection,Suspicious XSS payload in web logs,,,,,{}
+EV-DNS-LOGS,evidence,Evidence,DNS logs,,,,,{}
+EV-EDR-NETWORK,evidence,Evidence,EDR network telemetry,,,,,{}
+EV-EGRESS-DESTINATION-VOLUME,evidence,Evidence,Destination bytes uploaded user session reputation and baseline deviation,,,,,"{""source_kind"": ""public-compatible"", ""source_ref"": ""data/mappings/backbone_core.json""}"
+EV-FIREWALL-LOGS,evidence,Evidence,Firewall or load balancer logs,,,,,{}
+EV-HTTP-REQUEST-CONTEXT,evidence,Evidence,HTTP method URL parameters headers source IP response code,,,,,"{""source_kind"": ""public-compatible"", ""source_ref"": ""data/mappings/backbone_core.json""}"
+EV-IAM-LOGS,evidence,Evidence,IAM authentication logs,,,,,{}
+EV-PROCESS-COMMAND-LINE,evidence,Evidence,Parent process command line user host and timestamp,,,,,"{""source_kind"": ""public-compatible"", ""source_ref"": ""data/mappings/backbone_core.json""}"
+EV-PROXY-LOGS,evidence,Evidence,Proxy logs,,,,,{}
+EV-WAF-RULE-ACTION,evidence,Evidence,WAF rule ID action payload signature and request metadata,,,,,"{""source_kind"": ""public-compatible"", ""source_ref"": ""data/mappings/backbone_core.json""}"
+EV-WEB-APP-LOGS,evidence,Evidence,Web application logs,,,,,{}
+GAP-EGRESS-BASELINE,gap,Gap,No outbound baseline or destination reputation context,,,,,"{""source_kind"": ""public-compatible"", ""source_ref"": ""data/mappings/backbone_core.json""}"
+GAP-ENDPOINT-PROCESS-TELEMETRY,gap,Gap,Endpoint command-line telemetry missing or incomplete,,,,,"{""source_kind"": ""public-compatible"", ""source_ref"": ""data/mappings/backbone_core.json""}"
+GAP-MISSING-APP-HTTP-LOGS,gap,Gap,Missing normalized application or reverse proxy HTTP logs,,,,,"{""source_kind"": ""public-compatible"", ""source_ref"": ""data/mappings/backbone_core.json""}"
+GAP-WAF-NOT-INGESTED,gap,Gap,WAF logs not ingested or action semantics not normalized,,,,,"{""source_kind"": ""public-compatible"", ""source_ref"": ""data/mappings/backbone_core.json""}"
+T1059,attack,ATTACK,Command and Scripting Interpreter,,https://attack.mitre.org/techniques/T1059/,,,"{""source_kind"": ""public-compatible"", ""source_ref"": ""data/mappings/backbone_core.json""}"
+T1059.004,attack,ATTACK,Unix Shell,,,,,"{""source_kind"": ""curated"", ""source_ref"": ""data/mappings/curated/cve_2026_23479_redis_uaf.json""}"
+T1059.007,attack,ATTACK,Command and Scripting Interpreter: JavaScript,,https://attack.mitre.org/techniques/T1059/007/,,,{}
+T1071,attack,ATTACK,Application Layer Protocol,,https://attack.mitre.org/techniques/T1071/,,,{}
+T1078,attack,ATTACK,Valid Accounts,,https://attack.mitre.org/techniques/T1078/,,,{}
+T1105,attack,ATTACK,Ingress Tool Transfer,,https://attack.mitre.org/techniques/T1105/,,,{}
+T1110,attack,ATTACK,Brute Force,,https://attack.mitre.org/techniques/T1110/,,,{}
+T1189,attack,ATTACK,Drive-by Compromise,,https://attack.mitre.org/techniques/T1189/,,,"{""source_kind"": ""public-compatible"", ""source_ref"": ""data/mappings/backbone_core.json""}"
+T1190,attack,ATTACK,Exploit Public-Facing Application,,https://attack.mitre.org/techniques/T1190/,,,"{""source_kind"": ""curated"", ""source_ref"": ""data/mappings/curated/cve_2026_23479_redis_uaf.json""}"
+T1210,attack,ATTACK,Exploitation of Remote Services,,,,,"{""source_kind"": ""curated"", ""source_ref"": ""data/mappings/curated/cve_2026_23479_redis_uaf.json""}"
+T1567,attack,ATTACK,Exfiltration Over Web Service,,https://attack.mitre.org/techniques/T1567/,,,"{""source_kind"": ""public-compatible"", ""source_ref"": ""data/mappings/backbone_core.json""}"
