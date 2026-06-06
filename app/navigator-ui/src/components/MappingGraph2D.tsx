@@ -5,6 +5,7 @@ export interface MappingGraph2DProps {
   edges: RouteViewEdge[];
   canonicalPath: RouteViewNode[];
   warnings?: string[];
+  isPreview?: boolean;
 }
 
 const stages: Array<{ layer: RouteLayer; label: string; x: number }> = [
@@ -15,7 +16,7 @@ const stages: Array<{ layer: RouteLayer; label: string; x: number }> = [
   { layer: 'd3fend', label: 'D3FEND', x: 910 },
 ];
 
-export function MappingGraph2D({ nodes, edges, canonicalPath, warnings = [] }: MappingGraph2DProps) {
+export function MappingGraph2D({ nodes, edges, canonicalPath, warnings = [], isPreview = false }: MappingGraph2DProps) {
   const primaryIds = new Set(canonicalPath.map((node) => node.id));
   const grouped = stages.map((stage) => {
     const stageNodes = nodes.filter((node) => node.layer === stage.layer);
@@ -37,15 +38,21 @@ export function MappingGraph2D({ nodes, edges, canonicalPath, warnings = [] }: M
   const hasRoute = nodes.length > 0;
 
   return (
-    <section className="a2d-graph-card">
+    <section className={`a2d-graph-card${isPreview ? ' a2d-graph-preview' : ''}`}>
       <div className="a2d-graph-head">
         <div>
           <h2>Attack2Defend Mapping Graph</h2>
           <p>CVE -&gt; CWE -&gt; CAPEC -&gt; ATT&amp;CK -&gt; D3FEND</p>
         </div>
         <div className="a2d-graph-actions">
-          <span>Static-first</span>
-          <span>Bundle route</span>
+          {isPreview ? (
+            <span className="a2d-preview-badge">Preview / Not Canonical</span>
+          ) : (
+            <>
+              <span>Static-first</span>
+              <span>Bundle route</span>
+            </>
+          )}
         </div>
       </div>
 
@@ -78,7 +85,7 @@ export function MappingGraph2D({ nodes, edges, canonicalPath, warnings = [] }: M
         ))}
 
         {grouped.flatMap((stage) => stage.nodes.map((node, index) => (
-          <GraphNode key={node.id} node={node} stageX={stage.x} top={82 + index * 116} primary={primaryIds.has(node.id)} />
+          <GraphNode key={node.id} node={node} stageX={stage.x} top={82 + index * 116} primary={primaryIds.has(node.id)} isPreview={isPreview} />
         )))}
 
         {!hasRoute && (
@@ -104,10 +111,10 @@ export function MappingGraph2D({ nodes, edges, canonicalPath, warnings = [] }: M
   );
 }
 
-function GraphNode({ node, stageX, top, primary }: { node: RouteViewNode; stageX: number; top: number; primary: boolean }) {
+function GraphNode({ node, stageX, top, primary, isPreview }: { node: RouteViewNode; stageX: number; top: number; primary: boolean; isPreview: boolean }) {
   return (
     <div
-      className={`a2d-graph-node a2d-layer-${node.layer} ${primary ? 'a2d-node-primary' : 'a2d-node-secondary'}`}
+      className={`a2d-graph-node a2d-layer-${node.layer} ${primary ? 'a2d-node-primary' : 'a2d-node-secondary'}${isPreview ? ' a2d-node-preview' : ''}`}
       style={{ left: `${stageX / 10}%`, top }}
     >
       <strong>{node.id}</strong>

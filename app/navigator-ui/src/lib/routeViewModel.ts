@@ -2,9 +2,8 @@ import type { KnowledgeBundle, RouteEdge, RouteNode } from '../types/attack2defe
 import { buildAiContextPacket, type AiAssistTask } from '../graph/aiContextPacket';
 import { CANONICAL_CHAIN_LABEL, buildCanonicalChain } from '../graph/canonicalChain';
 import { filterEdgesByVisibleNodes, filterNodesByScope, type GraphFilters, type GraphScope } from '../graph/graphFilters';
-import { graphNodeLabel, graphNodeStatus, graphNodeWeight, graphRelationshipLabel } from '../graph/graphSemantics';
-import type { ProvenanceRecord, TrustLevel } from '../types/provenance';
-import { canonicalProvenance, missingSourceRef } from '../types/provenance';
+import { graphNodeLabel, graphRelationshipLabel } from '../graph/graphSemantics';
+import { missingSourceRef } from '../types/provenance';
 
 export type RouteLayer =
   | 'cve'
@@ -68,6 +67,8 @@ export interface CoherenceItem {
 export interface RouteViewModel {
   query: string;
   found: boolean;
+  isPreview: boolean;
+  sourceMode: 'bundle' | 'preview';
   canonicalPath: RouteViewNode[];
   nodes: RouteViewNode[];
   edges: RouteViewEdge[];
@@ -75,6 +76,49 @@ export interface RouteViewModel {
   coherence: CoherenceItem[];
   quickContext: Record<string, string>;
   warnings: string[];
+}
+
+export interface PreviewRouteNode {
+  id: string;
+  type: RouteLayer;
+  name: string;
+  description?: string;
+  url?: string;
+}
+
+export interface PreviewRouteEdge {
+  source: string;
+  target: string;
+  relationship: string;
+  confidence?: string;
+  source_ref?: string;
+}
+
+export interface CoverageRecord {
+  status?: string;
+  controls?: string[];
+  detections?: string[];
+  evidence?: string[];
+  gaps?: string[];
+}
+
+export interface PreviewRouteArtifact {
+  artifact_type: 'attack2defend.preview_route';
+  canonical: false;
+  input: string;
+  normalized_input: string;
+  generated_at: string;
+  source: 'mock' | 'api';
+  nodes: PreviewRouteNode[];
+  edges: PreviewRouteEdge[];
+  coverage?: Record<string, CoverageRecord>;
+  warnings: string[];
+  provenance: Array<{
+    id: string;
+    source: string;
+    trust: 'official' | 'inferred' | 'mock' | 'unknown';
+    note?: string;
+  }>;
 }
 
 export function deriveConfidenceBadge(input: {
@@ -118,11 +162,7 @@ export function buildTier1Readout(params: {
     'Confirmar evidencia antes de escalar.',
   ];
   if (!selectedNode) {
-    return {
-      title: 'Tier 1 Analyst Readout',
-      bullets: fallbackBullets,
-      confidence: 'unknown',
-    };
+    return { title: 'Tier 1 Analyst Readout', bullets: fallbackBullets, confidence: 'unknown' };
   }
 
   const bullets: string[] = [];
@@ -186,6 +226,8 @@ export function buildRouteViewModel(params: {
   return {
     query: params.query,
     found: Boolean(selectedNode),
+    isPreview: false,
+    sourceMode: 'bundle',
     canonicalPath: routeViewNodes.filter((node) => ['cve', 'cwe', 'capec', 'attack', 'd3fend'].includes(node.layer)),
     nodes: routeViewNodes,
     edges: routeViewEdges,
@@ -204,10 +246,104 @@ export function buildRouteViewModel(params: {
   };
 }
 
+export function buildRouteViewModelFromPreview(artifact: PreviewRouteArtifact): RouteViewModel {
+  const routeViewNodes: RouteViewNode[] = artifact.nodes.map((node) => {
+    const prov = artifact.provenance.find((p) => p.id === node.id);
+    const trust = prov?.trust ?? 'unknown';
+    const badge: ConfidenceBadge =
+      trust === 'official' ? 'official' :
+      trust === 'inferred' ? 'analytical_inferred' :
+      trust === 'mock' ? 'conditional' : 'unknown';
+    return {
+      id: node.id,
+      label: graphNodeLabel(node.id, node.name),
+      layer: node.type,
+      description: node.description,
+      badge,
+      provenance: [prov?.source ?? 'on-demand-resolution'],
+      warnings: trust === 'mock' ? ['Preview — requires validation'] : trust === 'unknown' ? ['Insufficient local evidence'] : [],
+    };
+  });
+
+  const routeViewEdges: RouteViewEdge[] = artifact.edges.map((edge) => ({
+    id: `${edge.source}::${edge.relationship}::${edge.target}`,
+    source: edge.source,
+    target: edge.target,
+    badge: 'analytical_inferred',
+    relationship: graphRelationshipLabel(edge.relationship),
+    isPrimary: edge.confidence === 'high',
+    isConditional: true,
+    isInferred: true,
+  }));
+
+  const canonicalPath = routeViewNodes.filter((node) => ['cve', 'cwe', 'capec', 'attack', 'd3fend'].includes(node.layer));
+
+  const previewWarnings = [
+    'Preview / Not Canonical — generated from on-demand resolution.',
+    'Requires validation before operational use.',
+    ...artifact.warnings,
+  ];
+
+  const selectedViewNode = routeViewNodes.find((n) => n.layer === 'cve') ?? routeViewNodes[0];
+
+  const tier1Readout: Tier1Readout = {
+    title: `Tier 1 Preview · ${artifact.normalized_input}`,
+    bullets: [
+      `Preview route for ${artifact.normalized_input} — not from canonical bundle.`,
+      'No CVSS or official description available from local bundle.',
+      'Requires analyst validation before escalation.',
+      ...previewWarnings.slice(0, 2),
+    ].slice(0, 5),
+    confidence: 'preview',
+  };
+
+  const coherence = buildCoherenceItemsFromView(selectedViewNode, routeViewNodes, routeViewEdges);
+
+  const quickContext: Record<string, string> = {
+    source: `on-demand (${artifact.source})`,
+    canonical: 'false',
+    generated_at: artifact.generated_at,
+    node_count: String(routeViewNodes.length),
+    edge_count: String(routeViewEdges.length),
+    canonical_chain: 'preview',
+    status: 'requires_validation',
+  };
+
+  return {
+    query: artifact.normalized_input,
+    found: true,
+    isPreview: true,
+    sourceMode: 'preview',
+    canonicalPath,
+    nodes: routeViewNodes,
+    edges: routeViewEdges,
+    tier1Readout,
+    coherence,
+    quickContext,
+    warnings: previewWarnings,
+  };
+}
+
+function buildCoherenceItemsFromView(
+  selectedNode: RouteViewNode | undefined,
+  nodes: RouteViewNode[],
+  _edges: RouteViewEdge[],
+): CoherenceItem[] {
+  const has = (layer: RouteLayer) => nodes.some((n) => n.layer === layer);
+  return [
+    { layer: 'summary', label: 'Resumen', reading: selectedNode ? `Preview activo para ${selectedNode.id}.` : 'Preview sin nodo raíz.', badge: 'conditional' },
+    { layer: 'cve', label: 'CVE', reading: has('cve') ? 'Vulnerabilidad raíz (preview — no canónica).' : 'Sin CVE en preview.', badge: has('cve') ? 'conditional' : 'unknown' },
+    { layer: 'cwe', label: 'CWE', reading: has('cwe') ? 'Debilidad inferida (preview).' : 'Sin CWE en preview.', badge: has('cwe') ? 'analytical_inferred' : 'unknown' },
+    { layer: 'capec', label: 'CAPEC', reading: has('capec') ? 'Patrón inferido (preview).' : 'Sin CAPEC en preview.', badge: has('capec') ? 'analytical_inferred' : 'unknown' },
+    { layer: 'attack', label: 'ATT&CK', reading: has('attack') ? 'Técnica condicional (preview).' : 'Sin ATT&CK en preview.', badge: has('attack') ? 'conditional' : 'unknown' },
+    { layer: 'd3fend', label: 'D3FEND', reading: has('d3fend') ? 'Control sugerido (preview).' : 'Sin D3FEND en preview.', badge: has('d3fend') ? 'conditional' : 'unknown' },
+  ];
+}
+
 function toRouteViewNode(node: RouteNode, bundle: KnowledgeBundle, visibleEdges: RouteEdge[]): RouteViewNode {
   const sourceRef = nodeSourceRef(node);
   const relatedCoverage = bundle.coverage?.[node.id];
-  const confidence = visibleEdges.some((edge) => edge.source === node.id || edge.target === node.id) ? 'high' : 'unknown';
+  const _confidence = visibleEdges.some((edge) => edge.source === node.id || edge.target === node.id) ? 'high' : 'unknown';
   return {
     id: node.id,
     label: graphNodeLabel(node.id, node.name),
