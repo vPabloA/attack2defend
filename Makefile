@@ -94,7 +94,7 @@ evaluate-golden:
 validate-product: validate evaluate-golden graph-sidecar mirror-intelligence validate-static-first
 
 test:
-	pytest -q
+	$(PYTHON) -m pytest -q
 	cd $(UI_DIR) && npm run build
 
 ui:

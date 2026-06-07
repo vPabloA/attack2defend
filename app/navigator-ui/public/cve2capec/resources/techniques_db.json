@@ -5,6 +5,12 @@
     "name": "Command and Scripting Interpreter",
     "url": "https://attack.mitre.org/techniques/T1059/"
   },
+  "T1059.004": {
+    "description": "",
+    "id": "T1059.004",
+    "name": "Unix Shell",
+    "url": ""
+  },
   "T1059.007": {
     "description": "",
     "id": "T1059.007",
@@ -46,6 +52,12 @@
     "id": "T1190",
     "name": "Exploit Public-Facing Application",
     "url": "https://attack.mitre.org/techniques/T1190/"
+  },
+  "T1210": {
+    "description": "",
+    "id": "T1210",
+    "name": "Exploitation of Remote Services",
+    "url": ""
   },
   "T1567": {
     "description": "",

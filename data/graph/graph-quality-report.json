@@ -1,0 +1,56 @@
+{
+  "generated_at": "2026-06-07T01:06:38.835441+00:00",
+  "node_count": 124,
+  "edge_count": 133,
+  "orphan_node_count": 0,
+  "weak_edge_count": 1,
+  "missing_source_ref_count": 0,
+  "broken_edge_count": 0,
+  "routes_with_defense_path": 42,
+  "routes_missing_defense_path": 18,
+  "routes_missing_evidence": 0,
+  "ai_promoted_edge_count": 0,
+  "top_structural_gaps": [
+    {
+      "gap_id": "GAP-EGRESS-BASELINE",
+      "inbound_paths": 1
+    },
+    {
+      "gap_id": "GAP-MISSING-APP-HTTP-LOGS",
+      "inbound_paths": 1
+    },
+    {
+      "gap_id": "GAP-ENDPOINT-PROCESS-TELEMETRY",
+      "inbound_paths": 1
+    },
+    {
+      "gap_id": "GAP-WAF-NOT-INGESTED",
+      "inbound_paths": 1
+    }
+  ],
+  "samples": {
+    "orphan_nodes": [],
+    "routes_missing_defense_path": [
+      "ART-CREDENTIAL",
+      "ART-DOMAIN",
+      "ART-LOG4J-JAVA-APP",
+      "ART-MOVEIT-TRANSFER",
+      "ART-REMOTE-SESSION",
+      "ART-USER-ACCOUNT",
+      "ART-VCENTER-SERVICE",
+      "CAPEC-124",
+      "CAPEC-26",
+      "CPE:2.3:A:APACHE:LOG4J:*:*:*:*:*:*:*:*",
+      "CPE:2.3:A:PROGRESS:MOVEIT_TRANSFER:*:*:*:*:*:*:*:*",
+      "CWE-502",
+      "T1059.007",
+      "T1071",
+      "T1078",
+      "T1105",
+      "T1110",
+      "T1189"
+    ],
+    "routes_missing_evidence": [],
+    "broken_edges": []
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "generated_at": "2026-06-07T01:06:38.782991+00:00",
+  "source_root": "data",
+  "target_root": "app/navigator-ui/public/data",
+  "artifacts": {
+    "factory_report": "/data/intelligence/intelligence-factory-report.json",
+    "promotion_policy": "/data/intelligence/promotion_policy.json",
+    "golden_report": "/data/reports/golden-route-evaluation.json",
+    "graph_quality_report": "/data/graph/graph-quality-report.json",
+    "audit_log": "/data/candidates/audit_log.json",
+    "promoted_mappings_index": "/data/mappings/ai_promoted/index.json"
+  },
+  "counts": {
+    "audit_entries": 0,
+    "promoted_mapping_files": 0
+  }
+}
