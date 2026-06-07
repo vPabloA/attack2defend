@@ -1,0 +1,23 @@
+{
+  "policy_version": "0.1.0",
+  "promotion_mode": "dry_run",
+  "min_score": 0.75,
+  "allowed_confidence": [
+    "high"
+  ],
+  "allowed_relationships": [
+    "vulnerability_has_weakness",
+    "weakness_enables_attack_pattern",
+    "attack_pattern_maps_to_technique",
+    "technique_mitigated_by_countermeasure",
+    "validated_by_detection",
+    "protected_by_control",
+    "affects_product_or_platform"
+  ],
+  "require_evidence": true,
+  "require_existing_nodes": true,
+  "allow_new_nodes": false,
+  "block_if_secret_detected": true,
+  "max_candidates_per_run": 50,
+  "timeout_policy": "never_wait_for_human"
+}

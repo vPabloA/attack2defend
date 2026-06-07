@@ -1,9 +1,12 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import fallbackRoute from './data/log4shell.route.json';
 import './styles.css';
 import { RouteGraphTab } from './RouteGraph';
-import { buildRouteViewModel } from './lib/routeViewModel';
+import { buildRouteViewModel, buildRouteViewModelFromPreview } from './lib/routeViewModel';
+import { startRouteResolution, getOrchestratorModePublic } from './lib/routeOrchestratorClient';
+import type { ResolutionStatus, ResolutionStep, RouteResolutionJobStatus } from './lib/routeOrchestratorClient';
+import type { PreviewRouteArtifact, RouteViewModel } from './lib/routeViewModel';
 import { A2DAppShell } from './components/A2DAppShell';
 
 type NodeType = 'cve' | 'cwe' | 'capec' | 'attack' | 'd3fend' | 'artifact' | 'control' | 'detection' | 'evidence' | 'gap' | 'action';
@@ -246,6 +249,15 @@ function App() {
   const [activeTab, setActiveTab] = useState<TabId>('route');
   const [searchError, setSearchError] = useState<string>('');
 
+  // On-demand resolution state
+  const [resolutionStatus, setResolutionStatus] = useState<ResolutionStatus>('idle');
+  const [resolutionSteps, setResolutionSteps] = useState<ResolutionStep[]>([]);
+  const [resolutionProgress, setResolutionProgress] = useState<number>(0);
+  const [resolutionMessage, setResolutionMessage] = useState<string>('');
+  const [resolutionWarnings, setResolutionWarnings] = useState<string[]>([]);
+  const [resolutionError, setResolutionError] = useState<string>('');
+  const [previewArtifact, setPreviewArtifact] = useState<PreviewRouteArtifact | null>(null);
+
   useEffect(() => {
     fetch('/data/knowledge-bundle.json')
       .then((response) => {
@@ -286,10 +298,6 @@ function App() {
   const selectedNode = selectedIds.length ? nodeMap.get(selectedIds[0]) ?? null : null;
   const activeRoute = useMemo(() => (selectedIds.length ? resolveRoute(bundle, selectedIds) : null), [bundle, selectedIds]);
   const suggestions = useMemo(() => buildSuggestions(bundle, query), [bundle, query]);
-  const routeViewModel = useMemo(
-    () => buildRouteViewModel({ bundle, query, selectedIds, aiTask: 'explain_visible_graph' }),
-    [bundle, query, selectedIds],
-  );
   const coverageRows = useMemo(() => (activeRoute ? buildCoverageRows(bundle, activeRoute) : []), [bundle, activeRoute]);
   const navigatorLayer = useMemo(() => (activeRoute ? buildAttackNavigatorLayer(bundle, activeRoute) : buildAttackNavigatorLayer(bundle, { root: 'EMPTY', nodes: [], edges: [] })), [bundle, activeRoute]);
   const d3fendCadGraph = useMemo(() => (activeRoute ? buildD3fendCadGraph(bundle, activeRoute) : buildD3fendCadGraph(bundle, { root: 'EMPTY', nodes: [], edges: [] })), [bundle, activeRoute]);
@@ -309,16 +317,78 @@ function App() {
   }, [bundle, activeRoute, selectedNode]);
   const capabilityJson = useMemo(() => (capabilityView && curatedRoute ? JSON.stringify(buildCapabilityExportPackage(capabilityView, curatedRoute), null, 2) : ''), [capabilityView, curatedRoute]);
 
+  const routeViewModel = useMemo<RouteViewModel>(() => {
+    if (previewArtifact && resolutionStatus !== 'idle' && resolutionStatus !== 'local_found' && !selectedIds.length) {
+      return buildRouteViewModelFromPreview(previewArtifact);
+    }
+    return buildRouteViewModel({ bundle, query, selectedIds, aiTask: 'explain_visible_graph' });
+  }, [bundle, query, selectedIds, previewArtifact, resolutionStatus]);
+
+  const isPreview = routeViewModel.isPreview;
+
+  const startResolution = useCallback(async (input: string) => {
+    setResolutionStatus('queued');
+    setResolutionSteps([]);
+    setResolutionProgress(0);
+    setResolutionMessage(`${input} not found in local bundle. Starting preview resolution...`);
+    setResolutionWarnings([]);
+    setResolutionError('');
+    setPreviewArtifact(null);
+
+    let result: RouteResolutionJobStatus;
+    try {
+      result = await startRouteResolution(input, (steps, progress) => {
+        setResolutionSteps(steps);
+        setResolutionProgress(progress);
+        setResolutionStatus('running');
+      });
+    } catch (err) {
+      setResolutionStatus('failed');
+      setResolutionError(err instanceof Error ? err.message : 'Unknown resolution error.');
+      return;
+    }
+
+    setResolutionSteps(result.steps ?? []);
+    setResolutionProgress(result.progress ?? 100);
+    setResolutionWarnings(result.warnings ?? []);
+    setResolutionError(result.error ?? '');
+
+    if (result.status === 'disabled') {
+      setResolutionStatus('disabled');
+      setResolutionMessage('');
+      return;
+    }
+
+    if ((result.status === 'completed' || result.status === 'completed_with_gaps') && result.preview_artifact) {
+      setPreviewArtifact(result.preview_artifact);
+      setResolutionStatus(result.status);
+      setResolutionMessage('');
+      return;
+    }
+
+    setResolutionStatus(result.status === 'failed' ? 'failed' : 'failed');
+    setResolutionMessage('');
+  }, []);
+
   function submitSearch() {
     const term = query.trim();
     const candidate = term.toUpperCase();
     setSearchError('');
+    setPreviewArtifact(null);
+    setResolutionStatus('idle');
+    setResolutionSteps([]);
+    setResolutionProgress(0);
+    setResolutionMessage('');
+    setResolutionWarnings([]);
+    setResolutionError('');
+
     if (!candidate) return;
 
     const exact = nodeMap.get(candidate);
     if (exact) {
       selectNode(exact.id);
       setActiveTab('route');
+      setResolutionStatus('local_found');
       return;
     }
 
@@ -326,11 +396,22 @@ function App() {
     if (fuzzy) {
       selectNode(fuzzy.id);
       setActiveTab('route');
+      setResolutionStatus('local_found');
       return;
     }
 
+    // Not in local bundle — start on-demand resolution
     setSelectedIds([]);
-    setSearchError(`No node found for "${term}" in the loaded bundle.`);
+    setResolutionStatus('local_not_found');
+    setResolutionMessage(`"${candidate}" not found in the local bundle.`);
+
+    const orchestratorMode = getOrchestratorModePublic();
+    if (orchestratorMode === 'disabled') {
+      setResolutionStatus('disabled');
+      return;
+    }
+
+    void startResolution(candidate);
   }
 
   function clearSearch() {
@@ -338,6 +419,13 @@ function App() {
     setSelectedIds([]);
     setSearchError('');
     setActiveTab('route');
+    setResolutionStatus('idle');
+    setResolutionSteps([]);
+    setResolutionProgress(0);
+    setResolutionMessage('');
+    setResolutionWarnings([]);
+    setResolutionError('');
+    setPreviewArtifact(null);
   }
 
   function selectNode(id: string) {
@@ -353,10 +441,23 @@ function App() {
         viewModel={routeViewModel}
         onQueryChange={setQuery}
         onAnalyze={submitSearch}
+        searchError={searchError}
+        resolutionStatus={resolutionStatus === 'idle' || resolutionStatus === 'local_found' ? undefined : resolutionStatus}
+        resolutionSteps={resolutionSteps}
+        resolutionProgress={resolutionProgress}
+        resolutionMessage={resolutionMessage}
+        resolutionWarnings={resolutionWarnings}
+        resolutionError={resolutionError}
+        isPreview={isPreview}
+        onRetryResolution={() => {
+          const candidate = query.trim().toUpperCase();
+          if (candidate) void startResolution(candidate);
+        }}
       />
 
       <details className="legacy-technical">
         <summary>Legacy / Technical Details</summary>
+
       <header className="hero">
         <div>
           <p className="eyebrow">Attack2Defend</p>

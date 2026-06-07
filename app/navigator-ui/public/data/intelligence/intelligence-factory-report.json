@@ -1,0 +1,21 @@
+{
+  "status": "not_generated",
+  "generated_at": "2026-06-07T01:06:38.780491+00:00",
+  "run_id": "not-generated",
+  "promotion_mode": "not_available",
+  "candidates_seen": 0,
+  "candidates_generated": 0,
+  "candidates_validated": 0,
+  "candidates_scored": 0,
+  "candidates_promoted": 0,
+  "candidates_rejected": 0,
+  "candidates_queued_for_review": 0,
+  "pending_review_count": 0,
+  "blocking": false,
+  "timeout_waited_for_human": false,
+  "top_candidates": [],
+  "top_queued_candidates": [],
+  "top_rejection_reasons": [],
+  "artifact_paths": {},
+  "errors": []
+}

@@ -7,6 +7,15 @@
       "D3-PSEP"
     ]
   },
+  "T1059.004": {
+    "capec": [],
+    "d3fend": [
+      "D3-EI",
+      "D3-PSEP",
+      "D3-RN",
+      "D3-SCH"
+    ]
+  },
   "T1059.007": {
     "capec": [
       "CAPEC-63"
@@ -39,6 +48,7 @@
     "capec": [
       "CAPEC-100",
       "CAPEC-126",
+      "CAPEC-129",
       "CAPEC-248",
       "CAPEC-66",
       "CAPEC-664"
@@ -46,8 +56,19 @@
     "d3fend": [
       "D3-AI",
       "D3-AVE",
+      "D3-NI",
+      "D3-NTF",
       "D3-SU",
+      "D3-SWI",
       "D3-WAF"
+    ]
+  },
+  "T1210": {
+    "capec": [
+      "CAPEC-129"
+    ],
+    "d3fend": [
+      "D3-NI"
     ]
   },
   "T1567": {
