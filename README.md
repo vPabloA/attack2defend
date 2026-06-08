@@ -4,6 +4,8 @@
 
 **Attack2Defend** is a static-first cyber defense intelligence navigator and automation layer that maps vulnerabilities, weaknesses and adversary techniques into defensive routes, evidence requirements, coverage gaps and SOC actions.
 
+It is designed to be a production-grade successor to CVE2CAPEC-style navigation: it accepts compressed URL inputs, resolves the underlying CVE payload, and renders the defensive route with deterministic local artifacts.
+
 It starts with the chain:
 
 ```text
@@ -215,6 +217,27 @@ flowchart TB
     J --> K
     K --> L[knowledge-bundle.json remains canonical]
 ```
+
+## Navigator Inputs
+
+The UI accepts both direct IDs and compressed Galeax-style payloads.
+
+Examples:
+
+```text
+CVE-2026-4342
+H4sIAAAAAAAAE3MOc9U1MjAy0zUxNjECANnv1LoNAAAA
+```
+
+The compressed form is decoded in the browser and resolved as the underlying CVE when possible.
+
+The `layer` query parameter also selects the active view:
+
+```text
+?layer=enterprise-defend&input=H4sIAAAAAAAAE3MOc9U1MjAy0zUxNjECANnv1LoNAAAA
+```
+
+`enterprise-defend` maps to the D3FEND view.
 
 Production rules:
 

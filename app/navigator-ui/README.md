@@ -24,6 +24,14 @@ src/data/log4shell.route.json
 
 This keeps local development resilient while preserving the production rule: the UI should consume a local snapshot, not live public APIs.
 
+The search bar also accepts compressed Galeax-style URL payloads. For example, this resolves to `CVE-2026-4342` when the payload decodes successfully:
+
+```text
+H4sIAAAAAAAAE3MOc9U1MjAy0zUxNjECANnv1LoNAAAA
+```
+
+The `layer` query parameter selects the active view on load. `enterprise-defend` maps to the D3FEND tab.
+
 ---
 
 ## Generate UI data
@@ -67,6 +75,12 @@ Open:
 
 ```text
 http://localhost:5173
+```
+
+To open a specific route directly:
+
+```text
+http://localhost:5173/?layer=enterprise-defend&input=H4sIAAAAAAAAE3MOc9U1MjAy0zUxNjECANnv1LoNAAAA
 ```
 
 ---
