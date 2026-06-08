@@ -9,7 +9,6 @@ import { A2DAppShell } from './components/A2DAppShell';
 type NodeType = 'cve' | 'cwe' | 'capec' | 'attack' | 'd3fend' | 'artifact' | 'control' | 'detection' | 'evidence' | 'gap' | 'action';
 type CoverageStatus = 'covered' | 'partial' | 'missing' | 'unknown' | 'not_applicable';
 type TabId = 'route' | 'attack' | 'd3fend' | 'coverage' | 'export' | 'graph';
-type LayerParam = 'enterprise-defend' | 'attack' | 'd3fend' | 'coverage' | 'export' | 'graph' | 'route';
 type BundleSource = 'generated' | 'fallback';
 
 type RouteNode = {
@@ -296,16 +295,6 @@ function App() {
     void submitSearch(encodedInput);
   }, []);
 
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const encodedInput = params.get('input')?.trim();
-    const layer = normalizeLayerParam(params.get('layer'));
-    if (layer) setActiveTab(layer);
-    if (!encodedInput) return;
-    setQuery(encodedInput);
-    void submitSearch(encodedInput);
-  }, []);
-
   const nodeMap = useMemo(() => new Map(bundle.nodes.map((node) => [node.id, node])), [bundle.nodes]);
   const selectedNode = selectedIds.length ? nodeMap.get(selectedIds[0]) ?? null : null;
   const activeRoute = useMemo(() => (selectedIds.length ? resolveRoute(bundle, selectedIds) : null), [bundle, selectedIds]);
@@ -365,18 +354,6 @@ function App() {
     setSelectedIds([]);
     setSearchError(`No node found for "${normalized}" in the loaded bundle.`);
     setStatusMessage(`No se encontró coincidencia local para "${normalized}". Prueba con un ID presente en el bundle.`);
-  }
-
-  function normalizeLayerParam(value: string | null): LayerParam | null {
-    const normalized = (value ?? '').trim().toLowerCase();
-    if (!normalized) return null;
-    if (normalized === 'enterprise-defend') return 'd3fend';
-    if (normalized === 'attack') return 'attack';
-    if (normalized === 'd3fend') return 'd3fend';
-    if (normalized === 'coverage') return 'coverage';
-    if (normalized === 'export') return 'export';
-    if (normalized === 'graph') return 'graph';
-    return 'route';
   }
 
   function normalizeLayerParam(value: string | null): TabId | null {
