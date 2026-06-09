@@ -43,6 +43,10 @@ def as_bool(value: Any, default: bool) -> bool:
     return default
 
 
+def has_value(value: Any) -> bool:
+    return value not in (None, "", [], {})
+
+
 def feed(edge: dict[str, Any]) -> str:
     for key in ("source_feed", "source_kind", "curation_status", "license"):
         value = str(edge.get(key) or "").strip()
@@ -77,12 +81,16 @@ def transform(edge: dict[str, Any], metadata: dict[str, Any]) -> str:
 
 def stamp(edge: dict[str, Any], metadata: dict[str, Any], generated_at: str) -> dict[str, Any]:
     out = dict(edge)
-    out.setdefault("source_feed", feed(out))
-    if not out.get("source_ref") and not out.get("source_url"):
+    if not has_value(out.get("source_feed")):
+        out["source_feed"] = feed(out)
+    if not has_value(out.get("source_ref")) and not has_value(out.get("source_url")):
         out["source_ref"] = ref(out)
-    out.setdefault("retrieved_at", metadata.get("mapping_backbone_applied_at") or metadata.get("generated_at") or generated_at)
-    out.setdefault("transform_version", transform(out, metadata))
-    out.setdefault("confidence", "medium")
+    if not has_value(out.get("retrieved_at")):
+        out["retrieved_at"] = metadata.get("mapping_backbone_applied_at") or metadata.get("generated_at") or generated_at
+    if not has_value(out.get("transform_version")):
+        out["transform_version"] = transform(out, metadata)
+    if not has_value(out.get("confidence")):
+        out["confidence"] = "medium"
     out["deterministic"] = as_bool(out.get("deterministic"), True)
     out["inferred"] = as_bool(out.get("inferred"), False)
     return out

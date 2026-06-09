@@ -36,7 +36,7 @@ def test_bridges_and_official_links_are_explicit():
     assert ("DET-RPC-EXPLOIT-ATTEMPT", "EV-FIREWALL-LOGS", "requires_evidence") in bridge_pairs
     assert links["CVE-2024-37079"] == "https://nvd.nist.gov/vuln/detail/CVE-2024-37079"
     assert links["CWE-787"] == "https://cwe.mitre.org/data/definitions/787.html"
-    assert links["CAPEC-100"] == "https://capec.mitre.org/data/definitions/100.html"
+    assert links["CAPEC-126"] == "https://capec.mitre.org/data/definitions/126.html"
     assert links["T1190"] == "https://attack.mitre.org/techniques/T1190/"
     assert links["D3-NTA"] == "https://d3fend.mitre.org/technique/D3-NTA/"
 

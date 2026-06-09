@@ -4,6 +4,7 @@ import { CANONICAL_CHAIN_LABEL, buildCanonicalChain } from '../graph/canonicalCh
 import { filterEdgesByVisibleNodes, filterNodesByScope, type GraphFilters, type GraphScope } from '../graph/graphFilters';
 import { graphNodeLabel, graphRelationshipLabel } from '../graph/graphSemantics';
 import { missingSourceRef } from '../types/provenance';
+import { resolveSearchSelection } from './a2dSearchHelpers.js';
 
 export type RouteLayer =
   | 'cve'
@@ -51,10 +52,27 @@ export interface RouteViewEdge {
 export interface Tier1Readout {
   title: string;
   bullets: string[];
+  summary?: string;
   severity?: string;
-  cvss?: string | number;
+  cvss?: string | number | Record<string, unknown> | null;
   vector?: string;
   confidence?: string;
+  provenance?: string;
+  review_status?: 'approved' | 'candidate' | 'pending' | 'rejected';
+  mode?: 'cve' | 'node' | 'fallback';
+  associated_cves?: string[];
+  attack_techniques?: Array<{ id: string; name: string; justification?: string; provenance?: string; confidence?: string; review_status?: 'approved' | 'candidate' | 'pending' | 'rejected' }>;
+  d3fend_controls?: Array<{ id: string; name: string; justification: string; provenance?: string; confidence?: string; review_status?: 'approved' | 'candidate' | 'pending' | 'rejected' }>;
+  compensating_controls?: Array<{ id: string; label: string; text: string; provenance?: string; confidence?: string; review_status?: 'approved' | 'candidate' | 'pending' | 'rejected' }>;
+  detection_guidance?: Array<{ id: string; label: string; text: string; provenance?: string; confidence?: string; review_status?: 'approved' | 'candidate' | 'pending' | 'rejected' }>;
+  evidence_to_review?: Array<{ id: string; label: string; text: string; provenance?: string; confidence?: string; review_status?: 'approved' | 'candidate' | 'pending' | 'rejected' }>;
+  gaps?: Array<{ id: string; label: string; text: string; provenance?: string; confidence?: string; review_status?: 'approved' | 'candidate' | 'pending' | 'rejected' }>;
+  risk_acceptance_matrix?: Array<{ id: string; label: string; minimum_controls: string[]; rationale: string; provenance?: string; confidence?: string; review_status?: 'approved' | 'candidate' | 'pending' | 'rejected' }>;
+  copy_paste_10_lines?: string[];
+  checklist?: string[];
+  escalation_criteria?: string[];
+  source_ref?: string;
+  soc_action_pack?: Record<string, unknown>;
 }
 
 export interface CoherenceItem {
@@ -162,25 +180,266 @@ export function buildTier1Readout(params: {
     'Confirmar evidencia antes de escalar.',
   ];
   if (!selectedNode) {
-    return { title: 'Tier 1 Analyst Readout', bullets: fallbackBullets, confidence: 'unknown' };
+    return {
+      title: 'Tier 1 Analyst Readout',
+      bullets: fallbackBullets,
+      summary: 'Sin nodo seleccionado en el bundle local.',
+      confidence: 'unknown',
+      provenance: 'unknown',
+      mode: 'fallback',
+      copy_paste_10_lines: fallbackBullets,
+      checklist: [
+        'Confirmar un identificador cargado en el bundle.',
+        'Verificar que el bundle local incluya rutas y reverse index.',
+        'Revisar el estado de sincronización del bundle.',
+      ],
+      escalation_criteria: ['No hay nodo activo en la vista.'],
+      associated_cves: [],
+      attack_techniques: [],
+      d3fend_controls: [],
+      compensating_controls: [],
+      detection_guidance: [],
+      evidence_to_review: [],
+      gaps: [],
+      risk_acceptance_matrix: [],
+    };
   }
 
-  const bullets: string[] = [];
-  const cveDescription = selectedNode.description?.trim();
-  if (cveDescription) bullets.push(cveDescription);
-  else bullets.push('No disponible en bundle local para descripción del nodo seleccionado.');
-  const coverage = params.bundle.coverage?.[selectedNode.id];
-  if (coverage?.gaps?.length) bullets.push(`Requiere validación: ${coverage.gaps[0]}`);
-  if (coverage?.status) bullets.push(`Estado de cobertura: ${coverage.status}`);
-  const d3 = params.routeNodes.find((node) => node.type === 'd3fend');
-  if (d3) bullets.push(`Controles D3FEND disponibles: ${d3.name}`);
-  if (params.warnings?.length) bullets.push(...params.warnings.slice(0, 2));
-  if (bullets.length === 0) bullets.push(...fallbackBullets);
+  const activeNode = selectedNode as RouteNode;
+  const cveRecord = params.bundle.cves?.[activeNode.id];
+  const reverseSelection = resolveSearchSelection(params.bundle, activeNode.id, { maxRoots: 8, maxReverseMatches: 8 });
+  const associatedCves = uniqueStrings(
+    cveRecord?.tier1_readout?.associated_cves ??
+      reverseSelection.associatedCves ??
+      (activeNode.type === 'cve' ? [activeNode.id] : []),
+  );
+  const primaryCveRecord = cveRecord ?? (associatedCves.length ? params.bundle.cves?.[associatedCves[0]] : undefined);
+  const pack = primaryCveRecord?.soc_action_pack ?? buildFallbackSocActionPack(params, activeNode, associatedCves);
+  const readout: Partial<Tier1Readout> = primaryCveRecord?.tier1_readout ?? {};
+  const bullets = (readout.bullets?.length ? readout.bullets : buildBullets(activeNode, params.routeNodes, params.warnings, associatedCves)).slice(0, 5);
+  const summary = readout.summary ?? primaryCveRecord?.description ?? activeNode.description ?? `Nodo ${activeNode.id} disponible en el bundle local.`;
+  const severity = primaryCveRecord?.severity ?? readout.severity ?? (activeNode.type === 'cve' ? 'unknown' : 'informational');
+  const confidence = primaryCveRecord?.confidence ?? readout.confidence ?? (activeNode.type === 'cve' ? 'unknown' : 'medium');
+  const provenance = primaryCveRecord?.provenance ?? readout.provenance ?? (activeNode.type === 'cve' ? 'canonical' : 'derived');
+  const reviewStatus = primaryCveRecord?.review_status ?? readout.review_status ?? (primaryCveRecord ? 'approved' : 'candidate');
+  const associatedReadoutCves = uniqueStrings(readout.associated_cves ?? associatedCves);
+  const detectionGuidance = pack.detection_rules ?? readout.detection_guidance ?? [];
+  const evidence = pack.evidence_to_review ?? readout.evidence_to_review ?? [];
+  const gaps = pack.gaps ?? readout.gaps ?? [];
+  const readoutCopy = (readout.copy_paste_10_lines?.length ? readout.copy_paste_10_lines : buildCopyPasteLines({
+    node: activeNode,
+    severity,
+    confidence,
+    primaryAttack: pack.attack_techniques?.[0]?.id ?? reverseSelection.hits.find((hit) => hit.type === 'attack')?.token ?? 'unknown',
+    d3fendControls: pack.d3fend_controls,
+    evidence,
+    compensatingControls: pack.compensating_controls,
+    detectionGuidance,
+    gaps,
+    riskAcceptance: pack.risk_acceptance_matrix,
+  })).slice(0, 10);
+
   return {
-    title: `Tier 1 Analyst Readout · ${selectedNode.id}`,
-    bullets: bullets.slice(0, 5),
-    confidence: coverage?.status ?? 'unknown',
+    title: `Tier 1 Analyst Readout · ${activeNode.id}`,
+    bullets,
+    summary,
+    severity,
+    cvss: primaryCveRecord?.cvss ?? readout.cvss ?? null,
+    vector: readout.vector ?? vectorFromCvss(primaryCveRecord?.cvss),
+    confidence,
+    provenance,
+    review_status: reviewStatus,
+    mode: activeNode.type === 'cve' ? 'cve' : 'node',
+    associated_cves: associatedReadoutCves,
+    attack_techniques: pack.attack_techniques ?? readout.attack_techniques ?? [],
+    d3fend_controls: pack.d3fend_controls ?? readout.d3fend_controls ?? [],
+    compensating_controls: pack.compensating_controls ?? readout.compensating_controls ?? [],
+    detection_guidance: detectionGuidance,
+    evidence_to_review: evidence,
+    gaps,
+    risk_acceptance_matrix: pack.risk_acceptance_matrix ?? readout.risk_acceptance_matrix ?? [],
+    copy_paste_10_lines: readoutCopy,
+    checklist: (readout.checklist?.length ? readout.checklist : buildChecklist(activeNode, severity, confidence, associatedReadoutCves, gaps)).slice(0, 8),
+    escalation_criteria: (readout.escalation_criteria?.length ? readout.escalation_criteria : buildEscalationCriteria(activeNode, gaps, detectionGuidance, evidence)).slice(0, 6),
+    source_ref: activeNode.metadata?.source_ref ? String(activeNode.metadata.source_ref) : undefined,
+    soc_action_pack: pack,
   };
+}
+
+function buildFallbackSocActionPack(params: {
+  bundle: KnowledgeBundle;
+  selectedNode: RouteNode | null;
+  routeNodes: RouteNode[];
+  routeEdges: RouteEdge[];
+  viewNodes: RouteViewNode[];
+  warnings?: string[];
+}, selectedNode: RouteNode, associatedCves: string[]) {
+  const d3Nodes = params.routeNodes.filter((node) => node.type === 'd3fend').slice(0, 3);
+  const attackNodes = params.routeNodes.filter((node) => node.type === 'attack').slice(0, 3);
+  const gaps = [
+    {
+      id: `GAP-${selectedNode.id}-PACK`,
+      label: 'Route gap',
+      text: selectedNode.type === 'cve' ? `No se ha cargado un soc_action_pack canonical para ${selectedNode.id}.` : `No existe pack canónico directo para ${selectedNode.id}.`,
+      provenance: 'inferred',
+      confidence: 'medium',
+      review_status: 'candidate' as const,
+    },
+    ...((params.warnings ?? []).slice(0, 2).map((warning, index) => ({
+      id: `GAP-${selectedNode.id}-WARN-${index + 1}`,
+      label: 'Route gap',
+      text: warning,
+      provenance: 'inferred',
+      confidence: 'medium',
+      review_status: 'candidate' as const,
+    }))),
+  ];
+  return {
+    attack_techniques: attackNodes.map((node) => ({
+      id: node.id,
+      name: node.name,
+      justification: `Técnica asociada a la ruta visible para ${selectedNode.id}.`,
+      provenance: 'derived',
+      confidence: 'medium',
+      review_status: 'candidate' as const,
+    })),
+    d3fend_controls: d3Nodes.map((node) => ({
+      id: node.id,
+      name: node.name,
+      justification: `Control defensivo visible en la ruta del bundle local para ${selectedNode.id}.`,
+      provenance: 'derived',
+      confidence: 'medium',
+      review_status: 'candidate' as const,
+    })),
+    compensating_controls: [
+      {
+        id: `COMP-${selectedNode.id}-PATCH`,
+        label: 'Patch/Upgrade',
+        text: `Revisar parches y versionado aplicado a ${selectedNode.id}.`,
+        provenance: 'inferred',
+        confidence: 'medium',
+        review_status: 'candidate' as const,
+      },
+    ],
+    detection_rules: [
+      {
+        id: `DETECT-${selectedNode.id}-01`,
+        label: 'Monitoring',
+        text: `Revisar telemetría asociada a ${selectedNode.id} y a sus técnicas relacionadas.`,
+        provenance: 'inferred',
+        confidence: 'medium',
+        review_status: 'candidate' as const,
+      },
+    ],
+    evidence_to_review: [
+      {
+        id: `EVID-${selectedNode.id}-01`,
+        label: 'Evidence',
+        text: `Corroborar eventos y artefactos ligados a ${selectedNode.id}.`,
+        provenance: 'inferred',
+        confidence: 'medium',
+        review_status: 'candidate' as const,
+      },
+    ],
+    ioc_candidates: [
+      {
+        id: `IOC-${selectedNode.id}-01`,
+        label: 'IOC candidate',
+        text: associatedCves.length ? associatedCves.join(', ') : selectedNode.id,
+        provenance: 'inferred',
+        confidence: 'low',
+        review_status: 'candidate' as const,
+      },
+    ],
+    gaps,
+    risk_acceptance_matrix: [
+      {
+        id: `RISK-${selectedNode.id}-01`,
+        label: 'Minimal acceptance',
+        minimum_controls: ['Patch/Upgrade', 'Monitoring', 'Exposure review'],
+        rationale: `Escenario provisional mientras no exista pack canónico para ${selectedNode.id}.`,
+        provenance: 'inferred',
+        confidence: 'medium',
+        review_status: 'candidate' as const,
+      },
+    ],
+  };
+}
+
+function buildBullets(selectedNode: RouteNode, routeNodes: RouteNode[], warnings: string[] | undefined, associatedCves: string[]): string[] {
+  const bullets: string[] = [];
+  if (selectedNode.description?.trim()) bullets.push(selectedNode.description.trim());
+  bullets.push(`Nodo activo: ${selectedNode.id}.`);
+  if (associatedCves.length) bullets.push(`CVEs asociados: ${associatedCves.slice(0, 5).join(', ')}.`);
+  const d3 = routeNodes.filter((node) => node.type === 'd3fend').slice(0, 2);
+  if (d3.length) bullets.push(`Controles D3FEND visibles: ${d3.map((node) => node.name).join(', ')}.`);
+  if (warnings?.length) bullets.push(...warnings.slice(0, 2));
+  return bullets.length ? bullets : ['Ruta de conocimiento disponible para análisis.'];
+}
+
+function buildCopyPasteLines(params: {
+  node: RouteNode;
+  severity: string;
+  confidence: string;
+  primaryAttack: string;
+  d3fendControls: Array<{ id: string; name: string }>;
+  evidence: Array<{ id: string; label: string; text: string }>;
+  compensatingControls: Array<{ id: string; label: string; text: string }>;
+  detectionGuidance: Array<{ id: string; label: string; text: string }>;
+  gaps: Array<{ id: string; label: string; text: string }>;
+  riskAcceptance: Array<{ id: string; label: string; minimum_controls: string[]; rationale: string }>;
+}) {
+  return [
+    `CVE: ${params.node.id}`,
+    `Severity: ${params.severity}`,
+    `Likely ATT&CK: ${params.primaryAttack}`,
+    `Defensive mapping: ${params.d3fendControls.slice(0, 3).map((item) => item.id).join(', ') || 'n/a'}`,
+    `Evidence to review: ${params.evidence.slice(0, 2).map((item) => item.text).join(' | ') || 'n/a'}`,
+    `Compensating controls: ${params.compensatingControls.slice(0, 2).map((item) => item.text).join(' | ') || 'n/a'}`,
+    `Detection guidance: ${params.detectionGuidance.slice(0, 2).map((item) => item.text).join(' | ') || 'n/a'}`,
+    `Known gaps: ${params.gaps.slice(0, 2).map((item) => item.text).join(' | ') || 'n/a'}`,
+    `Escalate if: ${params.gaps.length ? params.gaps[0].text : 'validation remains incomplete'}`,
+    `Risk acceptance: ${params.riskAcceptance.slice(0, 1).map((item) => item.rationale).join(' | ') || 'n/a'}`,
+  ];
+}
+
+function buildChecklist(selectedNode: RouteNode, severity: string, confidence: string, associatedCves: string[], gaps: Array<{ id: string; label: string; text: string }>) {
+  const items = [
+    `Confirmar el activo relacionado con ${selectedNode.id}.`,
+    `Revisar severidad ${severity} y confianza ${confidence}.`,
+    associatedCves.length ? `Validar CVEs asociados: ${associatedCves.slice(0, 3).join(', ')}.` : `Validar si ${selectedNode.id} tiene relaciones en el bundle.`,
+    gaps.length ? `Cerrar brechas descritas: ${gaps[0].text}` : 'Documentar ausencia de brechas explícitas.',
+  ];
+  return items;
+}
+
+function buildEscalationCriteria(
+  selectedNode: RouteNode,
+  gaps: Array<{ id: string; label: string; text: string }>,
+  detectionGuidance: Array<{ id: string; label: string; text: string }>,
+  evidence: Array<{ id: string; label: string; text: string }>,
+) {
+  const criteria = [
+    `No hay evidencia suficiente para confirmar el estado de ${selectedNode.id}.`,
+    gaps.length ? gaps[0].text : 'No se declaran brechas explícitas en el bundle local.',
+    detectionGuidance.length ? `Falta validar: ${detectionGuidance[0].text}` : 'No existe orientación de monitoreo directa.',
+    evidence.length ? `Falta corroborar: ${evidence[0].text}` : 'No hay evidencia mínima asociada.',
+  ];
+  return criteria;
+}
+
+function vectorFromCvss(cvss: unknown): string | undefined {
+  if (cvss && typeof cvss === 'object' && !Array.isArray(cvss) && 'vector' in cvss && typeof (cvss as Record<string, unknown>).vector === 'string') {
+    return String((cvss as Record<string, unknown>).vector);
+  }
+  if (cvss && typeof cvss === 'object' && !Array.isArray(cvss) && 'vectorString' in cvss && typeof (cvss as Record<string, unknown>).vectorString === 'string') {
+    return String((cvss as Record<string, unknown>).vectorString);
+  }
+  return undefined;
+}
+
+function uniqueStrings(values: Array<string | undefined | null>): string[] {
+  return [...new Set(values.map((value) => String(value ?? '').trim()).filter(Boolean))];
 }
 
 export function buildCoherenceItems(input: {
@@ -223,6 +482,10 @@ export function buildRouteViewModel(params: {
   const tier1Readout = buildTier1Readout({ bundle: params.bundle, selectedNode, routeNodes, routeEdges: visibleRouteEdges, viewNodes: routeViewNodes, warnings });
   const coherence = buildCoherenceItems({ selectedNode, routeNodes: visibleRouteNodes, routeEdges: visibleRouteEdges, viewNodes: routeViewNodes });
   const aiContextPacket = buildAiContextPacket({ task: params.aiTask, input: params.query, visibleScope: scope, canonicalChain, visibleNodes: visibleRouteNodes, visibleEdges: visibleRouteEdges, bundleVersion: params.bundle.metadata.contract_version ?? params.bundle.metadata.generated_at });
+  const bundleVersion = params.bundle.bundle_version ?? params.bundle.metadata.contract_version ?? params.bundle.metadata.generated_at ?? 'unknown';
+  const generatedAt = params.bundle.generated_at ?? params.bundle.metadata.generated_at ?? 'unknown';
+  const cveCount = Object.keys(params.bundle.cves ?? {}).length || params.bundle.nodes.filter((node) => node.type === 'cve').length;
+  const reviewQueueCount = params.bundle.review_queue?.length ?? 0;
   return {
     query: params.query,
     found: Boolean(selectedNode),
@@ -234,13 +497,23 @@ export function buildRouteViewModel(params: {
     tier1Readout,
     coherence,
     quickContext: {
-      bundle_version: params.bundle.metadata.contract_version ?? params.bundle.metadata.generated_at ?? 'unknown',
-      visible_scope: scope,
+      bundle_version: bundleVersion,
+      generated_at: generatedAt,
+      source: params.bundle.source ?? 'CVE2CAPEC',
+      provenance: params.bundle.provenance ?? 'canonical',
+      cve_count: String(cveCount),
+      node_count: String(params.bundle.nodes.length),
+      edge_count: String(params.bundle.edges.length),
       route_count: String(params.bundle.routes?.length ?? 0),
-      node_count: String(routeViewNodes.length),
-      edge_count: String(routeViewEdges.length),
+      review_queue: String(reviewQueueCount),
+      last_sync: params.bundle.generated_at ?? params.bundle.metadata.generated_at ?? 'unknown',
+      visible_scope: scope,
+      visible_nodes: String(routeViewNodes.length),
+      visible_edges: String(routeViewEdges.length),
+      selected_mode: selectedNode?.type ?? 'none',
       canonical_chain: CANONICAL_CHAIN_LABEL,
       ai_context_packet: aiContextPacket.capability,
+      search_mode: selectedNode ? (selectedNode.type === 'cve' ? 'direct' : 'node') : 'empty',
     },
     warnings,
   };

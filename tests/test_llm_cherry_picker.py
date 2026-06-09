@@ -1,5 +1,6 @@
 import copy
 import json
+import os
 import socket
 import ssl
 import subprocess
@@ -113,6 +114,21 @@ class InventingMockClient:
         }
 
 
+class WrappedRouteMockClient:
+    def complete_json(self, *, system_prompt, user_prompt, config):
+        return {
+            "curated_route": {
+                "cve": [{"id": "CVE-2024-37079", "reason_es": "Entrada principal del contexto permitido."}],
+                "cwe": [{"id": "CWE-22", "reason_es": "Debilidad seleccionada desde el contexto permitido."}],
+                "capec": [{"id": "CAPEC-126", "reason_es": "Patrón seleccionado desde el contexto permitido."}],
+                "attack": [{"id": "T1190", "reason_es": "Técnica seleccionada desde el contexto permitido."}],
+                "d3fend": [{"id": "D3-WAF", "reason_es": "Control seleccionado desde el contexto permitido."}],
+            },
+            "full_traceability_counts": {"cve": 1, "cwe": 1, "capec": 1, "attack": 1, "d3fend": 1},
+            "validation": {"status": "pass", "errors": [], "validator": "a2d_curated_route_validator"},
+        }
+
+
 class FailingMockClient:
     """Client that always raises ProviderCallError."""
     def __init__(self, error_type="network", http_status=None):
@@ -158,6 +174,13 @@ def _llm_config(**overrides) -> AiCherryPickerConfig:
     return AiCherryPickerConfig(**defaults)
 
 
+def _env_without_provider_keys() -> dict[str, str]:
+    env = dict(os.environ)
+    for key in ("GEMINI_API_KEY", "GOOGLE_API_KEY", "OPENAI_API_KEY", "ANTHROPIC_API_KEY"):
+        env.pop(key, None)
+    return env
+
+
 # ===========================================================================
 # Existing tests (preserved)
 # ===========================================================================
@@ -197,7 +220,9 @@ def test_prompts_forbid_external_knowledge_and_require_allowed_ids():
     assert "runtime_public_api_calls" in user_prompt
 
 
-def test_llm_mode_falls_back_when_provider_is_disabled():
+def test_llm_mode_falls_back_when_provider_is_disabled(monkeypatch):
+    for key in ("GEMINI_API_KEY", "GOOGLE_API_KEY", "OPENAI_API_KEY", "ANTHROPIC_API_KEY"):
+        monkeypatch.delenv(key, raising=False)
     capability, context = _capability_and_context()
     cfg = _llm_config(provider="gemini", model="gemini-2.5-flash-lite")
 
@@ -208,6 +233,19 @@ def test_llm_mode_falls_back_when_provider_is_disabled():
     assert route["selection_method"] == "deterministic_prefilter"
     assert route["llm_adapter"]["used"] is False
     assert route["llm_adapter"]["fallback_reason"].startswith(("provider_error", "missing_api_key"))
+
+
+def test_wrapped_llm_curated_route_is_normalized_to_schema():
+    capability, context = _capability_and_context()
+    cfg = _llm_config(provider="openai", model="gpt-4o-mini")
+
+    route = cherry_pick_route(capability, context, config=cfg, client=WrappedRouteMockClient())
+
+    jsonschema.validate(route, _schema(CURATED_SCHEMA))
+    assert "curated_route" not in route
+    assert route["selection_method"] == "llm_cherry_picker"
+    assert route["llm_adapter"]["used"] is True
+    assert route["stages"][0]["selected"][0]["id"] == "CVE-2024-37079"
 
 
 def test_valid_mock_llm_output_can_pass_validator():
@@ -252,6 +290,7 @@ def test_curate_route_cli_llm_flag_still_outputs_valid_json():
         check=True,
         capture_output=True,
         text=True,
+        env=_env_without_provider_keys(),
     )
     payload = json.loads(completed.stdout)
 

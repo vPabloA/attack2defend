@@ -5,6 +5,8 @@ PYTHONPATH := src$(if $(PYTHONPATH),:$(PYTHONPATH))
 export PYTHONPATH
 UI_DIR := app/navigator-ui
 INPUT ?= CVE-2021-44228
+A2D_CVE2CAPEC_CACHE_DIR ?= data/raw/cve2capec
+A2D_CVE2CAPEC_YEAR ?= $(shell date -u +%Y)
 
 install:
 	$(PYTHON) -m pip install -e ".[dev]"
@@ -15,7 +17,15 @@ install-ai: ## Install AI curation dependencies
 
 build: build-bundle mirror-intelligence
 
-build-product: build graph-sidecar
+build-product: build-cve2capec-db graph-sidecar
+
+build-cve2capec-db:
+	$(PYTHON) scripts/etl_cve2capec_to_a2d.py --cache-dir $(A2D_CVE2CAPEC_CACHE_DIR) --years $(A2D_CVE2CAPEC_YEAR)
+	$(PYTHON) scripts/mapping_builder/apply_mapping_backbone.py --bundle data/knowledge-bundle.json --mappings-dir data/mappings --ui-public-dir app/navigator-ui/public/data --last-good --no-semantic-routes
+
+validate-cve2capec-db:
+	$(PYTHON) scripts/etl_cve2capec_to_a2d.py --validate-only --bundle data/knowledge-bundle.json
+	$(PYTHON) scripts/knowledge_builder/validate_edge_provenance.py data/knowledge-bundle.json
 
 build-curated:
 	$(PYTHON) scripts/knowledge_builder/build_knowledge_base.py
@@ -91,7 +101,7 @@ validate-candidates:
 evaluate-golden:
 	$(PYTHON) scripts/intelligence/evaluate_golden_routes.py
 
-validate-product: validate evaluate-golden graph-sidecar mirror-intelligence validate-static-first
+validate-product: validate-cve2capec-db evaluate-golden graph-sidecar mirror-intelligence validate-static-first
 
 test:
 	$(PYTHON) -m pytest -q

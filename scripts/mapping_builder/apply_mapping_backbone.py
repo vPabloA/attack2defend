@@ -15,10 +15,13 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[2]
 SRC = ROOT / "src"
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
 
 from attack2defend.runtime_bundle import write_runtime_bundle
+from scripts.knowledge_builder.enforce_edge_provenance import enforce_bundle
 
 CONTRACT_VERSION = "attack2defend.knowledge_bundle.v2"
 BACKBONE_VERSION = "0.2.1"
@@ -116,7 +119,7 @@ def load(path: Path) -> Any:
 def dump(path: Path, payload: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8") as handle:
-        json.dump(payload, handle, indent=2, sort_keys=True)
+        json.dump(payload, handle, ensure_ascii=False, separators=(",", ":"), sort_keys=True)
         handle.write("\n")
 
 
@@ -383,7 +386,15 @@ def resolve_route(
     return {"root": root_id, "root_type": ntype(nodes[root_id].get("type"), root_id), "coverage_status": status, "confidence_score": score, "nodes": ordered, "edges": edge_list, "missing_segments": missing, "generated_by": "semantic_route_resolver.v1"}
 
 
-def apply_mapping_backbone(bundle_path: Path, mappings_dir: Path, ui_public_dir: Path | None, output_path: Path | None, last_good: bool) -> int:
+def apply_mapping_backbone(
+    bundle_path: Path,
+    mappings_dir: Path,
+    ui_public_dir: Path | None,
+    output_path: Path | None,
+    last_good: bool,
+    *,
+    include_semantic_routes: bool = True,
+) -> int:
     bundle = load(bundle_path)
     nodes = {nid(node.get("id")): dict(node) for node in bundle.get("nodes", []) if isinstance(node, dict)}
     edges: dict[tuple[str, str, str], dict[str, Any]] = {}
@@ -414,16 +425,34 @@ def apply_mapping_backbone(bundle_path: Path, mappings_dir: Path, ui_public_dir:
     for edge in edge_list:
         route_by_source.setdefault(nid(edge.get("source")), []).append(edge)
         route_by_target.setdefault(nid(edge.get("target")), []).append(edge)
-    bundle["semantic_routes"] = [resolve_route(root, node_map, edge_list, route_by_source, route_by_target) for root in sorted(bundle["indexes"]["route_inputs"]) if root in node_map]
     by_status: dict[str, int] = {}
-    for route in bundle["semantic_routes"]:
+    semantic_routes: list[dict[str, Any]] = []
+    for root in sorted(bundle["indexes"]["route_inputs"]):
+        if root not in node_map:
+            continue
+        route = resolve_route(root, node_map, edge_list, route_by_source, route_by_target)
         by_status[route["coverage_status"]] = by_status.get(route["coverage_status"], 0) + 1
+        if include_semantic_routes:
+            semantic_routes.append(route)
+    if include_semantic_routes:
+        bundle["semantic_routes"] = semantic_routes
+    else:
+        bundle.pop("semantic_routes", None)
+        bundle.pop("routes", None)
     bundle["coverage_summary"] = {"routes_by_status": dict(sorted(by_status.items()))}
     metadata = dict(bundle.get("metadata", {}))
     counts = dict(metadata.get("counts", {})) if isinstance(metadata.get("counts"), dict) else {}
-    counts.update({"nodes": len(node_list), "edges": len(edge_list), "coverage_records": len(bundle["coverage"]), "semantic_routes": len(bundle["semantic_routes"]), "mapping_files": len(files), "mapping_records": mapping_records})
+    counts.update({
+        "nodes": len(node_list),
+        "edges": len(edge_list),
+        "coverage_records": len(bundle["coverage"]),
+        "semantic_routes": len(semantic_routes) if include_semantic_routes else 0,
+        "mapping_files": len(files),
+        "mapping_records": mapping_records,
+    })
     metadata.update({"contract_version": CONTRACT_VERSION, "schema_version": CONTRACT_VERSION, "mapping_backbone_version": BACKBONE_VERSION, "mapping_backbone_applied_at": now(), "mode": "mapping_backbone_bundle", "counts": counts, "mapping_backbone": {"mappings_dir": _relpath(mappings_dir), "mapping_files": [_relpath(path) for path in files]}})
     bundle["metadata"] = metadata
+    bundle = enforce_bundle(bundle, generated_at=metadata["mapping_backbone_applied_at"])
     target = output_path or bundle_path
     dump(target, bundle)
     if target != bundle_path:
@@ -435,7 +464,11 @@ def apply_mapping_backbone(bundle_path: Path, mappings_dir: Path, ui_public_dir:
         write_runtime_bundle(bundle_path.with_name("knowledge-bundle.last-good.json"), bundle, pretty=False)
         if ui_public_dir is not None:
             write_runtime_bundle(ui_public_dir / "knowledge-bundle.last-good.json", bundle, pretty=False)
-    print(f"Attack2Defend mapping backbone applied: files={len(files)} records={mapping_records} nodes={len(node_list)} edges={len(edge_list)} semantic_routes={len(bundle['semantic_routes'])}")
+    print(
+        "Attack2Defend mapping backbone applied: "
+        f"files={len(files)} records={mapping_records} nodes={len(node_list)} "
+        f"edges={len(edge_list)} semantic_routes={len(semantic_routes) if include_semantic_routes else 0}"
+    )
     return 0
 
 
@@ -448,13 +481,21 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser.add_argument("--output", type=Path, default=None)
     parser.add_argument("--no-ui-mirror", action="store_true")
     parser.add_argument("--last-good", action="store_true")
+    parser.add_argument("--no-semantic-routes", action="store_true")
     return parser.parse_args(argv)
 
 
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv or sys.argv[1:])
     try:
-        return apply_mapping_backbone(args.bundle, args.mappings_dir, None if args.no_ui_mirror else args.ui_public_dir, args.output, args.last_good)
+        return apply_mapping_backbone(
+            args.bundle,
+            args.mappings_dir,
+            None if args.no_ui_mirror else args.ui_public_dir,
+            args.output,
+            args.last_good,
+            include_semantic_routes=not args.no_semantic_routes,
+        )
     except Exception as exc:
         print(f"ERROR: failed to apply mapping backbone: {exc}", file=sys.stderr)
         return 1

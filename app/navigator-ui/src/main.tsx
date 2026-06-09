@@ -5,6 +5,8 @@ import './styles.css';
 import { RouteGraphTab } from './RouteGraph';
 import { buildRouteViewModel } from './lib/routeViewModel';
 import { A2DAppShell } from './components/A2DAppShell';
+import { resolveSearchSelection } from './lib/a2dSearchHelpers.js';
+import type { BundleSummary, BundleStats, CveRecord, ReviewFilter, ReviewQueueItem, ReviewStatus, SearchContext } from './types/attack2defend';
 
 type NodeType = 'cve' | 'cwe' | 'capec' | 'attack' | 'd3fend' | 'artifact' | 'control' | 'detection' | 'evidence' | 'gap' | 'action';
 type CoverageStatus = 'covered' | 'partial' | 'missing' | 'unknown' | 'not_applicable';
@@ -40,6 +42,18 @@ type CoverageRecord = {
   owners?: string[];
 };
 
+const REVIEW_OVERRIDE_STORAGE_KEY = 'attack2defend.review_overrides.v1';
+const EMPTY_SEARCH_CONTEXT: SearchContext = {
+  normalized_query: '',
+  tokens: [],
+  mode: 'empty',
+  associated_cves: [],
+  selected_ids: [],
+  message: '',
+  primary_id: null,
+  reverse_anchor: null,
+};
+
 type RouteMetadata = {
   id: string;
   input: string;
@@ -50,6 +64,10 @@ type RouteMetadata = {
 };
 
 type KnowledgeBundle = {
+  bundle_version?: string;
+  generated_at?: string;
+  source?: string;
+  provenance?: string;
   metadata: {
     contract_version?: string;
     builder_version?: string;
@@ -63,6 +81,16 @@ type KnowledgeBundle = {
   };
   nodes: RouteNode[];
   edges: RouteEdge[];
+  canonical_chain?: Array<Record<string, unknown>>;
+  cves?: Record<string, CveRecord>;
+  reverse_index?: {
+    by_cwe?: Record<string, string[]>;
+    by_capec?: Record<string, string[]>;
+    by_attack?: Record<string, string[]>;
+    by_d3fend?: Record<string, string[]>;
+  };
+  review_queue?: ReviewQueueItem[];
+  stats?: BundleStats;
   indexes?: {
     by_type?: Partial<Record<NodeType, string[]>>;
     outgoing?: Record<string, Array<{ target: string; relationship: string }>>;
@@ -76,6 +104,7 @@ type KnowledgeBundle = {
   };
   coverage?: Record<string, CoverageRecord>;
   routes?: RouteMetadata[];
+  semantic_routes?: unknown[];
 };
 
 type LegacyRouteData = {
@@ -242,10 +271,19 @@ function App() {
   const [bundleSource, setBundleSource] = useState<BundleSource>('fallback');
   const [aiArtifact, setAiArtifact] = useState<AiCuratedRouteArtifact | null>(null);
   const [query, setQuery] = useState<string>('');
+  const [batchInput, setBatchInput] = useState<string>('');
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [activeTab, setActiveTab] = useState<TabId>('route');
   const [searchError, setSearchError] = useState<string>('');
   const [statusMessage, setStatusMessage] = useState<string>('');
+  const [reviewFilter, setReviewFilter] = useState<ReviewFilter>('all');
+  const [showStats, setShowStats] = useState<boolean>(false);
+  const [searchContext, setSearchContext] = useState<SearchContext>(EMPTY_SEARCH_CONTEXT);
+  const [reviewOverrides, setReviewOverrides] = useState<Record<string, ReviewStatus>>(() => loadReviewOverrides());
+
+  useEffect(() => {
+    persistReviewOverrides(reviewOverrides);
+  }, [reviewOverrides]);
 
   useEffect(() => {
     fetch('/data/knowledge-bundle.json')
@@ -258,7 +296,9 @@ function App() {
           setBundle(nextBundle);
           setBundleSource('generated');
           setQuery('');
+          setBatchInput('');
           setSelectedIds([]);
+          setSearchContext(EMPTY_SEARCH_CONTEXT);
           setStatusMessage('Bundle local cargado correctamente.');
         }
       })
@@ -266,7 +306,9 @@ function App() {
         setBundle(fallbackBundle);
         setBundleSource('fallback');
         setQuery('');
+        setBatchInput('');
         setSelectedIds([]);
+        setSearchContext(EMPTY_SEARCH_CONTEXT);
         setStatusMessage('Bundle generado no disponible. Usando muestra local de respaldo.');
       });
   }, []);
@@ -316,44 +358,19 @@ function App() {
   }, [aiArtifact, selectedNode]);
   const capabilityView = useMemo(() => (activeRoute && selectedNode ? buildCapabilityView(bundle, activeRoute, selectedNode, activeAiArtifact) : null), [bundle, activeRoute, selectedNode, activeAiArtifact]);
   const curatedRoute = useMemo(() => (capabilityView ? buildCuratedRoute(capabilityView) : null), [capabilityView]);
-  const markdownExport = useMemo(() => {
-    if (!activeRoute || !selectedNode) return '';
-    return buildMarkdownExport(bundle, activeRoute, selectedNode);
-  }, [bundle, activeRoute, selectedNode]);
+  const selectedId = selectedIds[0] ?? searchContext.primary_id ?? null;
+  const bundleSummary = useMemo(() => buildBundleSummary(bundle, bundleSource, reviewOverrides), [bundle, bundleSource, reviewOverrides]);
+  const reviewQueueItems = useMemo(() => buildReviewQueue(bundle, reviewOverrides, reviewFilter, selectedId), [bundle, reviewOverrides, reviewFilter, selectedId]);
+  const markdownExport = useMemo(() => buildReadoutMarkdown(), [routeViewModel.tier1Readout, selectedId, searchContext]);
   const capabilityJson = useMemo(() => (capabilityView && curatedRoute ? JSON.stringify(buildCapabilityExportPackage(capabilityView, curatedRoute), null, 2) : ''), [capabilityView, curatedRoute]);
 
   async function submitSearch(inputOverride?: string) {
     const term = (inputOverride ?? query).trim();
-    const normalized = await normalizeSearchInput(term);
-    const candidate = normalized.toUpperCase();
-    setSearchError('');
-    setStatusMessage('');
-    if (!candidate) return;
+    await applySearch(term, 'query');
+  }
 
-    if (normalized !== term) {
-      setQuery(normalized);
-      setStatusMessage(`Entrada comprimida decodificada a ${normalized}.`);
-    }
-
-    const exact = nodeMap.get(candidate);
-    if (exact) {
-      selectNode(exact.id);
-      setActiveTab('route');
-      setStatusMessage(`Ruta resuelta para ${exact.id}.`);
-      return;
-    }
-
-    const fuzzy = bundle.nodes.find((node) => `${node.id} ${node.name}`.toLowerCase().includes(normalized.toLowerCase()));
-    if (fuzzy) {
-      selectNode(fuzzy.id);
-      setActiveTab('route');
-      setStatusMessage(`Ruta resuelta para ${fuzzy.id}.`);
-      return;
-    }
-
-    setSelectedIds([]);
-    setSearchError(`No node found for "${normalized}" in the loaded bundle.`);
-    setStatusMessage(`No se encontró coincidencia local para "${normalized}". Prueba con un ID presente en el bundle.`);
+  async function submitBatchSearch() {
+    await applySearch(batchInput, 'batch');
   }
 
   function normalizeLayerParam(value: string | null): TabId | null {
@@ -370,25 +387,131 @@ function App() {
 
   function clearSearch() {
     setQuery('');
+    setBatchInput('');
     setSelectedIds([]);
     setSearchError('');
     setStatusMessage('');
     setActiveTab('route');
+    setSearchContext(EMPTY_SEARCH_CONTEXT);
+    setShowStats(false);
   }
 
   function selectNode(id: string) {
-    setSelectedIds((prev) => prev.includes(id) ? [id, ...prev.filter((item) => item !== id)] : [id, ...prev].slice(0, 5));
-    setQuery(id);
+    void applySearch(id, 'graph');
+  }
+
+  async function applySearch(raw: string, origin: 'query' | 'batch' | 'graph') {
+    const normalized = await normalizeSearchInput(raw);
+    const selection = resolveSearchSelection(bundle, normalized, { maxRoots: 8, maxReverseMatches: 12 });
+    const nextSelectedIds = selection.selectedIds.length ? selection.selectedIds : selection.associatedCves.slice(0, 8);
+    const nextContext: SearchContext = {
+      normalized_query: selection.normalizedQuery,
+      tokens: selection.tokens,
+      mode: selection.mode,
+      primary_id: selection.primaryId,
+      reverse_anchor: selection.reverseAnchor,
+      associated_cves: selection.associatedCves,
+      selected_ids: nextSelectedIds,
+      message: selection.message,
+    };
+    setSearchContext(nextContext);
+    setSelectedIds(nextSelectedIds);
     setSearchError('');
+    if (origin === 'batch') {
+      setBatchInput(normalized);
+    } else {
+      setQuery(normalized);
+    }
+    if (nextSelectedIds.length) {
+      setStatusMessage(selection.message || `Ruta resuelta para ${nextSelectedIds[0]}.`);
+      setActiveTab('route');
+      return;
+    }
+    setSearchError(`No node found for "${normalized}" in the loaded bundle.`);
+    setStatusMessage(selection.message || `No se encontró coincidencia local para "${normalized}".`);
+  }
+
+  function updateReviewStatus(id: string | undefined, nextStatus: ReviewStatus) {
+    const targetId = normalizeReviewTargetId(id ?? selectedId ?? '');
+    if (!targetId) return;
+    setReviewOverrides((current) => ({ ...current, [targetId]: nextStatus }));
+    setStatusMessage(`${targetId} marcado como ${nextStatus}.`);
+  }
+
+  function resetInvestigation() {
+    clearSearch();
+    setReviewFilter('all');
+  }
+
+  function buildReadoutMarkdown() {
+    const readout = routeViewModel.tier1Readout;
+    const lines = [
+      `# ${readout.title}`,
+      '',
+      readout.summary ? readout.summary : '',
+      '',
+      `- Severity: ${readout.severity ?? 'unknown'}`,
+      `- Confidence: ${readout.confidence ?? 'unknown'}`,
+      `- Provenance: ${readout.provenance ?? 'unknown'}`,
+      `- Review status: ${readout.review_status ?? 'candidate'}`,
+      `- Associated CVEs: ${(readout.associated_cves ?? []).join(', ') || 'n/a'}`,
+      '',
+      '## Copy Block',
+      '```text',
+      ...(readout.copy_paste_10_lines ?? readout.bullets),
+      '```',
+      '',
+    ];
+    return lines.filter((line) => line !== '').join('\n');
+  }
+
+  function copyReadout() {
+    const text = (routeViewModel.tier1Readout.copy_paste_10_lines ?? routeViewModel.tier1Readout.bullets).join('\n');
+    void copyToClipboard(text, 'Readout copied to clipboard.');
+  }
+
+  function exportMarkdown() {
+    const markdown = markdownExport || buildReadoutMarkdown();
+    downloadText(`attack2defend-${selectedId ?? 'readout'}.md`, markdown);
+    setStatusMessage('Markdown exported.');
+  }
+
+  function promoteSelected(id?: string) {
+    updateReviewStatus(id, 'approved');
+  }
+
+  function rejectSelected(id?: string) {
+    updateReviewStatus(id, 'rejected');
+  }
+
+  function selectReviewItem(id: string) {
+    void applySearch(id, 'graph');
   }
 
   return (
     <main className="app-shell">
       <A2DAppShell
         query={query}
+        batchInput={batchInput}
         viewModel={routeViewModel}
+        bundleSummary={bundleSummary}
+        reviewQueue={reviewQueueItems}
+        reviewFilter={reviewFilter}
+        searchContext={searchContext}
+        showStats={showStats}
         onQueryChange={setQuery}
         onAnalyze={submitSearch}
+        onBatchInputChange={setBatchInput}
+        onBatchAnalyze={submitBatchSearch}
+        onReviewFilterChange={setReviewFilter}
+        onToggleStats={() => setShowStats((current) => !current)}
+        onCopyReadout={copyReadout}
+        onExportMarkdown={exportMarkdown}
+        onPromote={promoteSelected}
+        onReject={rejectSelected}
+        onReset={resetInvestigation}
+        onSelectReviewItem={selectReviewItem}
+        selectedId={selectedId}
         statusMessage={statusMessage}
         errorMessage={searchError}
       />
@@ -1524,14 +1647,132 @@ ${coverageRows.map((row) => `- ${row.id}: ${row.status}${row.gaps.length ? ` | g
 `;
 }
 
+function buildBundleSummary(bundle: KnowledgeBundle, bundleSource: BundleSource, reviewOverrides: Record<string, ReviewStatus>): BundleSummary {
+  const cveCount = Object.keys(bundle.cves ?? {}).length || bundle.nodes.filter((node) => node.type === 'cve').length;
+  const routeCount = bundle.routes?.length ?? bundle.indexes?.route_inputs?.length ?? 0;
+  const reviewQueueCount = buildReviewQueue(bundle, reviewOverrides, 'all', null).length;
+  return {
+    bundle_version: bundle.bundle_version ?? bundle.metadata.contract_version ?? bundle.metadata.generated_at ?? 'unknown',
+    generated_at: bundle.generated_at ?? bundle.metadata.generated_at ?? 'unknown',
+    source: bundle.source ?? (bundleSource === 'generated' ? 'CVE2CAPEC' : 'fallback'),
+    provenance: bundle.provenance ?? 'canonical',
+    node_count: bundle.nodes.length,
+    edge_count: bundle.edges.length,
+    cve_count: cveCount,
+    route_count: routeCount,
+    review_queue_count: reviewQueueCount,
+    last_sync: bundle.generated_at ?? bundle.metadata.generated_at ?? 'unknown',
+    stats: bundle.stats,
+  };
+}
+
+function buildReviewQueue(bundle: KnowledgeBundle, overrides: Record<string, ReviewStatus>, filter: ReviewFilter, selectedId: string | null): ReviewQueueItem[] {
+  const source = (bundle.review_queue?.length ? bundle.review_queue : buildReviewQueueFromCves(bundle)).map((item) => normalizeReviewItem(bundle, item, overrides, selectedId));
+  return source.filter((item) => reviewFilterMatches(item, filter));
+}
+
+function buildReviewQueueFromCves(bundle: KnowledgeBundle): ReviewQueueItem[] {
+  return Object.values(bundle.cves ?? {})
+    .filter((record) => record.review_status !== 'approved' || (record.canonical_chain?.length ?? 0) === 0)
+    .map((record) => ({
+      id: record.id,
+      label: record.label,
+      review_status: record.review_status ?? 'candidate',
+      provenance: record.provenance ?? 'canonical',
+      confidence: record.confidence ?? 'unknown',
+      reason: record.tier1_readout?.summary ?? record.description ?? '',
+      cve_count: 1,
+      route_count: record.canonical_chain?.length ?? 0,
+      focus: record.id,
+    }));
+}
+
+function normalizeReviewItem(bundle: KnowledgeBundle, item: ReviewQueueItem, overrides: Record<string, ReviewStatus>, selectedId: string | null): ReviewQueueItem {
+  const id = normalizeReviewTargetId(item.id);
+  const record = bundle.cves?.[id];
+  const review_status = normalizeReviewStatus(overrides[id] ?? item.review_status ?? record?.review_status);
+  return {
+    id,
+    label: item.label ?? record?.label ?? id,
+    review_status,
+    provenance: item.provenance ?? record?.provenance ?? 'canonical',
+    confidence: item.confidence ?? record?.confidence ?? 'unknown',
+    reason: item.reason ?? record?.tier1_readout?.summary ?? record?.description ?? '',
+    cve_count: item.cve_count ?? (record ? 1 : 0),
+    route_count: item.route_count ?? record?.canonical_chain?.length ?? 0,
+    selected: selectedId ? id === selectedId : Boolean(item.selected),
+    focus: item.focus ?? id,
+  };
+}
+
+function reviewFilterMatches(item: ReviewQueueItem, filter: ReviewFilter): boolean {
+  if (filter === 'all') return true;
+  if (filter === 'canonical') return item.provenance === 'canonical' || item.review_status === 'approved';
+  if (filter === 'ai_inferred') return item.provenance !== 'canonical' || item.review_status !== 'approved';
+  if (filter === 'pending') return item.review_status === 'candidate' || item.review_status === 'pending';
+  return true;
+}
+
+function normalizeReviewStatus(value: unknown): ReviewStatus {
+  const text = String(value ?? '').trim().toLowerCase();
+  if (text === 'approved' || text === 'rejected' || text === 'pending' || text === 'candidate') return text;
+  return 'candidate';
+}
+
+function normalizeReviewTargetId(value: string) {
+  return String(value ?? '').trim().toUpperCase();
+}
+
+function loadReviewOverrides(): Record<string, ReviewStatus> {
+  try {
+    const raw = window.localStorage.getItem(REVIEW_OVERRIDE_STORAGE_KEY);
+    if (!raw) return {};
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed !== 'object') return {};
+    return Object.fromEntries(Object.entries(parsed as Record<string, unknown>).map(([key, value]) => [normalizeReviewTargetId(key), normalizeReviewStatus(value)]));
+  } catch {
+    return {};
+  }
+}
+
+function persistReviewOverrides(overrides: Record<string, ReviewStatus>) {
+  try {
+    window.localStorage.setItem(REVIEW_OVERRIDE_STORAGE_KEY, JSON.stringify(overrides));
+  } catch {
+    // ignore localStorage failures in private / restricted modes
+  }
+}
+
+async function copyToClipboard(value: string, fallbackFilename = 'attack2defend-readout.txt') {
+  try {
+    if (navigator?.clipboard?.writeText) {
+      await navigator.clipboard.writeText(value);
+      return;
+    }
+  } catch {
+    // fall back to file download below
+  }
+  downloadText(fallbackFilename, value, 'text/plain;charset=utf-8');
+}
+
+function downloadText(filename: string, content: string, mimeType = 'text/plain;charset=utf-8') {
+  const blob = new Blob([content], { type: mimeType });
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement('a');
+  anchor.href = url;
+  anchor.download = filename;
+  anchor.click();
+  URL.revokeObjectURL(url);
+}
+
 async function normalizeSearchInput(raw: string) {
   const term = raw.trim();
   if (!term) return '';
   if (/^H4s[A-Za-z0-9+/=]+$/.test(term)) {
     const decoded = await decodeCompressedInput(term);
-    return decoded.match(/CVE-\d{4}-\d{4,7}/i)?.[0] ?? decoded.trim();
+    return decoded.trim();
   }
-  return term.match(/CVE-\d{4}-\d{4,7}/i)?.[0] ?? term;
+  return term;
 }
 
 async function decodeCompressedInput(value: string) {

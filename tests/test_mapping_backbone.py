@@ -8,6 +8,7 @@ sys.path.insert(0, str(ROOT / "scripts" / "knowledge_builder"))
 
 from apply_mapping_backbone import apply_mapping_backbone  # noqa: E402
 from validate_bundle import validate_bundle  # noqa: E402
+from validate_edge_provenance import validate_bundle as validate_edge_provenance  # noqa: E402
 
 
 def write_json(path: Path, payload: object) -> None:
@@ -29,6 +30,7 @@ def test_mapping_backbone_creates_defensive_semantic_route(tmp_path: Path) -> No
 
     assert apply_mapping_backbone(bundle_path, ROOT / "data" / "mappings", None, None, False) == 0
     result = json.loads(bundle_path.read_text(encoding="utf-8"))
+    assert validate_edge_provenance(result) == []
 
     errors = validate_bundle(
         result,

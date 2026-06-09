@@ -24,6 +24,17 @@ Attack2Defend is built for teams that need to answer one operational question fa
 
 ---
 
+## SOC-Ready Bundle Sync
+
+The static runtime consumes `data/knowledge-bundle.json`, which is rebuilt from CVE2CAPEC sources by:
+
+- `scripts/etl_cve2capec_to_a2d.py`
+- `.github/workflows/sync-cve2capec.yml`
+
+The ETL updates the canonical bundle, mirrors the runtime copy into `app/navigator-ui/public/data/knowledge-bundle.json`, preserves reverse indexes and review state, and validates smoke routes before publishing.
+
+---
+
 ## Executive Summary
 
 Attack2Defend is not just a mapping table and not just a graph viewer.
@@ -368,6 +379,23 @@ Validate the product before trusting the output:
 ```bash
 make ga-check
 ```
+
+### Canonical launcher
+
+Use the root launcher as the single entrypoint:
+
+```bash
+./run.sh
+```
+
+Modes:
+
+```bash
+./run.sh ui    # frontend only
+./run.sh full  # build, validate, API + frontend
+```
+
+The compatibility wrappers `run_full_capacity.sh` and `scripts/run_full_stack.sh` now delegate to `run.sh`.
 
 ### Generate a curated route from the CLI
 

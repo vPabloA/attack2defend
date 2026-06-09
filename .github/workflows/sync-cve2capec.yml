@@ -1,0 +1,49 @@
+name: Sync CVE2CAPEC bundle
+
+on:
+  schedule:
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    name: Build and publish CVE2CAPEC bundle
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install package
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e '.[dev]'
+
+      - name: Build SOC-ready bundle
+        run: python scripts/etl_cve2capec_to_a2d.py
+
+      - name: Validate bundle
+        run: python scripts/etl_cve2capec_to_a2d.py --validate-only
+
+      - name: Validate edge provenance
+        run: python scripts/knowledge_builder/validate_edge_provenance.py data/knowledge-bundle.json
+
+      - name: Commit and push bundle updates
+        run: |
+          if git diff --quiet -- data/knowledge-bundle.json data/knowledge-bundle.last-good.json app/navigator-ui/public/data/knowledge-bundle.json app/navigator-ui/public/data/knowledge-bundle.last-good.json; then
+            echo "No bundle changes detected."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/knowledge-bundle.json data/knowledge-bundle.last-good.json app/navigator-ui/public/data/knowledge-bundle.json app/navigator-ui/public/data/knowledge-bundle.last-good.json
+          git commit -m "chore: sync bundle from CVE2CAPEC"
+          git push
