@@ -1,3 +1,4 @@
+import { useEffect, useMemo, useRef, useState } from 'react';
 import ForceGraph2D from 'react-force-graph-2d';
 import type { GraphLink, GraphNode, GraphViewModel } from '../graph/graphModel';
 import type { GraphSelection } from './GraphInspector';
@@ -11,10 +12,35 @@ type ForceGraphData = {
 };
 
 export function GraphExplorer2D({ view, onSelectNode, onSelectionChange }: { view: GraphViewModel; onSelectNode: (id: string) => void; onSelectionChange: (selection: GraphSelection) => void }) {
+  const frameRef = useRef<HTMLDivElement>(null);
+  const [frameSize, setFrameSize] = useState({ width: 900, height: 560 });
   const data: ForceGraphData = {
     nodes: view.nodes as ForceNode[],
     links: view.links as ForceLink[],
   };
+
+  useEffect(() => {
+    const frame = frameRef.current;
+    if (!frame) return;
+
+    const updateSize = () => {
+      const rect = frame.getBoundingClientRect();
+      setFrameSize({
+        width: Math.max(320, Math.floor(rect.width)),
+        height: Math.max(460, Math.floor(rect.height)),
+      });
+    };
+
+    updateSize();
+    const observer = new ResizeObserver(updateSize);
+    observer.observe(frame);
+    window.addEventListener('resize', updateSize);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('resize', updateSize);
+    };
+  }, []);
 
   return (
     <section className="graph-card graph-canvas-card">
@@ -29,11 +55,11 @@ export function GraphExplorer2D({ view, onSelectNode, onSelectionChange }: { vie
           <span>{view.visibleScope}</span>
         </div>
       </div>
-      <div className="graph-canvas-frame">
+      <div className="graph-canvas-frame" ref={frameRef}>
         <ForceGraph2D
           graphData={data}
-          width={900}
-          height={560}
+          width={frameSize.width}
+          height={frameSize.height}
           nodeLabel={(node) => `${(node as ForceNode).id} · ${(node as ForceNode).rawNode.name}`}
           linkLabel={(link) => `${(link as ForceLink).relationship} · ${(link as ForceLink).confidence}`}
           nodeVal={(node) => (node as ForceNode).val}

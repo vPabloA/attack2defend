@@ -1,4 +1,11 @@
+import { useMemo } from 'react';
 import type { RouteViewEdge, RouteViewNode, RouteLayer } from '../lib/routeViewModel';
+import {
+  buildGraphRenderPlan,
+  GRAPH_VIEWPORT_HEIGHT,
+  type GraphRenderNode,
+  type GraphRenderNodePlacement,
+} from '../graph/graphRenderPlan.ts';
 
 export interface MappingGraph2DProps {
   nodes: RouteViewNode[];
@@ -8,35 +15,47 @@ export interface MappingGraph2DProps {
   isPreview?: boolean;
 }
 
-const stages: Array<{ layer: RouteLayer; label: string; x: number }> = [
-  { layer: 'cve', label: 'CVE', x: 90 },
-  { layer: 'cwe', label: 'CWE', x: 292 },
-  { layer: 'capec', label: 'CAPEC', x: 500 },
-  { layer: 'attack', label: 'MITRE ATT&CK', x: 708 },
-  { layer: 'd3fend', label: 'D3FEND', x: 910 },
-];
+const STAGE_LABELS: Record<RouteLayer, string> = {
+  cve: 'CVE',
+  cwe: 'CWE',
+  capec: 'CAPEC',
+  attack: 'MITRE ATT&CK',
+  d3fend: 'D3FEND',
+  control: 'Control',
+  detection: 'Detection',
+  evidence: 'Evidence',
+  gap: 'Gap',
+  action: 'Action',
+};
 
 export function MappingGraph2D({ nodes, edges, canonicalPath, warnings = [], isPreview = false }: MappingGraph2DProps) {
-  const primaryIds = new Set(canonicalPath.map((node) => node.id));
-  const grouped = stages.map((stage) => {
-    const stageNodes = nodes.filter((node) => node.layer === stage.layer);
-    const primary = stageNodes.filter((node) => primaryIds.has(node.id));
-    const secondary = stageNodes.filter((node) => !primaryIds.has(node.id));
-    return { ...stage, nodes: [...primary, ...secondary] };
-  });
-  const maxRows = Math.max(1, ...grouped.map((stage) => stage.nodes.length));
-  const graphHeight = Math.max(470, 148 + maxRows * 116);
-  const positions = new Map<string, { x: number; y: number }>();
+  const renderNodes = useMemo(
+    () => nodes.map(toRenderNode).filter((node): node is GraphRenderNode => node !== null),
+    [nodes],
+  );
+  const plan = useMemo(
+    () => buildGraphRenderPlan({
+      nodes: renderNodes,
+      canonicalPathIds: canonicalPath.map((node) => node.id),
+    }),
+    [renderNodes, canonicalPath],
+  );
 
-  grouped.forEach((stage) => {
-    stage.nodes.forEach((node, index) => {
-      positions.set(node.id, { x: stage.x, y: 118 + index * 116 });
-    });
-  });
+  const positions = useMemo(() => {
+    const map = new Map<string, { x: number; y: number }>();
+    for (const stage of plan.stages) {
+      for (const node of stage.nodes) {
+        map.set(node.id, { x: node.x, y: node.y });
+      }
+    }
+    return map;
+  }, [plan]);
 
-  const visibleEdges = edges.filter((edge) => positions.has(edge.source) && positions.has(edge.target));
-  const hasRoute = nodes.length > 0;
-
+  const visibleEdges = useMemo(
+    () => edges.filter((edge) => positions.has(edge.source) && positions.has(edge.target)),
+    [edges, positions],
+  );
+  const hasRoute = plan.visibleNodeCount > 0;
   return (
     <section className={`a2d-graph-card${isPreview ? ' a2d-graph-preview' : ''}`}>
       <div className="a2d-graph-head">
@@ -56,50 +75,64 @@ export function MappingGraph2D({ nodes, edges, canonicalPath, warnings = [], isP
         </div>
       </div>
 
-      <div className="a2d-graph-stage" style={{ minHeight: graphHeight }}>
-        <svg className="a2d-edge-layer" viewBox={`0 0 1000 ${graphHeight}`} preserveAspectRatio="none" aria-hidden="true">
-          {visibleEdges.map((edge) => {
-            const source = positions.get(edge.source);
-            const target = positions.get(edge.target);
-            if (!source || !target) return null;
-            const sourceOffset = source.x < target.x ? 74 : -74;
-            const targetOffset = source.x < target.x ? -74 : 74;
-            const startX = source.x + sourceOffset;
-            const endX = target.x + targetOffset;
-            const midX = startX + (endX - startX) / 2;
-            const dashed = edge.isConditional || edge.isInferred || edge.badge === 'conditional' || edge.badge === 'analytical_inferred';
-            return (
-              <path
-                key={edge.id}
-                d={`M ${startX} ${source.y} C ${midX} ${source.y}, ${midX} ${target.y}, ${endX} ${target.y}`}
-                className={`a2d-edge ${dashed ? 'a2d-edge-dashed' : 'a2d-edge-primary'}`}
-              />
-            );
-          })}
-        </svg>
+      <div className="a2d-graph-stage" style={{ height: GRAPH_VIEWPORT_HEIGHT }}>
+        <div className="a2d-graph-stage-inner" style={{ height: plan.contentHeight }}>
+          <svg className="a2d-edge-layer" viewBox={`0 0 1000 ${plan.contentHeight}`} preserveAspectRatio="none" aria-hidden="true">
+            {visibleEdges.map((edge) => {
+              const source = positions.get(edge.source);
+              const target = positions.get(edge.target);
+              if (!source || !target) return null;
+              const sourceOffset = source.x < target.x ? 74 : -74;
+              const targetOffset = source.x < target.x ? -74 : 74;
+              const startX = source.x + sourceOffset;
+              const endX = target.x + targetOffset;
+              const midX = startX + (endX - startX) / 2;
+              const dashed = edge.isConditional || edge.isInferred || edge.badge === 'conditional' || edge.badge === 'analytical_inferred';
+              return (
+                <path
+                  key={edge.id}
+                  d={`M ${startX} ${source.y} C ${midX} ${source.y}, ${midX} ${target.y}, ${endX} ${target.y}`}
+                  className={`a2d-edge ${dashed ? 'a2d-edge-dashed' : 'a2d-edge-primary'}`}
+                />
+              );
+            })}
+          </svg>
 
-        {stages.map((stage) => (
-          <div key={stage.layer} className={`a2d-stage-label a2d-layer-${stage.layer}`} style={{ left: `${stage.x / 10}%` }}>
-            {stage.label}
-          </div>
-        ))}
+          {plan.stages.map((stage) => (
+            <div key={stage.layer}>
+              <div className={`a2d-stage-label a2d-layer-${stage.layer}`} style={{ left: `${stage.x / 10}%` }}>
+                {stage.label}
+              </div>
+              {stage.nodes.map((node) => (
+                <GraphNode key={node.id} node={node} />
+              ))}
+              {stage.hiddenAlternatives > 0 && (
+                <div className={`a2d-stage-more a2d-layer-${stage.layer}`} style={{ left: `${stage.x / 10}%`, top: plan.contentHeight - 72 }}>
+                  +{stage.hiddenAlternatives} more hidden
+                </div>
+              )}
+            </div>
+          ))}
 
-        {grouped.flatMap((stage) => stage.nodes.map((node, index) => (
-          <GraphNode key={node.id} node={node} stageX={stage.x} top={82 + index * 116} primary={primaryIds.has(node.id)} isPreview={isPreview} />
-        )))}
+          {hasRoute && plan.hiddenAlternativeCount > 0 && (
+            <div className="a2d-graph-more-note">
+              Showing canonical path plus up to 3 alternatives per stage.
+            </div>
+          )}
 
-        {!hasRoute && (
-          <div className="a2d-empty-graph">
-            <strong>No hay ruta disponible en el bundle local para este input.</strong>
-            <span>Ingresa un CVE, CWE, CAPEC, ATT&amp;CK o D3FEND disponible y ejecuta Analyze.</span>
-          </div>
-        )}
+          {!hasRoute && (
+            <div className="a2d-empty-graph">
+              <strong>No hay ruta disponible en el bundle local para este input.</strong>
+              <span>Ingresa un CVE, CWE, CAPEC, ATT&amp;CK o D3FEND disponible y ejecuta Analyze.</span>
+            </div>
+          )}
 
-        {hasRoute && grouped.find((stage) => stage.layer === 'd3fend')?.nodes.length === 0 && (
-          <div className="a2d-graph-gap">
-            No hay capacidad defensiva D3FEND asociada en el bundle local.
-          </div>
-        )}
+          {hasRoute && !plan.stages.find((stage) => stage.layer === 'd3fend')?.nodes.length && (
+            <div className="a2d-graph-gap">
+              No hay capacidad defensiva D3FEND asociada en el bundle local.
+            </div>
+          )}
+        </div>
       </div>
 
       {warnings.length > 0 && (
@@ -111,15 +144,30 @@ export function MappingGraph2D({ nodes, edges, canonicalPath, warnings = [], isP
   );
 }
 
-function GraphNode({ node, stageX, top, primary, isPreview }: { node: RouteViewNode; stageX: number; top: number; primary: boolean; isPreview: boolean }) {
+function GraphNode({ node }: { node: GraphRenderNodePlacement }) {
   return (
     <div
-      className={`a2d-graph-node a2d-layer-${node.layer} ${primary ? 'a2d-node-primary' : 'a2d-node-secondary'}${isPreview ? ' a2d-node-preview' : ''}`}
-      style={{ left: `${stageX / 10}%`, top }}
+      className={`a2d-graph-node a2d-layer-${node.layer} ${node.primary ? 'a2d-node-primary' : 'a2d-node-secondary'} a2d-node-${node.bucket}`}
+      style={{ left: `${node.x / 10}%`, top: node.y }}
     >
       <strong>{node.id}</strong>
-      <span>{node.label.replace(`${node.id} · `, '')}</span>
+      <span>{node.label?.replace(`${node.id} · `, '') ?? node.title ?? node.id}</span>
       {node.badge && <em className={`a2d-badge a2d-badge-${node.badge}`}>{node.badge}</em>}
     </div>
   );
+}
+
+function toRenderNode(node: RouteViewNode): GraphRenderNode | null {
+  if (!isGraphStageLayer(node.layer)) return null;
+  return {
+    id: node.id,
+    layer: node.layer,
+    label: node.label,
+    title: node.description ?? node.label,
+    badge: node.badge,
+  };
+}
+
+function isGraphStageLayer(layer: RouteLayer): layer is 'cve' | 'cwe' | 'capec' | 'attack' | 'd3fend' {
+  return layer === 'cve' || layer === 'cwe' || layer === 'capec' || layer === 'attack' || layer === 'd3fend';
 }

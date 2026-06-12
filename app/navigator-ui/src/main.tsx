@@ -1,13 +1,12 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import fallbackRoute from './data/log4shell.route.json';
 import './styles.css';
 import { RouteGraphTab } from './RouteGraph';
-import { buildRouteViewModel, buildRouteViewModelFromPreview } from './lib/routeViewModel';
-import { startRouteResolution, getOrchestratorModePublic } from './lib/routeOrchestratorClient';
-import type { ResolutionStatus, ResolutionStep, RouteResolutionJobStatus } from './lib/routeOrchestratorClient';
-import type { PreviewRouteArtifact, RouteViewModel } from './lib/routeViewModel';
+import { buildRouteViewModel } from './lib/routeViewModel';
 import { A2DAppShell } from './components/A2DAppShell';
+import { resolveSearchSelection } from './lib/a2dSearchHelpers.js';
+import type { BundleSummary, BundleStats, CveRecord, ReviewFilter, ReviewQueueItem, ReviewStatus, SearchContext } from './types/attack2defend';
 
 type NodeType = 'cve' | 'cwe' | 'capec' | 'attack' | 'd3fend' | 'artifact' | 'control' | 'detection' | 'evidence' | 'gap' | 'action';
 type CoverageStatus = 'covered' | 'partial' | 'missing' | 'unknown' | 'not_applicable';
@@ -43,6 +42,18 @@ type CoverageRecord = {
   owners?: string[];
 };
 
+const REVIEW_OVERRIDE_STORAGE_KEY = 'attack2defend.review_overrides.v1';
+const EMPTY_SEARCH_CONTEXT: SearchContext = {
+  normalized_query: '',
+  tokens: [],
+  mode: 'empty',
+  associated_cves: [],
+  selected_ids: [],
+  message: '',
+  primary_id: null,
+  reverse_anchor: null,
+};
+
 type RouteMetadata = {
   id: string;
   input: string;
@@ -53,6 +64,10 @@ type RouteMetadata = {
 };
 
 type KnowledgeBundle = {
+  bundle_version?: string;
+  generated_at?: string;
+  source?: string;
+  provenance?: string;
   metadata: {
     contract_version?: string;
     builder_version?: string;
@@ -66,6 +81,16 @@ type KnowledgeBundle = {
   };
   nodes: RouteNode[];
   edges: RouteEdge[];
+  canonical_chain?: Array<Record<string, unknown>>;
+  cves?: Record<string, CveRecord>;
+  reverse_index?: {
+    by_cwe?: Record<string, string[]>;
+    by_capec?: Record<string, string[]>;
+    by_attack?: Record<string, string[]>;
+    by_d3fend?: Record<string, string[]>;
+  };
+  review_queue?: ReviewQueueItem[];
+  stats?: BundleStats;
   indexes?: {
     by_type?: Partial<Record<NodeType, string[]>>;
     outgoing?: Record<string, Array<{ target: string; relationship: string }>>;
@@ -79,6 +104,7 @@ type KnowledgeBundle = {
   };
   coverage?: Record<string, CoverageRecord>;
   routes?: RouteMetadata[];
+  semantic_routes?: unknown[];
 };
 
 type LegacyRouteData = {
@@ -245,18 +271,19 @@ function App() {
   const [bundleSource, setBundleSource] = useState<BundleSource>('fallback');
   const [aiArtifact, setAiArtifact] = useState<AiCuratedRouteArtifact | null>(null);
   const [query, setQuery] = useState<string>('');
+  const [batchInput, setBatchInput] = useState<string>('');
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [activeTab, setActiveTab] = useState<TabId>('route');
   const [searchError, setSearchError] = useState<string>('');
+  const [statusMessage, setStatusMessage] = useState<string>('');
+  const [reviewFilter, setReviewFilter] = useState<ReviewFilter>('pending');
+  const [showStats, setShowStats] = useState<boolean>(false);
+  const [searchContext, setSearchContext] = useState<SearchContext>(EMPTY_SEARCH_CONTEXT);
+  const [reviewOverrides, setReviewOverrides] = useState<Record<string, ReviewStatus>>(() => loadReviewOverrides());
 
-  // On-demand resolution state
-  const [resolutionStatus, setResolutionStatus] = useState<ResolutionStatus>('idle');
-  const [resolutionSteps, setResolutionSteps] = useState<ResolutionStep[]>([]);
-  const [resolutionProgress, setResolutionProgress] = useState<number>(0);
-  const [resolutionMessage, setResolutionMessage] = useState<string>('');
-  const [resolutionWarnings, setResolutionWarnings] = useState<string[]>([]);
-  const [resolutionError, setResolutionError] = useState<string>('');
-  const [previewArtifact, setPreviewArtifact] = useState<PreviewRouteArtifact | null>(null);
+  useEffect(() => {
+    persistReviewOverrides(reviewOverrides);
+  }, [reviewOverrides]);
 
   useEffect(() => {
     fetch('/data/knowledge-bundle.json')
@@ -269,14 +296,20 @@ function App() {
           setBundle(nextBundle);
           setBundleSource('generated');
           setQuery('');
+          setBatchInput('');
           setSelectedIds([]);
+          setSearchContext(EMPTY_SEARCH_CONTEXT);
+          setStatusMessage('Bundle local cargado correctamente.');
         }
       })
       .catch(() => {
         setBundle(fallbackBundle);
         setBundleSource('fallback');
         setQuery('');
+        setBatchInput('');
         setSelectedIds([]);
+        setSearchContext(EMPTY_SEARCH_CONTEXT);
+        setStatusMessage('Bundle generado no disponible. Usando muestra local de respaldo.');
       });
   }, []);
 
@@ -294,10 +327,24 @@ function App() {
       });
   }, []);
 
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const encodedInput = params.get('input')?.trim();
+    const layer = normalizeLayerParam(params.get('layer'));
+    if (layer) setActiveTab(layer);
+    if (!encodedInput) return;
+    setQuery(encodedInput);
+    void submitSearch(encodedInput);
+  }, []);
+
   const nodeMap = useMemo(() => new Map(bundle.nodes.map((node) => [node.id, node])), [bundle.nodes]);
   const selectedNode = selectedIds.length ? nodeMap.get(selectedIds[0]) ?? null : null;
   const activeRoute = useMemo(() => (selectedIds.length ? resolveRoute(bundle, selectedIds) : null), [bundle, selectedIds]);
   const suggestions = useMemo(() => buildSuggestions(bundle, query), [bundle, query]);
+  const routeViewModel = useMemo(
+    () => buildRouteViewModel({ bundle, query, selectedIds, aiTask: 'explain_visible_graph' }),
+    [bundle, query, selectedIds],
+  );
   const coverageRows = useMemo(() => (activeRoute ? buildCoverageRows(bundle, activeRoute) : []), [bundle, activeRoute]);
   const navigatorLayer = useMemo(() => (activeRoute ? buildAttackNavigatorLayer(bundle, activeRoute) : buildAttackNavigatorLayer(bundle, { root: 'EMPTY', nodes: [], edges: [] })), [bundle, activeRoute]);
   const d3fendCadGraph = useMemo(() => (activeRoute ? buildD3fendCadGraph(bundle, activeRoute) : buildD3fendCadGraph(bundle, { root: 'EMPTY', nodes: [], edges: [] })), [bundle, activeRoute]);
@@ -311,208 +358,163 @@ function App() {
   }, [aiArtifact, selectedNode]);
   const capabilityView = useMemo(() => (activeRoute && selectedNode ? buildCapabilityView(bundle, activeRoute, selectedNode, activeAiArtifact) : null), [bundle, activeRoute, selectedNode, activeAiArtifact]);
   const curatedRoute = useMemo(() => (capabilityView ? buildCuratedRoute(capabilityView) : null), [capabilityView]);
-  const markdownExport = useMemo(() => {
-    if (!activeRoute || !selectedNode) return '';
-    return buildMarkdownExport(bundle, activeRoute, selectedNode);
-  }, [bundle, activeRoute, selectedNode]);
+  const selectedId = selectedIds[0] ?? searchContext.primary_id ?? null;
+  const bundleSummary = useMemo(() => buildBundleSummary(bundle, bundleSource, reviewOverrides), [bundle, bundleSource, reviewOverrides]);
+  const reviewQueueItems = useMemo(() => buildReviewQueue(bundle, reviewOverrides, reviewFilter, selectedId), [bundle, reviewOverrides, reviewFilter, selectedId]);
+  const markdownExport = useMemo(() => buildReadoutMarkdown(), [routeViewModel.tier1Readout, selectedId, searchContext]);
   const capabilityJson = useMemo(() => (capabilityView && curatedRoute ? JSON.stringify(buildCapabilityExportPackage(capabilityView, curatedRoute), null, 2) : ''), [capabilityView, curatedRoute]);
 
-  const routeViewModel = useMemo<RouteViewModel>(() => {
-    if (previewArtifact && resolutionStatus !== 'idle' && resolutionStatus !== 'local_found' && !selectedIds.length) {
-      return buildRouteViewModelFromPreview(previewArtifact);
-    }
-    return buildRouteViewModel({ bundle, query, selectedIds, aiTask: 'explain_visible_graph' });
-  }, [bundle, query, selectedIds, previewArtifact, resolutionStatus]);
+  async function submitSearch(inputOverride?: string) {
+    const term = (inputOverride ?? query).trim();
+    await applySearch(term, 'query');
+  }
 
-  const isPreview = routeViewModel.isPreview;
+  async function submitBatchSearch() {
+    await applySearch(batchInput, 'batch');
+  }
 
-  const startResolution = useCallback(async (input: string) => {
-    setResolutionStatus('queued');
-    setResolutionSteps([]);
-    setResolutionProgress(0);
-    setResolutionMessage(`${input} not found in local bundle. Starting preview resolution...`);
-    setResolutionWarnings([]);
-    setResolutionError('');
-    setPreviewArtifact(null);
-
-    let result: RouteResolutionJobStatus;
-    try {
-      result = await startRouteResolution(input, (steps, progress) => {
-        setResolutionSteps(steps);
-        setResolutionProgress(progress);
-        setResolutionStatus('running');
-      });
-    } catch (err) {
-      setResolutionStatus('failed');
-      setResolutionError(err instanceof Error ? err.message : 'Unknown resolution error.');
-      return;
-    }
-
-    setResolutionSteps(result.steps ?? []);
-    setResolutionProgress(result.progress ?? 100);
-    setResolutionWarnings(result.warnings ?? []);
-    setResolutionError(result.error ?? '');
-
-    if (result.status === 'disabled') {
-      setResolutionStatus('disabled');
-      setResolutionMessage('');
-      return;
-    }
-
-    if ((result.status === 'completed' || result.status === 'completed_with_gaps') && result.preview_artifact) {
-      setPreviewArtifact(result.preview_artifact);
-      setResolutionStatus(result.status);
-      setResolutionMessage('');
-      return;
-    }
-
-    setResolutionStatus(result.status === 'failed' ? 'failed' : 'failed');
-    setResolutionMessage('');
-  }, []);
-
-  function submitSearch() {
-    const term = query.trim();
-    const candidate = term.toUpperCase();
-    setSearchError('');
-    setPreviewArtifact(null);
-    setResolutionStatus('idle');
-    setResolutionSteps([]);
-    setResolutionProgress(0);
-    setResolutionMessage('');
-    setResolutionWarnings([]);
-    setResolutionError('');
-
-    if (!candidate) return;
-
-    const exact = nodeMap.get(candidate);
-    if (exact) {
-      selectNode(exact.id);
-      setActiveTab('route');
-      setResolutionStatus('local_found');
-      return;
-    }
-
-    const fuzzy = bundle.nodes.find((node) => `${node.id} ${node.name}`.toLowerCase().includes(term.toLowerCase()));
-    if (fuzzy) {
-      selectNode(fuzzy.id);
-      setActiveTab('route');
-      setResolutionStatus('local_found');
-      return;
-    }
-
-    // Not in local bundle — start on-demand resolution
-    setSelectedIds([]);
-    setResolutionStatus('local_not_found');
-    setResolutionMessage(`"${candidate}" not found in the local bundle.`);
-
-    const orchestratorMode = getOrchestratorModePublic();
-    if (orchestratorMode === 'disabled') {
-      setResolutionStatus('disabled');
-      return;
-    }
-
-    void startResolution(candidate);
+  function normalizeLayerParam(value: string | null): TabId | null {
+    const normalized = (value ?? '').trim().toLowerCase();
+    if (!normalized) return null;
+    if (normalized === 'enterprise-defend') return 'd3fend';
+    if (normalized === 'attack') return 'attack';
+    if (normalized === 'd3fend') return 'd3fend';
+    if (normalized === 'coverage') return 'coverage';
+    if (normalized === 'export') return 'export';
+    if (normalized === 'graph') return 'graph';
+    return 'route';
   }
 
   function clearSearch() {
     setQuery('');
+    setBatchInput('');
     setSelectedIds([]);
     setSearchError('');
+    setStatusMessage('');
     setActiveTab('route');
-    setResolutionStatus('idle');
-    setResolutionSteps([]);
-    setResolutionProgress(0);
-    setResolutionMessage('');
-    setResolutionWarnings([]);
-    setResolutionError('');
-    setPreviewArtifact(null);
+    setSearchContext(EMPTY_SEARCH_CONTEXT);
+    setShowStats(false);
   }
 
   function selectNode(id: string) {
-    setSelectedIds((prev) => prev.includes(id) ? [id, ...prev.filter((item) => item !== id)] : [id, ...prev].slice(0, 5));
-    setQuery(id);
+    void applySearch(id, 'graph');
+  }
+
+  async function applySearch(raw: string, origin: 'query' | 'batch' | 'graph') {
+    const normalized = await normalizeSearchInput(raw);
+    const selection = resolveSearchSelection(bundle, normalized, { maxRoots: 8, maxReverseMatches: 12 });
+    const nextSelectedIds = selection.selectedIds.length ? selection.selectedIds : selection.associatedCves.slice(0, 8);
+    const nextContext: SearchContext = {
+      normalized_query: selection.normalizedQuery,
+      tokens: selection.tokens,
+      mode: selection.mode,
+      primary_id: selection.primaryId,
+      reverse_anchor: selection.reverseAnchor,
+      associated_cves: selection.associatedCves,
+      selected_ids: nextSelectedIds,
+      message: selection.message,
+    };
+    setSearchContext(nextContext);
+    setSelectedIds(nextSelectedIds);
     setSearchError('');
+    if (origin === 'batch') {
+      setBatchInput(normalized);
+    } else {
+      setQuery(normalized);
+    }
+    if (nextSelectedIds.length) {
+      setStatusMessage(selection.message || `Ruta resuelta para ${nextSelectedIds[0]}.`);
+      setActiveTab('route');
+      return;
+    }
+    setSearchError(`No node found for "${normalized}" in the loaded bundle.`);
+    setStatusMessage(selection.message || `No se encontró coincidencia local para "${normalized}".`);
+  }
+
+  function updateReviewStatus(id: string | undefined, nextStatus: ReviewStatus) {
+    const targetId = normalizeReviewTargetId(id ?? selectedId ?? '');
+    if (!targetId) return;
+    setReviewOverrides((current) => ({ ...current, [targetId]: nextStatus }));
+    setStatusMessage(`${targetId} marcado como ${nextStatus}.`);
+  }
+
+  function resetInvestigation() {
+    clearSearch();
+    setReviewFilter('pending');
+  }
+
+  function buildReadoutMarkdown() {
+    const readout = routeViewModel.tier1Readout;
+    const lines = [
+      `# ${readout.title}`,
+      '',
+      readout.summary ? readout.summary : '',
+      '',
+      `- Severity: ${readout.severity ?? 'unknown'}`,
+      `- Confidence: ${readout.confidence ?? 'unknown'}`,
+      `- Provenance: ${readout.provenance ?? 'unknown'}`,
+      `- Review status: ${readout.review_status ?? 'candidate'}`,
+      `- Associated CVEs: ${(readout.associated_cves ?? []).join(', ') || 'n/a'}`,
+      '',
+      '## Copy Block',
+      '```text',
+      ...(readout.copy_paste_10_lines ?? readout.bullets),
+      '```',
+      '',
+    ];
+    return lines.filter((line) => line !== '').join('\n');
+  }
+
+  function copyReadout() {
+    const text = (routeViewModel.tier1Readout.copy_paste_10_lines ?? routeViewModel.tier1Readout.bullets).join('\n');
+    void copyToClipboard(text, 'Readout copied to clipboard.');
+  }
+
+  function exportMarkdown() {
+    const markdown = markdownExport || buildReadoutMarkdown();
+    downloadText(`attack2defend-${selectedId ?? 'readout'}.md`, markdown);
+    setStatusMessage('Markdown exported.');
+  }
+
+  function promoteSelected(id?: string) {
+    updateReviewStatus(id, 'approved');
+  }
+
+  function rejectSelected(id?: string) {
+    updateReviewStatus(id, 'rejected');
+  }
+
+  function selectReviewItem(id: string) {
+    void applySearch(id, 'graph');
   }
 
   return (
     <main className="app-shell">
       <A2DAppShell
         query={query}
+        batchInput={batchInput}
         viewModel={routeViewModel}
+        bundleSummary={bundleSummary}
+        reviewQueue={reviewQueueItems}
+        reviewFilter={reviewFilter}
+        searchContext={searchContext}
+        showStats={showStats}
         onQueryChange={setQuery}
         onAnalyze={submitSearch}
-        searchError={searchError}
-        resolutionStatus={resolutionStatus === 'idle' || resolutionStatus === 'local_found' ? undefined : resolutionStatus}
-        resolutionSteps={resolutionSteps}
-        resolutionProgress={resolutionProgress}
-        resolutionMessage={resolutionMessage}
-        resolutionWarnings={resolutionWarnings}
-        resolutionError={resolutionError}
-        isPreview={isPreview}
-        onRetryResolution={() => {
-          const candidate = query.trim().toUpperCase();
-          if (candidate) void startResolution(candidate);
-        }}
+        onBatchInputChange={setBatchInput}
+        onBatchAnalyze={submitBatchSearch}
+        onReviewFilterChange={setReviewFilter}
+        onToggleStats={() => setShowStats((current) => !current)}
+        onCopyReadout={copyReadout}
+        onExportMarkdown={exportMarkdown}
+        onPromote={promoteSelected}
+        onReject={rejectSelected}
+        onReset={resetInvestigation}
+        onSelectReviewItem={selectReviewItem}
+        selectedId={selectedId}
+        statusMessage={statusMessage}
+        errorMessage={searchError}
       />
-
-      <details className="legacy-technical">
-        <summary>Legacy / Technical Details</summary>
-
-      <header className="hero">
-        <div>
-          <p className="eyebrow">Attack2Defend</p>
-          <h1>Attack2Defend</h1>
-          <p className="hero-copy">Convierte vulnerabilidades en decisiones defensivas accionables.</p>
-        </div>
-        <div className="search-card">
-          <label htmlFor="route-search">Buscar ID o nombre</label>
-          <div className="search-inline search-inline-with-clear">
-            <input id="route-search" value={query} onChange={(event) => setQuery(event.target.value)} onKeyDown={(event) => event.key === 'Enter' && submitSearch()} placeholder="CVE-2026-41940, CVE-2021-44228, T1190, CWE-306..." />
-            <button onClick={submitSearch}>Buscar</button>
-            <button className="secondary-button" onClick={clearSearch}>Limpiar</button>
-          </div>
-          {searchError && <p className="search-error">{searchError}</p>}
-          {query.trim() && suggestions.length > 0 && (
-            <div className="suggestions">
-              {suggestions.map((node) => (
-                <button key={node.id} onClick={() => selectNode(node.id)}>
-                  <strong>{node.id}</strong><span>{node.name}</span>
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-      </header>
-
-      <nav className="tabs" aria-label="Navigator tabs">
-        {[
-          ['route', 'Análisis'],
-          ['graph', 'Ruta Visual'],
-          ['attack', 'ATT&CK Navigator'],
-          ['d3fend', 'D3FEND CAD'],
-          ['coverage', 'Coverage'],
-          ['export', 'Exportar JSON'],
-        ].map(([id, label]) => (
-          <button key={id} className={activeTab === id ? 'active' : ''} onClick={() => setActiveTab(id as TabId)}>{label}</button>
-        ))}
-      </nav>
-
-      {!selectedIds.length || !activeRoute || !selectedNode ? (
-        <EmptyState bundleSource={bundleSource} />
-      ) : (
-        <>
-          {activeTab === 'route' && (
-            capabilityView && curatedRoute ? <AnalysisTab view={capabilityView} curatedRoute={curatedRoute} bundle={bundle} bundleSource={bundleSource} onSelect={selectNode} aiArtifact={activeAiArtifact} /> : null
-          )}
-
-          {activeTab === 'graph' && <RouteGraphTab bundle={bundle} activeRoute={activeRoute} selectedNode={selectedNode} />}
-          {activeTab === 'attack' && <AttackNavigatorTab bundle={bundle} activeRoute={activeRoute} navigatorLayer={navigatorLayer} />}
-          {activeTab === 'd3fend' && <D3fendCadTab bundle={bundle} activeRoute={activeRoute} cadGraph={d3fendCadGraph} />}
-          {activeTab === 'coverage' && <CoverageTab rows={coverageRows} bundle={bundle} />}
-          {activeTab === 'export' && <ExportTab markdown={markdownExport} routeJson={JSON.stringify({ route: activeRoute, selected: selectedNode, coverage: coverageRows }, null, 2)} capabilityJson={capabilityJson} navigatorLayer={JSON.stringify(navigatorLayer, null, 2)} cadGraph={JSON.stringify(d3fendCadGraph, null, 2)} />}
-        </>
-      )}
-      </details>
     </main>
   );
 }
@@ -524,43 +526,6 @@ function Metric({ label, value }: { label: string; value: string }) {
 function PanelTitle({ title, subtitle }: { title: string; subtitle: string }) {
   return <div className="panel-title"><h2>{title}</h2><p>{subtitle}</p></div>;
 }
-
-function BundleBanner({ bundle, bundleSource }: { bundle: KnowledgeBundle; bundleSource: BundleSource }) {
-  const generatedAt = bundle.metadata.generated_at ?? 'not available';
-  const mode = bundle.metadata.mode ?? 'unknown';
-  const warnings = bundle.metadata.warnings?.length ?? 0;
-  const publicSources = bundle.metadata.public_sources?.length ?? 0;
-  const publicFailures = bundle.metadata.public_source_failures?.length ?? 0;
-
-  return (
-    <div className={`bundle-banner ${bundleSource}`}>
-      <strong>{bundleSource === 'generated' ? 'Generated bundle loaded' : 'Fallback sample loaded'}</strong>
-      <span>mode: {mode}</span>
-      <span>generated: {generatedAt}</span>
-      <span>public sources: {publicSources}</span>
-      <span>warnings: {warnings + publicFailures}</span>
-      {bundleSource === 'fallback' && <em>No generated bundle was found. Run the builder before treating this as pre-production data.</em>}
-    </div>
-  );
-}
-
-function EmptyState({ bundleSource }: { bundleSource: BundleSource }) {
-  return (
-    <section className="panel empty-state">
-      <h2>Busca para iniciar</h2>
-      <p>Ingresa una CVE, CWE, CAPEC, técnica ATT&CK, técnica D3FEND, Control, Detection, Evidence, Gap o Action. Nada se preselecciona: el análisis se deriva del bundle local.</p>
-      <div className="empty-examples">
-        <code>CVE-2021-44228</code>
-        <code>T1190</code>
-        <code>CAPEC-63</code>
-        <code>CWE-79</code>
-        <code>D3-MFA</code>
-      </div>
-      {bundleSource === 'fallback' && <p className="fallback-warning">El fallback sample solo sirve para resiliencia de desarrollo. Genera <code>/data/knowledge-bundle.json</code> para validación real.</p>}
-    </section>
-  );
-}
-
 
 function PreliminarySummary({ view }: { view: CapabilityView }) {
   return (
@@ -1680,6 +1645,144 @@ ${buildCtiActions(selectedNode, route).concat(buildHuntingActions(selectedNode, 
 ## Coverage / Gaps
 ${coverageRows.map((row) => `- ${row.id}: ${row.status}${row.gaps.length ? ` | gaps: ${row.gaps.join('; ')}` : ''}`).join('\n') || '- No coverage records mapped yet.'}
 `;
+}
+
+function buildBundleSummary(bundle: KnowledgeBundle, bundleSource: BundleSource, reviewOverrides: Record<string, ReviewStatus>): BundleSummary {
+  const cveCount = Object.keys(bundle.cves ?? {}).length || bundle.nodes.filter((node) => node.type === 'cve').length;
+  const routeCount = bundle.routes?.length ?? bundle.indexes?.route_inputs?.length ?? 0;
+  const reviewQueueCount = buildReviewQueue(bundle, reviewOverrides, 'all', null).length;
+  return {
+    bundle_version: bundle.bundle_version ?? bundle.metadata.contract_version ?? bundle.metadata.generated_at ?? 'unknown',
+    generated_at: bundle.generated_at ?? bundle.metadata.generated_at ?? 'unknown',
+    source: bundle.source ?? (bundleSource === 'generated' ? 'CVE2CAPEC' : 'fallback'),
+    provenance: bundle.provenance ?? 'canonical',
+    node_count: bundle.nodes.length,
+    edge_count: bundle.edges.length,
+    cve_count: cveCount,
+    route_count: routeCount,
+    review_queue_count: reviewQueueCount,
+    last_sync: bundle.generated_at ?? bundle.metadata.generated_at ?? 'unknown',
+    stats: bundle.stats,
+  };
+}
+
+function buildReviewQueue(bundle: KnowledgeBundle, overrides: Record<string, ReviewStatus>, filter: ReviewFilter, selectedId: string | null): ReviewQueueItem[] {
+  const source = (bundle.review_queue?.length ? bundle.review_queue : buildReviewQueueFromCves(bundle)).map((item) => normalizeReviewItem(bundle, item, overrides, selectedId));
+  return source.filter((item) => reviewFilterMatches(item, filter));
+}
+
+function buildReviewQueueFromCves(bundle: KnowledgeBundle): ReviewQueueItem[] {
+  return Object.values(bundle.cves ?? {})
+    .filter((record) => record.review_status !== 'approved' || (record.canonical_chain?.length ?? 0) === 0)
+    .map((record) => ({
+      id: record.id,
+      label: record.label,
+      review_status: record.review_status ?? 'candidate',
+      provenance: record.provenance ?? 'canonical',
+      confidence: record.confidence ?? 'unknown',
+      reason: record.tier1_readout?.summary ?? record.description ?? '',
+      cve_count: 1,
+      route_count: record.canonical_chain?.length ?? 0,
+      focus: record.id,
+    }));
+}
+
+function normalizeReviewItem(bundle: KnowledgeBundle, item: ReviewQueueItem, overrides: Record<string, ReviewStatus>, selectedId: string | null): ReviewQueueItem {
+  const id = normalizeReviewTargetId(item.id);
+  const record = bundle.cves?.[id];
+  const review_status = normalizeReviewStatus(overrides[id] ?? item.review_status ?? record?.review_status);
+  return {
+    id,
+    label: item.label ?? record?.label ?? id,
+    review_status,
+    provenance: item.provenance ?? record?.provenance ?? 'canonical',
+    confidence: item.confidence ?? record?.confidence ?? 'unknown',
+    reason: item.reason ?? record?.tier1_readout?.summary ?? record?.description ?? '',
+    cve_count: item.cve_count ?? (record ? 1 : 0),
+    route_count: item.route_count ?? record?.canonical_chain?.length ?? 0,
+    selected: selectedId ? id === selectedId : Boolean(item.selected),
+    focus: item.focus ?? id,
+  };
+}
+
+function reviewFilterMatches(item: ReviewQueueItem, filter: ReviewFilter): boolean {
+  if (filter === 'all') return true;
+  if (filter === 'canonical') return item.provenance === 'canonical' || item.review_status === 'approved';
+  if (filter === 'ai_inferred') return item.provenance !== 'canonical' || item.review_status !== 'approved';
+  if (filter === 'pending') return item.review_status === 'candidate' || item.review_status === 'pending';
+  return true;
+}
+
+function normalizeReviewStatus(value: unknown): ReviewStatus {
+  const text = String(value ?? '').trim().toLowerCase();
+  if (text === 'approved' || text === 'rejected' || text === 'pending' || text === 'candidate') return text;
+  return 'candidate';
+}
+
+function normalizeReviewTargetId(value: string) {
+  return String(value ?? '').trim().toUpperCase();
+}
+
+function loadReviewOverrides(): Record<string, ReviewStatus> {
+  try {
+    const raw = window.localStorage.getItem(REVIEW_OVERRIDE_STORAGE_KEY);
+    if (!raw) return {};
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed !== 'object') return {};
+    return Object.fromEntries(Object.entries(parsed as Record<string, unknown>).map(([key, value]) => [normalizeReviewTargetId(key), normalizeReviewStatus(value)]));
+  } catch {
+    return {};
+  }
+}
+
+function persistReviewOverrides(overrides: Record<string, ReviewStatus>) {
+  try {
+    window.localStorage.setItem(REVIEW_OVERRIDE_STORAGE_KEY, JSON.stringify(overrides));
+  } catch {
+    // ignore localStorage failures in private / restricted modes
+  }
+}
+
+async function copyToClipboard(value: string, fallbackFilename = 'attack2defend-readout.txt') {
+  try {
+    if (navigator?.clipboard?.writeText) {
+      await navigator.clipboard.writeText(value);
+      return;
+    }
+  } catch {
+    // fall back to file download below
+  }
+  downloadText(fallbackFilename, value, 'text/plain;charset=utf-8');
+}
+
+function downloadText(filename: string, content: string, mimeType = 'text/plain;charset=utf-8') {
+  const blob = new Blob([content], { type: mimeType });
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement('a');
+  anchor.href = url;
+  anchor.download = filename;
+  anchor.click();
+  URL.revokeObjectURL(url);
+}
+
+async function normalizeSearchInput(raw: string) {
+  const term = raw.trim();
+  if (!term) return '';
+  if (/^H4s[A-Za-z0-9+/=]+$/.test(term)) {
+    const decoded = await decodeCompressedInput(term);
+    return decoded.trim();
+  }
+  return term;
+}
+
+async function decodeCompressedInput(value: string) {
+  const binary = atob(value);
+  const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0));
+  if (typeof DecompressionStream !== 'undefined') {
+    const stream = new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));
+    return await new Response(stream).text();
+  }
+  return new TextDecoder().decode(bytes);
 }
 
 createRoot(document.getElementById('root')!).render(<App />);

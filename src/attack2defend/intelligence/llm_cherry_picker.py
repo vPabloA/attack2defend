@@ -564,6 +564,7 @@ def cherry_pick_route(
         return deterministic
 
     # Validate the proposed output ---------------------------------------------
+    proposed = normalize_llm_curated_route(proposed, capability_response, official_context_pack)
     proposed["selection_method"] = "llm_cherry_picker"
     proposed["runtime_public_api_calls"] = False
     errors = validate_curated_route(proposed, official_context_pack)
@@ -595,6 +596,116 @@ def cherry_pick_route(
         used_model=used_model,
     )
     return proposed
+
+
+def normalize_llm_curated_route(
+    proposed: dict[str, Any],
+    capability_response: dict[str, Any],
+    official_context_pack: dict[str, Any],
+) -> dict[str, Any]:
+    """Coerce provider output into the curated route schema shape.
+
+    Some models return a lightweight wrapper such as
+    {"curated_route": {"cve": [{"id": "..."}]}}. Keep that accepted only as
+    input syntax; the public function still returns the strict flat schema.
+    """
+    if isinstance(proposed.get("stages"), list):
+        return dict(proposed)
+
+    nested = proposed.get("curated_route")
+    if isinstance(nested, dict) and isinstance(nested.get("stages"), list):
+        out = dict(nested)
+        out.setdefault("input", proposed.get("input"))
+        out.setdefault("normalized_input", proposed.get("normalized_input"))
+        out.setdefault("full_traceability_counts", proposed.get("full_traceability_counts"))
+        out.setdefault("rationale_es", proposed.get("rationale_es"))
+        return out
+
+    if isinstance(nested, dict):
+        return build_curated_route_from_id_groups(
+            nested,
+            proposed,
+            capability_response,
+            official_context_pack,
+        )
+
+    return dict(proposed)
+
+
+def build_curated_route_from_id_groups(
+    grouped_selection: dict[str, Any],
+    proposed: dict[str, Any],
+    capability_response: dict[str, Any],
+    official_context_pack: dict[str, Any],
+) -> dict[str, Any]:
+    entries_by_id = {
+        str(entry.get("id") or "").upper(): entry
+        for entry in official_context_pack.get("entries", [])
+        if isinstance(entry, dict)
+    }
+    stages = []
+    for node_type, limit in CURATED_ROUTE_LIMITS.items():
+        selected_records = []
+        raw_items = grouped_selection.get(node_type, [])
+        if isinstance(raw_items, dict):
+            raw_items = [raw_items]
+        if not isinstance(raw_items, list):
+            raw_items = []
+        for item in raw_items[:limit]:
+            if not isinstance(item, dict):
+                continue
+            node_id = str(item.get("id") or "").strip().upper()
+            entry = entries_by_id.get(node_id)
+            if not entry:
+                selected_records.append(
+                    {
+                        "id": node_id,
+                        "type": node_type,
+                        "name": str(item.get("name") or node_id),
+                        "official_link": str(item.get("official_link") or ""),
+                        "source_ref": str(item.get("source_ref") or "missing_source_ref"),
+                        "rank": len(selected_records) + 1,
+                        "score": int(item.get("score") or 0),
+                        "reason_es": str(item.get("reason_es") or "Selección propuesta por el adaptador LLM."),
+                    }
+                )
+                continue
+            selected_records.append(
+                {
+                    "id": entry.get("id", node_id),
+                    "type": entry.get("type", node_type),
+                    "name": entry.get("name", node_id),
+                    "official_link": entry.get("official_url", ""),
+                    "source_ref": entry.get("source_ref", "missing_source_ref"),
+                    "rank": len(selected_records) + 1,
+                    "score": int(item.get("score") or max(1, 100 - (len(selected_records) * 10))),
+                    "reason_es": str(item.get("reason_es") or "Selección propuesta por el adaptador LLM."),
+                }
+            )
+        available_count = sum(1 for entry in official_context_pack.get("entries", []) if entry.get("type") == node_type)
+        stages.append(
+            {
+                "type": node_type,
+                "label": node_type.upper() if node_type != "attack" else "ATT&CK",
+                "available_count": available_count,
+                "selected": selected_records,
+            }
+        )
+
+    return {
+        "schema_version": "1.0",
+        "input": str(proposed.get("input") or capability_response.get("input") or ""),
+        "normalized_input": str(proposed.get("normalized_input") or capability_response.get("normalized_input") or ""),
+        "mode": "official_rag_grounded",
+        "selection_method": str(proposed.get("selection_method") or "llm_cherry_picker"),
+        "ai_ready": bool(proposed.get("ai_ready", True)),
+        "runtime_public_api_calls": False,
+        "limits": CURATED_ROUTE_LIMITS,
+        "stages": stages,
+        "full_traceability_counts": proposed.get("full_traceability_counts") or official_context_pack.get("full_traceability_counts", {}),
+        "rationale_es": str(proposed.get("rationale_es") or "Ruta curada a partir de IDs permitidos del contexto oficial."),
+        "validation": proposed.get("validation") if isinstance(proposed.get("validation"), dict) else {"status": "pending", "errors": []},
+    }
 
 
 # ---------------------------------------------------------------------------

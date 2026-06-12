@@ -22,7 +22,7 @@ export function CveRouteSearch({ value, placeholder, onChange, onAnalyze, disabl
       <input
         id="a2d-route-search"
         value={value}
-        placeholder={placeholder ?? 'CVE-2021-44228'}
+        placeholder={placeholder ?? 'CVE-2021-44228 or H4sIA...'}
         onChange={(event) => onChange(event.target.value)}
         onKeyDown={(event) => event.key === 'Enter' && !isDisabled && onAnalyze()}
         disabled={isDisabled}

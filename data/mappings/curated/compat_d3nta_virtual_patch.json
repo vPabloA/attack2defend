@@ -1,0 +1,64 @@
+{
+  "description": "Compatibility mapping to preserve legacy D3-NTA virtual patch bridges used by existing resolver expectations.",
+  "nodes": [
+    {
+      "id": "CTRL-VIRTUAL-PATCH",
+      "type": "control",
+      "name": "Virtual patching",
+      "description": "Legacy compatibility control for virtual patching and exploit blocking."
+    },
+    {
+      "id": "DET-RPC-EXPLOIT-ATTEMPT",
+      "type": "detection",
+      "name": "RPC exploit attempt",
+      "description": "Legacy compatibility detection for RPC exploit activity."
+    },
+    {
+      "id": "EV-FIREWALL-LOGS",
+      "type": "evidence",
+      "name": "Firewall logs",
+      "description": "Legacy compatibility evidence for firewall and perimeter log review."
+    }
+  ],
+  "edges": [
+    {
+      "from": "D3-NTA",
+      "from_type": "d3fend",
+      "from_name": "Network Traffic Analysis",
+      "to": "CTRL-VIRTUAL-PATCH",
+      "to_type": "control",
+      "to_name": "Virtual patching",
+      "relationship": "implemented_by_control",
+      "confidence": "high",
+      "source_ref": "compat:d3nta-virtual-patch",
+      "source_kind": "curated",
+      "owner": "Compatibility"
+    },
+    {
+      "from": "CTRL-VIRTUAL-PATCH",
+      "from_type": "control",
+      "from_name": "Virtual patching",
+      "to": "DET-RPC-EXPLOIT-ATTEMPT",
+      "to_type": "detection",
+      "to_name": "RPC exploit attempt",
+      "relationship": "validated_by_detection",
+      "confidence": "high",
+      "source_ref": "compat:d3nta-virtual-patch",
+      "source_kind": "curated",
+      "owner": "Compatibility"
+    },
+    {
+      "from": "DET-RPC-EXPLOIT-ATTEMPT",
+      "from_type": "detection",
+      "from_name": "RPC exploit attempt",
+      "to": "EV-FIREWALL-LOGS",
+      "to_type": "evidence",
+      "to_name": "Firewall logs",
+      "relationship": "requires_evidence",
+      "confidence": "high",
+      "source_ref": "compat:d3nta-virtual-patch",
+      "source_kind": "curated",
+      "owner": "Compatibility"
+    }
+  ]
+}

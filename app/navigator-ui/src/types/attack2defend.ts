@@ -12,6 +12,173 @@ export type NodeType =
   | 'action';
 
 export type CoverageStatus = 'covered' | 'partial' | 'missing' | 'unknown' | 'not_applicable';
+export type ReviewStatus = 'approved' | 'candidate' | 'pending' | 'rejected';
+export type SearchMode = 'empty' | 'direct' | 'reverse' | 'batch' | 'mixed';
+export type ReviewFilter = 'all' | 'canonical' | 'ai_inferred' | 'pending';
+
+export type SearchContext = {
+  normalized_query: string;
+  tokens: string[];
+  mode: SearchMode;
+  primary_id?: string | null;
+  reverse_anchor?: string | null;
+  associated_cves: string[];
+  selected_ids: string[];
+  message?: string;
+};
+
+export type BundleStats = {
+  total_cves_processed?: number;
+  total_nodes?: number;
+  total_edges?: number;
+  total_canonical_chains?: number;
+  cves_with_complete_route?: number;
+  cves_without_route?: number;
+  cves_with_candidate_route?: number;
+  review_queue_size?: number;
+  smoke_test_hits?: number;
+  smoke_test_warnings?: number;
+  bundle_bytes?: number;
+  source_years?: number[];
+};
+
+export type ReverseIndex = {
+  by_cwe?: Record<string, string[]>;
+  by_capec?: Record<string, string[]>;
+  by_attack?: Record<string, string[]>;
+  by_d3fend?: Record<string, string[]>;
+};
+
+export type D3fendControl = {
+  id: string;
+  name: string;
+  justification: string;
+  provenance?: string;
+  confidence?: string;
+  review_status?: ReviewStatus;
+};
+
+export type SocTechnique = {
+  id: string;
+  name: string;
+  justification?: string;
+  provenance?: string;
+  confidence?: string;
+  review_status?: ReviewStatus;
+};
+
+export type SocCandidate = {
+  id: string;
+  label: string;
+  text: string;
+  provenance?: string;
+  confidence?: string;
+  review_status?: ReviewStatus;
+};
+
+export type SocActionPack = {
+  attack_techniques: SocTechnique[];
+  d3fend_controls: D3fendControl[];
+  compensating_controls: SocCandidate[];
+  detection_rules: SocCandidate[];
+  evidence_to_review: SocCandidate[];
+  ioc_candidates: SocCandidate[];
+  gaps: SocCandidate[];
+  risk_acceptance_matrix: Array<{
+    id: string;
+    label: string;
+    minimum_controls: string[];
+    rationale: string;
+    provenance?: string;
+    confidence?: string;
+    review_status?: ReviewStatus;
+  }>;
+};
+
+export type CveChainLink = {
+  cve?: string;
+  cwe?: string;
+  capec?: string;
+  attack?: string;
+  d3fend?: string;
+  provenance?: string;
+  confidence?: string;
+  review_status?: ReviewStatus;
+};
+
+export type Tier1Readout = {
+  title: string;
+  bullets: string[];
+  summary?: string;
+  severity?: string;
+  cvss?: string | number | Record<string, unknown> | null;
+  vector?: string;
+  confidence?: string;
+  provenance?: string;
+  review_status?: ReviewStatus;
+  mode?: 'cve' | 'node' | 'fallback';
+  associated_cves?: string[];
+  attack_techniques?: SocTechnique[];
+  d3fend_controls?: D3fendControl[];
+  compensating_controls?: SocCandidate[];
+  detection_guidance?: SocCandidate[];
+  evidence_to_review?: SocCandidate[];
+  gaps?: SocCandidate[];
+  risk_acceptance_matrix?: SocActionPack['risk_acceptance_matrix'];
+  copy_paste_10_lines?: string[];
+  checklist?: string[];
+  escalation_criteria?: string[];
+  source_ref?: string;
+  soc_action_pack?: SocActionPack;
+};
+
+export type CveRecord = {
+  id: string;
+  type: 'cve';
+  label: string;
+  description?: string;
+  severity?: string | null;
+  cvss?: string | number | Record<string, unknown> | null;
+  published?: string | null;
+  provenance?: string;
+  confidence?: string;
+  review_status?: ReviewStatus;
+  canonical_chain: CveChainLink[];
+  soc_action_pack: SocActionPack;
+  tier1_readout: Tier1Readout;
+  source_year?: number;
+  route_count?: number;
+  vendor?: string | null;
+  product?: string | null;
+  kev?: boolean;
+};
+
+export type ReviewQueueItem = {
+  id: string;
+  label: string;
+  review_status: ReviewStatus;
+  provenance?: string;
+  confidence?: string;
+  reason?: string;
+  cve_count?: number;
+  route_count?: number;
+  selected?: boolean;
+  focus?: string;
+};
+
+export type BundleSummary = {
+  bundle_version?: string;
+  generated_at?: string;
+  source?: string;
+  provenance?: string;
+  node_count: number;
+  edge_count: number;
+  cve_count: number;
+  route_count: number;
+  review_queue_count: number;
+  last_sync?: string;
+  stats?: BundleStats;
+};
 
 export type RouteNode = {
   id: string;
@@ -52,6 +219,10 @@ export type RouteMetadata = {
 };
 
 export type KnowledgeBundle = {
+  bundle_version?: string;
+  generated_at?: string;
+  source?: string;
+  provenance?: string;
   metadata: {
     contract_version?: string;
     builder_version?: string;
@@ -65,6 +236,11 @@ export type KnowledgeBundle = {
   };
   nodes: RouteNode[];
   edges: RouteEdge[];
+  canonical_chain?: CveChainLink[];
+  cves?: Record<string, CveRecord>;
+  reverse_index?: ReverseIndex;
+  review_queue?: ReviewQueueItem[];
+  stats?: BundleStats;
   indexes?: {
     by_type?: Partial<Record<NodeType, string[]>>;
     outgoing?: Record<string, Array<{ target: string; relationship: string }>>;
@@ -78,6 +254,7 @@ export type KnowledgeBundle = {
   };
   coverage?: Record<string, CoverageRecord>;
   routes?: RouteMetadata[];
+  semantic_routes?: unknown[];
 };
 
 export type ResolvedRoute = {
