@@ -105,6 +105,7 @@ validate-product: validate-cve2capec-db evaluate-golden graph-sidecar mirror-int
 
 test:
 	$(PYTHON) -m pytest -q
+	cd $(UI_DIR) && npm run test:contracts
 	cd $(UI_DIR) && npm run build
 
 ui:

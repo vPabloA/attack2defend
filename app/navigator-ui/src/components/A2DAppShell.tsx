@@ -110,9 +110,9 @@ export function A2DAppShell({
           </div>
         </div>
         <div className="a2d-filter-strip">
-          {(['all', 'canonical', 'ai_inferred', 'pending'] as ReviewFilter[]).map((item) => (
+          {(['pending', 'all', 'canonical', 'ai_inferred'] as ReviewFilter[]).map((item) => (
             <button key={item} type="button" className={reviewFilter === item ? 'active' : ''} onClick={() => onReviewFilterChange(item)}>
-              {item === 'all' ? 'All' : item === 'canonical' ? 'Canonical only' : item === 'ai_inferred' ? 'AI-inferred' : 'Pending approval'}
+              {item === 'pending' ? 'Pending approval' : item === 'all' ? 'All' : item === 'canonical' ? 'Canonical only' : 'AI-inferred'}
             </button>
           ))}
         </div>

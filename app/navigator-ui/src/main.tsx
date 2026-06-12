@@ -276,7 +276,7 @@ function App() {
   const [activeTab, setActiveTab] = useState<TabId>('route');
   const [searchError, setSearchError] = useState<string>('');
   const [statusMessage, setStatusMessage] = useState<string>('');
-  const [reviewFilter, setReviewFilter] = useState<ReviewFilter>('all');
+  const [reviewFilter, setReviewFilter] = useState<ReviewFilter>('pending');
   const [showStats, setShowStats] = useState<boolean>(false);
   const [searchContext, setSearchContext] = useState<SearchContext>(EMPTY_SEARCH_CONTEXT);
   const [reviewOverrides, setReviewOverrides] = useState<Record<string, ReviewStatus>>(() => loadReviewOverrides());
@@ -440,7 +440,7 @@ function App() {
 
   function resetInvestigation() {
     clearSearch();
-    setReviewFilter('all');
+    setReviewFilter('pending');
   }
 
   function buildReadoutMarkdown() {

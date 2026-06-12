@@ -1,4 +1,6 @@
+import { useEffect, useMemo, useState } from 'react';
 import type { ReviewFilter, ReviewQueueItem } from '../types/attack2defend';
+import { buildReviewQueuePresentation } from '../lib/reviewQueueLayout.ts';
 
 export interface ReviewQueuePanelProps {
   items: ReviewQueueItem[];
@@ -11,18 +13,25 @@ export interface ReviewQueuePanelProps {
 }
 
 const FILTERS: Array<{ id: ReviewFilter; label: string; hint: string }> = [
+  { id: 'pending', label: 'Pending approval', hint: 'Default triage queue' },
   { id: 'all', label: 'All', hint: 'Show every queue item' },
   { id: 'canonical', label: 'Canonical only', hint: 'Keep approved canonical items' },
   { id: 'ai_inferred', label: 'AI-inferred', hint: 'Keep derived or inferred items' },
-  { id: 'pending', label: 'Pending approval', hint: 'Keep items awaiting review' },
 ];
 
 export function ReviewQueuePanel({ items, filter, onFilterChange, onPromote, onReject, onSelect, selectedId }: ReviewQueuePanelProps) {
+  const [expanded, setExpanded] = useState(false);
+  useEffect(() => {
+    setExpanded(false);
+  }, [filter, items.length]);
+
+  const presentation = useMemo(() => buildReviewQueuePresentation(items, expanded), [items, expanded]);
+
   return (
     <section className="a2d-side-card a2d-review-panel">
       <div className="a2d-panel-title">
         <h3>Review queue</h3>
-        <span>{items.length}</span>
+        <span>{presentation.visibleCount}{presentation.hiddenCount > 0 ? ` / ${items.length}` : ''}</span>
       </div>
       <div className="a2d-filter-strip a2d-review-filters">
         {FILTERS.map((item) => (
@@ -31,11 +40,11 @@ export function ReviewQueuePanel({ items, filter, onFilterChange, onPromote, onR
           </button>
         ))}
       </div>
-      <div className="a2d-review-list">
-        {items.length === 0 && (
+      <div className="a2d-review-list a2d-review-list-scroll">
+        {presentation.visibleItems.length === 0 && (
           <p className="a2d-empty-state">No queue items match the current filter.</p>
         )}
-        {items.map((item) => (
+        {presentation.visibleItems.map((item) => (
           <article key={item.id} className={`a2d-review-item ${selectedId === item.id ? 'selected' : ''}`}>
             <header>
               <div>
@@ -57,6 +66,16 @@ export function ReviewQueuePanel({ items, filter, onFilterChange, onPromote, onR
           </article>
         ))}
       </div>
+      {presentation.hasMore && (
+        <button
+          type="button"
+          className="a2d-review-more"
+          onClick={() => setExpanded((current) => !current)}
+          aria-expanded={expanded}
+        >
+          {expanded ? 'Ver menos' : 'Ver más'}
+        </button>
+      )}
     </section>
   );
 }
